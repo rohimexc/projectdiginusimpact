@@ -6,49 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIGINUS - Empowering Skills. Elevating Digital Future.</title>
 
+    <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Header & Navigation -->
+    <!-- Header Minimalis (Hanya Logo, Tanpa Menu Navbar Berjibun) -->
+<!-- Header Minimalis (Logo di Navbar hanya muncul saat di-scroll) -->
     <header id="header">
         <div class="container navbar">
             <div class="logo">
-                <a href="#">
-                    <img src="logo.png" alt="Logo DIGINUS" class="logo-img">
-                    DIGINUS<span>.</span>
+                <a href="#beranda">
+                    <img src="LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" class="logo-img">
                 </a>
-            </div>
-
-            <nav id="nav-menu">
-                <ul id="nav-links">
-                    <li><a href="#beranda">Beranda</a></li>
-                    <li><a href="#tentang">Tentang Kami</a></li>
-                    <li><a href="#layanan">Layanan</a></li>
-                    <li><a href="#keunggulan">Keunggulan</a></li>
-                    <li><a href="#portofolio">Portofolio</a></li>
-                    <li><a href="#legalitas">Legalitas</a></li>
-                    <li><a href="#kontak">Kontak</a></li>
-                </ul>
-            </nav>
-
-            <div class="menu-toggle" id="mobile-menu">
-                <i class="fas fa-bars"></i>
             </div>
         </div>
     </header>
 
+    <!-- Hero Section dengan Logo Besar di Tengah -->
     <section id="beranda" class="hero">
         <div class="container hero-content" data-aos="fade-up" data-aos-duration="1000">
-            <h1>DIGINUS</h1>
-            <h2>Empowering Skills. Elevating Digital Future.</h2>
-            <p>Mitra strategis yang berkomitmen menjembatani tantangan di dunia digital melalui layanan, produk, dan
-                pembelajaran aplikatif.</p>
+            <!-- Logo Besar di Tengah -->
+            <div class="hero-logo-wrapper">
+                <img src="LOGO DIGINUS NO BG.png" alt="Logo DIGINUS Besar" class="hero-logo-center">
+            </div>
+        
+            <p>Mitra strategis yang berkomitmen menjembatani tantangan di dunia digital melalui layanan, produk, dan pembelajaran aplikatif.</p>
             <div class="hero-btns">
                 <a href="#layanan" class="btn btn-primary">Jelajahi Layanan</a>
                 <a href="#kontak" class="btn btn-secondary">Hubungi Kami</a>
@@ -56,6 +44,7 @@
         </div>
     </section>
 
+    <!-- Tentang Kami Section -->
     <section id="tentang" class="section">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
@@ -64,30 +53,21 @@
             </div>
             <div class="about-grid">
                 <div class="about-text" data-aos="fade-right">
-                    <p>DIGINUS hadir dengan semangat <strong>"Empowering Skills, Elevating Digital Future"</strong>
-                        untuk memberdayakan keterampilan melalui ekosistem pembelajaran, layanan profesional, dan produk
-                        digital inovatif.</p>
-                    <p>Kami percaya transformasi digital sejati terletak pada manusia yang menggerakkannya, bukan hanya
-                        teknologinya. Dengan menjunjung tinggi nilai pembelajaran berkelanjutan, kolaborasi, dan
-                        integritas, kami memastikan setiap solusi lahir dari kebutuhan riil di lapangan.</p>
+                    <p>DIGINUS hadir dengan semangat <strong>"Empowering Skills, Elevating Digital Future"</strong> untuk memberdayakan keterampilan melalui ekosistem pembelajaran, layanan profesional, dan produk digital inovatif.</p>
+                    <p>Kami percaya transformasi digital sejati terletak pada manusia yang menggerakkannya, bukan hanya teknologinya. Dengan menjunjung tinggi nilai pembelajaran berkelanjutan, kolaborasi, dan integritas, kami memastikan setiap solusi lahir dari kebutuhan riil di lapangan.</p>
                 </div>
                 <div class="vision-mission" data-aos="fade-left">
                     <div class="vm-box">
                         <h3>Visi</h3>
-                        <p>Menjadi perusahaan digital yang berperan aktif dalam pengembangan sumber daya manusia dan
-                            transformasi digital di Indonesia.</p>
+                        <p>Menjadi perusahaan digital yang berperan aktif dalam pengembangan sumber daya manusia dan transformasi digital di Indonesia.</p>
                     </div>
                     <div class="vm-box">
                         <h3>Misi</h3>
                         <ul>
-                            <li><i class="fas fa-check-circle"></i> Menyediakan layanan, produk, dan pelatihan digital
-                                yang berkualitas dan relevan.</li>
-                            <li><i class="fas fa-check-circle"></i> Mendorong peningkatan kompetensi digital melalui
-                                pembelajaran yang praktis dan aplikatif.</li>
-                            <li><i class="fas fa-check-circle"></i> Menjadi mitra strategis bagi individu, komunitas,
-                                dan organisasi dalam pengembangan solusi digital.</li>
-                            <li><i class="fas fa-check-circle"></i> Menghadirkan teknologi yang berdampak,
-                                berkelanjutan, dan mudah diakses.</li>
+                            <li><i class="fas fa-check-circle"></i> Menyediakan layanan, produk, dan pelatihan digital yang berkualitas dan relevan.</li>
+                            <li><i class="fas fa-check-circle"></i> Mendorong peningkatan kompetensi digital melalui pembelajaran yang praktis dan aplikatif.</li>
+                            <li><i class="fas fa-check-circle"></i> Menjadi mitra strategis bagi individu, komunitas, dan organisasi dalam pengembangan solusi digital.</li>
+                            <li><i class="fas fa-check-circle"></i> Menghadirkan teknologi yang berdampak, berkelanjutan, dan mudah diakses.</li>
                         </ul>
                     </div>
                 </div>
@@ -95,6 +75,7 @@
         </div>
     </section>
 
+    <!-- Layanan Section -->
     <section id="layanan" class="section bg-light">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
@@ -105,20 +86,17 @@
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
                     <h3>1. Course dan Training</h3>
-                    <p>Program pembelajaran digital komprehensif yang dirancang mengasah keterampilan praktis dan
-                        membangun kesiapan penuh menghadapi dinamika industri teknologi.</p>
+                    <p>Program pembelajaran digital komprehensif yang dirancang mengasah keterampilan praktis dan membangun kesiapan penuh menghadapi dinamika industri teknologi.</p>
                 </div>
                 <div class="service-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3>2. Digital Services</h3>
-                    <p>Layanan profesional mengintegrasikan kecanggihan teknologi dengan kreativitas tinggi untuk
-                        mengarsiteki, mengelola, serta mengoptimalkan kehadiran digital.</p>
+                    <p>Layanan profesional mengintegrasikan kecanggihan teknologi dengan kreativitas tinggi untuk mengarsiteki, mengelola, serta mengoptimalkan kehadiran digital.</p>
                 </div>
                 <div class="service-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="service-icon"><i class="fas fa-box-open"></i></div>
                     <h3>3. Produk & Penjualan Digital</h3>
-                    <p>Penyediaan aset digital inovatif yang fungsional sebagai katalis kuat untuk efektivitas
-                        pembelajaran, efisiensi produktivitas, dan akselerasi pertumbuhan bisnis.</p>
+                    <p>Penyediaan aset digital inovatif yang fungsional sebagai katalis kuat untuk efektivitas pembelajaran, efisiensi produktivitas, dan akselerasi pertumbuhan bisnis.</p>
                 </div>
             </div>
         </div>
@@ -135,7 +113,6 @@
             <div class="features-grid-container" data-aos="fade-up">
                 <!-- Baris Atas (4 Item) -->
                 <div class="features-row features-row-top">
-                    <!-- 01 -->
                     <div class="feature-card">
                         <div class="feature-header">
                             <div class="feature-icon-box"><i class="fas fa-cubes"></i></div>
@@ -143,11 +120,9 @@
                         </div>
                         <div class="feature-body">
                             <h4>Solusi Terintegrasi</h4>
-                            <p>Menggabungkan course, service, dan produk digital dalam satu kesatuan kohesif untuk
-                                transformasi menyeluruh.</p>
+                            <p>Menggabungkan course, service, dan produk digital dalam satu kesatuan kohesif untuk transformasi menyeluruh.</p>
                         </div>
                     </div>
-                    <!-- 02 -->
                     <div class="feature-card">
                         <div class="feature-header">
                             <div class="feature-icon-box"><i class="fas fa-bullseye"></i></div>
@@ -155,11 +130,9 @@
                         </div>
                         <div class="feature-body">
                             <h4>Praktis & Berbasis Kebutuhan Riil</h4>
-                            <p>Berakar pada analisis kebutuhan pasar nyata, memastikan solusi langsung aplikatif di
-                                industri.</p>
+                            <p>Berakar pada analisis kebutuhan pasar nyata, memastikan solusi langsung aplikatif di industri.</p>
                         </div>
                     </div>
-                    <!-- 03 -->
                     <div class="feature-card">
                         <div class="feature-header">
                             <div class="feature-icon-box"><i class="fas fa-chart-line"></i></div>
@@ -167,11 +140,9 @@
                         </div>
                         <div class="feature-body">
                             <h4>Berorientasi Dampak & Kapasitas</h4>
-                            <p>Membangun kapasitas dan kompetensi jangka panjang bagi setiap individu maupun organisasi.
-                            </p>
+                            <p>Membangun kapasitas dan kompetensi jangka panjang bagi setiap individu maupun organisasi.</p>
                         </div>
                     </div>
-                    <!-- 04 -->
                     <div class="feature-card">
                         <div class="feature-header">
                             <div class="feature-icon-box"><i class="fas fa-sliders-h"></i></div>
@@ -179,15 +150,13 @@
                         </div>
                         <div class="feature-body">
                             <h4>Fleksibilitas Tinggi</h4>
-                            <p>Layanan dirancang personal agar dapat disesuaikan dengan kebutuhan unik dan tujuan bisnis
-                                Anda.</p>
+                            <p>Layanan dirancang personal agar dapat disesuaikan dengan kebutuhan unik dan tujuan bisnis Anda.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Baris Bawah (3 Item - Centered) -->
                 <div class="features-row features-row-bottom">
-                    <!-- 05 -->
                     <div class="feature-card">
                         <div class="feature-header">
                             <div class="feature-icon-box"><i class="fas fa-hands-helping"></i></div>
@@ -195,11 +164,9 @@
                         </div>
                         <div class="feature-body">
                             <h4>Komitmen Inklusivitas</h4>
-                            <p>Teknologi dan produk yang dihadirkan bersifat berkelanjutan serta mudah diakses berbagai
-                                lapisan masyarakat.</p>
+                            <p>Teknologi dan produk yang dihadirkan bersifat berkelanjutan serta mudah diakses berbagai lapisan masyarakat.</p>
                         </div>
                     </div>
-                    <!-- 06 -->
                     <div class="feature-card">
                         <div class="feature-header">
                             <div class="feature-icon-box"><i class="fas fa-user-shield"></i></div>
@@ -207,11 +174,9 @@
                         </div>
                         <div class="feature-body">
                             <h4>Pelayanan Profesional & Terdampingi</h4>
-                            <p>Menjamin komunikasi jelas, komitmen tenggat waktu, serta pendampingan intensif yang
-                                optimal.</p>
+                            <p>Menjamin komunikasi jelas, komitmen tenggat waktu, serta pendampingan intensif yang optimal.</p>
                         </div>
                     </div>
-                    <!-- 07 -->
                     <div class="feature-card">
                         <div class="feature-header">
                             <div class="feature-icon-box"><i class="fas fa-laptop-house"></i></div>
@@ -219,15 +184,14 @@
                         </div>
                         <div class="feature-body">
                             <h4>Layanan Daring & Luring</h4>
-                            <p>Fleksibilitas penuh melalui opsi online, offline, maupun in-house training dengan tenaga
-                                profesional.</p>
+                            <p>Fleksibilitas penuh melalui opsi online, offline, maupun in-house training dengan tenaga profesional.</p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
+
     <!-- Portofolio Section -->
     <section id="portofolio" class="section bg-light">
         <div class="container">
@@ -239,7 +203,6 @@
             <div class="portfolio-grid-container" data-aos="fade-up">
                 <!-- Baris Atas 1 (3 Item) -->
                 <div class="portfolio-row">
-                    <!-- Portofolio 1 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-landmark"></i></div>
@@ -247,11 +210,9 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>Kantor Pertanahan Palu</h3>
-                            <p><strong>Official Website BPN Kota Palu (bpnpalu.id):</strong> Portal resmi transformasi
-                                layanan publik transparan (pendaftaran tanah, peralihan hak, hingga pengaduan).</p>
+                            <p><strong>Official Website BPN Kota Palu (bpnpalu.id):</strong> Portal resmi transformasi layanan publik transparan.</p>
                         </div>
                     </div>
-                    <!-- Portofolio 2 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-university"></i></div>
@@ -259,11 +220,9 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>SITAMPAN UNTAD</h3>
-                            <p><strong>Sistem Informasi Terpadu MBKM (sitampan.untad.ac.id):</strong> Pendukung Magang,
-                                PLP Terintegrasi, logbook harian, dan unggah laporan.</p>
+                            <p><strong>Sistem Informasi Terpadu MBKM:</strong> Pendukung Magang, PLP Terintegrasi, logbook harian, dan unggah laporan.</p>
                         </div>
                     </div>
-                    <!-- Portofolio 3 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-laptop"></i></div>
@@ -271,15 +230,13 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>Website Prodi Teknik Geofisika</h3>
-                            <p><strong>FMIPA Untad:</strong> Penjadwalan akademik real-time (ujian komprehensif, seminar
-                                hasil) serta pengumuman rekrutmen asisten lab.</p>
+                            <p><strong>FMIPA Untad:</strong> Penjadwalan akademik real-time serta pengumuman rekrutmen asisten lab.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Baris Tengah (3 Item) -->
                 <div class="portfolio-row">
-                    <!-- Portofolio 4 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-shield-alt"></i></div>
@@ -287,11 +244,9 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>SMART - Audit Mutu Internal</h3>
-                            <p><strong>Universitas Tadulako:</strong> Sistem manajemen audit mutu internal untuk
-                                instrumen digital, kertas kerja online, dan monitoring temuan.</p>
+                            <p><strong>Universitas Tadulako:</strong> Sistem manajemen audit mutu internal untuk instrumen digital dan kertas kerja online.</p>
                         </div>
                     </div>
-                    <!-- Portofolio 5 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-globe"></i></div>
@@ -299,11 +254,9 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>Website PMM UNTAD</h3>
-                            <p><strong>Pusat Mobilitas Mahasiswa:</strong> Portal strategis akselerasi program Kampus
-                                Berdampak Kemdiktisaintek (Magang & Kampus Mengajar).</p>
+                            <p><strong>Pusat Mobilitas Mahasiswa:</strong> Portal strategis akselerasi program Kampus Berdampak Kemdiktisaintek.</p>
                         </div>
                     </div>
-                    <!-- Portofolio 6 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-chart-pie"></i></div>
@@ -311,15 +264,13 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>Website Prodi Sains Data</h3>
-                            <p><strong>Universitas Tadulako:</strong> Portal resmi prodi baru fokus pengolahan data dan
-                                kecerdasan buatan, kurikulum, serta galeri laboratorium.</p>
+                            <p><strong>Universitas Tadulako:</strong> Portal resmi prodi baru fokus pengolahan data dan kecerdasan buatan.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Baris Bawah (2 Item - Centered ala Legalitas) -->
+                <!-- Baris Bawah (2 Item - Centered) -->
                 <div class="portfolio-row portfolio-row-center">
-                    <!-- Portofolio 7 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-book-reader"></i></div>
@@ -327,11 +278,9 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>Prodi Administrasi Publik FISIP</h3>
-                            <p><strong>Universitas Tadulako:</strong> Sarana komunikasi dan akuntabilitas digital prodi
-                                tertua, integrasi profil, Tri Dharma, dan layanan akademik.</p>
+                            <p><strong>Universitas Tadulako:</strong> Sarana komunikasi dan akuntabilitas digital prodi tertua.</p>
                         </div>
                     </div>
-                    <!-- Portofolio 8 -->
                     <div class="portfolio-card">
                         <div class="portfolio-card-top">
                             <div class="portfolio-icon-box"><i class="fas fa-school"></i></div>
@@ -339,13 +288,11 @@
                         </div>
                         <div class="portfolio-content">
                             <h3>Pesantren Insan Cita Indonesia</h3>
-                            <p>Platform resmi pesantren komprehensif mulai dari video hero banner, integrasi PPDB online
-                                tombol aksi cepat, hingga data asatidz.</p>
+                            <p>Platform resmi pesantren komprehensif mulai dari video hero banner hingga integrasi PPDB online.</p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -357,7 +304,6 @@
                 <p>CV. Cendika Digital Nusantara berbadan hukum resmi dan terpercaya</p>
             </div>
             <div class="legal-grid-container" data-aos="fade-up">
-                <!-- Baris Atas (3 Item) -->
                 <div class="legal-row legal-row-top">
                     <div class="legal-card">
                         <i class="fas fa-file-alt"></i>
@@ -375,7 +321,6 @@
                         <p>Nomor: AHU-00032.AH.02.01.Tahun 2021</p>
                     </div>
                 </div>
-                <!-- Baris Bawah (2 Item - Centered) -->
                 <div class="legal-row legal-row-bottom">
                     <div class="legal-card">
                         <i class="fas fa-id-card"></i>
@@ -392,6 +337,7 @@
         </div>
     </section>
 
+    <!-- Kontak Section -->
     <section id="kontak" class="section bg-light">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
@@ -401,8 +347,7 @@
             <div class="contact-wrapper">
                 <div class="contact-info" data-aos="fade-right">
                     <h3>CV. CENDIKA DIGITAL NUSANTARA</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Jl. Watunjamboko RT.003 RW.003, Kawatuna, Mantikulore, Kota
-                        Palu, Sulawesi Tengah, Kode Pos 94233</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl. Watunjamboko RT.003 RW.003, Kawatuna, Mantikulore, Kota Palu, Sulawesi Tengah, Kode Pos 94233</p>
                     <p><i class="fas fa-phone-alt"></i> +62 859-1067-80884</p>
                     <p><i class="fas fa-envelope"></i> cendikadigitalnusantara@gmail.com</p>
                     <p><i class="fas fa-globe"></i> diginus.web.id</p>
@@ -426,6 +371,7 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container footer-content">
             <p>&copy; 2026 <strong>DIGINUS (CV. Cendika Digital Nusantara)</strong>. All Rights Reserved.</p>
@@ -433,8 +379,25 @@
         </div>
     </footer>
 
+    <!-- AOS Script -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="main.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50
+        });
+
+        // Efek Navbar Berubah Warna Saat Di-scroll
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
 </body>
 
 </html>

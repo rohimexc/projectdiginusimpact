@@ -1,21 +1,24 @@
-/* Global Reset & Styling */
+/* =========================================
+   GLOBAL RESET & VARIABLES
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
-    --primary-color: #3b82f6; /* Biru modern yang lebih vibrant */
+    --primary-color: #4078ef;
     --primary-light: #eff6ff;
-    --secondary-color: #3b82f6;
-    --dark-color: #1e293b;
-    --text-muted: #64748b;
-    --light-color: #f8fafc;
-    --white: #ffffff;
     --accent-color: #f59e0b;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --dark-color: #0f172a;
+    --text-color: #334155;
+    --text-muted: #64748b;
+    --light-bg: #f8fafc;
+    --border-color: #f1f5f9;
+    --white: #ffffff;
+    --transition: all 0.25s ease;
 }
 
 html {
@@ -23,146 +26,129 @@ html {
 }
 
 body {
-    color: var(--dark-color);
-    line-height: 1.7;
+    color: var(--text-color);
     background-color: var(--white);
+    line-height: 1.6;
 }
 
 .container {
     width: 90%;
-    max-width: 1200px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 0 15px;
 }
 
-/* Header & Navbar (Default Transparan/Putih Lembut saat di atas) */
+/* =========================================
+   HEADER & LOGO (MINIMALIST)
+   ========================================= */
+/* Header & Logo Styling (Awalnya Disembunyikan) */
+/* =========================================
+   NAVBAR MUNCUL HANYA SAAT DI-SCROLL
+   ========================================= */
 header {
-    background: transparent;
+    background: var(--primary-color);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    transition: var(--transition);
+    height: 100px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    
+    /* Efek sembunyi di atas */
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
 }
 
+/* Pas di-scroll ke bawah, navbar langsung meluncur turun dan kelihatan */
 header.scrolled {
-    background: var(--secondary-color);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
 }
 
 .navbar {
     display: flex;
-    justify-content: space-between; /* Membuat logo di kiri dan menu di kanan secara otomatis */
+    justify-content: flex-start;
     align-items: center;
-    height: 80px;
-    transition: var(--transition);
-}
-
-.logo a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--white);
-    text-decoration: none;
-    letter-spacing: 0.5px;
+    height: 100%;
+    padding: 0 30px;
 }
 
 .logo-img {
-    width: 42px;
-    height: 42px;
+    height: 70px;
+    width: auto;
     object-fit: contain;
+    /* Karena navbar-nya sudah biru, logo otomatis kita ubah jadi putih bersih */
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
+}   
 
+header.scrolled {
+    background: var(--primary-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.logo span {
-    color: var(--accent-color);
+header.scrolled .logo {
+    opacity: 1;
+    visibility: visible;
 }
 
-nav {
-    margin-left: auto; /* Mendorong menu navigasi agar menempel ke sisi kanan */
+/* Otomatis ubah logo navbar jadi putih bersih pas background-nya biru */
+header.scrolled .logo-img {
+    filter: brightness(0) invert(1); 
 }
 
-nav ul {
+/* 2. Logo Besar di Tengah Hero Section */
+.hero-logo-wrapper {
+    margin-bottom: 20px;
     display: flex;
-    list-style: none;
-    align-items: center;
-    margin: 0;
-    padding: 0;
+    justify-content: center;
 }
 
-nav ul li {
-    margin-left: 25px; /* Mengatur jarak antar menu */
+.hero-logo-center {
+    height: 90px; /* Ukuran besar dan mencolok di tengah */
+    width: auto;
+    object-fit: contain;
+    /* Karena background hero section sudah biru/gelap, logo otomatis kita bikin putih bersih agar kontras */
+    filter: brightness(0) invert(1);
 }
 
-nav ul li a {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: var(--transition);
-    position: relative;
-    padding: 5px 0;
-    white-space: nowrap;
-}
-
-nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--accent-color);
-    transition: var(--transition);
-}
-
-nav ul li a:hover::after {
-    width: 100%;
-}
-
-nav ul li a:hover {
-    color: var(--accent-color);
-}
-.menu-toggle {
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--white);
-}
-
-/* Hero Section */
+/* =========================================
+   HERO SECTION
+   ========================================= */
 .hero {
-    height: 100vh;
-    background: linear-gradient(135deg, rgba(29, 78, 216, 0.9), rgba(30, 41, 59, 0.85)), url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+    min-height: 100vh;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.92), rgba(15, 23, 42, 0.9)), 
+                url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
     display: flex;
     align-items: center;
     text-align: center;
     color: var(--white);
-    padding-top: 80px;
+    padding: 100px 0 60px;
 }
 
 .hero-content h1 {
-    font-size: 3.8rem;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
+    font-size: 3.2rem;
     font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
 }
 
 .hero-content h2 {
-    font-size: 1.4rem;
-    margin-bottom: 25px;
-    font-weight: 400;
+    font-size: 1.25rem;
+    font-weight: 500;
     color: #93c5fd;
+    margin-bottom: 20px;
 }
 
 .hero-content p {
-    font-size: 1.1rem;
-    max-width: 680px;
-    margin: 0 auto 35px;
-    color: #e2e8f0;
+    font-size: 1.05rem;
+    max-width: 620px;
+    margin: 0 auto 30px;
+    color: #cbd5e1;
 }
 
 .hero-btns {
@@ -173,12 +159,12 @@ nav ul li a:hover {
 
 .btn {
     display: inline-block;
-    padding: 14px 28px;
-    border-radius: 50px;
+    padding: 12px 26px;
+    border-radius: 8px;
     font-weight: 600;
+    font-size: 0.92rem;
     text-decoration: none;
     transition: var(--transition);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .btn-primary {
@@ -193,10 +179,9 @@ nav ul li a:hover {
 }
 
 .btn-secondary {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.08);
     color: var(--white);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-secondary:hover {
@@ -207,68 +192,83 @@ nav ul li a:hover {
 
 .btn-block {
     width: 100%;
-    border-radius: 8px;
 }
 
-/* Section General */
+/* =========================================
+   GENERAL SECTIONS
+   ========================================= */
 .section {
-    padding: 90px 0;
+    padding: 85px 0;
 }
 
 .bg-light {
-    background-color: var(--light-color);
+    background-color: var(--light-bg);
 }
 
 .section-title {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
 }
 
 .section-title h2 {
-    font-size: 2.4rem;
-    color: var(--dark-color);
-    margin-bottom: 12px;
+    font-size: 2.1rem;
     font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 8px;
 }
 
 .section-title p {
     color: var(--text-muted);
-    font-size: 1.05rem;
+    font-size: 0.98rem;
 }
 
-/* Tentang Kami */
+/* =========================================
+   TENTANG KAMI
+   ========================================= */
 .about-grid {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
-    gap: 50px;
+    gap: 40px;
     align-items: center;
 }
 
 .about-text p {
-    margin-bottom: 18px;
-    font-size: 1.05rem;
-    color: #475569;
+    margin-bottom: 16px;
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.about-text strong {
+    color: var(--dark-color);
 }
 
 .vm-box {
     background: var(--white);
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-    margin-bottom: 20px;
-    border-left: 5px solid var(--primary-color);
+    padding: 22px 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    margin-bottom: 15px;
+    border-left: 4px solid var(--primary-color);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary-color);
     transition: var(--transition);
 }
 
 .vm-box:hover {
     transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.07);
+    border-left-color: var(--accent-color);
 }
 
 .vm-box h3 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-    font-size: 1.2rem;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.vm-box p {
+    font-size: 0.92rem;
+    color: var(--text-muted);
 }
 
 .vm-box ul {
@@ -276,47 +276,54 @@ nav ul li a:hover {
 }
 
 .vm-box ul li {
-    margin-bottom: 10px;
-    font-size: 0.95rem;
-    color: #475569;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: flex-start;
 }
 
 .vm-box ul li i {
-    color: var(--secondary-color);
+    color: var(--primary-color);
     margin-right: 10px;
+    margin-top: 4px;
 }
 
-/* Layanan Kami */
+/* =========================================
+   LAYANAN KAMI
+   ========================================= */
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
 }
 
 .service-card {
     background: var(--white);
-    padding: 45px 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    padding: 35px 25px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
     text-align: center;
     transition: var(--transition);
-    border: 1px solid #f1f5f9;
 }
 
 .service-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(29, 78, 216, 0.08);
-    border-color:var(--accent-color);
+    transform: translateY(-4px);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .service-icon {
-    font-size: 45px;
+    font-size: 32px;
     color: var(--primary-color);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     background: var(--primary-light);
-    width: 90px;
-    height: 90px;
-    line-height: 90px;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
@@ -324,372 +331,319 @@ nav ul li a:hover {
 }
 
 .service-card:hover .service-icon {
-    background: var(--primary-color);
-    color: var(--white);
-    transform: scale(1.05);
+    background-color: var(--accent-color);
+    color: var(--dark-color);
 }
 
 .service-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 15px;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
     color: var(--dark-color);
     font-weight: 700;
 }
 
 .service-card p {
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
-/* Keunggulan */
+/* =========================================
+   KENAPA HARUS DIGINUS (4-3 LAYOUT)
+   ========================================= */
 .features-grid-container {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 25px;
     align-items: center;
 }
 
 .features-row {
     display: flex;
     justify-content: center;
-    gap: 25px;
+    gap: 20px;
     width: 100%;
     flex-wrap: wrap;
 }
 
 .feature-card {
     background: var(--white);
-    padding: 25px 20px; /* Padding sedikit disesuaikan agar lebih padat */
-    border-radius: 20px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-    border: 1px solid #f1f5f9;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    padding: 24px 20px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: var(--transition);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    max-width: 265px; /* Dikecilkan sedikit agar 4 buah muat berjejer di atas */
-}
-
-/* Garis Aksen Cahaya Atas Saat di-hover */
-.feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: var(--accent-color);
-    opacity: 0;
-    transition: var(--transition);
+    max-width: 260px;
 }
 
 .feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(29, 78, 216, 0.1);
+    transform: translateY(-4px);
     border-color: var(--accent-color);
-}
-
-.feature-card:hover::before {
-    opacity: 1;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .feature-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .feature-icon-box {
-    width: 55px;
-    height: 55px;
+    width: 48px;
+    height: 48px;
     background: var(--primary-light);
     color: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
-    font-size: 22px;
+    border-radius: 10px;
+    font-size: 20px;
     transition: var(--transition);
 }
 
 .feature-card:hover .feature-icon-box {
-    background: var(--primary-color);
-    color: var(--white);
-    transform: scale(1.1) rotate(5deg);
+    background-color: var(--accent-color);
+    color: var(--dark-color);
 }
 
 .feature-number {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 800;
     color: #cbd5e1;
-    transition: var(--transition);
-}
-
-.feature-card:hover .feature-number {
-    color: var(--primary-color);
 }
 
 .feature-body h4 {
     color: var(--dark-color);
-    margin-bottom: 10px;
-    font-size: 1.1rem;
+    margin-bottom: 8px;
+    font-size: 1rem;
     font-weight: 700;
 }
 
 .feature-body p {
     color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
+    font-size: 0.88rem;
+    line-height: 1.5;
 }
-/* Portofolio */
+
 /* =========================================
-   PORTOFOLIO SECTION (LEGALITAS STYLE & FULLY ALIVE)
+   PORTOFOLIO (3-3-2 LAYOUT)
    ========================================= */
 .portfolio-grid-container {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 25px;
     align-items: center;
 }
 
 .portfolio-row {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 25px;
     width: 100%;
     flex-wrap: wrap;
 }
 
 .portfolio-card {
     background: var(--white);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-    /* Efek transisi halus agar card hidup waktu di-hover */
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: 1px solid #f1f5f9;
+    padding: 26px 22px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: var(--transition);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: relative;
-    overflow: hidden;
     width: 100%;
-    max-width: 360px; /* Ukuran pas dan konsisten ala card legalitas */
+    max-width: 350px;
 }
 
-/* Garis aksen cahaya tipis di atas card saat di-hover */
-.portfolio-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: var(--accent-color);
-    opacity: 0;
-    transition: var(--transition);
-}
-
-/* Efek hidup saat kursor menyentuh SEMUA card (Naik ke atas) */
 .portfolio-card:hover {
-    transform: translateY(-10px) scale(1.01);
-    box-shadow: 0 20px 45px rgba(29, 78, 216, 0.12), 0 0 15px rgba(59, 130, 246, 0.1);
-    border-color: #93c5fd;
-}
-
-.portfolio-card:hover::after {
-    opacity: 1;
+    transform: translateY(-4px);
+    border-color: var(--accent-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .portfolio-card-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .portfolio-icon-box {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     background: var(--primary-light);
     color: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
-    font-size: 24px;
+    border-radius: 10px;
+    font-size: 20px;
     transition: var(--transition);
 }
 
 .portfolio-card:hover .portfolio-icon-box {
-    background: var(--primary-color);
-    color: var(--white);
-    transform: scale(1.1) rotate(6deg);
+    background-color: var(--accent-color);
+    color: var(--dark-color);
 }
 
 .portfolio-badge {
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    background: #eff6ff;
+    background: var(--primary-light);
     color: var(--primary-color);
-    padding: 5px 12px;
-    border-radius: 50px;
-    letter-spacing: 0.5px;
-    transition: var(--transition);
-}
-
-.portfolio-card:hover .portfolio-badge {
-    background: var(--primary-color);
-    color: var(--white);
+    padding: 4px 10px;
+    border-radius: 6px;
 }
 
 .portfolio-content h3 {
-    font-size: 1.12rem;
+    font-size: 1.08rem;
     color: var(--dark-color);
     font-weight: 700;
-    margin-bottom: 10px;
-    line-height: 1.4;
-    transition: var(--transition);
-}
-
-.portfolio-card:hover .portfolio-content h3 {
-    color: var(--primary-color);
+    margin-bottom: 8px;
 }
 
 .portfolio-content p {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-muted);
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
-/* Legalitas Styling */
+/* =========================================
+   LEGALITAS (3-2 LAYOUT)
+   ========================================= */
 .legal-grid-container {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
     align-items: center;
 }
 
 .legal-row {
     display: flex;
     justify-content: center;
-    gap: 25px;
+    gap: 20px;
     width: 100%;
     flex-wrap: wrap;
 }
 
 .legal-card {
     background: var(--white);
-    padding: 30px 20px;
-    border-radius: 16px;
+    padding: 26px 20px;
+    border-radius: 14px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.03);
-    border: 1px solid #f1f5f9;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     transition: var(--transition);
     width: 100%;
-    max-width: 350px; /* Ukuran lebar pas untuk tiap kartu */
+    max-width: 340px;
 }
 
 .legal-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    transform: translateY(-4px);
     border-color: var(--accent-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .legal-card i {
-    font-size: 32px;
+    font-size: 28px;
     color: var(--primary-color);
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .legal-card h4 {
     font-size: 0.95rem;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: var(--dark-color);
     font-weight: 700;
 }
 
 .legal-card p {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--text-muted);
 }
-/* Kontak Section */
+
+/* =========================================
+   KONTAK
+   ========================================= */
 .contact-wrapper {
     display: grid;
     grid-template-columns: 1fr 1.1fr;
-    gap: 50px;
+    gap: 40px;
 }
 
 .contact-info h3 {
     color: var(--dark-color);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: 1.25rem;
 }
 
 .contact-info p {
-    margin-bottom: 18px;
+    margin-bottom: 15px;
     display: flex;
     align-items: flex-start;
-    gap: 15px;
-    font-size: 0.98rem;
+    gap: 12px;
+    font-size: 0.92rem;
     color: var(--text-muted);
 }
 
 .contact-info i {
     color: var(--primary-color);
-    margin-top: 4px;
-    font-size: 1.1rem;
+    margin-top: 3px;
+    font-size: 1rem;
 }
 
 .contact-form {
     background: var(--white);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-    border: 1px solid #f1f5f9;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 14px 18px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 0.95rem;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.92rem;
     outline: none;
     transition: var(--transition);
-    background-color: #fafafa;
+    background-color: var(--white);
     color: var(--dark-color);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--primary-color);
-    background-color: var(--white);
-    box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.1);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Footer */
+/* =========================================
+   FOOTER
+   ========================================= */
 footer {
     background-color: var(--dark-color);
     color: var(--white);
     text-align: center;
-    padding: 40px 0;
+    padding: 35px 0;
 }
 
 footer p {
-    margin-bottom: 6px;
-    font-size: 0.92rem;
+    margin-bottom: 4px;
+    font-size: 0.88rem;
     color: #94a3b8;
 }
 
@@ -697,60 +651,30 @@ footer strong {
     color: var(--white);
 }
 
-/* Responsive Design */
+/* =========================================
+   RESPONSIVE
+   ========================================= */
 @media (max-width: 992px) {
-    .about-grid, .contact-wrapper {
+    .about-grid, 
+    .contact-wrapper {
         grid-template-columns: 1fr;
     }
     
     .hero-content h1 {
-        font-size: 2.8rem;
+        font-size: 2.6rem;
     }
 }
 
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
-
-    nav {
-        position: fixed;
-        top: 80px;
-        right: -100%;
-        width: 100%;
-        height: calc(100vh - 80px);
-        background: var(--dark-color);
-        box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        transition: var(--transition);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    nav.active {
-        right: 0;
-    }
-
-    nav ul {
-        flex-direction: column;
-        padding: 0;
-        align-items: center;
-    }
-
-    nav ul li {
-        margin: 15px 0;
-    }
-
-    nav ul li a {
-        font-size: 1.2rem;
-        color: var(--white);
-    }
-
     .hero-content h1 {
-        font-size: 2.3rem;
+        font-size: 2.1rem;
     }
 
     .hero-content h2 {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
+    }
+
+    .section {
+        padding: 65px 0;
     }
 }
