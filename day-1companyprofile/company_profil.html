@@ -1,37 +1,27 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <!-- Menentukan format karakter standar UTF-8 -->
   <meta charset="UTF-8">
-  <!-- Pengaturan viewport agar layout otomatis responsif di semua perangkat -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Judul pada tab peramban -->
   <title>Diginus — Empowering Skills. Elevating Digital Future.</title>
   
-  <!-- Favicon resmi -->
+  <!-- Aset Ikon dan Font -->
   <link rel="icon" type="image/png" href="favicon.png">
-  
-  <!-- Google Fonts: Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- AOS (Animate On Scroll) -->
+  <!-- Pustaka Animasi dan CSS Utama -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-  
-  <!-- Stylesheet Utama -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Notifikasi Toast -->
+  <!-- Toast Notifikasi saat Salin Teks -->
   <div id="toast" class="toast"><i class="fa-solid fa-circle-check"></i> Notifikasi</div>
 
-  <!-- Modal Pratinjau Portofolio -->
+  <!-- Pop-Up Modal Pratinjau Detail Portofolio -->
   <div class="portfolio-modal" id="portfolioModal">
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal-content">
@@ -47,7 +37,7 @@
     </div>
   </div>
 
-  <!-- Navigasi Utama -->
+  <!-- Bilah Navigasi Sticky -->
   <nav class="navbar" id="navbar">
     <div class="container nav-container">
       <a href="#" class="brand-logo" aria-label="DIGINUS Logo">
@@ -56,7 +46,7 @@
     </div>
   </nav>
 
-  <!-- Section Statistik -->
+  <!-- Section 1: Ringkasan Angka Statistik Pencapaian -->
   <section class="stats-section">
     <div class="container">
       <div class="stats-grid">
@@ -84,7 +74,7 @@
     </div>
   </section>
 
-  <!-- Section Tentang Kami -->
+  <!-- Section 2: Visi dan Misi Perusahaan -->
   <section class="section" id="tentang">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -140,7 +130,7 @@
     </div>
   </section>
 
-  <!-- Section Layanan -->
+  <!-- Section 3: Tiga Pilar Layanan Utama -->
   <section class="section bg-light" id="layanan">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -186,7 +176,7 @@
     </div>
   </section>
 
-  <!-- Section Keunggulan -->
+  <!-- Section 4: Accordion Interaktif dan Gambar Showcase -->
   <section class="section" id="keunggulan">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -288,7 +278,7 @@
     </div>
   </section>
 
-  <!-- Section Portofolio: Single Row Infinite Marquee Card -->
+  <!-- Section 5: Dua Baris Marquee Portofolio Berjalan Otomatis (Anti-Bolong) -->
   <section class="section bg-light portfolio-section" id="portofolio">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -297,6 +287,7 @@
         <p>Solusi teknologi teruji untuk instansi pemerintah dan pendidikan tinggi. <em>(Arahkan kursor atau sentuh kartu untuk menjeda dan melihat detail pratinjau)</em></p>
       </div>
 
+      <!-- Filter Kategori Proyek -->
       <div class="portfolio-filter" data-aos="fade-up">
         <button class="filter-btn active" data-filter="all">Semua Proyek</button>
         <button class="filter-btn" data-filter="web">Web Portal</button>
@@ -305,11 +296,12 @@
       </div>
     </div>
 
-    <!-- Wadah 1 Baris Marquee Card Tunggal -->
+    <!-- Jalur Dua Baris Marquee -->
     <div class="marquee-wrapper" data-aos="fade-up">
+      
+      <!-- Baris 1: Mengalir Mulus ke Kiri -->
       <div class="marquee-row">
-        <div class="marquee-track">
-          <!-- Kartu 1 -->
+        <div class="marquee-group">
           <div class="portfolio-card hover-lift" data-category="web">
             <div class="portfolio-badge">Digital Services</div>
             <h3>Official Website BPN Kota Palu</h3>
@@ -317,8 +309,6 @@
             <p>Portal resmi Kantor Pertanahan Palu: transparansi layanan publik, alur sertifikasi, biaya hak, dan modul aduan masyarakat.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-
-          <!-- Kartu 2 -->
           <div class="portfolio-card hover-lift" data-category="system education">
             <div class="portfolio-badge">Sistem Informasi</div>
             <h3>SITAMPAN UNTAD</h3>
@@ -326,8 +316,6 @@
             <p>Sistem Informasi MBKM terpadu: monitoring magang, asistensi mengajar, logbook harian, dan penilaian berkala dosen pembimbing.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-
-          <!-- Kartu 3 -->
           <div class="portfolio-card hover-lift" data-category="web education">
             <div class="portfolio-badge">Web Portal</div>
             <h3>Website Prodi Teknik Geofisika</h3>
@@ -335,83 +323,118 @@
             <p>Pusat administrasi akademik prodi real-time: penjadwalan komprehensif, seminar hasil, dan informasi kegiatan tridharma.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-
-          <!-- Kartu 4 -->
-          <div class="portfolio-card hover-lift" data-category="system education">
-            <div class="portfolio-badge">Audit Mutu</div>
-            <h3>SMART UNTAD</h3>
-            <span class="portfolio-domain"><i class="fa-solid fa-check-to-slot"></i> Sistem Audit Internal</span>
-            <p>Sistem audit mutu PPEPP institusi: instrumen digital, kertas kerja daring, verifikasi auditor, dan pantauan temuan.</p>
+          <div class="portfolio-card hover-lift" data-category="web">
+            <div class="portfolio-badge">Company Profile</div>
+            <h3>Portal Layanan Pertanahan</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-shield-halved"></i> Tata Ruang & Pendaftaran</span>
+            <p>Platform interaktif panduan permohonan hak atas tanah, pengecekan berkas daring, dan integrasi pengaduan publik terpadu.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
+        </div>
 
-          <!-- Kartu 5 -->
-          <div class="portfolio-card hover-lift" data-category="web education">
-            <div class="portfolio-badge">Portal Kampus</div>
-            <h3>Website PMM UNTAD</h3>
-            <span class="portfolio-domain"><i class="fa-solid fa-users"></i> Mobilitas Mahasiswa</span>
-            <p>Gerbang informasi program kampus berdampak: pertukaran mahasiswa, asistensi mengajar, dan program kemanusiaan.</p>
-            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
-          </div>
-
-          <!-- Kartu 6 -->
-          <div class="portfolio-card hover-lift" data-category="web education">
-            <div class="portfolio-badge">Web Prodi</div>
-            <h3>Website Prodi Sains Data</h3>
-            <span class="portfolio-domain"><i class="fa-solid fa-chart-pie"></i> FMIPA UNTAD</span>
-            <p>Pusat informasi kurikulum data & AI, penerimaan mahasiswa baru, dan galeri riset komputasi mutakhir.</p>
-            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
-          </div>
-
-          <!-- Duplikasi Seluruh 6 Kartu Agar Looping Berjalan Mulus Tanpa Putus -->
-          <div class="portfolio-card hover-lift" data-category="web" aria-hidden="true">
+        <!-- Duplikat Baris 1: Menyambung Loop Animasi -->
+        <div class="marquee-group" aria-hidden="true">
+          <div class="portfolio-card hover-lift" data-category="web">
             <div class="portfolio-badge">Digital Services</div>
             <h3>Official Website BPN Kota Palu</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-link"></i> bpnpalu.id</span>
             <p>Portal resmi Kantor Pertanahan Palu: transparansi layanan publik, alur sertifikasi, biaya hak, dan modul aduan masyarakat.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-          <div class="portfolio-card hover-lift" data-category="system education" aria-hidden="true">
+          <div class="portfolio-card hover-lift" data-category="system education">
             <div class="portfolio-badge">Sistem Informasi</div>
             <h3>SITAMPAN UNTAD</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-link"></i> sitampan.untad.ac.id</span>
             <p>Sistem Informasi MBKM terpadu: monitoring magang, asistensi mengajar, logbook harian, dan penilaian berkala dosen pembimbing.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-          <div class="portfolio-card hover-lift" data-category="web education" aria-hidden="true">
+          <div class="portfolio-card hover-lift" data-category="web education">
             <div class="portfolio-badge">Web Portal</div>
             <h3>Website Prodi Teknik Geofisika</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-graduation-cap"></i> FMIPA UNTAD</span>
             <p>Pusat administrasi akademik prodi real-time: penjadwalan komprehensif, seminar hasil, dan informasi kegiatan tridharma.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-          <div class="portfolio-card hover-lift" data-category="system education" aria-hidden="true">
+          <div class="portfolio-card hover-lift" data-category="web">
+            <div class="portfolio-badge">Company Profile</div>
+            <h3>Portal Layanan Pertanahan</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-shield-halved"></i> Tata Ruang & Pendaftaran</span>
+            <p>Platform interaktif panduan permohonan hak atas tanah, pengecekan berkas daring, dan integrasi pengaduan publik terpadu.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Baris 2: Mengalir Mulus ke Kanan Sejak Awal Buka -->
+      <div class="marquee-row marquee-row-reverse">
+        <div class="marquee-group">
+          <div class="portfolio-card hover-lift" data-category="system education">
             <div class="portfolio-badge">Audit Mutu</div>
             <h3>SMART UNTAD</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-check-to-slot"></i> Sistem Audit Internal</span>
             <p>Sistem audit mutu PPEPP institusi: instrumen digital, kertas kerja daring, verifikasi auditor, dan pantauan temuan.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-          <div class="portfolio-card hover-lift" data-category="web education" aria-hidden="true">
+          <div class="portfolio-card hover-lift" data-category="web education">
             <div class="portfolio-badge">Portal Kampus</div>
             <h3>Website PMM UNTAD</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-users"></i> Mobilitas Mahasiswa</span>
             <p>Gerbang informasi program kampus berdampak: pertukaran mahasiswa, asistensi mengajar, dan program kemanusiaan.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
-          <div class="portfolio-card hover-lift" data-category="web education" aria-hidden="true">
+          <div class="portfolio-card hover-lift" data-category="web education">
             <div class="portfolio-badge">Web Prodi</div>
             <h3>Website Prodi Sains Data</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-chart-pie"></i> FMIPA UNTAD</span>
             <p>Pusat informasi kurikulum data & AI, penerimaan mahasiswa baru, dan galeri riset komputasi mutakhir.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
+          <div class="portfolio-card hover-lift" data-category="education system">
+            <div class="portfolio-badge">Sistem Akademik</div>
+            <h3>Sistem Karakter Santri</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-school"></i> Insan Cita Mandiri</span>
+            <p>Sistem pelaporan hafalan Al-Qur'an, kedisiplinan asrama, rekam medis harian, dan mutaba'ah santri terintegrasi wali santri.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+        </div>
+
+        <!-- Duplikat Baris 2: Menyambung Loop Animasi -->
+        <div class="marquee-group" aria-hidden="true">
+          <div class="portfolio-card hover-lift" data-category="system education">
+            <div class="portfolio-badge">Audit Mutu</div>
+            <h3>SMART UNTAD</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-check-to-slot"></i> Sistem Audit Internal</span>
+            <p>Sistem audit mutu PPEPP institusi: instrumen digital, kertas kerja daring, verifikasi auditor, dan pantauan temuan.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="web education">
+            <div class="portfolio-badge">Portal Kampus</div>
+            <h3>Website PMM UNTAD</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-users"></i> Mobilitas Mahasiswa</span>
+            <p>Gerbang informasi program kampus berdampak: pertukaran mahasiswa, asistensi mengajar, dan program kemanusiaan.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="web education">
+            <div class="portfolio-badge">Web Prodi</div>
+            <h3>Website Prodi Sains Data</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-chart-pie"></i> FMIPA UNTAD</span>
+            <p>Pusat informasi kurikulum data & AI, penerimaan mahasiswa baru, dan galeri riset komputasi mutakhir.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="education system">
+            <div class="portfolio-badge">Sistem Akademik</div>
+            <h3>Sistem Karakter Santri</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-school"></i> Insan Cita Mandiri</span>
+            <p>Sistem pelaporan hafalan Al-Qur'an, kedisiplinan asrama, rekam medis harian, dan mutaba'ah santri terintegrasi wali santri.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
         </div>
       </div>
+
     </div>
   </section>
 
-  <!-- Section Legalitas Perusahaan -->
+  <!-- Section 6: Legalitas dan Izin Resmi Perusahaan -->
   <section class="section" id="legalitas">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -452,7 +475,7 @@
     </div>
   </section>
 
-  <!-- Section Klien Kami -->
+  <!-- Section 7: Instansi Klien & Rekan Jejak Kemitraan -->
   <section class="section bg-light" id="klien">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -481,7 +504,7 @@
     </div>
   </section>
 
-  <!-- Section Kontak -->
+  <!-- Section 8: Informasi Alamat dan Saluran Kontak -->
   <section class="section contact-section" id="kontak">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -551,12 +574,12 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <!-- Tombol Melayang Scroll to Top Langsung ke Puncak (Top 0) -->
+  <!-- Tombol Melayang Scroll to Top Langsung ke Titik 0 -->
   <a href="#" class="scroll-top-right" id="scrollTopBtn" aria-label="Kembali ke atas">
     <i class="fa-solid fa-arrow-up"></i>
   </a>
 
-  <!-- Pustaka JS -->
+  <!-- Pustaka Eksternal JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="main.js"></script>
 </body>

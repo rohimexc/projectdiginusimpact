@@ -176,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
   };
 
+  // Pasang event klik ke setiap kartu marquee
   portfolioCards.forEach(card => {
     card.addEventListener('click', () => {
       openPortfolioModal(card);
