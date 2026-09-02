@@ -1,63 +1,99 @@
-// Inisialisasi AOS (Animate On Scroll) Library
-AOS.init({
-    duration: 1000, 
-    once: true,     
-    offset: 80     
-});
+/* AOS & Custom Minimalist Animation Script */
+document.addEventListener("DOMContentLoaded", function() {
+    // Inisialisasi AOS Library dengan konfigurasi halus & smooth
+    AOS.init({
+        duration: 800,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 40
+    });
 
-// Efek Navbar Berubah Warna Jadi Biru Saat Di-scroll
-const header = document.getElementById('header');
+    // Efek Navbar Berubah Warna Saat Di-scroll
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 30) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
 
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
+    // Interaksi tambahan untuk kartu portofolio (Auto-scroll smooth horizontal drag/wheel optional or subtle hover enhancement)
+    const portfolioMarquee = document.querySelector('.portfolio-marquee');
+    if (portfolioMarquee) {
+        portfolioMarquee.addEventListener('wheel', (evt) => {
+            if (evt.deltaY !== 0) {
+                evt.preventDefault();
+                portfolioMarquee.scrollLeft += evt.deltaY;
+            }
+        });
     }
 });
-
-// Toggle Mobile Navigation Menu
-const mobileMenu = document.getElementById('mobile-menu');
-const navLinks = document.querySelector('nav');
-
-mobileMenu.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    
-    // Ubah icon hamburger menjadi 'X' (close) dan sebaliknya
-    const icon = mobileMenu.querySelector('i');
-    if (navLinks.classList.contains('active')) {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-    } else {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
+function smoothScrollTo(event, targetId) {
+    event.preventDefault();
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
     }
-});
-
-// Tutup menu otomatis saat salah satu link diklik di perangkat mobile
-document.querySelectorAll('nav ul li a').forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        const icon = mobileMenu.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-    });
-});
-
-// Simulasi Form Kontak Submit 
-const formKontak = document.getElementById('form-kontak');
-if (formKontak) {
-    formKontak.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Terima kasih banyak! Pesan Anda sudah kami terima. Tim DIGINUS akan segera menghubungi Anda kembali.');
-        formKontak.reset();
-    });
 }
-document.querySelectorAll('.feature-card').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.borderColor = 'var(--primary-color)';
-    });
-    card.addEventListener('mouseleave', () => {
-        card.style.borderColor = '#f1f5f9';
+/* =========================================
+   LOGIKA JAVASCRIPT ACCORDION EKSKLUSIF
+   ========================================= */
+document.addEventListener("DOMContentLoaded", function() {
+    const accordionItems = document.querySelectorAll('.why-diginus-grid .accordion-item');
+    const activeImg = document.getElementById('active-feature-img');
+    const activeText = document.getElementById('active-feature-text');
+
+    // Set item pertama menyala secara default saat halaman dimuat
+    const firstItem = accordionItems[0];
+    if (firstItem) {
+        firstItem.classList.add('active');
+        const body = firstItem.querySelector('.accordion-body');
+        if (body) body.style.maxHeight = body.scrollHeight + "px";
+    }
+
+    accordionItems.forEach(item => {
+        const header = item.querySelector('.accordion-header');
+        
+        header.addEventListener('click', function() {
+            const isActive = item.classList.contains('active');
+            
+            // Tutup semua accordion item
+            accordionItems.forEach(el => {
+                el.classList.remove('active');
+                const body = el.querySelector('.accordion-body');
+                if (body) body.style.maxHeight = null;
+            });
+
+            // Jika item yang diklik tadi belum aktif, maka buka dan ganti gambarnya
+            if (!isActive) {
+                item.classList.add('active');
+                const body = item.querySelector('.accordion-body');
+                if (body) {
+                    body.style.maxHeight = body.scrollHeight + "px";
+                }
+
+                // Ambil data gambar dan teks dari atribut HTML
+                const newImgSrc = item.getAttribute('data-img');
+                const newCaption = item.getAttribute('data-caption');
+
+                // Efek transisi pudar (fade) saat ganti gambar
+                if (activeImg) {
+                    activeImg.style.opacity = '0';
+                    setTimeout(() => {
+                        activeImg.src = newImgSrc;
+                        activeImg.style.opacity = '1';
+                    }, 200);
+                }
+
+                // Ganti teks pada badge bawah gambar
+                if (activeText) {
+                    activeText.textContent = newCaption;
+                }
+            }
+        });
     });
 });
