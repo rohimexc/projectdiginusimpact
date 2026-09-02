@@ -754,8 +754,14 @@ footer p {
 }
 
 /* =========================================
-   STYLE AUTO MARQUEE INFINITE PORTOFOLIO
+   PERBAIKAN STYLE DUAL MARQUEE
    ========================================= */
+.dual-marquee-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
 .marquee-wrapper {
     width: 100%;
     overflow: hidden;
@@ -767,11 +773,21 @@ footer p {
     display: flex;
     gap: 20px;
     width: max-content;
-    /* Durasi 35 detik per putaran, atur cepat/lambat di sini */
-    animation: scrollMarquee 35s linear infinite; 
+    /* Mencegah card mengecil */
+    flex-shrink: 0; 
 }
 
-/* Berhenti bergerak otomatis saat kursor mendekat ke salah satu kartu portofolio */
+/* Baris 1: Bergerak ke Kanan */
+.track-right {
+    animation: scrollRight 35s linear infinite;
+}
+
+/* Baris 2: Bergerak ke Kiri */
+.track-left {
+    animation: scrollLeft 35s linear infinite;
+}
+
+/* Berhenti total otomatis saat kursor mendekat (hover) */
 .marquee-track:hover {
     animation-play-state: paused;
 }
@@ -786,12 +802,22 @@ footer p {
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-/* Keyframes untuk pergerakan geser menyamping */
-@keyframes scrollMarquee {
+/* Keyframes Gerak ke Kanan (Mulai dari -50% biar nyambung sama duplikatnya) */
+@keyframes scrollRight {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Keyframes Gerak ke Kiri (Mulai dari 0% geser ke -50%) */
+@keyframes scrollLeft {
     0% {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(calc(-50% - 10px));
+        transform: translateX(-50%);
     }
 }

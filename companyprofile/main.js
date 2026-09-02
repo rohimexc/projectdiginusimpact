@@ -133,3 +133,45 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+/**
+ * ==========================================================================
+ * LOGIKA OTOMATIS PEMBAGIAN BARIS PORTOFOLIO (> 8 CARD JADI 2 BARIS)
+ * ==========================================================================
+ */
+document.addEventListener("DOMContentLoaded", function() {
+    const row1Track = document.querySelector('#marquee-row-1 .marquee-track');
+    const row2Wrapper = document.getElementById('marquee-row-2');
+    const row2Track = document.getElementById('marquee-track-2');
+
+    if (row1Track && row2Wrapper && row2Track) {
+        const allCards = Array.from(row1Track.querySelectorAll('.portfolio-card'));
+        
+        // Jika total card portofolio lebih dari 8
+        if (allCards.length > 8) {
+            row2Wrapper.style.display = 'flex'; // Munculkan baris kedua
+
+            // Ambil card mulai dari indeks ke-8 (card ke-9 dan seterusnya)
+            const excessCards = allCards.slice(8);
+            
+            // Pindahkan card selebihnya ke baris kedua
+            excessCards.forEach(card => {
+                row2Track.appendChild(card.cloneNode(true)); // Gandakan ke baris 2
+                card.remove(); // Hapus dari baris 1
+            });
+        } else {
+            // Jika kurang atau pas 8, sembunyikan baris kedua
+            row2Wrapper.style.display = 'none';
+        }
+
+        // Duplikat isi track secara otomatis di dalam JavaScript untuk efek infinite loop yang mulus
+        [row1Track, row2Track].forEach(track => {
+            if (track.children.length > 0) {
+                const items = Array.from(track.children);
+                items.forEach(item => {
+                    track.appendChild(item.cloneNode(true));
+                });
+            }
+        });
+    }
+});
