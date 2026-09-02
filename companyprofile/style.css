@@ -1,13 +1,29 @@
-/* Reset & Base Styles */
+/**
+ * ==========================================================================
+ * DOKUMENTASI GAYA KUSTOM (style.css) - DIGINUS
+ * Catatan: Berkas ini mengatur seluruh tata letak visual, palet warna, tipografi,
+ * serta animasi interaksi (hover & transisi) untuk situs web DIGINUS.
+ * ==========================================================================
+ */
+
+
+/* ==========================================================================
+   1. PENGATURAN DASAR & RESET (BASE STYLES)
+   ========================================================================== */
+
+/* Mengaktifkan pengguliran halaman yang halus secara global */
 html {
     scroll-behavior: smooth;
 }
+
+/* Mengatur ulang margin, padding, dan mode kotak box-sizing untuk semua elemen */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Mengatur tipografi utama, warna teks, warna latar belakang, dan tinggi baris */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #334155;
@@ -16,13 +32,19 @@ body {
     scroll-behavior: smooth;
 }
 
+/* Membatasi lebar maksimum area konten utama agar tetap rapi di layar besar */
 .container {
     max-width: 1140px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* Header & Navbar Minimalis */
+
+/* ==========================================================================
+   2. HEADER & NAVBAR MINIMALIS
+   ========================================================================== */
+
+/* Mengatur header agar melayang di atas (fixed) saat halaman digulir */
 header {
     position: fixed;
     top: 0;
@@ -34,6 +56,7 @@ header {
     padding: 20px 0;
 }
 
+/* State saat header aktif discroll: Berubah jadi putih semi-transparan dengan efek blur */
 header.scrolled {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -41,30 +64,40 @@ header.scrolled {
     padding: 12px 0;
 }
 
+/* Mengatur tata letak navigasi agar berada di posisi tengah */
 .navbar {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* Mengatur ukuran tinggi gambar logo pada bilah navigasi */
 .logo-img {
     height: 35px;
     transition: transform 0.3s ease;
 }
 
+/* Efek interaksi saat logo didekati kursor (membesar halus) */
 .logo-img:hover {
     transform: scale(1.05);
 }
 
-/* Section General */
+
+/* ==========================================================================
+   3. PENGATURAN UMUM SECTION (BAGIAN HALAMAN)
+   ========================================================================== */
+
+/* Menentukan jarak ruang atas dan bawah untuk setiap section */
 .section {
     padding: 80px 0;
 }
 
+/* Kelas utilitas untuk latar belakang terang/abu-abu tipis */
 .bg-light {
     background-color: #f1f5f9;
 }
 
+/* Pengaturan judul section (Heading dan Subheading) */
 .section-title {
     text-align: center;
     margin-bottom: 50px;
@@ -82,7 +115,12 @@ header.scrolled {
     font-size: 16px;
 }
 
-/* Statistics Section */
+
+/* ==========================================================================
+   4. SECTION STATISTIK PERUSAHAAN
+   ========================================================================== */
+
+/* Mengatur latar belakang warna biru utama dan tata letak kotak metrik */
 .statistics-section {
     background: #2563eb;
     color: #fff;
@@ -90,20 +128,28 @@ header.scrolled {
     margin-top: 70px;
 }
 
+/* Transisi pergerakan tautan statistik */
 .statistics-section a {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+/* Efek hover: Kartu statistik bergerak naik dan sedikit transparan */
 .statistics-section a:hover {
     transform: translateY(-5px);
     opacity: 0.85;
 }
 
-/* Tentang Kami */
+
+/* ==========================================================================
+   5. SECTION TENTANG KAMI & VISI-MISI
+   ========================================================================== */
+
+/* Mengatur warna latar belakang khusus section tentang */
 #tentang {
-    background-color: #f8fafc; /* Sedikit kontras tipis dari section sebelah */
+    background-color: #f8fafc;
 }
 
+/* Mengatur tata letak grid dua kolom bagian atas (teks deskripsi & visi) */
 .about-top-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
@@ -115,6 +161,7 @@ header.scrolled {
     margin-right: auto;
 }
 
+/* Gaya kotak teks deskripsi perusahaan */
 .about-text {
     background: #ffffff;
     padding: 35px;
@@ -127,6 +174,7 @@ header.scrolled {
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* Efek hover kotak deskripsi: naik tipis dan bayangan menguat */
 .about-text:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(37, 99, 235, 0.05);
@@ -149,17 +197,19 @@ header.scrolled {
     margin: 0 auto;
 }
 
+/* Gaya kartu Visi dan Misi (VM-Card) dengan aksen garis vertikal kiri */
 .vm-card {
     background: #ffffff;
     padding: 35px;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
     border: 1px solid #e2e8f0;
-    border-left: 4px solid #2563eb; /* Aksen garis kiri minimalis */
+    border-left: 4px solid #2563eb;
     height: 100%;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* Efek hover kartu visi-misi */
 .vm-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(37, 99, 235, 0.05);
@@ -196,6 +246,7 @@ header.scrolled {
     margin-bottom: 0;
 }
 
+/* Penataan ikon centang pada daftar misi */
 .vm-card ul li i {
     color: #2563eb;
     margin-right: 12px;
@@ -203,17 +254,23 @@ header.scrolled {
     flex-shrink: 0;
 }
 
-/* Responsif untuk Layar HP */
+/* Pengaturan responsif layar kecil (HP): mengubah grid menjadi satu kolom */
 @media (max-width: 992px) {
     .about-top-grid {
         grid-template-columns: 1fr;
     }
 }
-/* Layanan Section */
+
+
+/* ==========================================================================
+   6. SECTION LAYANAN KAMI (SERVICE CARDS)
+   ========================================================================== */
+
 #layanan {
-    background-color: #ffffff; /* Dibuat bersih putih terang */
+    background-color: #ffffff;
 }
 
+/* Tata letak grid responsif untuk 3 pilar layanan utama */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -222,33 +279,35 @@ header.scrolled {
     margin: 0 auto;
 }
 
+/* Gaya kartu layanan individual */
 .service-card {
     background: #ffffff;
     padding: 35px 30px;
     border-radius: 16px;
-    border: 1px solid #e2e8f0; /* Border tipis minimalis */
+    border: 1px solid #e2e8f0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
     text-align: center;
-    /* Transisi halus saat card naik dan berubah border */
+    /* Transisi menggunakan fungsi cubic-bezier untuk efek animasi yang sangat natural */
     transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), 
                 box-shadow 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), 
                 border-color 0.35s ease;
 }
 
-/* Efek saat kursor mendekat (Card naik dan muncul bayangan halus) */
+/* Efek hover kartu layanan: Naik ke atas dan memunculkan bayangan lembut */
 .service-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 16px 35px rgba(37, 99, 235, 0.06); 
     border-color: #cbd5e1; 
 }
 
-/* Efek pada ikon di dalam card */
+/* Efek hover pada ikon layanan di dalam kartu */
 .service-card:hover .service-icon {
     background-color: #2563eb;
     color: #ffffff;
     transform: scale(1.08);
 }
 
+/* Kotak pembungkus ikon layanan */
 .service-icon {
     font-size: 28px;
     color: #2563eb;
@@ -259,7 +318,7 @@ header.scrolled {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px; /* Dibuat sedikit melengkung modern (bukan bulat penuh) */
+    border-radius: 14px;
     margin-left: auto;
     margin-right: auto;
     transition: all 0.3s ease;
@@ -278,8 +337,13 @@ header.scrolled {
     line-height: 1.6;
     margin: 0;
 }
-/* Accordion Keunggulan */
 
+
+/* ==========================================================================
+   7. SECTION KEUNGGULAN (ACCORDION & DYNAMIC IMAGE)
+   ========================================================================== */
+
+/* Tata letak grid dua kolom: Kiri Accordion, Kanan Gambar Interaktif */
 .why-diginus-grid {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
@@ -295,6 +359,7 @@ header.scrolled {
     gap: 12px;
 }
 
+/* Kotak pembungkus item accordion individual */
 .accordion-item {
     border: 1.5px solid #dbeafe;
     border-radius: 12px;
@@ -304,6 +369,7 @@ header.scrolled {
     transition: all 0.3s ease;
 }
 
+/* Kepala/Tombol akordeon yang dapat diklik */
 .accordion-header {
     padding: 18px 22px;
     background: #ffffff;
@@ -323,6 +389,7 @@ header.scrolled {
     transition: color 0.25s ease;
 }
 
+/* Efek hover pada kepala akordeon */
 .accordion-header:hover {
     background-color: #f8fafc;
     color: #2563eb;
@@ -338,6 +405,7 @@ header.scrolled {
     color: #64748b;
 }
 
+/* Isi konten akordeon (awalnya tersembunyi dengan max-height: 0) */
 .accordion-body {
     padding: 0 22px;
     max-height: 0;
@@ -354,7 +422,7 @@ header.scrolled {
     margin: 0;
 }
 
-/* KETIKA ACCORDION DIBUKA (ACTIVE) */
+/* STATE AKTIF KETIKA AKORDEON DIBUKA */
 .accordion-item.active .accordion-header {
     background-color: #eff6ff !important;
     color: #2563eb !important;
@@ -365,17 +433,19 @@ header.scrolled {
     color: #2563eb !important;
 }
 
+/* Memutar ikon panah ke atas (180 derajat) saat akordeon terbuka */
 .accordion-item.active .accordion-header i.fa-chevron-down {
     transform: rotate(180deg);
 }
 
+/* Membuka tinggi konten dan menampilkan garis pembatas atas */
 .accordion-item.active .accordion-body {
     max-height: 150px;
     padding: 16px 22px 20px 22px;
     border-top: 1px solid #dbeafe;
 }
 
-/* Kotak Gambar Sebelah Kanan */
+/* Kotak pembungkus gambar dinamis di sebelah kanan (dibuat sticky agar ikut terpaku saat scroll) */
 .why-diginus-image-wrapper {
     position: sticky;
     top: 100px;
@@ -402,7 +472,7 @@ header.scrolled {
     transform: scale(1.03);
 }
 
-/* Badge Caption di Bawah Gambar */
+/* Label badge keterangan mengapung di bawah gambar */
 .image-caption-badge {
     position: absolute;
     bottom: 20px;
@@ -428,7 +498,7 @@ header.scrolled {
     box-shadow: 0 0 10px #3b82f6;
 }
 
-/* Responsif untuk Layar HP / Tablet */
+/* Penyesuaian responsif layar kecil untuk section keunggulan */
 @media (max-width: 992px) {
     .why-diginus-grid {
         grid-template-columns: 1fr;
@@ -442,7 +512,13 @@ header.scrolled {
         height: 300px;
     }
 }
-/* Portofolio Marquee / Cards */
+
+
+/* ==========================================================================
+   8. SECTION PORTOFOLIO (MARQUEE / CAROUSEL)
+   ========================================================================== */
+
+/* Menyesuaikan tampilan bilah gulir (scrollbar) horizontal */
 .portfolio-marquee::-webkit-scrollbar {
     height: 6px;
 }
@@ -461,6 +537,7 @@ header.scrolled {
     background: #94a3b8;
 }
 
+/* Gaya kartu portofolio individu */
 .portfolio-card {
     background: #fff;
     border: 1px solid #e2e8f0;
@@ -469,6 +546,7 @@ header.scrolled {
     transition: all 0.3s ease;
 }
 
+/* Efek hover kartu portofolio */
 .portfolio-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.06);
@@ -512,12 +590,17 @@ header.scrolled {
     color: #64748b;
 }
 
-/* Legalitas Cards */
+
+/* ==========================================================================
+   9. SECTION LEGALITAS PERUSAHAAN
+   ========================================================================== */
+
 .legal-card {
     transition: all 0.3s ease;
     border: 1px solid #e2e8f0;
 }
 
+/* Efek hover kartu legalitas */
 .legal-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.06);
@@ -543,7 +626,11 @@ header.scrolled {
     color: #64748b;
 }
 
-/* Kontak Info */
+
+/* ==========================================================================
+   10. INFORMASI KONTAK & FOOTER
+   ========================================================================== */
+
 .contact-info {
     border: 1px solid #e2e8f0;
     transition: box-shadow 0.3s ease;
@@ -568,7 +655,6 @@ header.scrolled {
     transform: translateX(4px);
 }
 
-/* Floating Buttons */
 .float-btn {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -578,15 +664,18 @@ header.scrolled {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Footer */
+/* Aturan interaksi tautan di dalam area kontak/footer */
 #kontak a {
     transition: transform 0.25s ease, color 0.25s ease !important;
 }
 
+/* Efek hover tautan kontak: Teks bergerak naik tipis dan berubah jadi putih terang */
 #kontak a:hover {
-    transform: translateY(-3px); /* Item kontak bergerak naik tipis */
-    color: #ffffff !important; /* Warna teks berubah jadi putih terang */
+    transform: translateY(-3px); 
+    color: #ffffff !important; 
 }
+
+/* Tata letak dasar footer */
 footer {
     background: #0d233a;
     color: #94a3b8;
@@ -603,7 +692,11 @@ footer p {
     margin-bottom: 5px;
 }
 
-/* Responsive Breakpoints */
+
+/* ==========================================================================
+   11. ATURAN RESPONSIF GLOBAL (MEDIA QUERIES TAMBAHAN)
+   ========================================================================== */
+
 @media (max-width: 768px) {
     .about-grid {
         grid-template-columns: 1fr;

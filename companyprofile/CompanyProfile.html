@@ -2,25 +2,32 @@
 <html lang="id">
 
 <head>
+    <!-- Pengaturan Karakter dan Responsivitas Layar -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIGINUS - Empowering Skills. Elevating Digital Future.</title>
-    <!-- Favicon Website -->
-  <link rel="icon" type="image/png" href="LOGOONLY.jpeg">
+    
+    <!-- Favicon Website: Menggunakan LOGOONLY.jpeg agar ikon tab browser tampil jelas -->
+    <link rel="icon" type="image/jpeg" href="LOGOONLY.jpeg">
 
-    <!-- AOS Animation Library -->
+    <!-- Pustaka Animasi Eksternal: AOS (Animate On Scroll) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- FontAwesome Icons -->
+    
+    <!-- Pustaka Ikon Eksternal: FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
+    
+    <!-- Berkas Gaya Kustom Utama -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Header Minimalis (Logo di Navbar hanya muncul saat di-scroll) -->
+    <!-- ==========================================
+         HEADER & NAVBAR MINIMALIS
+         ========================================== -->
     <header id="header">
         <div class="container navbar">
+            <!-- Logo Perusahaan yang mengarah ke bagian tentang -->
             <div class="logo">
                 <a href="#tentang">
                     <img src="LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" class="logo-img">
@@ -29,25 +36,31 @@
         </div>
     </header>
 
-    <!-- Statistik Section -->
+    <!-- ==========================================
+         STATISTIK PERUSAHAAN
+         ========================================== -->
     <section class="statistics-section" style="background-color: #2a6aaf; padding: 30px 0; color: #fff;">
         <div class="container">
             <div style="display: flex; justify-content: space-around; text-align: center; flex-wrap: wrap; gap: 20px;">
+                <!-- Kartu Statistik 1: Portofolio -->
                 <a href="#portofolio" onclick="smoothScrollTo(event, '#portofolio')" style="color: inherit; text-decoration: none; flex: 1; min-width: 200px; cursor: pointer;">
                     <div style="font-size: 24px; margin-bottom: 5px;"><i class="fas fa-project-diagram"></i></div>
                     <div style="font-size: 28px; font-weight: bold;">8</div>
                     <div style="font-size: 14px; opacity: 0.9;">Portofolio Strategis Selesai</div>
                 </a>
+                <!-- Kartu Statistik 2: Pilar Layanan -->
                 <a href="#layanan" onclick="smoothScrollTo(event, '#layanan')" style="color: inherit; text-decoration: none; flex: 1; min-width: 200px; cursor: pointer;">
                     <div style="font-size: 24px; margin-bottom: 5px;"><i class="fas fa-layer-group"></i></div>
                     <div style="font-size: 28px; font-weight: bold;">3</div>
                     <div style="font-size: 14px; opacity: 0.9;">Pilar Layanan Utama</div>
                 </a>
+                <!-- Kartu Statistik 3: Keunggulan -->
                 <a href="#keunggulan" onclick="smoothScrollTo(event, '#keunggulan')" style="color: inherit; text-decoration: none; flex: 1; min-width: 200px; cursor: pointer;">
                     <div style="font-size: 24px; margin-bottom: 5px;"><i class="fas fa-award"></i></div>
                     <div style="font-size: 28px; font-weight: bold;">7</div>
                     <div style="font-size: 14px; opacity: 0.9;">Keunggulan Solutif</div>
                 </a>
+                <!-- Kartu Statistik 4: Legalitas -->
                 <a href="#legalitas" onclick="smoothScrollTo(event, '#legalitas')" style="color: inherit; text-decoration: none; flex: 1; min-width: 200px; cursor: pointer;">
                     <div style="font-size: 24px; margin-bottom: 5px;"><i class="fas fa-file-invoice"></i></div>
                     <div style="font-size: 28px; font-weight: bold;">100</div>
@@ -57,15 +70,18 @@
         </div>
     </section>
 
-<!-- Tentang Kami Section -->
+    <!-- ==========================================
+         TENTANG KAMI & VISI-MISI
+         ========================================== -->
     <section id="tentang" class="section">
         <div class="container">
+            <!-- Judul Section -->
             <div class="section-title" data-aos="fade-up">
                 <h2>Tentang Kami</h2>
                 <p>Mengenal lebih dekat CV. Cendika Digital Nusantara</p>
             </div>
 
-            <!-- Bagian Atas: Kolom Kiri (Teks Deskripsi) & Kolom Kanan (Visi Sejajar) -->
+            <!-- Grid Atas: Deskripsi Singkat (Kiri) & Kartu Visi (Kanan) -->
             <div class="about-top-grid">
                 <div class="about-text" data-aos="fade-right">
                     <p>DIGINUS hadir dengan semangat <strong>"Empowering Skills, Elevating Digital Future"</strong> untuk memberdayakan keterampilan melalui ekosistem pembelajaran, layanan profesional, dan produk digital inovatif.</p>
@@ -79,7 +95,7 @@
                 </div>
             </div>
 
-            <!-- Bagian Bawah: Misi Full Lebar di Bawahnya -->
+            <!-- Grid Bawah: Kartu Misi Full Lebar -->
             <div class="about-bottom-grid" data-aos="fade-up">
                 <div class="vm-card mission-card">
                     <h3>Misi</h3>
@@ -94,13 +110,16 @@
         </div>
     </section>
 
-    <!-- Layanan Section -->
+    <!-- ==========================================
+         LAYANAN KAMI (3 PILAR UTAMA)
+         ========================================== -->
     <section id="layanan" class="section bg-light">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
                 <h2>Layanan Kami</h2>
                 <p>Tiga pilar keunggulan solusi digital dan akselerasi talenta</p>
             </div>
+            <!-- Grid Kartu Layanan -->
             <div class="services-grid">
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
@@ -121,114 +140,117 @@
         </div>
     </section>
 
-
-<!-- Keunggulan Section (Model Accordion Interaktif dengan Dynamic Image) -->
-<section id="keunggulan" class="section">
-    <div class="container">
-        <div class="section-title" data-aos="fade-up">
-            <h2>Kenapa Harus DIGINUS?</h2>
-            <p>Nilai tambah yang kami tawarkan sebagai katalis perubahan dan pertumbuhan berkelanjutan</p>
-        </div>
-
-        <!-- Wrapper 2 Kolom: Kiri Accordion, Kanan Gambar Dinamis -->
-        <div class="why-diginus-grid" data-aos="fade-up">
-            
-            <!-- Kolom Kiri: Accordion -->
-            <div class="accordion-container">
-                <!-- Item 1 -->
-                <div class="accordion-item active" data-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" data-caption="Solusi Terintegrasi & Komprehensif">
-                    <div class="accordion-header">
-                        <span><i class="fas fa-cubes"></i> 01. Solusi Terintegrasi</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        <p>Menggabungkan course, service, dan produk digital dalam satu kesatuan kohesif untuk transformasi menyeluruh.</p>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="accordion-item" data-img="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80" data-caption="Praktis & Berbasis Kebutuhan Riil">
-                    <div class="accordion-header">
-                        <span><i class="fas fa-bullseye"></i> 02. Praktis & Berbasis Kebutuhan Riil</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        <p>Berakar pada analisis kebutuhan pasar nyata, memastikan solusi langsung aplikatif di industri.</p>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="accordion-item" data-img="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" data-caption="Berorientasi Dampak & Kapasitas">
-                    <div class="accordion-header">
-                        <span><i class="fas fa-chart-line"></i> 03. Berorientasi Dampak & Kapasitas</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        <p>Membangun kapasitas dan kompetensi jangka panjang bagi setiap individu maupun organisasi.</p>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="accordion-item" data-img="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80" data-caption="Fleksibilitas Tinggi & Kustomisasi">
-                    <div class="accordion-header">
-                        <span><i class="fas fa-sliders-h"></i> 04. Fleksibilitas Tinggi</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        <p>Layanan dirancang personal agar dapat disesuaikan dengan kebutuhan unik dan tujuan bisnis Anda.</p>
-                    </div>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="accordion-item" data-img="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" data-caption="Komitmen Inklusivitas">
-                    <div class="accordion-header">
-                        <span><i class="fas fa-hands-helping"></i> 05. Komitmen Inklusivitas</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        <p>Teknologi dan produk yang dihadirkan bersifat berkelanjutan serta mudah diakses berbagai lapisan masyarakat.</p>
-                    </div>
-                </div>
-
-                <!-- Item 6 -->
-                <div class="accordion-item" data-img="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" data-caption="Pelayanan Profesional & Terdampingi">
-                    <div class="accordion-header">
-                        <span><i class="fas fa-user-shield"></i> 06. Pelayanan Profesional & Terdampingi</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        <p>Menjamin komunikasi jelas, komitmen tenggat waktu, serta pendampingan intensif yang optimal.</p>
-                    </div>
-                </div>
-
-                <!-- Item 7 -->
-                <div class="accordion-item" data-img="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80" data-caption="Layanan Daring & Luring">
-                    <div class="accordion-header">
-                        <span><i class="fas fa-laptop-house"></i> 07. Layanan Daring & Luring</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        <p>Fleksibilitas penuh melalui opsi online, offline, maupun in-house training dengan tenaga profesional.</p>
-                    </div>
-                </div>
+    <!-- ==========================================
+         KENAPA HARUS DIGINUS (ACCORDION & DYNAMIC IMAGE)
+         ========================================== -->
+    <section id="keunggulan" class="section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Kenapa Harus DIGINUS?</h2>
+                <p>Nilai tambah yang kami tawarkan sebagai katalis perubahan dan pertumbuhan berkelanjutan</p>
             </div>
 
-            <!-- Kolom Kanan: Gambar Dinamis & Caption Badge -->
-            <div class="why-diginus-image-wrapper">
-                <div class="image-container">
-                    <img id="active-feature-img" src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80" alt="Ilustrasi Keunggulan DIGINUS">
-                    <div class="image-caption-badge">
-                        <span class="badge-dot"></span>
-                        <span id="active-feature-text">Solusi Terintegrasi & Komprehensif</span>
+            <!-- Wrapper 2 Kolom: Kiri Menu Accordion, Kanan Gambar Interaktif Dinamis -->
+            <div class="why-diginus-grid" data-aos="fade-up">
+                
+                <!-- Kolom Kiri: Daftar Menu Accordion -->
+                <div class="accordion-container">
+                    <!-- Item 1 -->
+                    <div class="accordion-item active" data-img="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" data-caption="Solusi Terintegrasi & Komprehensif">
+                        <div class="accordion-header">
+                            <span><i class="fas fa-cubes"></i> 01. Solusi Terintegrasi</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-body">
+                            <p>Menggabungkan course, service, dan produk digital dalam satu kesatuan kohesif untuk transformasi menyeluruh.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="accordion-item" data-img="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80" data-caption="Praktis & Berbasis Kebutuhan Riil">
+                        <div class="accordion-header">
+                            <span><i class="fas fa-bullseye"></i> 02. Praktis & Berbasis Kebutuhan Riil</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-body">
+                            <p>Berakar pada analisis kebutuhan pasar nyata, memastikan solusi langsung aplikatif di industri.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="accordion-item" data-img="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" data-caption="Berorientasi Dampak & Kapasitas">
+                        <div class="accordion-header">
+                            <span><i class="fas fa-chart-line"></i> 03. Berorientasi Dampak & Kapasitas</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-body">
+                            <p>Membangun kapasitas dan kompetensi jangka panjang bagi setiap individu maupun organisasi.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="accordion-item" data-img="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80" data-caption="Fleksibilitas Tinggi & Kustomisasi">
+                        <div class="accordion-header">
+                            <span><i class="fas fa-sliders-h"></i> 04. Fleksibilitas Tinggi</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-body">
+                            <p>Layanan dirancang personal agar dapat disesuaikan dengan kebutuhan unik dan tujuan bisnis Anda.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="accordion-item" data-img="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" data-caption="Komitmen Inklusivitas">
+                        <div class="accordion-header">
+                            <span><i class="fas fa-hands-helping"></i> 05. Komitmen Inklusivitas</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-body">
+                            <p>Teknologi dan produk yang dihadirkan bersifat berkelanjutan serta mudah diakses berbagai lapisan masyarakat.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 6 -->
+                    <div class="accordion-item" data-img="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" data-caption="Pelayanan Profesional & Terdampingi">
+                        <div class="accordion-header">
+                            <span><i class="fas fa-user-shield"></i> 06. Pelayanan Profesional & Terdampingi</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-body">
+                            <p>Menjamin komunikasi jelas, komitmen tenggat waktu, serta pendampingan intensif yang optimal.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 7 -->
+                    <div class="accordion-item" data-img="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80" data-caption="Layanan Daring & Luring">
+                        <div class="accordion-header">
+                            <span><i class="fas fa-laptop-house"></i> 07. Layanan Daring & Luring</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-body">
+                            <p>Fleksibilitas penuh melalui opsi online, offline, maupun in-house training dengan tenaga profesional.</p>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Kolom Kanan: Kotak Gambar Dinamis & Label Keterangan -->
+                <div class="why-diginus-image-wrapper">
+                    <div class="image-container">
+                        <img id="active-feature-img" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Ilustrasi Keunggulan DIGINUS">
+                        <div class="image-caption-badge">
+                            <span class="badge-dot"></span>
+                            <span id="active-feature-text">Solusi Terintegrasi & Komprehensif</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
         </div>
-    </div>
-</section>
+    </section>
 
-    <!-- Portofolio Section (Diubah menjadi Marquee / Carousel card bergeser) -->
+    <!-- ==========================================
+         PORTOFOLIO KAMI (CAROUSEL / MARQUEE)
+         ========================================== -->
     <section id="portofolio" class="section bg-light" style="overflow: hidden;">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
@@ -236,8 +258,9 @@
                 <p>Rekam jejak implementasi digital service dan produk digital unggulan</p>
             </div>
 
-            <!-- Marquee Container -->
+            <!-- Kontainer Gulir Horizontal Portofolio -->
             <div class="portfolio-marquee" style="display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 20px;" data-aos="fade-up">
+                <!-- Portofolio 1 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-landmark"></i></div>
@@ -248,6 +271,7 @@
                         <p><strong>Official Website BPN Kota Palu (bpnpalu.id):</strong> Portal resmi transformasi layanan publik transparan.</p>
                     </div>
                 </div>
+                <!-- Portofolio 2 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-university"></i></div>
@@ -258,6 +282,7 @@
                         <p><strong>Sistem Informasi Terpadu MBKM:</strong> Pendukung Magang, PLP Terintegrasi, logbook harian, dan unggah laporan.</p>
                     </div>
                 </div>
+                <!-- Portofolio 3 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-laptop"></i></div>
@@ -268,6 +293,7 @@
                         <p><strong>FMIPA Untad:</strong> Penjadwalan akademik real-time serta pengumuman rekrutmen asisten lab.</p>
                     </div>
                 </div>
+                <!-- Portofolio 4 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-shield-alt"></i></div>
@@ -278,6 +304,7 @@
                         <p><strong>Universitas Tadulako:</strong> Sistem manajemen audit mutu internal untuk instrumen digital dan kertas kerja online.</p>
                     </div>
                 </div>
+                <!-- Portofolio 5 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-globe"></i></div>
@@ -288,6 +315,7 @@
                         <p><strong>Pusat Mobilitas Mahasiswa:</strong> Portal strategis akselerasi program Kampus Berdampak Kemdiktisaintek.</p>
                     </div>
                 </div>
+                <!-- Portofolio 6 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-chart-pie"></i></div>
@@ -298,6 +326,7 @@
                         <p><strong>Universitas Tadulako:</strong> Portal resmi prodi baru fokus pengolahan data dan kecerdasan buatan.</p>
                     </div>
                 </div>
+                <!-- Portofolio 7 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-book-reader"></i></div>
@@ -308,6 +337,7 @@
                         <p><strong>Universitas Tadulako:</strong> Sarana komunikasi dan akuntabilitas digital prodi tertua.</p>
                     </div>
                 </div>
+                <!-- Portofolio 8 -->
                 <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                     <div class="portfolio-card-top">
                         <div class="portfolio-icon-box"><i class="fas fa-school"></i></div>
@@ -322,7 +352,9 @@
         </div>
     </section>
 
-    <!-- Legalitas Section (Akta Notaris & SK Kemenkumham dihapus sesuai koreksi poin nomor 3) -->
+    <!-- ==========================================
+         LEGALITAS PERUSAHAAN
+         ========================================== -->
     <section id="legalitas" class="section">
         <div class="container">
             <div class="section-title" data-aos="fade-up">
@@ -351,8 +383,9 @@
         </div>
     </section>
 
-    <!-- Footer -->
-<!-- Kontak & Footer Digabung Menjadi Satu Section yang Padat & Estetik -->
+    <!-- ==========================================
+         KONTAK & FOOTER TERPADU
+         ========================================== -->
     <footer id="kontak" style="background: #0d233a; color: #94a3b8; padding: 70px 0 30px 0; position: relative;">
         <div class="container">
             <div class="section-title" data-aos="fade-up" style="margin-bottom: 40px;">
@@ -360,10 +393,10 @@
                 <p style="color: #94a3b8; font-size: 15px;">Hubungi kami untuk konsultasi dan kolaborasi digital masa depan</p>
             </div>
             
-            <!-- Grid Layout Menyatu (Info Kontak & Quick Links / Brand Bio) -->
+            <!-- Grid Informasi Kontak & Identitas Perusahaan -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; margin-bottom: 50px; align-items: start;">
                 
-                <!-- Kolom 1: Tentang Singkat / Identitas -->
+                <!-- Kolom 1: Tentang Singkat -->
                 <div data-aos="fade-right" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 30px; border-radius: 12px; height: 100%;">
                     <div style="margin-bottom: 15px;">
                         <img src="LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" style="height: 35px; display: block; filter: brightness(0) invert(1);">
@@ -373,7 +406,7 @@
                     </p>
                 </div>
 
-                <!-- Kolom 2: Detail Kontak CV -->
+                <!-- Kolom 2: Detail Kontak CV (Dilengkapi Interaksi Hover Naik) -->
                 <div data-aos="fade-left" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 30px; border-radius: 12px;">
                     <h3 style="color: #fff; font-size: 18px; margin-bottom: 20px;">CV. CENDIKA DIGITAL NUSANTARA</h3>
                     <div style="display: flex; flex-direction: column; gap: 14px; font-size: 14px;">
@@ -398,7 +431,7 @@
 
             </div>
 
-            <!-- Copyright / Bagian Bawah Footer -->
+            <!-- Hak Cipta / Copyright -->
             <div class="footer-content" style="text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 25px;">
                 <p style="margin-bottom: 5px; font-size: 14px;">&copy; 2026 <strong style="color: #fff;">DIGINUS (CV. Cendika Digital Nusantara)</strong>. All Rights Reserved.</p>
                 <p style="margin: 0; font-size: 13px; color: #64748b;">Empowering Skills. Elevating Digital Future.</p>
@@ -406,17 +439,22 @@
         </div>
     </footer>
 
-<!-- AOS Script -->
+    <!-- ==========================================
+         SKRIP PEMROGRAMAN & INISIALISASI
+         ========================================== -->
+    <!-- Inisialisasi Pustaka Animasi AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Berkas Logika Interaktif Kustom Utama -->
     <script src="main.js"></script> 
     <script>
+        // Mengaktifkan pustaka animasi gulir AOS
         AOS.init({
             duration: 800,
             once: true,
             offset: 50
         });
 
-        // Efek Navbar Berubah Warna Saat Di-scroll
+        // Fungsi Fungsionalitas: Mengubah gaya navbar saat halaman digulir ke bawah
         window.addEventListener('scroll', function() {
             const header = document.getElementById('header');
             if (window.scrollY > 50) {
