@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIGINUS - Empowering Skills. Elevating Digital Future.</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- AOS Animation Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"><i class="fa-solid fa-circle-check"></i> Notifikasi</div>
+
+  <!-- Modal Detail Portofolio -->
+  <div class="portfolio-modal" id="portfolioModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-badge" id="modalBadge">Kategori Proyek</div>
+      <h3 id="modalTitle">Judul Portofolio</h3>
+      <span class="modal-domain" id="modalDomain"><i class="fa-solid fa-link"></i> domain.id</span>
+      <hr class="modal-divider">
+      <p id="modalDesc">Deskripsi lengkap portofolio proyek akan ditampilkan di sini secara interaktif.</p>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-modal-close" id="btnModalClose"><i class="fa-solid fa-check"></i> Tutup Pratinjau</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Bersih (Hanya Logo & Tagline) -->
+  <!-- Header Bersih (Hanya Gambar Logo DIGINUS) -->
+  <header class="main-header" id="navbar">
+    <div class="container header-container">
+      <a href="#home" class="brand-logo" aria-label="DIGINUS">
+        <img src="logo.png" alt="DIGINUS Logo" class="logo-img">
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div class="hero-text" data-aos="fade-up" data-aos-duration="800">
+        <span class="badge"><i class="fa-solid fa-shield-halved"></i> CV. Cendika Digital Nusantara</span>
+        <h1>Empowering Skills.<br><span class="gradient-text">Elevating Digital Future.</span></h1>
+        <p>
+          Mitra strategis terpercaya yang berkomitmen menjembatani tantangan dunia digital melalui ekosistem pembelajaran, layanan profesional, dan produk digital inovatif yang aplikatif serta inklusif.
+        </p>
+        <div class="hero-actions">
+          <a href="#layanan" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Jelajahi Layanan</a>
+          <a href="#portofolio" class="btn btn-outline"><i class="fa-solid fa-briefcase"></i> Lihat Portofolio</a>
+        </div>
+      </div>
+      <div class="hero-visual" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
+        <div class="hero-card hover-lift">
+          <div class="icon-circle">
+            <i class="fa-solid fa-network-wired"></i>
+          </div>
+          <h3>Solusi Digital Terpadu</h3>
+          <p>Membangun kapasitas talenta dan infrastruktur digital berkualitas tinggi untuk akselerasi pertumbuhan berkelanjutan.</p>
+          <div class="hero-chips">
+            <span>#Inovatif</span>
+            <span>#Aplikatif</span>
+            <span>#Terpercaya</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Statistik -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+          <i class="fa-solid fa-diagram-project"></i>
+          <h3 class="counter" data-target="8">0</h3>
+          <p>Portofolio Strategis Selesai</p>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+          <i class="fa-solid fa-layer-group"></i>
+          <h3 class="counter" data-target="3">0</h3>
+          <p>Pilar Layanan Utama</p>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+          <i class="fa-solid fa-award"></i>
+          <h3 class="counter" data-target="7">0</h3>
+          <p>Keunggulan Solutif</p>
+        </div>
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+          <i class="fa-solid fa-file-circle-check"></i>
+          <h3 class="counter" data-target="100">0</h3>
+          <p>% Legalitas Sah Terverifikasi</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tentang Kami -->
+  <section class="section" id="tentang">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="sub-title">Profil Perusahaan</span>
+        <h2>Tentang DIGINUS</h2>
+        <p>Di era transformasi digital yang serba cepat, kemajuan teknologi harus berjalan beriringan dengan kesiapan SDM yang mengelolanya.</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card hover-lift" data-aos="fade-up" data-aos-delay="100">
+          <div class="card-icon"><i class="fa-solid fa-users-gear"></i></div>
+          <h3>Pendahuluan</h3>
+          <p>
+            DIGINUS lahir dengan keyakinan bahwa masa depan digital Indonesia yang gemilang dimulai dari pemberdayaan individu yang memiliki keterampilan relevan serta kompetensi terasah. Kami memastikan setiap inovasi bersifat inklusif, mudah diakses, dan berdampak nyata bagi talenta maupun organisasi.
+          </p>
+        </div>
+
+        <div class="about-card hover-lift" data-aos="fade-up" data-aos-delay="200">
+          <div class="card-icon"><i class="fa-solid fa-bullseye"></i></div>
+          <h3>Visi Kami</h3>
+          <p class="vision-quote">
+            "Menjadi perusahaan digital yang berperan aktif dalam pengembangan sumber daya manusia dan transformasi digital di Indonesia."
+          </p>
+        </div>
+
+        <div class="about-card full-width hover-lift" data-aos="fade-up" data-aos-delay="300">
+          <div class="card-icon"><i class="fa-solid fa-list-check"></i></div>
+          <h3>Misi Kami</h3>
+          <div class="misi-list">
+            <div class="misi-item hover-item">
+              <span class="misi-num">01</span>
+              <div>
+                <strong>Layanan Berkualitas</strong>
+                <p>Menyediakan layanan, produk, dan pelatihan digital yang berkualitas dan relevan.</p>
+              </div>
+            </div>
+            <div class="misi-item hover-item">
+              <span class="misi-num">02</span>
+              <div>
+                <strong>Peningkatan Kompetensi</strong>
+                <p>Mendorong peningkatan kompetensi digital melalui pembelajaran praktis dan aplikatif.</p>
+              </div>
+            </div>
+            <div class="misi-item hover-item">
+              <span class="misi-num">03</span>
+              <div>
+                <strong>Mitra Strategis</strong>
+                <p>Menjadi mitra strategis bagi individu, komunitas, dan organisasi dalam pengembangan solusi digital.</p>
+              </div>
+            </div>
+            <div class="misi-item hover-item">
+              <span class="misi-num">04</span>
+              <div>
+                <strong>Inovasi Berkelanjutan</strong>
+                <p>Menghadirkan teknologi yang berdampak, berkelanjutan, dan mudah diakses oleh seluruh lapisan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Layanan Kami -->
+  <section class="section bg-light" id="layanan">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="sub-title">Pilar Keunggulan</span>
+        <h2>Layanan Kami</h2>
+        <p>Akselerasi talenta dan inovasi teknologi terukur melalui tiga pilar utama</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card hover-lift" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <h3>Course dan Training</h3>
+          <p>Program pembelajaran digital komprehensif yang dirancang untuk mengasah keterampilan praktis dan membangun kesiapan penuh dalam menjawab dinamika industri teknologi yang terus berevolusi.</p>
+          <div class="service-tags">
+            <span>Pelatihan Praktis</span>
+            <span>In-House Training</span>
+            <span>Online/Offline</span>
+          </div>
+        </div>
+
+        <div class="service-card hover-lift" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-icon"><i class="fa-solid fa-laptop-code"></i></div>
+          <h3>Digital Services</h3>
+          <p>Layanan profesional yang mengintegrasikan kecanggihan teknologi dengan kreativitas tinggi untuk mengarsiteki, mengelola, serta mengoptimalkan kehadiran digital agar lebih impresif dan berpengaruh.</p>
+          <div class="service-tags">
+            <span>Web Development</span>
+            <span>Sistem Informasi</span>
+            <span>Portal Instansi</span>
+          </div>
+        </div>
+
+        <div class="service-card hover-lift" data-aos="fade-up" data-aos-delay="300">
+          <div class="service-icon"><i class="fa-solid fa-box-archive"></i></div>
+          <h3>Produk & Penjualan Digital</h3>
+          <p>Penyediaan aset digital inovatif yang fungsional sebagai katalis kuat untuk efektivitas pembelajaran, efisiensi produktivitas, hingga akselerasi pertumbuhan bisnis Anda secara berkelanjutan.</p>
+          <div class="service-tags">
+            <span>Aset Digital</span>
+            <span>Sistem Otomasi</span>
+            <span>Solusi Produktivitas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kenapa Harus DIGINUS -->
+  <section class="section" id="keunggulan">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="sub-title">Nilai Tambah</span>
+        <h2>Kenapa Harus DIGINUS?</h2>
+        <p>Solusi terpadu yang berakar pada hasil nyata, kapasitas jangka panjang, dan pertumbuhan berkelanjutan</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-item hover-lift" data-aos="fade-up" data-aos-delay="100">
+          <div class="feat-icon"><i class="fa-solid fa-cubes"></i></div>
+          <h4>1. Solusi Terintegrasi</h4>
+          <p>Kami menggabungkan aspek pembelajaran (course), layanan profesional (service), dan produk digital dalam satu kesatuan yang kohesif untuk menjawab kebutuhan transformasi digital Anda secara menyeluruh.</p>
+        </div>
+        <div class="feature-item hover-lift" data-aos="fade-up" data-aos-delay="150">
+          <div class="feat-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h4>2. Praktis & Berbasis Kebutuhan Riil</h4>
+          <p>Seluruh inovasi dan layanan kami berakar pada analisis kebutuhan pasar yang nyata, memastikan solusi yang diberikan bersifat praktis dan dapat langsung diaplikasikan dalam industri.</p>
+        </div>
+        <div class="feature-item hover-lift" data-aos="fade-up" data-aos-delay="200">
+          <div class="feat-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h4>3. Berorientasi pada Dampak & Kapasitas</h4>
+          <p>Kami tidak hanya bertujuan menyelesaikan pekerjaan, tetapi juga membangun kapasitas dan kompetensi jangka panjang bagi setiap individu maupun organisasi yang berkolaborasi bersama kami.</p>
+        </div>
+        <div class="feature-item hover-lift" data-aos="fade-up" data-aos-delay="250">
+          <div class="feat-icon"><i class="fa-solid fa-sliders"></i></div>
+          <h4>4. Fleksibilitas Tinggi</h4>
+          <p>Kami memahami bahwa setiap klien memiliki tantangan yang unik. Layanan kami dirancang agar dapat disesuaikan secara personal sesuai kebutuhan spesifik Anda.</p>
+        </div>
+        <div class="feature-item hover-lift" data-aos="fade-up" data-aos-delay="300">
+          <div class="feat-icon"><i class="fa-solid fa-universal-access"></i></div>
+          <h4>5. Komitmen pada Inklusivitas</h4>
+          <p>Kami memastikan bahwa setiap teknologi dan produk yang kami hadirkan bersifat berkelanjutan dan mudah diakses oleh berbagai lapisan masyarakat.</p>
+        </div>
+        <div class="feature-item hover-lift" data-aos="fade-up" data-aos-delay="350">
+          <div class="feat-icon"><i class="fa-solid fa-user-shield"></i></div>
+          <h4>6. Pelayanan Profesional & Terdampingi</h4>
+          <p>Kami menjamin komunikasi yang jelas, komitmen terhadap tenggat waktu, serta pendampingan intensif untuk hasil yang optimal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portofolio -->
+  <section class="section bg-light" id="portofolio">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="sub-title">Karya & Rekam Jejak</span>
+        <h2>Portofolio Kami</h2>
+        <p>Solusi teknologi teruji yang dirancang untuk instansi pemerintah, perguruan tinggi, dan lembaga pendidikan.</p>
+      </div>
+
+      <div class="portfolio-filter" data-aos="fade-up">
+        <button class="filter-btn active" data-filter="all">Semua Proyek</button>
+        <button class="filter-btn" data-filter="web">Web Portal</button>
+        <button class="filter-btn" data-filter="system">Sistem Informasi</button>
+        <button class="filter-btn" data-filter="education">Institusi / Kampus</button>
+      </div>
+
+      <div class="portfolio-grid">
+        <div class="portfolio-card hover-lift" data-category="web" data-aos="fade-up" data-aos-delay="100">
+          <div class="portfolio-badge">Digital Services</div>
+          <h3>Official Website BPN Kota Palu</h3>
+          <span class="portfolio-domain"><i class="fa-solid fa-link"></i> bpnpalu.id</span>
+          <p>Merancang dan membangun dari nol portal resmi Kantor Pertanahan Kota Palu untuk transparansi pelayanan publik.</p>
+          <div class="click-hint"><i class="fa-solid fa-arrow-right"></i> Detail Pratinjau</div>
+        </div>
+
+        <div class="portfolio-card hover-lift" data-category="system education" data-aos="fade-up" data-aos-delay="150">
+          <div class="portfolio-badge">Sistem Informasi</div>
+          <h3>SITAMPAN UNTAD</h3>
+          <span class="portfolio-domain"><i class="fa-solid fa-link"></i> sitampan.untad.ac.id</span>
+          <p>Sistem Informasi Terpadu MBKM Universitas Tadulako yang mengakomodasi Magang, PLP, logbook digital, dan penilaian dosen.</p>
+          <div class="click-hint"><i class="fa-solid fa-arrow-right"></i> Detail Pratinjau</div>
+        </div>
+
+        <div class="portfolio-card hover-lift" data-category="web education" data-aos="fade-up" data-aos-delay="200">
+          <div class="portfolio-badge">Web Portal</div>
+          <h3>Website Prodi Teknik Geofisika</h3>
+          <span class="portfolio-domain"><i class="fa-solid fa-graduation-cap"></i> FMIPA UNTAD</span>
+          <p>Pusat operasional dan administrasi akademik prodi secara real-time untuk penjadwalan ujian dan publikasi Tridharma.</p>
+          <div class="click-hint"><i class="fa-solid fa-arrow-right"></i> Detail Pratinjau</div>
+        </div>
+
+        <div class="portfolio-card hover-lift" data-category="system education" data-aos="fade-up" data-aos-delay="250">
+          <div class="portfolio-badge">Audit Mutu</div>
+          <h3>SMART UNTAD</h3>
+          <span class="portfolio-domain"><i class="fa-solid fa-check-to-slot"></i> Sistem Audit Internal</span>
+          <p>Sistem Manajemen Audit Mutu Internal Universitas Tadulako untuk mengawal siklus PPEPP akreditasi institusi secara real-time.</p>
+          <div class="click-hint"><i class="fa-solid fa-arrow-right"></i> Detail Pratinjau</div>
+        </div>
+
+        <div class="portfolio-card hover-lift" data-category="web education" data-aos="fade-up" data-aos-delay="300">
+          <div class="portfolio-badge">Portal Kampus</div>
+          <h3>Website PMM UNTAD</h3>
+          <span class="portfolio-domain"><i class="fa-solid fa-users"></i> Mobilitas Mahasiswa</span>
+          <p>Portal resmi Pusat Mobilitas Mahasiswa Universitas Tadulako guna mengakselerasi program Kampus Berdampak.</p>
+          <div class="click-hint"><i class="fa-solid fa-arrow-right"></i> Detail Pratinjau</div>
+        </div>
+
+        <div class="portfolio-card hover-lift" data-category="web education" data-aos="fade-up" data-aos-delay="350">
+          <div class="portfolio-badge">Lembaga Pendidikan</div>
+          <h3>Pesantren Insan Cita Indonesia</h3>
+          <span class="portfolio-domain"><i class="fa-solid fa-school"></i> Platform Pesantren</span>
+          <p>Platform interaktif pesantren dengan formulir pendaftaran PPDB online, kurikulum, dan direktori pendidik.</p>
+          <div class="click-hint"><i class="fa-solid fa-arrow-right"></i> Detail Pratinjau</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Legalitas Perusahaan -->
+  <section class="section" id="legalitas">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="sub-title">Kredibilitas & Keabsahan</span>
+        <h2>Legalitas Perusahaan</h2>
+        <p>CV. Cendika Digital Nusantara beroperasi secara resmi dan terdaftar sah di bawah hukum Republik Indonesia.</p>
+      </div>
+
+      <div class="legal-grid">
+        <div class="legal-card hover-lift" data-aos="fade-up" data-aos-delay="100">
+          <div class="legal-head">
+            <i class="fa-solid fa-stamp"></i>
+            <button class="btn-copy" data-copy="1302260040083" title="Salin NIB"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <h4>Nomor Induk Berusaha (NIB)</h4>
+          <p class="legal-highlight">1302260040083</p>
+        </div>
+
+        <div class="legal-card hover-lift" data-aos="fade-up" data-aos-delay="200">
+          <div class="legal-head">
+            <i class="fa-solid fa-file-contract"></i>
+            <button class="btn-copy" data-copy="AHU-00032.AH.02.01.Tahun 2021" title="Salin No. SK"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <h4>Akta Notaris</h4>
+          <p><strong>Hartini, S.H., M.Kn.</strong></p>
+          <small>SK Kemenkumham: AHU-00032.AH.02.01.Tahun 2021</small>
+        </div>
+
+        <div class="legal-card hover-lift" data-aos="fade-up" data-aos-delay="300">
+          <div class="legal-head">
+            <i class="fa-solid fa-certificate"></i>
+            <button class="btn-copy" data-copy="AHU-0110487-AH.01.14 Tahun 2025" title="Salin No. Keputusan"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <h4>Surat Keterangan Terdaftar</h4>
+          <p><strong>Kemenkumham RI</strong></p>
+          <small>Nomor: AHU-0110487-AH.01.14 Tahun 2025</small>
+        </div>
+
+        <div class="legal-card hover-lift" data-aos="fade-up" data-aos-delay="400">
+          <div class="legal-head">
+            <i class="fa-solid fa-id-card"></i>
+            <button class="btn-copy" data-copy="1000 0000 0778 4480" title="Salin NPWP"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <h4>NPWP Badan Usaha</h4>
+          <p class="legal-highlight">1000 0000 0778 4480</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Kontak -->
+  <section class="section contact-section" id="kontak">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="sub-title">Konsultasi & Kemitraan</span>
+        <h2>Kontak Kami</h2>
+        <p>Hubungi kami untuk konsultasi dan kolaborasi transformasi digital</p>
+      </div>
+
+      <div class="contact-dual-wrapper" data-aos="fade-up" data-aos-delay="150">
+        <div class="contact-card-info">
+          <div class="info-top">
+            <div class="status-pill">
+              <span class="pulse-dot"></span> Layanan Konsultasi Aktif
+            </div>
+            <h3>CV. CENDIKA DIGITAL NUSANTARA</h3>
+            <p class="tagline-sub">Empowering Skills. Elevating Digital Future.</p>
+          </div>
+
+          <div class="channel-list">
+            <a href="https://maps.google.com/?q=Jl.+Watunjamboko,+Kawatuna,+Mantikulore,+Kota+Palu,+Sulawesi+Tengah" target="_blank" class="channel-box click-box">
+              <div class="ch-icon map"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="ch-text">
+                <label>Alamat Kantor</label>
+                <span>Jl. Watunjamboko RT.003 RW.003, Kawatuna, Mantikulore, Kota Palu, Sulawesi Tengah (94233)</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square arrow-icon"></i>
+            </a>
+
+            <a href="https://wa.me/62859106780884" target="_blank" class="channel-box click-box">
+              <div class="ch-icon wa"><i class="fa-brands fa-whatsapp"></i></div>
+              <div class="ch-text">
+                <label>WhatsApp / Kontak</label>
+                <span>+62 859-1067-80884</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square arrow-icon"></i>
+            </a>
+
+            <a href="mailto:cendikadigitalnusantara@gmail.com" class="channel-box click-box">
+              <div class="ch-icon mail"><i class="fa-solid fa-envelope"></i></div>
+              <div class="ch-text">
+                <label>Email Resmi</label>
+                <span>cendikadigitalnusantara@gmail.com</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square arrow-icon"></i>
+            </a>
+
+            <div class="channel-socials">
+              <a href="https://diginus.web.id" target="_blank"><i class="fa-solid fa-globe"></i> diginus.web.id</a>
+              <a href="https://instagram.com/diginus.web.id" target="_blank"><i class="fa-brands fa-instagram"></i> @diginus.web.id</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card-form">
+          <div class="form-heading">
+            <h4>Kirimkan Kebutuhan Anda</h4>
+            <p>Sampaikan detail kebutuhan proyek atau pelatihan yang Anda inginkan.</p>
+          </div>
+
+          <form id="contactForm" class="modern-form">
+            <label class="form-label-top">Pilih Pilar Layanan:</label>
+            <div class="service-pills">
+              <label class="pill-option">
+                <input type="radio" name="service_type" value="Digital Services" checked>
+                <span>Digital Services</span>
+              </label>
+              <label class="pill-option">
+                <input type="radio" name="service_type" value="Course & Training">
+                <span>Course & Training</span>
+              </label>
+              <label class="pill-option">
+                <input type="radio" name="service_type" value="Produk Digital">
+                <span>Produk Digital</span>
+              </label>
+            </div>
+
+            <div class="input-grid">
+              <div class="input-field">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" id="name" placeholder="Nama Lengkap" required>
+              </div>
+              <div class="input-field">
+                <i class="fa-regular fa-envelope"></i>
+                <input type="email" id="email" placeholder="Alamat Email" required>
+              </div>
+            </div>
+
+            <div class="input-field textarea-field">
+              <i class="fa-regular fa-comment-dots"></i>
+              <textarea id="message" rows="4" placeholder="Pesan / Kebutuhan Proyek Anda" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-send">
+              <span>Kirim Pesan</span>
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>&copy; 2025 DIGINUS (CV. Cendika Digital Nusantara). Seluruh Hak Cipta Dilindungi.</p>
+      <div class="footer-tagline">Empowering Skills. Elevating Digital Future.</div>
+    </div>
+  </footer>
+
+  <!-- Floating Scroll Top & WhatsApp -->
+  <a href="#home" class="scroll-top" id="scrollTopBtn" aria-label="Kembali ke atas">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+
+  <a href="https://wa.me/62859106780884" target="_blank" class="float-wa" aria-label="Chat WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- JS Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
