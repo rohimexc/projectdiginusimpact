@@ -25,9 +25,9 @@
     <!-- ==========================================
          HEADER & NAVBAR MINIMALIS
          ========================================== -->
+<!-- Header Minimalis (Logo digeser ke kiri) -->
     <header id="header">
         <div class="container navbar">
-            <!-- Logo Perusahaan yang mengarah ke bagian tentang -->
             <div class="logo">
                 <a href="#tentang">
                     <img src="LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" class="logo-img">
@@ -73,36 +73,26 @@
     <!-- ==========================================
          TENTANG KAMI & VISI-MISI
          ========================================== -->
+<!-- Tentang Kami Section (Pendahuluan di sebelah visi dihapus, fokus ke Visi-Misi) -->
     <section id="tentang" class="section">
         <div class="container">
-            <!-- Judul Section -->
             <div class="section-title" data-aos="fade-up">
                 <h2>Tentang Kami</h2>
                 <p>Mengenal lebih dekat CV. Cendika Digital Nusantara</p>
             </div>
 
-            <!-- Grid Atas: Deskripsi Singkat (Kiri) & Kartu Visi (Kanan) -->
-            <div class="about-top-grid">
-                <div class="about-text" data-aos="fade-right">
-                    <p>DIGINUS hadir dengan semangat <strong>"Empowering Skills, Elevating Digital Future"</strong> untuk memberdayakan keterampilan melalui ekosistem pembelajaran, layanan profesional, dan produk digital inovatif.</p>
-                    <p>Kami percaya transformasi digital sejati terletak pada manusia yang menggerakkannya, bukan hanya teknologinya. Dengan menjunjung tinggi nilai pembelajaran berkelanjutan, kolaborasi, dan integritas, kami memastikan setiap solusi lahir dari kebutuhan riil di lapangan.</p>
-                </div>
-                <div class="vision-card-wrapper" data-aos="fade-left">
-                    <div class="vm-card">
-                        <h3>Visi</h3>
-                        <p>Menjadi perusahaan digital yang berperan aktif dalam pengembangan sumber daya manusia dan transformasi digital di Indonesia.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Grid Bawah: Kartu Misi Full Lebar -->
-            <div class="about-bottom-grid" data-aos="fade-up">
+            <!-- Bagian Visi & Misi Terpusat -->
+            <div class="about-vm-grid" data-aos="fade-up" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 0 auto;">
+<div class="vm-card">
+    <h3>Visi</h3>
+    <p><em>"Menjadi perusahaan digital yang berperan aktif dalam pengembangan sumber daya manusia dan transformasi digital di Indonesia."</em></p>
+</div>
                 <div class="vm-card mission-card">
                     <h3>Misi</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> Menyediakan layanan, produk, dan pelatihan digital yang berkualitas dan relevan.</li>
-                        <li><i class="fas fa-check-circle"></i> Mendorong peningkatan kompetensi digital melalui pembelajaran yang praktis dan aplikatif.</li>
-                        <li><i class="fas fa-check-circle"></i> Menjadi mitra strategis bagi individu, komunitas, dan organisasi dalam pengembangan solusi digital.</li>
+                        <li><i class="fas fa-check-circle"></i> Mendorong peningkatan kompetensi digital melalui pembelajaran praktis & aplikatif.</li>
+                        <li><i class="fas fa-check-circle"></i> Menjadi mitra strategis bagi individu dan organisasi dalam solusi digital.</li>
                         <li><i class="fas fa-check-circle"></i> Menghadirkan teknologi yang berdampak, berkelanjutan, dan mudah diakses.</li>
                     </ul>
                 </div>
@@ -248,104 +238,181 @@
         </div>
     </section>
 
-    <!-- ==========================================
-         PORTOFOLIO KAMI (CAROUSEL / MARQUEE)
+<!-- ==========================================
+         PORTOFOLIO KAMI (AUTO MARQUEE INFINITE)
          ========================================== -->
     <section id="portofolio" class="section bg-light" style="overflow: hidden;">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
+        <div class="container" style="max-width: 100%; padding: 0;">
+            <div class="section-title" data-aos="fade-up" style="padding: 0 20px;">
                 <h2>Portofolio Kami</h2>
                 <p>Rekam jejak implementasi digital service dan produk digital unggulan</p>
             </div>
 
-            <!-- Kontainer Gulir Horizontal Portofolio -->
-            <div class="portfolio-marquee" style="display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 20px;" data-aos="fade-up">
-                <!-- Portofolio 1 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-landmark"></i></div>
-                        <span class="portfolio-badge">Digital Service</span>
+            <!-- Wrapper Marquee Utama -->
+            <div class="marquee-wrapper" data-aos="fade-up">
+                <div class="marquee-track">
+                    <!-- KELOMPOK KARTU 1 -->
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-landmark"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Kantor Pertanahan Palu</h3>
+                            <p><strong>Official Website BPN Kota Palu (bpnpalu.id):</strong> Portal resmi transformasi layanan publik transparan.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>Kantor Pertanahan Palu</h3>
-                        <p><strong>Official Website BPN Kota Palu (bpnpalu.id):</strong> Portal resmi transformasi layanan publik transparan.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-university"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>SITAMPAN UNTAD</h3>
+                            <p><strong>Sistem Informasi Terpadu MBKM:</strong> Pendukung Magang, PLP Terintegrasi, logbook harian, dan unggah laporan.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Portofolio 2 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-university"></i></div>
-                        <span class="portfolio-badge">Produk Digital</span>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-laptop"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Website Prodi Teknik Geofisika</h3>
+                            <p><strong>FMIPA Untad:</strong> Penjadwalan akademik real-time serta pengumuman rekrutmen asisten lab.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>SITAMPAN UNTAD</h3>
-                        <p><strong>Sistem Informasi Terpadu MBKM:</strong> Pendukung Magang, PLP Terintegrasi, logbook harian, dan unggah laporan.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-shield-alt"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>SMART - Audit Mutu Internal</h3>
+                            <p><strong>Universitas Tadulako:</strong> Sistem manajemen audit mutu internal untuk instrumen digital dan kertas kerja online.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Portofolio 3 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-laptop"></i></div>
-                        <span class="portfolio-badge">Digital Service</span>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-globe"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Website PMM UNTAD</h3>
+                            <p><strong>Pusat Mobilitas Mahasiswa:</strong> Portal strategis akselerasi program Kampus Berdampak Kemdiktisaintek.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>Website Prodi Teknik Geofisika</h3>
-                        <p><strong>FMIPA Untad:</strong> Penjadwalan akademik real-time serta pengumuman rekrutmen asisten lab.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-chart-pie"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Website Prodi Sains Data</h3>
+                            <p><strong>Universitas Tadulako:</strong> Portal resmi prodi baru fokus pengolahan data dan kecerdasan buatan.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Portofolio 4 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-shield-alt"></i></div>
-                        <span class="portfolio-badge">Produk Digital</span>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-book-reader"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Prodi Administrasi Publik FISIP</h3>
+                            <p><strong>Universitas Tadulako:</strong> Sarana komunikasi dan akuntabilitas digital prodi tertua.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>SMART - Audit Mutu Internal</h3>
-                        <p><strong>Universitas Tadulako:</strong> Sistem manajemen audit mutu internal untuk instrumen digital dan kertas kerja online.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-school"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Pesantren Insan Cita Indonesia</h3>
+                            <p>Platform resmi pesantren komprehensif mulai dari video hero banner hingga integrasi PPDB online.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Portofolio 5 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-globe"></i></div>
-                        <span class="portfolio-badge">Digital Service</span>
+
+                    <!-- KELOMPOK KARTU DUPLIKAT (PENTING BIAR LOOPING-NYA MULUS TANPA PUTUS) -->
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-landmark"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Kantor Pertanahan Palu</h3>
+                            <p><strong>Official Website BPN Kota Palu (bpnpalu.id):</strong> Portal resmi transformasi layanan publik transparan.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>Website PMM UNTAD</h3>
-                        <p><strong>Pusat Mobilitas Mahasiswa:</strong> Portal strategis akselerasi program Kampus Berdampak Kemdiktisaintek.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-university"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>SITAMPAN UNTAD</h3>
+                            <p><strong>Sistem Informasi Terpadu MBKM:</strong> Pendukung Magang, PLP Terintegrasi, logbook harian, dan unggah laporan.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Portofolio 6 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-chart-pie"></i></div>
-                        <span class="portfolio-badge">Produk Digital</span>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-laptop"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Website Prodi Teknik Geofisika</h3>
+                            <p><strong>FMIPA Untad:</strong> Penjadwalan akademik real-time serta pengumuman rekrutmen asisten lab.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>Website Prodi Sains Data</h3>
-                        <p><strong>Universitas Tadulako:</strong> Portal resmi prodi baru fokus pengolahan data dan kecerdasan buatan.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-shield-alt"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>SMART - Audit Mutu Internal</h3>
+                            <p><strong>Universitas Tadulako:</strong> Sistem manajemen audit mutu internal untuk instrumen digital dan kertas kerja online.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Portofolio 7 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-book-reader"></i></div>
-                        <span class="portfolio-badge">Digital Service</span>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-globe"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Website PMM UNTAD</h3>
+                            <p><strong>Pusat Mobilitas Mahasiswa:</strong> Portal strategis akselerasi program Kampus Berdampak Kemdiktisaintek.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>Prodi Administrasi Publik FISIP</h3>
-                        <p><strong>Universitas Tadulako:</strong> Sarana komunikasi dan akuntabilitas digital prodi tertua.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-chart-pie"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Website Prodi Sains Data</h3>
+                            <p><strong>Universitas Tadulako:</strong> Portal resmi prodi baru fokus pengolahan data dan kecerdasan buatan.</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Portofolio 8 -->
-                <div class="portfolio-card" style="min-width: 300px; flex: 0 0 300px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div class="portfolio-card-top">
-                        <div class="portfolio-icon-box"><i class="fas fa-school"></i></div>
-                        <span class="portfolio-badge">Produk Digital</span>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-book-reader"></i></div>
+                            <span class="portfolio-badge">Digital Service</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Prodi Administrasi Publik FISIP</h3>
+                            <p><strong>Universitas Tadulako:</strong> Sarana komunikasi dan akuntabilitas digital prodi tertua.</p>
+                        </div>
                     </div>
-                    <div class="portfolio-content">
-                        <h3>Pesantren Insan Cita Indonesia</h3>
-                        <p>Platform resmi pesantren komprehensif mulai dari video hero banner hingga integrasi PPDB online.</p>
+                    <div class="portfolio-card">
+                        <div class="portfolio-card-top">
+                            <div class="portfolio-icon-box"><i class="fas fa-school"></i></div>
+                            <span class="portfolio-badge">Produk Digital</span>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Pesantren Insan Cita Indonesia</h3>
+                            <p>Platform resmi pesantren komprehensif mulai dari video hero banner hingga integrasi PPDB online.</p>
+                        </div>
                     </div>
                 </div>
             </div>

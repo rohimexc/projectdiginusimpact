@@ -44,7 +44,7 @@ body {
    2. HEADER & NAVBAR MINIMALIS
    ========================================================================== */
 
-/* Mengatur header agar melayang di atas (fixed) saat halaman digulir */
+/* Header & Navbar Minimalis (Logo digeser ke kiri) */
 header {
     position: fixed;
     top: 0;
@@ -64,10 +64,10 @@ header.scrolled {
     padding: 12px 0;
 }
 
-/* Mengatur tata letak navigasi agar berada di posisi tengah */
+/* Mengatur tata letak navigasi agar berada di sebelah kiri */
 .navbar {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Diubah dari center ke flex-start biar ke kiri */
     align-items: center;
 }
 
@@ -81,7 +81,6 @@ header.scrolled {
 .logo-img:hover {
     transform: scale(1.05);
 }
-
 
 /* ==========================================================================
    3. PENGATURAN UMUM SECTION (BAGIAN HALAMAN)
@@ -228,6 +227,7 @@ header.scrolled {
     font-size: 0.96rem;
     color: #475569;
     line-height: 1.7;
+    font-style: italic;
 }
 
 .vm-card ul {
@@ -704,5 +704,94 @@ footer p {
     
     .section {
         padding: 50px 0;
+    }
+}
+
+/* =========================================
+   PERBAIKAN RESPONSIF UNTUK TAMPILAN HP
+   ========================================= */
+
+/* 1. Perbaikan Statistik Section di HP */
+.statistics-section .container > div {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* 2. Media Queries khusus layar HP (di bawah 992px) */
+@media (max-width: 992px) {
+    /* Statistik dibuat 2 kolom di HP biar nggak kepanjangan ke bawah */
+    .statistics-section a {
+        flex: 0 0 45% !important;
+        min-width: unset !important;
+    }
+
+    /* Visi & Misi dipaksa jadi 1 kolom ke bawah dan teksnya rapi */
+    .about-vm-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .vm-card {
+        height: auto !important;
+    }
+
+    /* Bagian Keunggulan (Accordion) */
+    .why-diginus-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .why-diginus-image-wrapper {
+        position: relative;
+        top: 0;
+        margin-top: 20px;
+    }
+    
+    .image-container {
+        height: 250px !important;
+    }
+}
+
+/* =========================================
+   STYLE AUTO MARQUEE INFINITE PORTOFOLIO
+   ========================================= */
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+}
+
+.marquee-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    /* Durasi 35 detik per putaran, atur cepat/lambat di sini */
+    animation: scrollMarquee 35s linear infinite; 
+}
+
+/* Berhenti bergerak otomatis saat kursor mendekat ke salah satu kartu portofolio */
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.marquee-wrapper .portfolio-card {
+    min-width: 300px;
+    flex: 0 0 300px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* Keyframes untuk pergerakan geser menyamping */
+@keyframes scrollMarquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-50% - 10px));
     }
 }
