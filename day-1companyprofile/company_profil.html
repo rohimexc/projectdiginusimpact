@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <!-- Menentukan format karakter standar UTF-8 -->
   <meta charset="UTF-8">
+  <!-- Pengaturan viewport agar layout otomatis responsif di semua perangkat -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Judul pada tab peramban -->
   <title>Diginus — Empowering Skills. Elevating Digital Future.</title>
-
-  <!-- Favicon Identitas Tab Website -->
+  
+  <!-- Favicon resmi -->
   <link rel="icon" type="image/png" href="favicon.png">
   
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome Icons -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- AOS Animation Library -->
+  <!-- AOS (Animate On Scroll) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
   
-  <!-- Custom Style -->
+  <!-- Stylesheet Utama -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Toast Notification -->
+  <!-- Notifikasi Toast -->
   <div id="toast" class="toast"><i class="fa-solid fa-circle-check"></i> Notifikasi</div>
 
-  <!-- Modal Detail Portofolio -->
+  <!-- Modal Pratinjau Portofolio -->
   <div class="portfolio-modal" id="portfolioModal">
     <div class="modal-overlay" id="modalOverlay"></div>
     <div class="modal-content">
@@ -36,52 +40,21 @@
       <h3 id="modalTitle">Judul Portofolio</h3>
       <span class="modal-domain" id="modalDomain"><i class="fa-solid fa-link"></i> domain.id</span>
       <hr class="modal-divider">
-      <p id="modalDesc">Deskripsi lengkap portofolio proyek akan ditampilkan di sini secara interaktif.</p>
+      <p id="modalDesc">Deskripsi lengkap portofolio proyek akan ditampilkan di sini.</p>
       <div class="modal-footer">
         <button class="btn btn-primary btn-modal-close" id="btnModalClose"><i class="fa-solid fa-check"></i> Tutup Pratinjau</button>
       </div>
     </div>
   </div>
 
-  <!-- Navigation Bar dengan Logo Gambar -->
+  <!-- Navigasi Utama -->
   <nav class="navbar" id="navbar">
     <div class="container nav-container">
-      <a href="#home" class="brand-logo" aria-label="DIGINUS Logo">
+      <a href="#" class="brand-logo" aria-label="DIGINUS Logo">
         <img src="logo.png" alt="DIGINUS Logo" class="logo-img">
       </a>
     </div>
   </nav>
-
-  <!-- Hero Section -->
-  <section class="hero" id="home">
-    <div class="container hero-grid">
-      <div class="hero-text" data-aos="fade-right" data-aos-duration="1000">
-        <span class="badge"><i class="fa-solid fa-shield-halved"></i> CV. Cendika Digital Nusantara</span>
-        <h1>Empowering Skills.<br><span class="gradient-text">Elevating Digital Future.</span></h1>
-        <p>
-          Mitra strategis terpercaya yang berkomitmen menjembatani tantangan dunia digital melalui ekosistem pembelajaran, layanan profesional, dan produk digital inovatif yang aplikatif serta inklusif.
-        </p>
-        <div class="hero-actions">
-          <a href="#layanan" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Jelajahi Layanan</a>
-          <a href="#portofolio" class="btn btn-outline"><i class="fa-solid fa-briefcase"></i> Lihat Portofolio</a>
-        </div>
-      </div>
-      <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
-        <div class="hero-card hover-lift">
-          <div class="icon-circle">
-            <i class="fa-solid fa-network-wired"></i>
-          </div>
-          <h3>Solusi Digital Terpadu</h3>
-          <p>Membangun kapasitas talenta dan infrastruktur digital berkualitas tinggi untuk akselerasi pertumbuhan berkelanjutan.</p>
-          <div class="hero-chips">
-            <span>#Inovatif</span>
-            <span>#Aplikatif</span>
-            <span>#Terpercaya</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Section Statistik -->
   <section class="stats-section">
@@ -111,7 +84,7 @@
     </div>
   </section>
 
-  <!-- Tentang Kami -->
+  <!-- Section Tentang Kami -->
   <section class="section" id="tentang">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -167,7 +140,7 @@
     </div>
   </section>
 
-  <!-- Layanan Kami -->
+  <!-- Section Layanan -->
   <section class="section bg-light" id="layanan">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -180,7 +153,7 @@
         <div class="service-card hover-lift" data-aos="fade-up" data-aos-delay="100">
           <div class="service-icon"><i class="fa-solid fa-graduation-cap"></i></div>
           <h3>Course dan Training</h3>
-          <p>Program pembelajaran digital komprehensif yang dirancang untuk mengasah keterampilan praktis dan membangun kesiapan penuh dalam menjawab dinamika industri teknologi yang terus berevolusi.</p>
+          <p>Program pembelajaran digital komprehensif yang dirancang untuk mengasah keterampilan praktis dan membangun kesiapan industri secara aplikatif.</p>
           <div class="service-tags">
             <span>Pelatihan Praktis</span>
             <span>In-House Training</span>
@@ -191,7 +164,7 @@
         <div class="service-card hover-lift" data-aos="fade-up" data-aos-delay="200">
           <div class="service-icon"><i class="fa-solid fa-laptop-code"></i></div>
           <h3>Digital Services</h3>
-          <p>Layanan profesional yang mengintegrasikan kecanggihan teknologi dengan kreativitas tinggi untuk mengarsiteki, mengelola, serta mengoptimalkan kehadiran digital agar lebih impresif dan berpengaruh.</p>
+          <p>Layanan profesional yang mengintegrasikan kecanggihan teknologi dengan kreativitas tinggi untuk mengoptimalkan kehadiran sistem digital instansi.</p>
           <div class="service-tags">
             <span>Web Development</span>
             <span>Sistem Informasi</span>
@@ -202,7 +175,7 @@
         <div class="service-card hover-lift" data-aos="fade-up" data-aos-delay="300">
           <div class="service-icon"><i class="fa-solid fa-box-archive"></i></div>
           <h3>Produk & Penjualan Digital</h3>
-          <p>Penyediaan aset digital inovatif yang fungsional sebagai katalis kuat untuk efektivitas pembelajaran, efisiensi produktivitas, hingga akselerasi pertumbuhan bisnis Anda secara berkelanjutan.</p>
+          <p>Penyediaan aset digital inovatif yang fungsional sebagai katalis kuat untuk efektivitas operasional dan akselerasi produktivitas bisnis Anda.</p>
           <div class="service-tags">
             <span>Aset Digital</span>
             <span>Sistem Otomasi</span>
@@ -213,7 +186,7 @@
     </div>
   </section>
 
-  <!-- Kenapa Harus DIGINUS (Accordion dengan Gambar Showcase) -->
+  <!-- Section Keunggulan -->
   <section class="section" id="keunggulan">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -223,7 +196,6 @@
       </div>
 
       <div class="accordion-showcase-grid" data-aos="fade-up">
-        <!-- List Accordion Sisi Kiri -->
         <div class="accordion-list">
           <div class="accordion-item active" data-img="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80">
             <button class="accordion-header" type="button">
@@ -232,7 +204,7 @@
               <i class="fa-solid fa-chevron-down acc-arrow"></i>
             </button>
             <div class="accordion-body">
-              <p>Kami menggabungkan aspek pembelajaran (course), layanan profesional (service), dan produk digital dalam satu kesatuan yang kohesif untuk menjawab kebutuhan transformasi digital Anda secara menyeluruh.</p>
+              <p>Kami menggabungkan aspek pembelajaran, layanan profesional, dan produk digital dalam satu kesatuan terpadu untuk transformasi digital yang menyeluruh.</p>
             </div>
           </div>
 
@@ -243,7 +215,7 @@
               <i class="fa-solid fa-chevron-down acc-arrow"></i>
             </button>
             <div class="accordion-body">
-              <p>Seluruh inovasi dan layanan kami berakar pada analisis kebutuhan pasar yang nyata, memastikan solusi yang diberikan bersifat praktis dan dapat langsung diaplikasikan dalam industri.</p>
+              <p>Seluruh inovasi dan layanan kami berakar pada analisis kebutuhan pasar riil, memastikan implementasi bersifat aplikatif dan berdampak langsung.</p>
             </div>
           </div>
 
@@ -254,7 +226,7 @@
               <i class="fa-solid fa-chevron-down acc-arrow"></i>
             </button>
             <div class="accordion-body">
-              <p>Kami tidak hanya bertujuan menyelesaikan pekerjaan, tetapi juga membangun kapasitas dan kompetensi jangka panjang bagi setiap individu maupun organisasi yang berkolaborasi bersama kami.</p>
+              <p>Kami membangun kompetensi mandiri jangka panjang bagi setiap individu maupun institusi mitra yang berkolaborasi bersama kami.</p>
             </div>
           </div>
 
@@ -265,7 +237,7 @@
               <i class="fa-solid fa-chevron-down acc-arrow"></i>
             </button>
             <div class="accordion-body">
-              <p>Kami memahami bahwa setiap klien memiliki tantangan yang unik. Oleh karena itu, layanan kami dirancang agar dapat disesuaikan secara personal sesuai dengan kebutuhan spesifik dan tujuan bisnis Anda.</p>
+              <p>Layanan kami dirancang adaptif dan disesuaikan dengan kebutuhan spesifik serta alur kerja masing-masing institusi klien.</p>
             </div>
           </div>
 
@@ -276,7 +248,7 @@
               <i class="fa-solid fa-chevron-down acc-arrow"></i>
             </button>
             <div class="accordion-body">
-              <p>Sesuai dengan semangat kami dalam memberdayakan keterampilan, kami memastikan bahwa setiap teknologi dan produk yang kami hadirkan bersifat berkelanjutan dan mudah diakses oleh berbagai lapisan masyarakat.</p>
+              <p>Memastikan setiap inovasi dan teknologi yang kami hadirkan bersifat ramah pengguna, terjangkau, serta mudah diakses semua kalangan.</p>
             </div>
           </div>
 
@@ -287,7 +259,7 @@
               <i class="fa-solid fa-chevron-down acc-arrow"></i>
             </button>
             <div class="accordion-body">
-              <p>Kami menjamin komunikasi yang jelas, komitmen terhadap tenggat waktu, serta pendampingan intensif untuk memastikan setiap proyek mencapai hasil yang optimal.</p>
+              <p>Jaminan komunikasi transparan, komitmen ketepatan waktu, serta bimbingan teknis intensif di setiap tahapan pengerjaan proyek.</p>
             </div>
           </div>
 
@@ -298,12 +270,11 @@
               <i class="fa-solid fa-chevron-down acc-arrow"></i>
             </button>
             <div class="accordion-body">
-              <p>Memberikan fleksibilitas penuh melalui berbagai opsi pelaksanaan layanan, tersedia dalam pelayanan online, offline, maupun in-house training dengan pendampingan profesional.</p>
+              <p>Tersedia format pelaksanaan fleksibel baik pertemuan tatap muka langsung, in-house pelatihan, maupun pendampingan online intensif.</p>
             </div>
           </div>
         </div>
 
-        <!-- Preview Gambar Interaktif Sisi Kanan -->
         <div class="accordion-preview-wrap">
           <div class="accordion-img-card">
             <img id="accordionPreviewImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80" alt="Ilustrasi Keunggulan DIGINUS">
@@ -317,87 +288,130 @@
     </div>
   </section>
 
-  <!-- Portofolio Bergeser (Carousel Navigation Arrows) -->
-  <section class="section bg-light" id="portofolio">
+  <!-- Section Portofolio: Single Row Infinite Marquee Card -->
+  <section class="section bg-light portfolio-section" id="portofolio">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <span class="sub-title">Karya & Rekam Jejak</span>
         <h2>Portofolio Kami</h2>
-        <p>Solusi teknologi teruji yang dirancang untuk instansi pemerintah, perguruan tinggi, dan lembaga pendidikan. <em>(Klik kartu untuk melihat detail pop-up mengambang)</em></p>
+        <p>Solusi teknologi teruji untuk instansi pemerintah dan pendidikan tinggi. <em>(Arahkan kursor atau sentuh kartu untuk menjeda dan melihat detail pratinjau)</em></p>
       </div>
 
-      <!-- Filter Kategori Asli -->
       <div class="portfolio-filter" data-aos="fade-up">
         <button class="filter-btn active" data-filter="all">Semua Proyek</button>
         <button class="filter-btn" data-filter="web">Web Portal</button>
         <button class="filter-btn" data-filter="system">Sistem Informasi</button>
         <button class="filter-btn" data-filter="education">Institusi / Kampus</button>
       </div>
+    </div>
 
-      <!-- Wrapper Carousel -->
-      <div class="carousel-container" data-aos="fade-up">
-        <button class="nav-arrow prev-arrow" id="prevSlide" aria-label="Geser Kiri">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <div class="portfolio-track" id="portfolioTrack">
+    <!-- Wadah 1 Baris Marquee Card Tunggal -->
+    <div class="marquee-wrapper" data-aos="fade-up">
+      <div class="marquee-row">
+        <div class="marquee-track">
+          <!-- Kartu 1 -->
           <div class="portfolio-card hover-lift" data-category="web">
             <div class="portfolio-badge">Digital Services</div>
             <h3>Official Website BPN Kota Palu</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-link"></i> bpnpalu.id</span>
-            <p>Merancang dan membangun dari nol portal resmi Kantor Pertanahan Kota Palu untuk transparansi pelayanan publik: profil instansi, syarat administrasi, biaya layanan, pendaftaran tanah, peralihan hak, hingga modul aduan masyarakat.</p>
+            <p>Portal resmi Kantor Pertanahan Palu: transparansi layanan publik, alur sertifikasi, biaya hak, dan modul aduan masyarakat.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
 
+          <!-- Kartu 2 -->
           <div class="portfolio-card hover-lift" data-category="system education">
             <div class="portfolio-badge">Sistem Informasi</div>
             <h3>SITAMPAN UNTAD</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-link"></i> sitampan.untad.ac.id</span>
-            <p>Sistem Informasi Terpadu MBKM Universitas Tadulako yang mengakomodasi Magang, PLP Terintegrasi, Asistensi Mengajar, logbook digital, panduan multimedia, dan sistem unggah laporan terintegrasi penilaian dosen.</p>
+            <p>Sistem Informasi MBKM terpadu: monitoring magang, asistensi mengajar, logbook harian, dan penilaian berkala dosen pembimbing.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
 
+          <!-- Kartu 3 -->
           <div class="portfolio-card hover-lift" data-category="web education">
             <div class="portfolio-badge">Web Portal</div>
             <h3>Website Prodi Teknik Geofisika</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-graduation-cap"></i> FMIPA UNTAD</span>
-            <p>Pusat operasional dan administrasi akademik prodi secara real-time: penjadwalan ujian komprehensif, seminar hasil penelitian mahasiswa, rekrutmen asisten laboratorium, dan publikasi kegiatan Tridharma.</p>
+            <p>Pusat administrasi akademik prodi real-time: penjadwalan komprehensif, seminar hasil, dan informasi kegiatan tridharma.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
 
+          <!-- Kartu 4 -->
           <div class="portfolio-card hover-lift" data-category="system education">
             <div class="portfolio-badge">Audit Mutu</div>
             <h3>SMART UNTAD</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-check-to-slot"></i> Sistem Audit Internal</span>
-            <p>Sistem Manajemen Audit Mutu Internal Universitas Tadulako dibangun dari nol untuk mengawal siklus PPEPP akreditasi institusi: instrumen digital, kertas kerja audit online, verifikasi data auditor, dan monitoring temuan real-time.</p>
+            <p>Sistem audit mutu PPEPP institusi: instrumen digital, kertas kerja daring, verifikasi auditor, dan pantauan temuan.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
 
+          <!-- Kartu 5 -->
           <div class="portfolio-card hover-lift" data-category="web education">
             <div class="portfolio-badge">Portal Kampus</div>
             <h3>Website PMM UNTAD</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-users"></i> Mobilitas Mahasiswa</span>
-            <p>Portal resmi Pusat Mobilitas Mahasiswa Universitas Tadulako guna mengakselerasi program Kampus Berdampak Kemdiktisaintek: gerbang informasi Magang, Kampus Mengajar, dan Proyek Kemanusiaan Berdampak.</p>
+            <p>Gerbang informasi program kampus berdampak: pertukaran mahasiswa, asistensi mengajar, dan program kemanusiaan.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
 
+          <!-- Kartu 6 -->
           <div class="portfolio-card hover-lift" data-category="web education">
             <div class="portfolio-badge">Web Prodi</div>
             <h3>Website Prodi Sains Data</h3>
             <span class="portfolio-domain"><i class="fa-solid fa-chart-pie"></i> FMIPA UNTAD</span>
-            <p>Pusat informasi modern prodi sains data dan kecerdasan buatan: profil kurikulum adaptif, informasi pendaftaran mahasiswa baru, galeri aktivitas laboratorium riset komputasi data kampus.</p>
+            <p>Pusat informasi kurikulum data & AI, penerimaan mahasiswa baru, dan galeri riset komputasi mutakhir.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+
+          <!-- Duplikasi Seluruh 6 Kartu Agar Looping Berjalan Mulus Tanpa Putus -->
+          <div class="portfolio-card hover-lift" data-category="web" aria-hidden="true">
+            <div class="portfolio-badge">Digital Services</div>
+            <h3>Official Website BPN Kota Palu</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-link"></i> bpnpalu.id</span>
+            <p>Portal resmi Kantor Pertanahan Palu: transparansi layanan publik, alur sertifikasi, biaya hak, dan modul aduan masyarakat.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="system education" aria-hidden="true">
+            <div class="portfolio-badge">Sistem Informasi</div>
+            <h3>SITAMPAN UNTAD</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-link"></i> sitampan.untad.ac.id</span>
+            <p>Sistem Informasi MBKM terpadu: monitoring magang, asistensi mengajar, logbook harian, dan penilaian berkala dosen pembimbing.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="web education" aria-hidden="true">
+            <div class="portfolio-badge">Web Portal</div>
+            <h3>Website Prodi Teknik Geofisika</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-graduation-cap"></i> FMIPA UNTAD</span>
+            <p>Pusat administrasi akademik prodi real-time: penjadwalan komprehensif, seminar hasil, dan informasi kegiatan tridharma.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="system education" aria-hidden="true">
+            <div class="portfolio-badge">Audit Mutu</div>
+            <h3>SMART UNTAD</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-check-to-slot"></i> Sistem Audit Internal</span>
+            <p>Sistem audit mutu PPEPP institusi: instrumen digital, kertas kerja daring, verifikasi auditor, dan pantauan temuan.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="web education" aria-hidden="true">
+            <div class="portfolio-badge">Portal Kampus</div>
+            <h3>Website PMM UNTAD</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-users"></i> Mobilitas Mahasiswa</span>
+            <p>Gerbang informasi program kampus berdampak: pertukaran mahasiswa, asistensi mengajar, dan program kemanusiaan.</p>
+            <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
+          </div>
+          <div class="portfolio-card hover-lift" data-category="web education" aria-hidden="true">
+            <div class="portfolio-badge">Web Prodi</div>
+            <h3>Website Prodi Sains Data</h3>
+            <span class="portfolio-domain"><i class="fa-solid fa-chart-pie"></i> FMIPA UNTAD</span>
+            <p>Pusat informasi kurikulum data & AI, penerimaan mahasiswa baru, dan galeri riset komputasi mutakhir.</p>
             <div class="click-hint"><i class="fa-solid fa-expand"></i> Klik untuk Pratinjau</div>
           </div>
         </div>
-
-        <button class="nav-arrow next-arrow" id="nextSlide" aria-label="Geser Kanan">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
       </div>
     </div>
   </section>
 
-  <!-- Legalitas Perusahaan -->
+  <!-- Section Legalitas Perusahaan -->
   <section class="section" id="legalitas">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
@@ -438,13 +452,13 @@
     </div>
   </section>
 
-  <!-- Klien Kami -->
+  <!-- Section Klien Kami -->
   <section class="section bg-light" id="klien">
     <div class="container">
       <div class="section-header" data-aos="fade-up">
         <span class="sub-title">Kepercayaan Mitra</span>
         <h2>Klien Kami</h2>
-        <p>Telah dipercaya oleh berbagai institusi pemerintah dan perguruan tinggi terkemuka</p>
+        <p>Telah dipercaya oleh institusi pemerintah daerah dan perguruan tinggi negeri terkemuka</p>
       </div>
 
       <div class="clients-wrapper" data-aos="zoom-in">
@@ -487,7 +501,6 @@
           </div>
 
           <div class="channel-list">
-            <!-- Alamat Langsung ke Maps -->
             <a href="https://maps.google.com/?q=Jl.+Watunjamboko,+Kawatuna,+Mantikulore,+Kota+Palu,+Sulawesi+Tengah" target="_blank" rel="noopener noreferrer" class="channel-box click-box">
               <div class="ch-icon map"><i class="fa-solid fa-map-location-dot"></i></div>
               <div class="ch-text">
@@ -497,7 +510,6 @@
               <i class="fa-solid fa-arrow-up-right-from-square arrow-icon"></i>
             </a>
 
-            <!-- WhatsApp Chat Langsung -->
             <a href="https://wa.me/62859106780884" target="_blank" rel="noopener noreferrer" class="channel-box click-box">
               <div class="ch-icon wa"><i class="fa-brands fa-whatsapp"></i></div>
               <div class="ch-text">
@@ -507,7 +519,6 @@
               <i class="fa-solid fa-arrow-up-right-from-square arrow-icon"></i>
             </a>
 
-            <!-- Email Langsung -->
             <a href="mailto:cendikadigitalnusantara@gmail.com" class="channel-box click-box">
               <div class="ch-icon mail"><i class="fa-solid fa-envelope"></i></div>
               <div class="ch-text">
@@ -527,7 +538,7 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Kaki Halaman (Footer) -->
   <footer class="footer">
     <div class="container footer-content">
       <p>&copy; 2025 DIGINUS (CV. Cendika Digital Nusantara). Seluruh Hak Cipta Dilindungi.</p>
@@ -535,16 +546,17 @@
     </div>
   </footer>
 
-  <!-- Floating Actions -->
+  <!-- Tombol Aksi WhatsApp Melayang -->
   <a href="https://wa.me/62859106780884" target="_blank" rel="noopener noreferrer" class="float-wa-left" aria-label="Chat WhatsApp">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <a href="#home" class="scroll-top-right" id="scrollTopBtn" aria-label="Kembali ke atas">
+  <!-- Tombol Melayang Scroll to Top Langsung ke Puncak (Top 0) -->
+  <a href="#" class="scroll-top-right" id="scrollTopBtn" aria-label="Kembali ke atas">
     <i class="fa-solid fa-arrow-up"></i>
   </a>
 
-  <!-- JS Libraries -->
+  <!-- Pustaka JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="main.js"></script>
 </body>

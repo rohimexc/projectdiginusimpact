@@ -1,6 +1,6 @@
 /* ====================================================
    DIGINUS Official Corporate Style
-   Primary Brand: Electric Blue (#0052ff) & Dark Navy (#0d2e72)
+   Kombinasi Warna Utama: Electric Blue (#0052ff) & Dark Navy (#0d2e72)
    ==================================================== */
 
 :root {
@@ -44,7 +44,7 @@ body {
   margin: 0 auto;
 }
 
-/* Typography */
+/* Tipografi Heading */
 h1, h2, h3, h4 {
   color: var(--brand-navy);
   font-weight: 700;
@@ -98,7 +98,7 @@ a {
   font-size: 1rem;
 }
 
-/* Hover Lift Card Effect */
+/* Efek Angkat Halus pada Kartu */
 .hover-lift {
   transition: var(--transition);
 }
@@ -110,7 +110,7 @@ a {
 }
 
 /* ====================================================
-   Micro-Interactions Ikon (Minimalis & Elegan)
+   Micro-Interactions Ikon Minimalis
    ==================================================== */
 .card-icon i,
 .legal-head i,
@@ -126,32 +126,27 @@ a {
   display: inline-block;
 }
 
-/* Ikon Utama Visi & Misi */
 .about-card:hover .card-icon i {
   transform: translateY(-2px);
   color: var(--brand-blue-hover);
 }
 
-/* Badge Nomor Misi */
 .hover-item:hover .misi-num {
   transform: translateY(-2px);
   background-color: var(--brand-blue-hover);
   box-shadow: 0 4px 10px rgba(0, 82, 255, 0.25);
 }
 
-/* Kartu Statistik */
 .stat-card:hover i {
   transform: translateY(-3px);
   color: #60a5fa;
 }
 
-/* Kartu Layanan */
 .service-card:hover .service-icon {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(0, 82, 255, 0.2);
 }
 
-/* Portofolio: Transisi Warna & Opasitas Bersih */
 .portfolio-card:hover .portfolio-domain i {
   color: var(--brand-blue-hover);
   transform: scale(1.05);
@@ -176,7 +171,6 @@ a {
   color: var(--brand-blue);
 }
 
-/* Kontak & Salinan */
 .channel-box.click-box:hover .ch-icon {
   transform: translateY(-2px);
 }
@@ -194,7 +188,9 @@ a {
   color: var(--brand-blue);
 }
 
-/* Tombol */
+/* ====================================================
+   Tombol Utama dan Garis Luar
+   ==================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -231,7 +227,9 @@ a {
   transform: translateY(-2px);
 }
 
-/* Navbar */
+/* ====================================================
+   Navbar Header
+   ==================================================== */
 .navbar {
   position: sticky;
   top: 0;
@@ -265,87 +263,9 @@ a {
   display: block;
 }
 
-/* Hero Section */
-.hero {
-  background: radial-gradient(circle at top left, #e6eeff 0%, #ffffff 75%);
-  padding: 100px 0 80px 0;
-}
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 40px;
-  align-items: center;
-}
-
-.hero-text .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background-color: var(--brand-light-blue);
-  color: var(--brand-blue);
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  margin-bottom: 16px;
-}
-
-.hero-text h1 {
-  font-size: 2.85rem;
-  margin-bottom: 18px;
-}
-
-.hero-text p {
-  color: var(--text-muted);
-  font-size: 1.05rem;
-  margin-bottom: 28px;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 15px;
-}
-
-.hero-card {
-  background: var(--white);
-  padding: 40px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  border-top: 5px solid var(--brand-blue);
-  text-align: center;
-}
-
-.hero-chips {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 15px;
-}
-
-.hero-chips span {
-  font-size: 0.75rem;
-  background: var(--brand-light-blue);
-  color: var(--brand-blue);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-}
-
-.icon-circle {
-  width: 75px;
-  height: 75px;
-  background-color: var(--brand-light-blue);
-  color: var(--brand-blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  border-radius: 50%;
-  margin: 0 auto 20px auto;
-}
-
-/* Statistics Bar */
+/* ====================================================
+   Section Statistik (Desktop Default)
+   ==================================================== */
 .stats-section {
   background: var(--brand-navy);
   color: var(--white);
@@ -386,7 +306,9 @@ a {
   font-size: 0.9rem;
 }
 
-/* Tentang Section */
+/* ====================================================
+   Section Tentang Kami
+   ==================================================== */
 .about-grid-stack {
   display: flex;
   flex-direction: column;
@@ -454,7 +376,9 @@ a {
   font-size: 0.9rem;
 }
 
-/* Layanan Section */
+/* ====================================================
+   Section Layanan Kami
+   ==================================================== */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -501,7 +425,9 @@ a {
   border: 1px solid #e2e8f0;
 }
 
-/* Section Accordion Showcase */
+/* ====================================================
+   Section Accordion Showcase dengan Gambar
+   ==================================================== */
 .accordion-showcase-grid {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
@@ -644,7 +570,13 @@ a {
   color: var(--brand-sky);
 }
 
-/* Portfolio Filters */
+/* ====================================================
+   Portofolio: Single Row Infinite Marquee Card
+   ==================================================== */
+.portfolio-section {
+  overflow: hidden;
+}
+
 .portfolio-filter {
   display: flex;
   justify-content: center;
@@ -663,6 +595,7 @@ a {
   font-family: inherit;
   font-size: 0.9rem;
   transition: var(--transition);
+  white-space: nowrap;
 }
 
 .filter-btn:hover, .filter-btn.active {
@@ -672,42 +605,58 @@ a {
   box-shadow: 0 4px 10px rgba(0, 82, 255, 0.3);
 }
 
-/* Portfolio Carousel Layout */
-.carousel-container {
-  position: relative;
+/* Pembungkus 1 Baris Marquee Full Width dengan Masking Gradasi */
+.marquee-wrapper {
   display: flex;
-  align-items: center;
-  width: 100%;
+  flex-direction: column;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  padding: 10px 0 25px 0;
 }
 
-.portfolio-track {
+.marquee-row {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Jalur Berjalan Marquee Tunggal */
+.marquee-track {
   display: flex;
   gap: 24px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 15px 8px 25px 8px;
-  scrollbar-width: none;
-  width: 100%;
+  width: max-content;
+  animation: singleMarqueeScroll 32s linear infinite;
+  padding: 10px 0;
 }
 
-.portfolio-track::-webkit-scrollbar {
-  display: none;
+/* Otomatis Berhenti Ketika Kursor Mouse Mengarah atau Layar Disentuh */
+.marquee-row:hover .marquee-track {
+  animation-play-state: paused;
 }
 
-.portfolio-track .portfolio-card {
-  flex: 0 0 350px;
+/* Kartu Marquee Portofolio */
+.marquee-track .portfolio-card {
+  width: 360px;
+  min-width: 360px;
   background: var(--white);
-  padding: 26px;
+  padding: 26px 22px;
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
-  border: 1px solid #e2e8f0;
+  border: 1.5px solid #e2e8f0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.portfolio-track .portfolio-card.hide {
-  display: none;
+.marquee-track .portfolio-card.hide {
+  display: none !important;
 }
 
 .portfolio-badge {
@@ -721,7 +670,6 @@ a {
   width: fit-content;
 }
 
-/* Sub-Domain Link & Ikon Bersih */
 .portfolio-domain {
   display: inline-flex;
   align-items: center;
@@ -750,43 +698,19 @@ a {
   transition: var(--transition);
 }
 
-/* Tombol Panah Navigasi Carousel */
-.nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--white);
-  border: 1.5px solid #e2e8f0;
-  color: var(--brand-navy);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: var(--shadow-md);
-  z-index: 10;
-  transition: var(--transition);
+/* Animasi Pergerakan 1 Baris Penuh */
+@keyframes singleMarqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-.nav-arrow:hover {
-  background: var(--brand-blue);
-  color: var(--white);
-  border-color: var(--brand-blue);
-  transform: translateY(-50%) scale(1.08);
-}
-
-.prev-arrow {
-  left: -22px;
-}
-
-.next-arrow {
-  right: -22px;
-}
-
-/* Modal Pop-up */
+/* ====================================================
+   Modal Pop-up Portofolio
+   ==================================================== */
 .portfolio-modal {
   position: fixed;
   top: 0;
@@ -891,7 +815,9 @@ a {
   justify-content: flex-end;
 }
 
-/* Legalitas Grid */
+/* ====================================================
+   Section Legalitas Perusahaan
+   ==================================================== */
 .legal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -944,7 +870,9 @@ a {
   margin-top: 6px;
 }
 
-/* Clients */
+/* ====================================================
+   Section Klien Kami
+   ==================================================== */
 .clients-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -980,7 +908,9 @@ a {
   color: var(--text-muted);
 }
 
-/* Section Kontak */
+/* ====================================================
+   Section Kontak Kami
+   ==================================================== */
 .contact-section {
   background: linear-gradient(180deg, var(--bg-light) 0%, #edf3fe 100%);
 }
@@ -1125,7 +1055,9 @@ a {
   color: var(--white);
 }
 
-/* Toast */
+/* ====================================================
+   Komponen Toast Notifikasi
+   ==================================================== */
 .toast {
   position: fixed;
   bottom: -60px;
@@ -1149,7 +1081,9 @@ a {
   bottom: 30px;
 }
 
-/* Footer */
+/* ====================================================
+   Kaki Halaman (Footer)
+   ==================================================== */
 .footer {
   background-color: #06173a;
   color: rgba(255, 255, 255, 0.6);
@@ -1165,7 +1099,9 @@ a {
   gap: 12px;
 }
 
-/* Floating Actions */
+/* ====================================================
+   Tombol Aksi Mengambang
+   ==================================================== */
 .float-wa-left {
   position: fixed;
   bottom: 25px;
@@ -1218,15 +1154,10 @@ a {
   background-color: var(--brand-blue-hover);
 }
 
-/* Responsiveness */
+/* ====================================================
+   Responsivitas Tablet & Layar HP
+   ==================================================== */
 @media (max-width: 992px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  .hero-actions {
-    justify-content: center;
-  }
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1242,34 +1173,85 @@ a {
 }
 
 @media (max-width: 768px) {
+  /* Bar Statistik Ramping di HP */
+  .stats-section {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 8px;
+  }
+  .stat-card {
+    padding: 8px 4px;
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .stat-card i {
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+    opacity: 0.9;
+  }
+  .stat-card h3 {
+    font-size: 1.4rem;
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+  .stat-card p {
+    font-size: 0.72rem;
+    line-height: 1.25;
+    opacity: 0.85;
+  }
+
+  /* Filter Portofolio Horizontal */
+  .portfolio-filter {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 4px 6px 14px 6px;
+    margin-bottom: 20px;
+    gap: 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .portfolio-filter::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-btn {
+    font-size: 0.8rem;
+    padding: 7px 15px;
+    flex-shrink: 0;
+  }
+
+  /* Marquee Tunggal di Layar HP */
+  .marquee-wrapper {
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    padding: 5px 0 15px 0;
+  }
+  .marquee-track {
+    gap: 14px;
+    animation-duration: 22s;
+  }
+  .marquee-track .portfolio-card {
+    width: 290px;
+    min-width: 290px;
+    padding: 18px 16px;
+  }
+
   .misi-list, .services-grid {
     grid-template-columns: 1fr;
-  }
-  .hero-text h1 {
-    font-size: 2.1rem;
   }
   .section-header h2 {
     font-size: 1.8rem;
   }
-  .portfolio-track .portfolio-card {
-    flex: 0 0 280px;
-  }
-  .prev-arrow {
-    left: -10px;
-  }
-  .next-arrow {
-    right: -10px;
-  }
-  .float-wa-left {
-    left: 16px;
-    bottom: 20px;
-  }
-  .scroll-top-right {
-    right: 16px;
-    bottom: 20px;
-  }
-  
-  /* Mobile Alignment Kotak Kontak */
+  .float-wa-left { left: 16px; bottom: 20px; }
+  .scroll-top-right { right: 16px; bottom: 20px; }
+
   .channel-box {
     padding: 16px 14px;
     align-items: flex-start;

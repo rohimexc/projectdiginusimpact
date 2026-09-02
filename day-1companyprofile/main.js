@@ -1,5 +1,12 @@
+/**
+ * Logika Utama Halaman Landing Page DIGINUS
+ * Dijalankan setelah struktur dokumen HTML selesai dimuat ke browser
+ */
 document.addEventListener('DOMContentLoaded', () => {
+
+  // ----------------------------------------------------
   // 1. Inisialisasi AOS (Animate On Scroll)
+  // ----------------------------------------------------
   AOS.init({
     duration: 800,
     easing: 'ease-in-out',
@@ -7,7 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     offset: 70
   });
 
-  // 2. Sticky Header & Tombol Scroll To Top
+
+  // ----------------------------------------------------
+  // 2. Sticky Navbar & Tombol Scroll Langsung ke Puncak (Top 0)
+  // ----------------------------------------------------
   const navbar = document.getElementById('navbar');
   const scrollTopBtn = document.getElementById('scrollTopBtn');
 
@@ -31,7 +41,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  if (scrollTopBtn) {
+    scrollTopBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+
+
+  // ----------------------------------------------------
   // 3. Counter Statistics (Animasi Angka Berjalan)
+  // ----------------------------------------------------
   const counters = document.querySelectorAll('.counter');
   let counterStarted = false;
 
@@ -62,7 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Interaksi Accordion Keunggulan & Pergantian Gambar Dinamis
+
+  // ----------------------------------------------------
+  // 4. Interaksi Accordion Keunggulan & Pergantian Gambar Showcase
+  // ----------------------------------------------------
   const accordionItems = document.querySelectorAll('.accordion-item');
   const previewImg = document.getElementById('accordionPreviewImg');
 
@@ -72,14 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
     header.addEventListener('click', () => {
       const isActive = item.classList.contains('active');
 
-      // Tutup accordion lainnya
       accordionItems.forEach(acc => acc.classList.remove('active'));
 
-      // Buka accordion yang diklik
       if (!isActive) {
         item.classList.add('active');
 
-        // Ganti preview gambar dengan animasi transisi
         const newImgSrc = item.getAttribute('data-img');
         if (previewImg && newImgSrc) {
           previewImg.style.opacity = '0';
@@ -95,9 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 5. Filter Portofolio
+
+  // ----------------------------------------------------
+  // 5. Filter Kategori Portofolio (Kompatibel dengan Marquee)
+  // ----------------------------------------------------
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const portfolioCards = document.querySelectorAll('.portfolio-track .portfolio-card');
+  const portfolioCards = document.querySelectorAll('.marquee-track .portfolio-card');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -117,22 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Geser Carousel Portofolio (Tombol Panah Kiri & Kanan)
-  const portfolioTrack = document.getElementById('portfolioTrack');
-  const prevSlide = document.getElementById('prevSlide');
-  const nextSlide = document.getElementById('nextSlide');
 
-  if (portfolioTrack && prevSlide && nextSlide) {
-    prevSlide.addEventListener('click', () => {
-      portfolioTrack.scrollBy({ left: -370, behavior: 'smooth' });
-    });
-
-    nextSlide.addEventListener('click', () => {
-      portfolioTrack.scrollBy({ left: 370, behavior: 'smooth' });
-    });
-  }
-
-  // 7. Modal Portofolio
+  // ----------------------------------------------------
+  // 6. Modal Pop-Up Detail Portofolio
+  // ----------------------------------------------------
   const portfolioModal = document.getElementById('portfolioModal');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalClose = document.getElementById('modalClose');
@@ -172,7 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (modalClose) modalClose.addEventListener('click', closePortfolioModal);
   if (btnModalClose) btnModalClose.addEventListener('click', closePortfolioModal);
 
-  // 8. Tombol Salin 1-Klik dengan Notifikasi Toast
+
+  // ----------------------------------------------------
+  // 7. Tombol Salin 1-Klik dengan Notifikasi Toast
+  // ----------------------------------------------------
   const copyBtns = document.querySelectorAll('.btn-copy');
   const toast = document.getElementById('toast');
 
@@ -196,4 +213,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
 });
