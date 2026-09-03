@@ -1,0 +1,124 @@
+/* ========================================
+   1. CSS SYNTAX
+   ======================================== */
+p {                 /*apa je yang ada di p itu ke ubah pokoknya*/
+  color: red;       /*untuk mengubah warna*/
+  text-align: center;       /*mengubah text menjadi ke tengah*/
+}
+
+/* ========================================
+   2. CSS SELECTORS: ID SELECTOR
+   ======================================== */
+#para1 {             /* selector: menargetkan elemen dengan atribut id="para1" */
+  text-align: center; /* mengubah posisi teks menjadi rata tengah */
+  color: red;         /* mengubah warna teks menjadi merah */
+}
+
+/* ========================================
+   3. CSS SELECTORS: GROUPING SELECTOR
+   ======================================== */
+h1, h2, p {          /* selector: menggabungkan h1, h2, dan p sekaligus (dipisah tanda koma) */
+  text-align: center; /* mengubah posisi teks menjadi rata tengah */
+  color: red;         /* mengubah warna teks menjadi merah */
+}
+
+/* ========================================
+   4. CSS SELECTORS: UNIVERSAL SELECTOR
+   ======================================== */
+* {                  /* selector: tanda bintang (*) menargetkan SELURUH elemen di halaman web */
+  text-align: center; /* mengubah semua teks menjadi rata tengah */
+  color: blue;        /* mengubah semua teks menjadi biru */
+}
+
+/* ========================================
+   5. EXTERNAL CSS (mystyle.css)
+   ======================================== */
+body {                          /* selector: menargetkan seluruh area body halaman */
+  background-color: lightblue;  /* mengubah warna latar belakang halaman menjadi biru muda */
+}
+
+h1 {                            /* selector: menargetkan elemen judul utama <h1> */
+  color: navy;                  /* mengubah warna teks menjadi biru tua (navy) */
+  margin-left: 20px;            /* memberi jarak/spasi luar di sebelah kiri sebesar 20 pixel */
+}
+
+
+  /* ========================================
+      6. CONTOH PENERAPAN INTERNAL CSS yang di buat  di atas h1
+       <!DOCTYPE html>
+        <html>
+        <head>
+        <style>
+       ======================================== */
+  
+    body {                          /* menargetkan seluruh halaman */
+      background-color: linen;      /* warna background krem */
+    }
+
+    h1 {                            /* menargetkan judul h1 */
+      color: maroon;                /* warna teks merah maron */
+      margin-left: 40px;            /* jarak geser kiri 40px */
+    }
+    /* ======================================== -->
+    </style>
+  
+    </head>
+    <body>
+    <h1>Judul Halaman</h1>
+    <p>Paragraf teks biasa.</p>
+    </body>
+    </html>
+    ========================================*/
+
+     /* ========================================
+      7.CONTOH PENERAPAN INLINE CSS (berada di dalam elemnt html contoh h1)
+
+        <!DOCTYPE html>
+     <html>
+     <body>
+
+    <h1 style="color:blue;text-align:center;">This is a heading</h1>
+    <p style="color:red;">This is a paragraph.</p>
+
+    </body>
+    </html>
+    ========================================*/
+
+  /*========================================
+       8. MULTIPLE STYLE SHEETS: URUTAN INTERNAL DULUAN
+   <html>
+    <head>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <style>
+    h1 {
+  color: orange;
+        }
+    </style>
+    </head>
+    <body>
+
+    <h1>This is a heading</h1>
+    <p>The style of this document is a combination of an external stylesheet, and internal style</p>
+
+    </body>
+    </html>
+
+jika style di taruh di bawah </head> tidak akan mengikuti kodingan cssnya
+ ========================================*/
+
+    /* ========================================
+   9. CSS ERRORS: MISSING SEMICOLONS
+   ======================================== */
+
+/* CONTOH ERROR (Salah) */
+.bad {
+  color: red;                 /* ERROR: lupa tanda titik koma (;) di akhir baris */
+  background-color: yellow;  /* properti ini dan baris di atasnya jadi rusak/diabaikan browser */
+}
+
+/* CONTOH YANG BENAR */
+.good {
+  color: red;                /* wajib diakhiri titik koma (;) untuk memisahkan antar-properti */
+  background-color: yellow;  /* warna latar belakang kuning */
+}
+
