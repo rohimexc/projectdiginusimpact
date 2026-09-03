@@ -129,13 +129,14 @@ header.scrolled {
 
 /* Transisi pergerakan tautan statistik */
 .statistics-section a {
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 /* Efek hover: Kartu statistik bergerak naik dan sedikit transparan */
 .statistics-section a:hover {
     transform: translateY(-5px);
     opacity: 0.85;
+    transition: transform 0.5s ease;
 }
 
 
@@ -777,14 +778,15 @@ footer p {
     flex-shrink: 0; 
 }
 
+/*Durasi animasi marquee dapat disesuaikan di sini (150s untuk kanan, 150s untuk kiri)*/
 /* Baris 1: Bergerak ke Kanan */
 .track-right {
-    animation: scrollRight 35s linear infinite;
+    animation: scrollRight 150s linear infinite;
 }
 
 /* Baris 2: Bergerak ke Kiri */
 .track-left {
-    animation: scrollLeft 35s linear infinite;
+    animation: scrollLeft 150s linear infinite;
 }
 
 /* Berhenti total otomatis saat kursor mendekat (hover) */
