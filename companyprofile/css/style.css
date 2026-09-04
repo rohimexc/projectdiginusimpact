@@ -1,0 +1,17 @@
+/**
+ * ==========================================================================
+ * DOKUMENTASI GAYA KUSTOM (style.css) - DIGINUS
+ * Catatan: Berkas ini murni berisi modular @import sesuai arsitektur folder.
+ * ==========================================================================
+ */
+
+@import url('base/reset.css');
+@import url('base/variables.css');
+@import url('components/navbar.css');
+@import url('components/statistics.css');
+@import url('components/about.css');
+@import url('components/services.css');
+@import url('components/accordion.css');
+@import url('components/portofolio.css');
+@import url('components/legal.css');
+@import url('components/footer.css');

@@ -1,0 +1,49 @@
+/* ==========================================================================
+   SECTION LEGALITAS PERUSAHAAN
+   ========================================================================== */
+.legal-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.legal-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+}
+
+.legal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.06);
+    border-color: #2563eb;
+}
+
+.legal-card i {
+    font-size: 30px;
+    color: #2563eb;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.legal-card:hover i {
+    transform: scale(1.15);
+}
+
+.legal-card h4 {
+    font-size: 16px;
+    color: #0d233a;
+    margin-bottom: 5px;
+}
+
+.legal-card p {
+    font-size: 14px;
+    color: #64748b;
+}

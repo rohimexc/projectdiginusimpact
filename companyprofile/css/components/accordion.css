@@ -1,0 +1,161 @@
+/* ==========================================================================
+   SECTION KEUNGGULAN (ACCORDION & DYNAMIC IMAGE)
+   ========================================================================== */
+.why-diginus-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+.accordion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.accordion-item {
+    border: 1.5px solid #dbeafe;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.03);
+    transition: all 0.3s ease;
+}
+
+.accordion-header {
+    padding: 18px 22px;
+    background: #ffffff;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 0.98rem;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.accordion-header span i {
+    margin-right: 10px;
+    color: #2563eb;
+    transition: color 0.25s ease;
+}
+
+.accordion-header:hover {
+    background-color: #f8fafc;
+    color: #2563eb;
+}
+
+.accordion-header:hover span i,
+.accordion-header:hover i.fa-chevron-down {
+    color: #2563eb;
+}
+
+.accordion-header i.fa-chevron-down {
+    transition: transform 0.3s ease, color 0.25s ease;
+    color: #64748b;
+}
+
+.accordion-body {
+    padding: 0 22px;
+    max-height: 0;
+    overflow: hidden;
+    background: #ffffff;
+    border-top: 0 solid transparent;
+    transition: max-height 0.35s ease-in-out, padding 0.35s ease-in-out, border-color 0.35s ease;
+}
+
+.accordion-body p {
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.accordion-item.active .accordion-header {
+    background-color: #eff6ff !important;
+    color: #2563eb !important;
+}
+
+.accordion-item.active .accordion-header span i,
+.accordion-item.active .accordion-header i.fa-chevron-down {
+    color: #2563eb !important;
+}
+
+.accordion-item.active .accordion-header i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.accordion-item.active .accordion-body {
+    max-height: 150px;
+    padding: 16px 22px 20px 22px;
+    border-top: 1px solid #dbeafe;
+}
+
+.why-diginus-image-wrapper {
+    position: sticky;
+    top: 100px;
+}
+
+.image-container {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+    border: 1.5px solid #dbeafe;
+    background: #ffffff;
+    height: 420px;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s ease-in-out, transform 0.5s ease;
+}
+
+.image-container:hover img {
+    transform: scale(1.03);
+}
+
+.image-caption-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #3b82f6;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #3b82f6;
+}
+
+@media (max-width: 992px) {
+    .why-diginus-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .why-diginus-image-wrapper {
+        position: relative;
+        top: 0;
+        margin-top: 20px;
+    }
+    .image-container {
+        height: 250px !important;
+    }
+}
