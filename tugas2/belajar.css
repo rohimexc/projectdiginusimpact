@@ -6,119 +6,791 @@ p {                 /*apa je yang ada di p itu ke ubah pokoknya*/
   text-align: center;       /*mengubah text menjadi ke tengah*/
 }
 
+
 /* ========================================
-   2. CSS SELECTORS: ID SELECTOR
+   2. CSS SELECTORS
    ======================================== */
-#para1 {             /* selector: menargetkan elemen dengan atribut id="para1" */
-  text-align: center; /* mengubah posisi teks menjadi rata tengah */
+
+/* --- A. ID SELECTOR --- */
+#para1 {
+  text-align: center; /* selector: menargetkan elemen spesifik dengan id="para1" */
   color: red;         /* mengubah warna teks menjadi merah */
 }
 
-/* ========================================
-   3. CSS SELECTORS: GROUPING SELECTOR
-   ======================================== */
-h1, h2, p {          /* selector: menggabungkan h1, h2, dan p sekaligus (dipisah tanda koma) */
-  text-align: center; /* mengubah posisi teks menjadi rata tengah */
+/* --- B. GROUPING SELECTOR --- */
+h1, h2, p {
+  text-align: center; /* selector: menargetkan h1, h2, dan p sekaligus */
   color: red;         /* mengubah warna teks menjadi merah */
 }
 
-/* ========================================
-   4. CSS SELECTORS: UNIVERSAL SELECTOR
-   ======================================== */
-* {                  /* selector: tanda bintang (*) menargetkan SELURUH elemen di halaman web */
-  text-align: center; /* mengubah semua teks menjadi rata tengah */
-  color: blue;        /* mengubah semua teks menjadi biru */
+/* --- C. UNIVERSAL SELECTOR --- */
+* {
+  text-align: center; /* selector: tanda (*) menargetkan SELURUH elemen tanpa terkecuali */
+  color: blue;        /* mengubah warna semua teks menjadi biru */
 }
 
+
 /* ========================================
-   5. EXTERNAL CSS (mystyle.css)
+   3. CSS HOW TO
    ======================================== */
-body {                          /* selector: menargetkan seluruh area body halaman */
-  background-color: lightblue;  /* mengubah warna latar belakang halaman menjadi biru muda */
+
+/* --- A. ADD EXTERNAL CSS (mystyle.css) --- */
+body {
+  background-color: lightblue;  /* selector: menargetkan seluruh area body halaman, mengubah warna latar belakang halaman menjadi biru muda */
 }
 
-h1 {                            /* selector: menargetkan elemen judul utama <h1> */
-  color: navy;                  /* mengubah warna teks menjadi biru tua (navy) */
+h1 {
+  color: navy;                  /* selector: menargetkan elemen judul utama <h1>, mengubah warna teks menjadi biru tua (navy) */
   margin-left: 20px;            /* memberi jarak/spasi luar di sebelah kiri sebesar 20 pixel */
 }
 
-
-  /* ========================================
-      6. CONTOH PENERAPAN INTERNAL CSS yang di buat  di atas h1
-       <!DOCTYPE html>
-        <html>
-        <head>
-        <style>
-       ======================================== */
-  
-    body {                          /* menargetkan seluruh halaman */
-      background-color: linen;      /* warna background krem */
-    }
-
-    h1 {                            /* menargetkan judul h1 */
-      color: maroon;                /* warna teks merah maron */
-      margin-left: 40px;            /* jarak geser kiri 40px */
-    }
-    /* ======================================== -->
-    </style>
-  
-    </head>
-    <body>
-    <h1>Judul Halaman</h1>
-    <p>Paragraf teks biasa.</p>
-    </body>
-    </html>
-    ========================================*/
-
-     /* ========================================
-      7.CONTOH PENERAPAN INLINE CSS (berada di dalam elemnt html contoh h1)
-
-        <!DOCTYPE html>
-     <html>
-     <body>
-
-    <h1 style="color:blue;text-align:center;">This is a heading</h1>
-    <p style="color:red;">This is a paragraph.</p>
-
-    </body>
-    </html>
-    ========================================*/
-
-  /*========================================
-       8. MULTIPLE STYLE SHEETS: URUTAN INTERNAL DULUAN
+/* --- B. ADD INTERNAL CSS --- */
+/* CONTOH PENERAPAN INTERNAL CSS yang di buat di atas h1:
+   <!DOCTYPE html>
    <html>
-    <head>
-    <link rel="stylesheet" type="text/css" href="mystyle.css">
-    <style>
-    h1 {
-  color: orange;
-        }
-    </style>
-    </head>
-    <body>
+   <head>
+   <style>
+*/
+body {
+  background-color: linen;      /* menargetkan seluruh halaman, warna background krem */
+}
 
-    <h1>This is a heading</h1>
-    <p>The style of this document is a combination of an external stylesheet, and internal style</p>
+h1 {
+  color: maroon;                /* menargetkan judul h1, warna teks merah maron */
+  margin-left: 40px;            /* jarak geser kiri 40px */
+}
+/* </style>
+   </head>
+   <body>
+   <h1>Judul Halaman</h1>
+   <p>Paragraf teks biasa.</p>
+   </body>
+   </html>
+*/
 
-    </body>
-    </html>
+/* --- C. ADD INLINE STYLE --- */
+/* CONTOH PENERAPAN INLINE CSS (berada di dalam elemnt html contoh h1):
+   <!DOCTYPE html>
+   <html>
+   <body>
+   <h1 style="color:blue;text-align:center;">This is a heading</h1>
+   <p style="color:red;">This is a paragraph.</p>
+   </body>
+   </html>
+*/
+h1 {
+  color: blue;                  /* diterapkan langsung di elemen: style="color:blue;" */
+  text-align: center;           /* diterapkan langsung di elemen: style="text-align:center;" */
+}
 
-jika style di taruh di bawah </head> tidak akan mengikuti kodingan cssnya
- ========================================*/
+p {
+  color: red;                   /* diterapkan langsung di elemen: style="color:red;" */
+}
 
-    /* ========================================
-   9. CSS ERRORS: MISSING SEMICOLONS
+/* --- D. MULTIPLE STYLE SHEETS: URUTAN INTERNAL DULUAN --- */
+/* <html>
+   <head>
+   <link rel="stylesheet" type="text/css" href="mystyle.css">
+   <style>
+   h1 {
+     color: orange;
+   }
+   </style>
+   </head>
+   <body>
+   <h1>This is a heading</h1>
+   <p>The style of this document is a combination of an external stylesheet, and internal style</p>
+   </body>
+   </html>
+   jika style di taruh di bawah </head> tidak akan mengikuti kodingan cssnya
+*/
+h1 {
+  color: orange;                /* menimpa style dari file external karena internal dideklarasikan setelahnya */
+}
+
+
+/* ========================================
+   4. CSS COMMENTS
+   ======================================== */
+/* Ini adalah komentar satu baris */
+
+/* 
+   Ini adalah komentar 
+   yang terdiri dari beberapa baris
+*/
+p {
+  color: red; /* Memberi komentar di akhir baris deklarasi */
+}
+
+
+/* ========================================
+   5. CSS ERRORS
    ======================================== */
 
-/* CONTOH ERROR (Salah) */
+/* --- A. MISSING SEMICOLONS (CONTOH SALAH) --- */
 .bad {
   color: red;                 /* ERROR: lupa tanda titik koma (;) di akhir baris */
   background-color: yellow;  /* properti ini dan baris di atasnya jadi rusak/diabaikan browser */
 }
 
-/* CONTOH YANG BENAR */
+/* --- B. MISSING SEMICOLONS (CONTOH BENAR) --- */
 .good {
   color: red;                /* wajib diakhiri titik koma (;) untuk memisahkan antar-properti */
   background-color: yellow;  /* warna latar belakang kuning */
 }
 
+
+/* ========================================
+   6. CSS COLORS
+   ======================================== */
+
+/* --- A. COLOR NAMES (INLINE STYLE) --- */
+/* <!DOCTYPE html>
+   <html>
+   <body>
+   <!-- Judul <h3> dengan warna teks oranye kemerahan -->
+   <h3 style="color:Tomato;">Hello World</h3>
+   <!-- color: Tomato;         : mengubah warna teks judul h3 menjadi merah tomat (Tomato) -->
+
+   <!-- Paragraf pertama dengan warna teks biru cerah -->
+   <p style="color:DodgerBlue;">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+   <!-- color: DodgerBlue;     : mengubah warna teks paragraf menjadi biru cerah (DodgerBlue) -->
+
+   <!-- Paragraf kedua dengan warna teks hijau laut -->
+   <p style="color:MediumSeaGreen;">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+   <!-- color: MediumSeaGreen; : mengubah warna teks paragraf menjadi hijau laut (MediumSeaGreen) -->
+</body>
+</html>
+*/
+h3 {
+  color: Tomato;          /* mengubah warna teks judul h3 menjadi merah tomat (Tomato) */
+}
+
+p.blue {
+  color: DodgerBlue;      /* mengubah warna teks paragraf menjadi biru cerah (DodgerBlue) */
+}
+
+p.green {
+  color: MediumSeaGreen;  /* mengubah warna teks paragraf menjadi hijau laut (MediumSeaGreen) */
+}
+
+
+/* ========================================
+   7. CSS BACKGROUNDS
+   ======================================== */
+
+/* --- A. CSS BACKGROUND COLOR --- */
+body {
+  background-color: lightblue;       /* mengubah latar belakang halaman menjadi biru muda */
+}
+h1 {
+  background-color: green;           /* latar belakang blok judul h1 menjadi hijau */
+}
+div {
+  background-color: lightblue;       /* latar belakang blok div menjadi biru muda */
+}
+p {
+  background-color: yellow;          /* latar belakang paragraf menjadi kuning */
+}
+
+/* --- B. CSS BACKGROUND IMAGE --- */
+body {
+  background-image: url("paper.gif"); /* memasang gambar paper.gif sebagai latar halaman */
+}
+p {
+  background-image: url("paper.gif"); /* memasang gambar latar khusus untuk area paragraf saja */
+}
+
+/* --- C. CSS BACKGROUND REPEAT --- */
+body {
+  background-image: url("gradient_bg.png"); /* memanggil file gambar latar */
+  background-repeat: repeat-x;              /* mengulang gambar hanya secara horizontal (ke samping) */
+}
+/* 
+Catatan opsi pengulangan:
+- repeat-x  : diulang ke samping saja (horizontal)
+- repeat-y  : diulang ke bawah saja (vertikal)
+- no-repeat : gambar hanya tampil 1 kali (tidak diulang sama sekali)
+*/
+
+/* --- D. CSS BACKGROUND ATTACHMENT --- */
+
+/* Kasus 1: Background Diam di Tempat (Fixed) */
+body {
+  background-image: url("img_tree.png");  /* memanggil file gambar latar */
+  background-repeat: no-repeat;           /* gambar tidak diulang-ulang */
+  background-position: right top;         /* posisi gambar ditaruh di pojok kanan atas */
+  background-attachment: fixed;           /* gambar tetap diam dan terkunci saat halaman di-scroll */
+}
+
+/* Kasus 2: Background Ikut Bergerak (Scroll) */
+body {
+  background-image: url("img_tree.png");  /* memanggil file gambar latar */
+  background-repeat: no-repeat;           /* gambar tidak diulang-ulang */
+  background-position: right top;         /* posisi gambar ditaruh di pojok kanan atas */
+  background-attachment: scroll;          /* gambar ikut bergeser ke atas/bawah saat halaman di-scroll */
+}
+
+/* --- E. CSS BACKGROUND - SHORTHAND PROPERTY --- */
+
+/* CARA LAMA (Ditulis Satu Per Satu) */
+body {
+  background-color: #ffffff;             /* warna latar putih */
+  background-image: url("img_tree.png");  /* gambar latar */
+  background-repeat: no-repeat;           /* tidak diulang */
+  background-position: right top;         /* posisi di kanan atas */
+}
+
+/* CARA RINGKAS / SHORTHAND (Hanya 1 Baris Properti "background") */
+body {
+  background: #ffffff url("img_tree.png") no-repeat right top; 
+  /* urutan nilai: [warna] [gambar] [pengulangan] [posisi] */
+}
+
+
+/* ========================================
+   8. CSS BORDERS
+   ======================================== */
+p.border-example {
+  border-style: solid;        /* jenis garis bingkai padat */
+  border-width: 2px;          /* ketebalan garis 2px */
+  border-color: red;          /* warna garis merah */
+  border-radius: 5px;         /* membuat sudut garis melengkung */
+}
+
+
+/* ========================================
+   9. CSS MARGINS
+   ======================================== */
+
+/* --- A. INDIVIDUAL SIDES --- */
+p {
+  margin-top: 100px;     /* memberi jarak ruang luar di bagian atas sebesar 100px */
+  margin-bottom: 100px;  /* memberi jarak ruang luar di bagian bawah sebesar 100px */
+  margin-right: 150px;   /* memberi jarak ruang luar di bagian kanan sebesar 150px */
+  margin-left: 80px;     /* memberi jarak ruang luar di bagian kiri sebesar 80px */
+}
+
+/* --- B. MARGIN COLLAPSE --- */
+h1 {
+  margin-bottom: 50px;  /* memberi jarak luar ke arah bawah sebesar 50px */
+}
+
+h2 {
+  margin-top: 20px;     /* memberi jarak luar ke arah atas sebesar 20px */
+}
+
+/* 
+PENJELASAN CARA KERJA MARGIN COLLAPSE:
+- Secara logika hitungan biasa: 50px + 20px = 70px.
+- Kenyataannya di CSS: Terjadi "Margin Collapse" (jarak vertikal menyatu/melebur).
+- Browser HANYA mengambil nilai margin yang PALING BESAR, yaitu 50px (bukan 70px).
+- Aturan penting: Margin collapse HANYA terjadi pada margin atas & bawah (vertikal), tidak berlaku untuk margin kiri & kanan (horizontal).
+*/  
+
+
+/* ========================================
+   10. CSS PADDING
+   ======================================== */
+
+/* --- A. INDIVIDUAL SIDES --- */
+div {
+  padding-top: 50px;     /* memberi ruang jarak ke dalam di bagian atas sebesar 50px */
+  padding-right: 30px;   /* memberi ruang jarak ke dalam di bagian kanan sebesar 30px */
+  padding-bottom: 50px;  /* memberi ruang jarak ke dalam di bagian bawah sebesar 50px */
+  padding-left: 80px;    /* memberi ruang jarak ke dalam di bagian kiri sebesar 80px */
+}
+
+/* 
+Catatan:
+- Padding adalah ruang di BAGIAN DALAM elemen (antara konten dan border).
+- Berbeda dengan margin, nilai negatif TIDAK DIPERBOLEHKAN pada padding.
+*/
+
+
+/* ========================================
+   11. CSS HEIGHT / WIDTH
+   ======================================== */
+
+/* --- A. BASIC HEIGHT & WIDTH --- */
+div {
+  height: 70px;                      /* menentukan tinggi elemen sebesar 70 pixel */
+  width: 100%;                       /* menentukan lebar elemen sebesar 100% dari ruang induknya */
+  background-color: powderblue;      /* memberi warna latar biru muda pucat */
+}
+
+/* 
+Catatan:
+- Secara default, nilai height & width hanya mengatur area konten (belum termasuk padding, border, atau margin).
+*/
+
+/* --- B. WIDTH VS MAX-WIDTH --- */
+
+/* Menggunakan max-width (Responsif) */
+.div1 {
+  max-width: 500px;                  /* batas lebar maksimal 500px (bisa mengecil otomatis jika layar sempit) */
+  background-color: powderblue;      /* warna latar biru muda pucat */
+}
+
+/* Menggunakan width tetap (Kaku) */
+.div2 {
+  width: 500px;                      /* lebar dipatok mati 500px (bisa memicu scroll samping di layar HP) */
+  background-color: powderblue;      /* warna latar biru muda pucat */
+}
+/* jika div di hapus elemnt yang ada di dalamnya tidak berfungsi*/
+
+
+/* ========================================
+   12. CSS BOX MODEL
+   ======================================== */
+
+/* --- A. STANDAR TANPA BOX-SIZING (Lebar Asli Membengkak) --- */
+div {
+  width: 300px;          /* lebar konten diset 300px */
+  padding: 25px;         /* total lebar riil bertambah jadi 350px (300px + 25px kiri + 25px kanan) */
+}
+
+/* --- B. MENGGUNAKAN BOX-SIZING: BORDER-BOX (Ukuran Tetap Terkunci) --- */
+div {
+  width: 300px;          /* lebar elemen dipatok tetap 300px */
+  padding: 25px;         /* padding 25px masuk ke dalam, tidak memperlebar kotak */
+  box-sizing: border-box; /* mengunci lebar total agar padding tidak menambah ukuran elemen */
+}
+
+
+/* ========================================
+   13. CSS OUTLINE
+   ======================================== */
+
+/* --- A. OUTLINE STYLE --- */
+p.dotted { outline-style: dotted; } /* garis luar berupa titik-titik */
+p.dashed { outline-style: dashed; } /* garis luar berupa garis putus-putus */
+p.solid  { outline-style: solid;  } /* garis luar padat/lurus */
+p.double { outline-style: double; } /* dua garis luar paralel */
+p.groove { outline-style: groove; } /* efek garis luar 3D berlekuk ke dalam */
+p.ridge  { outline-style: ridge;  } /* efek garis luar 3D menonjol keluar */
+p.inset  { outline-style: inset;  } /* efek bingkai 3D tenggelam */
+p.outset { outline-style: outset; } /* efek bingkai 3D terangkat */
+
+/* Catatan: Outline digambar di luar border dan TIDAK memengaruhi ukuran box model */
+
+/* --- B. OUTLINE WIDTH --- */
+p {
+  padding: 5px;             /* jarak dalam elemen */
+  outline-style: solid;     /* jenis outline padat (wajib ada agar outline muncul) */
+  outline-color: green;     /* warna garis luar hijau */
+}
+
+p.ex1 { outline-width: thin;   } /* ketebalan garis luar tipis (thin) */
+p.ex2 { outline-width: medium; } /* ketebalan garis luar sedang bawaan (medium) */
+p.ex3 { outline-width: thick;  } /* ketebalan garis luar tebal (thick) */
+p.ex4 { outline-width: 8px;    } /* ketebalan garis luar spesifik ukuran 8px */
+
+/* --- C. OUTLINE COLOR --- */
+p {
+  border: 1px solid black;  /* garis bingkai utama hitam setebal 1px */
+  padding: 5px;             /* ruang dalam teks */
+}
+
+p.ex1 {
+  outline-style: solid;     /* outline garis lurus padat */
+  outline-color: red;       /* warna garis luar merah */
+}
+
+p.ex2 {
+  outline-style: dotted;    /* outline garis titik-titik */
+  outline-color: blue;      /* warna garis luar biru */
+}
+
+p.ex3 {
+  outline-style: outset;    /* outline efek timbul 3D */
+  outline-color: green;     /* warna garis luar hijau */
+}
+
+p.ex4 {
+  outline-style: solid;     /* outline garis lurus padat */
+  outline-color: invert;    /* invert: warna otomatis kebalikan/kontras dari warna latar */
+}
+
+/* --- D. OUTLINE SHORTHAND --- */
+/* Menulis jenis, ketebalan, dan warna outline hanya dalam 1 baris */
+p.ex1 { outline: dashed; }                 /* hanya menyetel gaya putus-putus */
+p.ex2 { outline: dotted red; }             /* menyetel gaya titik-titik dan warna merah */
+p.ex3 { outline: 7px solid yellow; }       /* tebal 7px, garis lurus, warna kuning */
+p.ex4 { outline: thick ridge pink; }       /* tebal kustom, bentuk ridge 3D, warna pink */
+
+/* --- E. OUTLINE OFFSET --- */
+p {
+  margin: 30px;               /* jarak pemisah elemen terluar 30px */
+  padding: 5px;              /* ruang dalam konten 5px */
+  background: yellow;        /* warna latar elemen kuning */
+  border: 1px solid black;   /* garis batas tepi elemen warna hitam 1px */
+  outline: 3px solid red;    /* garis luar warna merah padat tebal 3px */
+  outline-offset: 15px;      /* memberi celah transparan sebesar 15px antara border dan outline */
+}
+
+
+/* ========================================
+   14. CSS TEXT
+   ======================================== */
+
+/* --- A. TEXT COLOR --- */
+body {
+  color: blue;                     /* menentukan warna teks default untuk seluruh halaman menjadi biru */
+}
+
+h1 {
+  color: green;                    /* menimpa warna teks judul h1 menjadi hijau */
+}
+
+h2 {
+  color: red;                      /* menimpa warna teks judul h2 menjadi merah */
+}
+
+/* --- B. TEXT ALIGNMENT --- */
+h1 {
+  text-align: center;              /* membuat posisi teks judul h1 berada di tengah */
+}
+
+h2 {
+  text-align: left;                /* membuat teks judul h2 rata kiri (default untuk teks LTR) */
+}
+
+h3 {
+  text-align: right;               /* membuat posisi teks judul h3 rata kanan */
+}
+
+div {
+  text-align: justify;             /* meratakan teks sisi kiri dan kanan secara seimbang (seperti koran) */
+}
+
+/* --- C. TEXT DECORATION LINE --- */
+h1 {
+  text-decoration-line: overline;          /* memberi garis di atas teks */
+}
+
+h2 {
+  text-decoration-line: line-through;     /* memberi garis coret melintang di tengah teks */
+}
+
+h3 {
+  text-decoration-line: underline;        /* memberi garis bawah pada teks */
+}
+
+p {
+  text-decoration-line: overline underline; /* menggabungkan dua garis: di atas dan di bawah teks */
+}
+
+/* --- D. TEXT DECORATION STYLES & COLORS --- */
+h1 {
+  text-decoration-line: underline;  /* garis bawah */
+  text-decoration-style: solid;     /* bentuk garis lurus padat */
+}
+
+h2 {
+  text-decoration-line: underline;  /* garis bawah */
+  text-decoration-style: double;    /* bentuk dua garis paralel */
+}
+
+h3 {
+  text-decoration-line: underline;  /* garis bawah */
+  text-decoration-style: dotted;    /* bentuk garis titik-titik */
+}
+
+p.ex1 {
+  text-decoration-line: underline;  /* garis bawah */
+  text-decoration-style: dashed;    /* bentuk garis putus-putus */
+}
+
+p.ex2 {
+  text-decoration-line: underline;  /* garis bawah */
+  text-decoration-style: wavy;      /* bentuk garis bergelombang */
+}
+
+p.ex3 {
+  text-decoration-line: underline;  /* garis bawah */
+  text-decoration-color: red;       /* memberi warna merah khusus pada garis dekorasi */
+  text-decoration-style: wavy;      /* bentuk garis bergelombang */
+}
+
+/* --- E. TEXT TRANSFORMATION --- */
+p.uppercase {
+  text-transform: uppercase;        /* mengubah seluruh huruf menjadi KAPITAL SEMUA */
+}
+
+p.lowercase {
+  text-transform: lowercase;        /* mengubah seluruh huruf menjadi huruf kecil semua */
+}
+
+p.capitalize {
+  text-transform: capitalize;       /* mengubah Huruf Pertama Pada Setiap Kata Menjadi Kapital */
+}
+
+/* --- F. TEXT SPACING (INDENT & LETTER SPACING) --- */
+p {
+  text-indent: 50px;                /* memberi tab atau jarak menjorok ke dalam sebesar 50px pada baris pertama teks */
+}
+
+h1 {
+  letter-spacing: 5px;              /* memberi jarak renggang antar-karakter huruf sebesar 5px */
+}
+
+h2 {
+  letter-spacing: -2px;             /* mempersempit/merapatkan jarak antar-huruf sebesar -2px (nilai negatif) */
+}
+
+/* --- G. TEXT SHADOW --- */
+/* Bayangan standar: sumbu-X (horizontal) dan sumbu-Y (vertikal) */
+h1 {
+  text-shadow: 2px 2px;             /* bayangan bergeser 2px ke kanan dan 2px ke bawah (warna default teks) */
+}
+
+/* Bayangan dengan warna */
+h1 {
+  text-shadow: 2px 2px red;         /* bayangan geser 2px ke kanan, 2px ke bawah, berwarna merah */
+}
+
+/* Bayangan dengan warna dan efek blur (kabur) */
+h1 {
+  text-shadow: 2px 2px 5px red;     /* geser horizontal 2px, vertikal 2px, tingkat blur 5px, warna merah */
+}
+
+
+/* ========================================
+   15. CSS FONTS
+   ======================================== */
+
+/* --- A. CSS FONT FAMILY --- */
+.p1 {
+  font-family: "Times New Roman", Times, serif;           /* font serif berkaki klasik (pakai tanda kutip jika nama font lebih dari satu kata) */
+}
+
+.p2 {
+  font-family: Arial, Helvetica, sans-serif;               /* font sans-serif modern tanpa kaki */
+}
+
+.p3 {
+  font-family: "Lucida Console", "Courier New", monospace; /* font monospace dengan lebar karakter seragam seperti mesin tik/koding */
+}
+
+/* --- B. CSS FONT WEB SAFE (FALLBACK SYSTEM) --- */
+p {
+  font-family: Tahoma, Verdana, sans-serif;                /* pilihan 1: Tahoma -> jika tidak ada: Verdana -> jika tidak ada: font sans-serif bawaan */
+}
+
+/* --- C. CSS FONT STYLE --- */
+p.normal {
+  font-style: normal;                                      /* gaya huruf tegak biasa (default) */
+}
+
+p.italic {
+  font-style: italic;                                      /* gaya huruf miring khusus (italic) */
+}
+
+p.oblique {
+  font-style: oblique;                                     /* memiringkan paksa bentuk huruf normal */
+}
+
+/* --- D. CSS FONT SIZE --- */
+h1 {
+  font-size: 40px;                                         /* ukuran huruf judul utama sebesar 40 pixel */
+}
+
+h2 {
+  font-size: 30px;                                         /* ukuran huruf sub-judul sebesar 30 pixel */
+}
+
+p {
+  font-size: 16px;                                         /* ukuran huruf paragraf standar sebesar 16 pixel */
+}
+
+/* --- E. CSS GOOGLE FONTS --- */
+/* Catatan: Tambahkan <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia"> di bagian <head> HTML */
+body {
+  font-family: "Sofia", sans-serif;                        /* menerapkan font dekoratif Sofia, dengan cadangan sans-serif */
+}
+
+/* --- F. CSS FONT PAIRINGS (HIERARKI TYPOGRAPHY) --- */
+body {
+  background-color: black;                                 /* latar belakang halaman hitam */
+  font-family: Verdana, sans-serif;                        /* font isi teks memakai sans-serif agar nyaman dan mudah dibaca */
+  font-size: 16px;                                         /* ukuran font teks isi standar 16px */
+  color: gray;                                             /* warna teks isi abu-abu */
+}
+
+h1 {
+  font-family: Georgia, serif;                             /* font judul menggunakan Georgia (serif) sebagai elemen utama/fokus visual */
+  font-size: 60px;                                         /* ukuran judul dibuat kontras besar 60px */
+  color: white;                                            /* warna teks judul putih */
+}
+
+/* --- G. CSS FONT SHORTHAND --- */
+p.a {
+  font: 20px Arial, sans-serif;                            /* format ringkas wajib: [ukuran] [keluarga font] */
+}
+
+p.b {
+  font: italic bold 16px Arial, sans-serif;                /* urutan: [style] [weight] [size] [family] */
+}
+
+p.c {
+  font: italic small-caps bold 15px/30px Georgia, serif;   /* urutan lengkap: [style] [variant] [weight] [size/line-height] [family] */
+}
+
+
+/* ========================================
+   16. CSS ICONS
+   ======================================== */
+/* <!DOCTYPE html>
+   <html>
+   <head>
+   
+   <!-- 1. CDN Font Awesome -->
+   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+   <!-- 2. CDN Bootstrap Glyphicons -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+   <!-- 3. CDN Google Material Icons -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+
+   <!-- --- A. FONT AWESOME ICONS --- -->
+   <i class="fas fa-cloud"></i>          <!-- ikon awan (cloud) -->
+   <i class="fas fa-heart"></i>          <!-- ikon hati (heart) -->
+   <i class="fas fa-car"></i>            <!-- ikon mobil (car) -->
+   <i class="fas fa-file"></i>           <!-- ikon berkas (file) -->
+   <i class="fas fa-bars"></i>           <!-- ikon menu tiga garis (bars) -->
+
+
+   <!-- --- B. BOOTSTRAP GLYPHICONS --- -->
+   <i class="glyphicon glyphicon-cloud"></i>     <!-- ikon awan -->
+   <i class="glyphicon glyphicon-remove"></i>    <!-- ikon silang/hapus -->
+   <i class="glyphicon glyphicon-user"></i>      <!-- ikon profil pengguna -->
+   <i class="glyphicon glyphicon-envelope"></i>  <!-- ikon pesan/amplop -->
+   <i class="glyphicon glyphicon-thumbs-up"></i> <!-- ikon jempol ke atas -->
+
+
+   <!-- --- C. GOOGLE MATERIAL ICONS --- -->
+   <i class="material-icons">cloud</i>          <!-- ikon awan -->
+   <i class="material-icons">favorite</i>       <!-- ikon hati/favorit -->
+   <i class="material-icons">attachment</i>     <!-- ikon penjepit kertas/lampiran -->
+   <i class="material-icons">computer</i>       <!-- ikon monitor komputer -->
+   <i class="material-icons">traffic</i>        <!-- ikon lampu lalu lintas -->
+   </body>
+   </html>
+*/
+
+
+/* ========================================
+   17. CSS LINKS
+   ======================================== */
+
+/* --- A. CSS STYLING LINKS --- */
+a {
+  color: hotpink;              /* mengubah warna teks link menjadi merah muda cerah (hotpink) */
+  background-color: yellow;    /* memberi warna latar belakang kuning di belakang teks link */
+  font-weight: bold;           /* menebalkan karakter teks link */
+}
+
+/* --- B. CSS LINK BUTTONS --- */
+/* Kondisi normal dan setelah pernah diklik */
+a:link, a:visited {
+  background-color: #f44336;   /* warna latar tombol (merah) */
+  color: white;                /* warna teks tombol menjadi putih */
+  padding: 14px 25px;          /* ruang dalam tombol: 14px atas-bawah, 25px kiri-kanan */
+  text-align: center;          /* teks berada tepat di tengah tombol */
+  text-decoration: none;       /* menghilangkan garis bawah bawaan link */
+  display: inline-block;       /* mengubah link agar berperilaku seperti elemen kotak tombol */
+}
+
+/* Kondisi saat kursor diarahkan (hover) dan saat tombol sedang ditekan (active) */
+a:hover, a:active {
+  background-color: red;       /* mengubah warna latar menjadi merah terang saat disentuh/diklik */
+}
+
+
+/* ========================================
+   18. CSS LISTS
+   ======================================== */
+
+/* --- A. UNORDERED LISTS (BULLETS / SIMBOL) --- */
+ul.a {
+  list-style-type: circle;       /* penanda poin berupa lingkaran berongga / transparan di tengah */
+}
+
+ul.b {
+  list-style-type: disc;         /* penanda poin berupa bulatan hitam padat (default bullet) */
+}
+
+ul.c {
+  list-style-type: square;       /* penanda poin berupa kotak hitam padat */
+}
+
+/* --- B. ORDERED LISTS (URUTAN / NOMOR & HURUF) --- */
+ol.d {
+  list-style-type: upper-roman;  /* penomoran angka romawi besar (I, II, III, IV, ...) */
+}
+
+ol.e {
+  list-style-type: lower-roman;  /* penomoran angka romawi kecil (i, ii, iii, iv, ...) */
+}
+
+ol.f {
+  list-style-type: lower-alpha;  /* penomoran huruf kecil (a, b, c, d, ...) */
+}
+
+ol.g {
+  list-style-type: decimal;      /* penomoran angka standar biasa (1, 2, 3, 4, ...) */
+}
+
+
+/* ========================================
+   19. CSS TABLES
+   ======================================== */
+
+/* --- A. TABLE BORDERS & BORDER COLOR --- */
+table, th, td {
+  border: 1px solid;          /* memberi garis batas 1px solid hitam bawaan pada tabel, header, dan sel */
+}
+
+table, th, td {
+  border: 1px solid green;    /* memberi garis batas 1px padat berwarna hijau */
+}
+
+/* --- B. TABLE SIZE (WIDTH) --- */
+table {
+  width: 100%;                /* membuat lebar tabel membentang penuh 100% mengikuti lebar layar */
+}
+
+/* --- C. TABLE ALIGNMENT --- */
+td {
+  text-align: center;         /* mengatur posisi teks di dalam sel tabel (td) agar berada di tengah */
+}
+
+/* --- D. TABLE STYLING (PADDING & ALIGNMENT) --- */
+th, td {
+  padding: 10px;              /* memberi ruang/jarak ke dalam sel sebesar 10px agar teks tidak menempel ke border */
+  text-align: left;           /* meratakan teks di dalam header (th) dan sel (td) ke sisi kiri */
+}
+
+/* --- E. TABLE RESPONSIVE --- */
+div.tablecontainer {
+  overflow-x: auto;           /* memunculkan scrollbar horizontal secara otomatis jika tabel lebih lebar dari layar HP */
+}
+
+
+/* ========================================
+   20. CSS DISPLAY
+   ======================================== */
+
+/* --- A. OVERRIDE DEFAULT DISPLAY --- */
+li {
+  display: inline;             /* mengubah elemen list (li) dari blok ke inline agar berjajar horizontal ke samping */
+}
+
+/* --- B. VISIBILITY / HIDE (DISPLAY: NONE) --- */
+#panel {
+  display: none;               /* menyembunyikan elemen sepenuhnya sehingga tidak memakan ruang di halaman */
+}
