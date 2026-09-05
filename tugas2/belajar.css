@@ -44,31 +44,7 @@ h1 {
   margin-left: 20px;            /* memberi jarak/spasi luar di sebelah kiri sebesar 20 pixel */
 }
 
-/* --- B. ADD INTERNAL CSS --- */
-/* CONTOH PENERAPAN INTERNAL CSS yang di buat di atas h1:
-   <!DOCTYPE html>
-   <html>
-   <head>
-   <style>
-*/
-body {
-  background-color: linen;      /* menargetkan seluruh halaman, warna background krem */
-}
-
-h1 {
-  color: maroon;                /* menargetkan judul h1, warna teks merah maron */
-  margin-left: 40px;            /* jarak geser kiri 40px */
-}
-/* </style>
-   </head>
-   <body>
-   <h1>Judul Halaman</h1>
-   <p>Paragraf teks biasa.</p>
-   </body>
-   </html>
-*/
-
-/* --- C. ADD INLINE STYLE --- */
+/* --- B. ADD INLINE STYLE --- */
 /* CONTOH PENERAPAN INLINE CSS (berada di dalam elemnt html contoh h1):
    <!DOCTYPE html>
    <html>
@@ -87,7 +63,7 @@ p {
   color: red;                   /* diterapkan langsung di elemen: style="color:red;" */
 }
 
-/* --- D. MULTIPLE STYLE SHEETS: URUTAN INTERNAL DULUAN --- */
+/* --- C. MULTIPLE STYLE SHEETS: URUTAN INTERNAL DULUAN --- */
 /* <html>
    <head>
    <link rel="stylesheet" type="text/css" href="mystyle.css">
@@ -251,13 +227,90 @@ body {
 /* ========================================
    8. CSS BORDERS
    ======================================== */
-p.border-example {
-  border-style: solid;        /* jenis garis bingkai padat */
-  border-width: 2px;          /* ketebalan garis 2px */
-  border-color: red;          /* warna garis merah */
-  border-radius: 5px;         /* membuat sudut garis melengkung */
+
+/* --- A. BORDER STYLE --- */
+/* Catatan: border-style WAJIB ada, jika tidak ada maka border tidak akan pernah muncul */
+p.dotted  { border-style: dotted; }  /* garis bertitik-titik */
+p.dashed  { border-style: dashed; }  /* garis putus-putus */
+p.solid   { border-style: solid; }   /* garis lurus padat biasa */
+p.double  { border-style: double; }  /* garis ganda (dua garis paralel) */
+p.groove  { border-style: groove; }  /* efek ukiran 3D berlekuk ke dalam */
+p.ridge   { border-style: ridge; }   /* efek ukiran 3D menonjol keluar */
+p.inset   { border-style: inset; }   /* efek bingkai 3D tenggelam */
+p.outset  { border-style: outset; }  /* efek bingkai 3D terangkat */
+p.none    { border-style: none; }    /* tanpa garis border */
+p.hidden  { border-style: hidden; }  /* border tersembunyi */
+
+
+/* --- B. BORDER WIDTH --- */
+p.one {
+  border-style: solid;
+  border-width: 5px;                 /* ukuran ketebalan spesifik dengan satuan px */
 }
 
+p.two {
+  border-style: solid;
+  border-width: medium;              /* opsi kata kunci: thin (tipis), medium (sedang), thick (tebal) */
+}
+
+p.three {
+  border-style: solid;
+  border-width: 2px 10px 4px 20px;   /* urutan 4 sisi: atas (2px), kanan (10px), bawah (4px), kiri (20px) */
+}
+
+
+/* --- C. BORDER COLOR --- */
+p.c1 {
+  border-style: solid;
+  border-color: red;                 /* memberi warna border dengan nama warna */
+}
+
+p.c2 {
+  border-style: solid;
+  border-color: #ff0000;             /* warna border menggunakan kode HEX */
+}
+
+p.c3 {
+  border-style: solid;
+  border-color: rgb(255, 0, 0);       /* warna border menggunakan format RGB */
+}
+
+p.c4 {
+  border-style: solid;
+  border-color: red green blue yellow; /* warna beda tiap sisi: atas (merah), kanan (hijau), bawah (biru), kiri (kuning) */
+}
+
+
+/* --- D. BORDER SIDES (PENGATURAN TIAP SISI TERPISAH) --- */
+p.sides {
+  border-top-style: dotted;          /* hanya mengatur garis sisi atas */
+  border-right-style: solid;         /* hanya mengatur garis sisi kanan */
+  border-bottom-style: dotted;       /* hanya mengatur garis sisi bawah */
+  border-left-style: solid;          /* hanya mengatur garis sisi kiri */
+}
+
+
+/* --- E. BORDER SHORTHAND --- */
+/* Menuliskan ketebalan, gaya garis, dan warna sekaligus hanya dalam 1 baris */
+p.shorthand {
+  border: 5px solid red;             /* urutan nilai: [border-width] [border-style] [border-color] */
+}
+
+p.bottom-only {
+  border-bottom: 3px solid blue;     /* shorthand khusus untuk satu sisi saja (misal membuat garis bawah pembatas) */
+}
+
+
+/* --- F. ROUNDED BORDERS --- */
+p.round1 {
+  border: 2px solid red;
+  border-radius: 5px;                /* melengkungkan keempat sudut border sebesar 5px */
+}
+
+p.round2 {
+  border: 2px solid red;
+  border-radius: 12px;               /* sudut lengkungan lebih besar (semakin bulat) */
+}
 
 /* ========================================
    9. CSS MARGINS
@@ -793,4 +846,250 @@ li {
 /* --- B. VISIBILITY / HIDE (DISPLAY: NONE) --- */
 #panel {
   display: none;               /* menyembunyikan elemen sepenuhnya sehingga tidak memakan ruang di halaman */
+}
+/* ========================================
+   21. CSS MAX-WIDTH
+   ======================================== */
+
+/* --- A. WIDTH (Kaku) --- */
+div.ex1 {
+  width: 500px;                 /* lebar dipatok tetap 500px */
+  margin: auto;                 /* posisi kotak rata tengah horizontal */
+  border: 3px solid #73AD21;    /* garis bingkai hijau tebal 3px */
+}
+
+/* --- B. MAX-WIDTH (Responsif) --- */
+div.ex2 {
+  max-width: 500px;             /* batas maksimal lebar 500px */
+  margin: auto;                 /* posisi kotak rata tengah horizontal */
+  border: 3px solid #73AD21;    /* garis bingkai hijau tebal 3px */
+}
+
+
+/* ========================================
+   22. CSS POSITION
+   ======================================== */
+
+/* --- A. STATIC POSITION (Default) --- */
+div.static {
+  position: static;             /* posisi bawaan/default mengikuti alur HTML */
+  border: 3px solid #73AD21;    /* top, bottom, left, right tidak berpengaruh */
+}
+
+
+/* --- B. RELATIVE POSITION --- */
+div.relative {
+  position: relative;           /* posisi berdasarkan posisi aslinya */
+  left: 30px;                   /* bergeser 30px ke kanan dari posisi awal */
+  border: 3px solid #73AD21;
+}
+
+
+/* --- C. FIXED POSITION --- */
+div.fixed {
+  position: fixed;              /* tetap menempel pada layar saat halaman di-scroll */
+  bottom: 0;                    /* menempel di bagian bawah layar */
+  right: 0;                     /* menempel di bagian kanan layar */
+  width: 300px;                 /* lebar kotak 300px */
+  border: 3px solid #73AD21;    /* contoh: tombol chat yang melayang */
+}
+
+
+/* --- D. ABSOLUTE POSITION --- */
+div.absolute {
+  position: absolute;           /* posisi berdasarkan parent terdekat yang memiliki position */
+  top: 50px;                    /* berjarak 50px dari bagian atas parent */
+  right: 0;                     /* menempel pada sisi kanan parent */
+  border: 3px solid #73AD21;
+}
+
+
+/* --- E. STICKY POSITION --- */
+div.sticky {
+  position: sticky;             /* gabungan perilaku relative dan fixed */
+  top: 0;                       /* menempel di bagian atas saat halaman di-scroll */
+  background-color: green;      /* warna latar belakang hijau */
+  border: 2px solid #4CAF50;    /* contoh: navbar yang menempel di atas */
+}
+
+
+/* ========================================
+   23. CSS POSITION OFFSETS
+   ======================================== */
+
+/*
+   Position Offset digunakan untuk mengatur atau
+   menggeser posisi elemen menggunakan:
+
+   top
+   right
+   bottom
+   left
+
+   Offset bekerja pada elemen yang menggunakan
+   position selain static.
+*/
+
+div.box-offsets {
+  position: relative;           /* mengaktifkan penggunaan offset */
+
+  top: 20px;                    /* menggeser elemen 20px ke bawah */
+  right: 0;                     /* mengatur jarak dari sisi kanan */
+  bottom: 0;                    /* mengatur jarak dari sisi bawah */
+  left: 50px;                   /* menggeser elemen 50px ke kanan */
+
+  clip: rect(0px, 60px, 200px, 0px);
+  /* memotong/membatasi bagian elemen yang ditampilkan */
+}
+/* ========================================
+   24. CSS Z-INDEX
+   ======================================== */
+img {
+  position: absolute; /* z-index hanya berfungsi pada elemen ber-position (selain static) */
+  left: 0px;
+  top: 0px;
+  z-index: -1;        /* nilai minus membuat gambar berada di lapisan belakang teks */
+}
+/* ========================================
+   25. CSS OVERFLOW
+   ======================================== */
+
+/* --- A. OVERFLOW DASAR --- */
+div {
+  width: 200px;
+  height: 65px;
+  background-color: coral;
+  overflow: visible;  /* nilai default: konten yang kepanjangan tetap meluber keluar kotak */
+}
+
+/* Opsi nilai lain:
+   hidden : memotong konten yang meluber keluar kotak
+   scroll : selalu memunculkan batang scrollbar
+   auto   : scrollbar muncul otomatis hanya jika teks kepanjangan
+*/
+
+/* --- B. OVERFLOW X DAN Y --- */
+div.scroll-custom {
+  overflow-x: hidden; /* menyembunyikan scrollbar horizontal (ke samping) */
+  overflow-y: scroll; /* memunculkan scrollbar vertikal (ke atas/bawah) */
+}
+
+/* ========================================
+   26. CSS FLOAT & CLEAR
+   ======================================== */
+
+/* --- A. FLOAT DASAR --- */
+img {
+  float: right;       /* menggeser gambar ke sisi kanan dan membuat teks mengalir di sekelilingnya */
+}
+
+/* --- B. CLEAR (MENCEGAH PENUMPUKAN FLOAT) --- */
+div1 {
+  float: left;        /* div1 mengambang di sisi kiri */
+}
+
+div2 {
+  clear: left;        /* mendorong div2 ke bawah agar tidak ikut sejajar di samping float div1 */
+}
+
+/* --- C. FLOAT GRID COLUMN DENGAN BOX-SIZING --- */
+* {
+  box-sizing: border-box; /* mengunci lebar agar padding tidak menambah ukuran */
+}
+
+.box {
+  float: left;        /* membuat kotak berjejer ke samping */
+  width: 33.33%;      /* membagi halaman menjadi 3 kolom sejajar */
+  padding: 50px;      /* jarak spasi dalam kotak */
+}
+/* ========================================
+   27. CSS INLINE-BLOCK
+   ======================================== */
+
+/* Elemen inline biasa: tidak bisa diatur width dan height */
+span.a {
+  display: inline;
+  padding: 5px;
+  border: 2px solid red;
+}
+
+/* Elemen inline-block: berjejer ke samping, TETAPI bisa diatur ukuran width & height */
+span.b {
+  display: inline-block;
+  width: 100px;       /* lebar berhasil diterapkan */
+  height: 35px;       /* tinggi berhasil diterapkan */
+  padding: 5px;
+  border: 2px solid red;
+}
+/* ========================================
+   28. CSS ALIGN
+   ======================================== */
+
+/* --- A. CENTER ALIGN (HORIZONTAL & VERTIKAL VIA FLEXBOX) --- */
+.center {
+  display: flex;
+  justify-content: center; /* menengahkan konten secara horizontal (kiri-kanan) */
+  align-items: center;     /* menengahkan konten secara vertikal (atas-bawah) */
+}
+
+/* --- B. VERTICAL ALIGN DENGAN TINGGI WADAH SPESIFIK --- */
+.center-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;           /* tinggi wadah ditetapkan 200px */
+  border: 3px solid green;
+}
+/* ========================================
+   29. CSS COMBINATORS
+   ======================================== */
+
+/* --- A. DESCENDANT SELECTOR (SPASI) --- */
+/* Menargetkan SELURUH tag <p> yang ada di dalam <div>, tidak peduli seberapa dalam tingkatannya */
+div p {
+  background-color: yellow;
+}
+
+/* --- B. CHILD SELECTOR ( > ) --- */
+/* Hanya menargetkan tag <p> yang merupakan ANAK LANGSUNG tepat di bawah <div> */
+div > p {
+  background-color: pink;
+}
+/* ========================================
+   30. CSS PSEUDO-CLASSES
+   ======================================== */
+
+/* --- A. SYNTAX DASAR --- */
+/* Ditandai dengan satu tanda titik dua (:) setelah nama selector */
+/* selector:pseudo-class-name { CSS properties } */
+
+
+/* --- B. INTERACTIVE (STATUS TAUTAN / TOMBOL) --- */
+
+/* Kondisi link yang belum pernah dikunjungi */
+a:link {
+  color: #FF0000;       /* warna merah */
+}
+
+/* Kondisi link yang sudah pernah dikunjungi */
+a:visited {
+  color: #00FF00;       /* warna hijau */
+}
+
+/* Kondisi saat kursor mouse melayang di atas elemen (hover) */
+a:hover {
+  color: #FF00FF;       /* warna ungu magenta */
+}
+
+/* Kondisi saat link sedang ditekan/diklik aktif */
+a:active {
+  color: #0000FF;       /* warna biru */
+}
+
+
+/* --- C. STRUCTURAL (BERDASARKAN STRUKTUR DOKUMEN) --- */
+
+/* Menargetkan elemen <p> yang merupakan anak PERTAMA dari elemen induknya */
+p:first-child {
+  color: blue;          /* warna teks biru */
 }
