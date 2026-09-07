@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Professional UI</title>
+    <!-- Tailwind CSS Play CDN -->
+    <script rell="preconnect" src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body class="bg-slate-400 min-h-screen flex items-center justify-center p-4">
+
+    <!-- Card Utama (Split Layout: Kiri Professional Dark/Slate, Kanan Form) -->
+    <div class="max-w-4xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+        
+        <!-- SISI KIRI: Professional Dark Banner (Elegan, Tidak Alay) -->
+        <div class="bg-slate-700 p-10 text-white flex flex-col justify-between relative overflow-hidden border-r border-slate-800">
+            <!-- Hiasan subtle glow yang kalem -->
+            <div class="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl"></div>
+            
+            <div class="relative z-10">
+                <h2 class="text-3xl font-bold mt-6 leading-tight tracking-tight text-white">Create Your Account Today</h2>
+                <p class="text-slate-400 text-sm mt-2">Join thousands of users and unlock secure digital services.</p>
+            </div>
+
+            <!-- Fitur Unggulan -->
+            <div class="relative z-10 space-y-4 my-8">
+                <div class="flex items-center space-x-3 text-sm text-slate-300">
+                    <div class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-blue-400 font-bold">✓</div>
+                    <span>Fast & Secure Data Protection</span>
+                </div>
+                <div class="flex items-center space-x-3 text-sm text-slate-300">
+                    <div class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-blue-400 font-bold">✓</div>
+                    <span>Clean & Professional Interface</span>
+                </div>
+            </div>
+
+            <div class="relative z-10 text-xs text-slate-500">
+                © 2026 Cendika Digital Nusantara.
+            </div>
+        </div>
+
+        <!-- SISI KANAN: Form Pendaftaran Clean & Minimalist -->
+        <div class="p-8 md:p-10 flex flex-col justify-center bg-white">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold text-slate-900">Let's Get You <span class="text-blue-600">Started</span></h3>
+                <p class="text-slate-500 text-xs mt-1">Please enter your details to create an account.</p>
+            </div>
+
+            <form id="registerForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Full Name</label>
+                    <input type="text" id="regName" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm bg-slate-50/50 transition" placeholder="Enter your name">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Email Address</label>
+                    <input type="email" id="regEmail" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm bg-slate-50/50 transition" placeholder="name@example.com">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Password</label>
+                    <input type="password" id="regPassword" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm bg-slate-50/50 transition" placeholder="••••••••">
+                </div>
+<button type="submit" class="w-full bg-blue-600 hover:bg-blue-800 text-white font-medium py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-0.5 text-sm">
+    Create Account
+</button>
+            </form>
+
+            <p class="text-center text-xs text-slate-500 mt-6">
+                Already have an account? <a href="../Login/login.html" class="text-blue-600 font-semibold hover:underline">Log in</a>
+            </p>
+        </div>
+
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>

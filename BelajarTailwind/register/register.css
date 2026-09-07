@@ -1,0 +1,10 @@
+/* Efek transisi halus dan kustom tambahan */
+input {
+    transition: all 0.25s ease-in-out;
+}
+input:focus {
+    background-color: #ffffff;
+}
+button:active {
+    transform: scale(0.98);
+}
