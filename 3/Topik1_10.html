@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belajar Tailwind CSS: Topik 1 - 10</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-purple-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="p-2 bg-gradient-to-br from-cyan-400 to-blue-600 text-white rounded-xl font-bold shadow-md shadow-cyan-500/20">TW</span>
+        <h1 class="text-lg font-bold text-slate-900">Tailwind CSS Cheat Sheet <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full ml-1">Topik 1 - 10</span></h1>
+      </div>
+      <a href="#daftar-isi" class="text-xs font-semibold text-purple-600 hover:text-purple-700">Daftar Isi &darr;</a>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-10 space-y-12">
+
+    <!-- Quick Navigation / Daftar Isi -->
+    <section id="daftar-isi" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm">
+      <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-purple-600"></span> Navigasi Modul (1 - 10)
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-medium">
+        <a href="#topik-1" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">1️⃣ Getting Started</a>
+        <a href="#topik-2" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">2️⃣ Core Concepts</a>
+        <a href="#topik-3" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">3️⃣ Base Styles</a>
+        <a href="#topik-4" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">4️⃣ Layout</a>
+        <a href="#topik-5" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">5️⃣ Flexbox & Grid</a>
+        <a href="#topik-6" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">6️⃣ Spacing</a>
+        <a href="#topik-7" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">7️⃣ Sizing</a>
+        <a href="#topik-8" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">8️⃣ Typography</a>
+        <a href="#topik-9" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">9️⃣ Backgrounds</a>
+        <a href="#topik-10" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">🔟 Borders</a>
+      </div>
+    </section>
+
+    <!-- 1. Getting Started -->
+    <section id="topik-1" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 1</span>
+        <h2 class="text-xl font-bold text-slate-900">Getting Started</h2>
+      </div>
+      <p class="text-sm text-slate-600">Tailwind CSS dapat diinstal via NPM, Vite/Framework CLI, atau Play CDN untuk prototipe cepat.</p>
+      
+      <div class="grid sm:grid-cols-2 gap-4 text-xs font-mono">
+        <div class="bg-slate-900 text-slate-200 p-4 rounded-xl space-y-2">
+          <p class="text-slate-400 font-sans font-semibold">1. Install via NPM</p>
+          <code>npm install -D tailwindcss<br>npx tailwindcss init</code>
+        </div>
+        <div class="bg-slate-900 text-slate-200 p-4 rounded-xl space-y-2">
+          <p class="text-slate-400 font-sans font-semibold">2. Quick CDN Setup</p>
+          <code class="text-cyan-400">&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</code>
+        </div>
+      </div>
+      <div class="bg-purple-50 border-l-4 border-purple-500 p-3 rounded text-xs text-purple-900">
+        <strong>Editor Setup:</strong> Sangat disarankan memakai ekstensi VS Code resmi <em>Tailwind CSS IntelliSense</em> untuk fitur auto-complete class.
+      </div>
+    </section>
+
+    <!-- 2. Core Concepts -->
+    <section id="topik-2" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 2</span>
+        <h2 class="text-xl font-bold text-slate-900">Core Concepts</h2>
+      </div>
+      
+      <div class="grid sm:grid-cols-3 gap-4 text-xs">
+        <div class="p-4 rounded-xl border border-slate-200 space-y-2">
+          <p class="font-bold text-slate-800">State Modifiers</p>
+          <p class="text-slate-500">Gunakan prefix seperti <code>hover:</code>, <code>focus:</code>, <code>active:</code>.</p>
+          <button class="w-full py-2 bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-semibold rounded-lg transition">
+            Hover & Click Aku
+          </button>
+        </div>
+
+        <div class="p-4 rounded-xl border border-slate-200 space-y-2">
+          <p class="font-bold text-slate-800">Responsive Breakpoints</p>
+          <p class="text-slate-500">Mobile first: <code>sm:</code> (640px), <code>md:</code> (768px), <code>lg:</code> (1024px).</p>
+          <div class="p-2 bg-slate-100 rounded text-center font-mono">
+            <span class="block sm:hidden text-amber-600 font-bold">Layar: Mobile (&lt;640px)</span>
+            <span class="hidden sm:block md:hidden text-blue-600 font-bold">Layar: Tablet (sm)</span>
+            <span class="hidden md:block text-emerald-600 font-bold">Layar: Desktop (md+)</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl border border-slate-200 space-y-2">
+          <p class="font-bold text-slate-800">Arbitrary Values</p>
+          <p class="text-slate-500">Bisa masukkan nilai kustom menggunakan kurung siku <code>[...]</code>.</p>
+          <div class="p-2 bg-[#7000ff] text-white rounded font-mono text-center">
+            bg-[#7000ff]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Base Styles -->
+    <section id="topik-3" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 3</span>
+        <h2 class="text-xl font-bold text-slate-900">Base Styles (Preflight)</h2>
+      </div>
+      <p class="text-sm text-slate-600">
+        Tailwind otomatis menyertakan <strong>Preflight</strong> (reset CSS berbasis modern-normalize). Margin default semua elemen dihapus, heading tidak memiliki ukuran default bawaan browser, dan list tidak memiliki bullet default sebelum diberi utility class.
+      </p>
+      <div class="p-3 bg-slate-100 rounded-lg text-xs font-mono text-slate-700">
+        Tag &lt;h1&gt;, &lt;p&gt;, &lt;button&gt; tampil polos tanpa style browser bawaan sampai ditambahkan class Tailwind.
+      </div>
+    </section>
+
+    <!-- 4. Layout -->
+    <section id="topik-4" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 4</span>
+        <h2 class="text-xl font-bold text-slate-900">Layout</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4 text-xs">
+        <div class="space-y-2">
+          <span class="font-semibold text-slate-700">Position & Z-Index:</span>
+          <div class="relative h-28 bg-slate-100 rounded-xl p-3 border border-slate-200 overflow-hidden">
+            <div class="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded shadow z-10 font-mono">z-10 (Atas)</div>
+            <div class="absolute top-5 left-5 bg-purple-500 text-white px-4 py-3 rounded shadow z-0 font-mono">z-0 (Bawah)</div>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <span class="font-semibold text-slate-700">Overflow (overflow-auto):</span>
+          <div class="h-28 overflow-y-auto bg-slate-100 p-3 rounded-xl border border-slate-200 space-y-1 text-slate-600">
+            <p>Baris 1 - Scrollable container</p>
+            <p>Baris 2 - Scrollable container</p>
+            <p>Baris 3 - Scrollable container</p>
+            <p>Baris 4 - Scrollable container</p>
+            <p>Baris 5 - Scrollable container</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Flexbox & Grid -->
+    <section id="topik-5" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 5</span>
+        <h2 class="text-xl font-bold text-slate-900">Flexbox & Grid</h2>
+      </div>
+      
+      <div class="space-y-3">
+        <span class="text-xs font-semibold text-slate-700">Flexbox: <code>flex justify-between items-center gap-2</code></span>
+        <div class="flex justify-between items-center gap-2 p-3 bg-slate-100 rounded-xl">
+          <div class="p-2 bg-purple-500 text-white text-xs font-semibold rounded">Item 1</div>
+          <div class="p-2 bg-purple-500 text-white text-xs font-semibold rounded">Item 2</div>
+          <div class="p-2 bg-purple-500 text-white text-xs font-semibold rounded">Item 3</div>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <span class="text-xs font-semibold text-slate-700">Grid: <code>grid grid-cols-3 gap-3</code></span>
+        <div class="grid grid-cols-3 gap-3 text-center text-xs font-semibold text-white">
+          <div class="p-3 bg-blue-500 rounded-lg">Col 1</div>
+          <div class="p-3 bg-blue-500 rounded-lg">Col 2</div>
+          <div class="p-3 bg-blue-500 rounded-lg">Col 3</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Spacing -->
+    <section id="topik-6" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 6</span>
+        <h2 class="text-xl font-bold text-slate-900">Spacing (Padding & Margin)</h2>
+      </div>
+      <p class="text-xs text-slate-500">Skala spacing Tailwind: 1 unit = 0.25rem (4px). Jadi <code>p-4</code> = 16px, <code>m-2</code> = 8px.</p>
+      
+      <div class="p-4 bg-amber-100 border border-amber-300 rounded-xl text-xs">
+        <span class="font-mono text-amber-800">Container luar: p-4</span>
+        <div class="my-3 p-3 bg-amber-300 rounded-lg text-amber-950 font-mono">
+          Elemen dalam: my-3 p-3
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Sizing -->
+    <section id="topik-7" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 7</span>
+        <h2 class="text-xl font-bold text-slate-900">Sizing (Width & Height)</h2>
+      </div>
+      <div class="space-y-2 text-xs font-mono text-white">
+        <div class="w-full bg-slate-700 p-2 rounded">w-full (100%)</div>
+        <div class="w-3/4 bg-slate-600 p-2 rounded">w-3/4 (75%)</div>
+        <div class="w-1/2 bg-slate-500 p-2 rounded">w-1/2 (50%)</div>
+        <div class="w-1/4 bg-slate-400 p-2 rounded text-slate-900">w-1/4 (25%)</div>
+      </div>
+    </section>
+
+    <!-- 8. Typography -->
+    <section id="topik-8" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 8</span>
+        <h2 class="text-xl font-bold text-slate-900">Typography</h2>
+      </div>
+      <div class="space-y-2">
+        <p class="text-2xl font-black tracking-tight text-slate-900">text-2xl font-black tracking-tight</p>
+        <p class="text-base font-semibold text-purple-600 uppercase">text-base font-semibold uppercase</p>
+        <p class="text-sm italic underline decoration-wavy decoration-indigo-500 text-slate-600">
+          text-sm italic underline decoration-wavy
+        </p>
+        <p class="text-xs text-slate-400 font-mono">text-xs font-mono text-slate-400</p>
+      </div>
+    </section>
+
+    <!-- 9. Backgrounds -->
+    <section id="topik-9" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 9</span>
+        <h2 class="text-xl font-bold text-slate-900">Backgrounds</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4 text-xs font-semibold text-white">
+        <div class="h-20 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center shadow">
+          bg-gradient-to-r from-violet-600 to-indigo-600
+        </div>
+        <div class="h-20 bg-gradient-to-tr from-rose-500 via-purple-500 to-cyan-500 rounded-xl flex items-center justify-center shadow">
+          from-rose-500 via-purple-500 to-cyan-500
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Borders -->
+    <section id="topik-10" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 10</span>
+        <h2 class="text-xl font-bold text-slate-900">Borders & Outline</h2>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs font-medium">
+        <div class="p-3 border-2 border-dashed border-purple-400 rounded-lg text-purple-700">
+          border-dashed
+        </div>
+        <div class="p-3 border-2 border-purple-500 rounded-2xl text-purple-700">
+          rounded-2xl
+        </div>
+        <div class="p-3 border-4 border-indigo-500 rounded-full text-indigo-700">
+          rounded-full
+        </div>
+        <div class="p-3 outline outline-2 outline-offset-2 outline-blue-500 rounded-lg text-blue-700">
+          outline-offset-2
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-200">
+    Dokumentasi Praktik Modul Tailwind CSS 1 - 10
+  </footer>
+
+</body>
+</html>
