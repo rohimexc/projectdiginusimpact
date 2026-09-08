@@ -1,0 +1,57 @@
+/* ==========================================================================
+   PENGATURAN DASAR & RESET (BASE STYLES)
+   ========================================================================== */
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #334155;
+    background-color: #f8fafc;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.bg-light {
+    background-color: #f1f5f9;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title h2 {
+    font-size: 32px;
+    color: #0d233a;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.section-title p {
+    color: #64748b;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 50px 0;
+    }
+}

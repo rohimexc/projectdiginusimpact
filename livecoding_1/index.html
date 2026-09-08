@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ID Card Diginus - Responsive Flip</title>
+
+  <!-- Preconnect untuk optimasi loading resource -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Tailwind CSS via CDN -->
+  <script rel="preconnect" src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Konfigurasi Tema Tailwind (Warna & Font) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              orange: '#b9562e', /* Menyesuaikan warna jingga pada gambar */
+              cream: '#e4dacf', /* Menyesuaikan warna dasar sisi kiri */
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="flex min-h-screen flex-col bg-gray-100 text-gray-800">
+
+  <!-- Ubah class section untuk membatasi lebar maksimal dan menengahkan konten -->
+  <section class="mx-auto flex w-full max-w-7xl flex-grow items-center justify-center p-6">
+
+    <!-- TAMBAHKAN GRID CONTAINER DI SINI -->
+    <!-- grid-cols-1 (Mobile), md:grid-cols-2 (Tablet), lg:grid-cols-3 (Laptop) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+
+      <!-- ================= CARD 1 ================= -->
+      <div class="group h-[500px] w-[320px] [perspective:1000px]">
+        <!-- Inner Wrapper (Yang Berputar) -->
+        <div
+          class="relative h-full w-full shadow-2xl transition-all duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] rounded-xl">
+
+          <!-- Sisi Depan -->
+          <div
+            class="absolute inset-0 flex h-full w-full overflow-hidden rounded-xl bg-brand-cream [backface-visibility:hidden]">
+            <div
+              class="absolute left-0 top-0 h-full w-[15%] bg-[url('https://www.transparenttextures.com/patterns/escheresque.png')] opacity-20">
+            </div>
+            <div class="absolute bottom-0 right-0 h-full w-[88%] rounded-tl-[3.5rem] bg-brand-orange overflow-hidden">
+              <div class="absolute right-5 top-5 z-20 w-28">
+                <img src="https://lh3.googleusercontent.com/d/1nb6C--nk-uPeHdU1IIu1V6A2hOai8F-C" alt="Logo" class="h-auto w-full object-contain brightness-0 invert" />
+              </div>
+              <div class="absolute bottom-0 left-1/2 z-10 w-[95%] -translate-x-1/2">
+                <img src="https://lh3.googleusercontent.com/d/1wsrLZsKW0fji_W-NWHTrM1MJtFXIOPlU" alt="Apri" class="h-auto w-full object-cover object-top" style="mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%); -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);" />
+              </div>
+              <div class="absolute left-0 top-10 z-0 w-full opacity-20 mix-blend-overlay">
+                <img src="https://lh3.googleusercontent.com/d/1wsrLZsKW0fji_W-NWHTrM1MJtFXIOPlU" alt="Background" class="h-auto w-full object-cover object-top scale-150 -translate-x-10" />
+              </div>
+            </div>
+            <div
+              class="absolute bottom-0 left-0 z-30 w-full border-b-[16px] border-brand-cream bg-black pb-6 pt-5 text-center">
+              <h3 class="text-center font-bold text-white ">APRI</h3>
+              <p class="text-center font-bold text-brand-orange text-sm">Junior Full Stack Developer</p>
+
+            </div>
+          </div>
+
+          <!-- Sisi Belakang -->
+          <div
+            class="absolute inset-0 flex h-full w-full flex-col items-center justify-center rounded-xl bg-gray-900 p-6 text-center shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)]">
+
+            <img src="https://lh3.googleusercontent.com/d/1nb6C--nk-uPeHdU1IIu1V6A2hOai8F-C" alt="Logo" class="h-auto w-40 object-contain brightness-0 invert" />
+            <h1 class="text-center font-bold text-brand-cream m-5 ">Contact Info</h1>
+            <div>
+              <div class="flex bg-gray-800 text-center rounded-md ">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-envelope-at-fill text-brand-orange text-sm "></i>imadeapriana65@gmail.com
+                </p>
+              </div>
+              <div class="flex bg-gray-800 text-center rounded-md mt-3">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-telephone-fill text-brand-orange text-sm "></i>087756297493
+                </p>
+              </div>
+              <div class="flex bg-gray-800 text-center rounded-md mt-3">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-geo-alt-fill text-brand-orange text-sm "></i>Gianyar,Bali
+                </p>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-4">
+                <a href="https://www.instagram.com/aprianaa_8?stkn=eXYwY3B3Z2cwc20z"
+                  class="flex bg-gray-800 text-center rounded-md mt-5"><i class="bi bi-instagram text-brand-cream text-xl p-2"></i></a>
+                <a href="https://github.com/Aprianaaa"
+                  class="flex bg-gray-800 text-center rounded-md mt-5"><i class="bi bi-github text-brand-cream text-xl p-2"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+            <div class="group h-[500px] w-[320px] [perspective:1000px]">
+        <!-- Inner Wrapper (Yang Berputar) -->
+        <div
+          class="relative h-full w-full shadow-2xl transition-all duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] rounded-xl">
+
+          <!-- Sisi Depan -->
+          <div
+            class="absolute inset-0 flex h-full w-full overflow-hidden rounded-xl bg-brand-cream [backface-visibility:hidden]">
+            <div
+              class="absolute left-0 top-0 h-full w-[15%] bg-[url('https://www.transparenttextures.com/patterns/escheresque.png')] opacity-20">
+            </div>
+            <div class="absolute bottom-0 right-0 h-full w-[88%] rounded-tl-[3.5rem] bg-brand-orange overflow-hidden">
+              <div class="absolute right-5 top-5 z-20 w-28">
+                <img src="https://lh3.googleusercontent.com/d/1nb6C--nk-uPeHdU1IIu1V6A2hOai8F-C" alt="Logo" class="h-auto w-full object-contain brightness-0 invert" />
+              </div>
+              <div class="absolute bottom-0 left-1/2 z-10 w-[95%] -translate-x-1/2">
+                <img src="https://lh3.googleusercontent.com/d/1wsrLZsKW0fji_W-NWHTrM1MJtFXIOPlU" alt="Apri" class="h-auto w-full object-cover object-top" style="mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%); -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);" />
+              </div>
+              <div class="absolute left-0 top-10 z-0 w-full opacity-20 mix-blend-overlay">
+                <img src="https://lh3.googleusercontent.com/d/1wsrLZsKW0fji_W-NWHTrM1MJtFXIOPlU" alt="Background" class="h-auto w-full object-cover object-top scale-150 -translate-x-10" />
+              </div>
+            </div>
+            <div
+              class="absolute bottom-0 left-0 z-30 w-full border-b-[16px] border-brand-cream bg-black pb-6 pt-5 text-center">
+              <h3 class="text-center font-bold text-white ">APRI</h3>
+              <p class="text-center font-bold text-brand-orange text-sm">Junior Full Stack Developer</p>
+
+            </div>
+          </div>
+
+          <!-- Sisi Belakang -->
+          <div
+            class="absolute inset-0 flex h-full w-full flex-col items-center justify-center rounded-xl bg-gray-900 p-6 text-center shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)]">
+
+            <img src="https://lh3.googleusercontent.com/d/1nb6C--nk-uPeHdU1IIu1V6A2hOai8F-C" alt="Logo" class="h-auto w-40 object-contain brightness-0 invert" />
+            <h1 class="text-center font-bold text-brand-cream m-5 ">Contact Info</h1>
+            <div>
+              <div class="flex bg-gray-800 text-center rounded-md ">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-envelope-at-fill text-brand-orange text-sm "></i>imadeapriana65@gmail.com
+                </p>
+              </div>
+              <div class="flex bg-gray-800 text-center rounded-md mt-3">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-telephone-fill text-brand-orange text-sm "></i>087756297493
+                </p>
+              </div>
+              <div class="flex bg-gray-800 text-center rounded-md mt-3">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-geo-alt-fill text-brand-orange text-sm "></i>Gianyar,Bali
+                </p>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-4">
+                <a href="https://www.instagram.com/aprianaa_8?stkn=eXYwY3B3Z2cwc20z"
+                  class="flex bg-gray-800 text-center rounded-md mt-5"><i class="bi bi-instagram text-brand-cream text-xl p-2"></i></a>
+                <a href="https://github.com/Aprianaaa"
+                  class="flex bg-gray-800 text-center rounded-md mt-5"><i class="bi bi-github text-brand-cream text-xl p-2"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+            <div class="group h-[500px] w-[320px] [perspective:1000px]">
+        <!-- Inner Wrapper (Yang Berputar) -->
+        <div
+          class="relative h-full w-full shadow-2xl transition-all duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] rounded-xl">
+
+          <!-- Sisi Depan -->
+          <div
+            class="absolute inset-0 flex h-full w-full overflow-hidden rounded-xl bg-brand-cream [backface-visibility:hidden]">
+            <div
+              class="absolute left-0 top-0 h-full w-[15%] bg-[url('https://www.transparenttextures.com/patterns/escheresque.png')] opacity-20">
+            </div>
+            <div class="absolute bottom-0 right-0 h-full w-[88%] rounded-tl-[3.5rem] bg-brand-orange overflow-hidden">
+              <div class="absolute right-5 top-5 z-20 w-28">
+                <img src="https://lh3.googleusercontent.com/d/1nb6C--nk-uPeHdU1IIu1V6A2hOai8F-C" alt="Logo" class="h-auto w-full object-contain brightness-0 invert" />
+              </div>
+              <div class="absolute bottom-0 left-1/2 z-10 w-[95%] -translate-x-1/2">
+                <img src="https://lh3.googleusercontent.com/d/1wsrLZsKW0fji_W-NWHTrM1MJtFXIOPlU" alt="Apri" class="h-auto w-full object-cover object-top" style="mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%); -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);" />
+              </div>
+              <div class="absolute left-0 top-10 z-0 w-full opacity-20 mix-blend-overlay">
+                <img src="https://lh3.googleusercontent.com/d/1wsrLZsKW0fji_W-NWHTrM1MJtFXIOPlU" alt="Background" class="h-auto w-full object-cover object-top scale-150 -translate-x-10" />
+              </div>
+            </div>
+            <div
+              class="absolute bottom-0 left-0 z-30 w-full border-b-[16px] border-brand-cream bg-black pb-6 pt-5 text-center">
+              <h3 class="text-center font-bold text-white ">APRI</h3>
+              <p class="text-center font-bold text-brand-orange text-sm">Junior Full Stack Developer</p>
+
+            </div>
+          </div>
+
+          <!-- Sisi Belakang -->
+          <div
+            class="absolute inset-0 flex h-full w-full flex-col items-center justify-center rounded-xl bg-gray-900 p-6 text-center shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)]">
+
+            <img src="https://lh3.googleusercontent.com/d/1nb6C--nk-uPeHdU1IIu1V6A2hOai8F-C" alt="Logo" class="h-auto w-40 object-contain brightness-0 invert" />
+            <h1 class="text-center font-bold text-brand-cream m-5 ">Contact Info</h1>
+            <div>
+              <div class="flex bg-gray-800 text-center rounded-md ">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-envelope-at-fill text-brand-orange text-sm "></i>imadeapriana65@gmail.com
+                </p>
+              </div>
+              <div class="flex bg-gray-800 text-center rounded-md mt-3">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-telephone-fill text-brand-orange text-sm "></i>087756297493
+                </p>
+              </div>
+              <div class="flex bg-gray-800 text-center rounded-md mt-3">
+                <p class=" flex gap-3 text-center text-brand-cream p-4 ">
+                  <i class="bi-geo-alt-fill text-brand-orange text-sm "></i>Gianyar,Bali
+                </p>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-4">
+                <a href="https://www.instagram.com/aprianaa_8?stkn=eXYwY3B3Z2cwc20z"
+                  class="flex bg-gray-800 text-center rounded-md mt-5"><i class="bi bi-instagram text-brand-cream text-xl p-2"></i></a>
+                <a href="https://github.com/Aprianaaa"
+                  class="flex bg-gray-800 text-center rounded-md mt-5"><i class="bi bi-github text-brand-cream text-xl p-2"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+
+  <footer class="bg-gray-800 p-4 text-center text-sm text-gray-300">
+    <p>&copy; Diginus 2026</p>
+  </footer>
+
+</body>
+
+</html>
