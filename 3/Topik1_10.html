@@ -3,274 +3,517 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Belajar Tailwind CSS: Topik 1 - 10</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Font -->
+  <title>Laboratorium Tailwind CSS | Topik 11 - 18</title>
+
+  <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
             sans: ['Plus Jakarta Sans', 'sans-serif'],
-            mono: ['Fira Code', 'monospace'],
+            mono: ['JetBrains Mono', 'monospace'],
           },
-        },
-      },
-    };
+          colors: {
+            brand: {
+              bg: '#f1f5f9',
+              dark: '#0f172a',
+              card: '#ffffff',
+              accent: '#6366f1',
+              accentLight: '#e0e7ff',
+              emerald: '#10b981'
+            }
+          }
+        }
+      }
+    }
   </script>
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-purple-500 selection:text-white">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+<body class="bg-slate-100 text-slate-800 font-sans selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Announcement / Breadcrumb Bar -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 text-white">
+    <div class="max-w-7xl mx-auto px-5 py-3.5 flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <span class="p-2 bg-gradient-to-br from-cyan-400 to-blue-600 text-white rounded-xl font-bold shadow-md shadow-cyan-500/20">TW</span>
-        <h1 class="text-lg font-bold text-slate-900">Tailwind CSS Cheat Sheet <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full ml-1">Topik 1 - 10</span></h1>
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center font-bold text-sm shadow">
+          <i class="bi bi-terminal-fill text-white"></i>
+        </span>
+        <div>
+          <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+            Tailwind Mastery Lab
+            <span class="text-[10px] bg-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/40">Part 2: 11 - 18</span>
+          </h1>
+        </div>
       </div>
-      <a href="#daftar-isi" class="text-xs font-semibold text-purple-600 hover:text-purple-700">Daftar Isi &darr;</a>
+
+      <div class="flex items-center gap-2 text-xs">
+        <a href="Topik1_10.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center gap-1.5 border border-slate-700">
+          <i class="bi bi-chevron-left"></i> Topik 1-10
+        </a>
+        <a href="login.html" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition shadow-md shadow-indigo-600/30">
+          Kembali ke Login
+        </a>
+      </div>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-6 py-10 space-y-12">
-
-    <!-- Quick Navigation / Daftar Isi -->
-    <section id="daftar-isi" class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm">
-      <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-purple-600"></span> Navigasi Modul (1 - 10)
+  <!-- Hero Banner -->
+  <section class="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white py-14 px-5 border-b border-slate-800">
+    <div class="max-w-5xl mx-auto text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-400/20 text-indigo-300 text-xs font-semibold">
+        <i class="bi bi-stars text-amber-400"></i> Eksplorasi Tingkat Lanjut
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-indigo-200">
+        Efek, Animasi, Grafis & Aksesibilitas
       </h2>
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-medium">
-        <a href="#topik-1" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">1️⃣ Getting Started</a>
-        <a href="#topik-2" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">2️⃣ Core Concepts</a>
-        <a href="#topik-3" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">3️⃣ Base Styles</a>
-        <a href="#topik-4" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">4️⃣ Layout</a>
-        <a href="#topik-5" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">5️⃣ Flexbox & Grid</a>
-        <a href="#topik-6" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">6️⃣ Spacing</a>
-        <a href="#topik-7" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">7️⃣ Sizing</a>
-        <a href="#topik-8" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">8️⃣ Typography</a>
-        <a href="#topik-9" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">9️⃣ Backgrounds</a>
-        <a href="#topik-10" class="p-2 rounded-lg bg-slate-50 hover:bg-purple-50 hover:text-purple-700 border border-slate-200/60 transition">🔟 Borders</a>
-      </div>
-    </section>
-
-    <!-- 1. Getting Started -->
-    <section id="topik-1" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 1</span>
-        <h2 class="text-xl font-bold text-slate-900">Getting Started</h2>
-      </div>
-      <p class="text-sm text-slate-600">Tailwind CSS dapat diinstal via NPM, Vite/Framework CLI, atau Play CDN untuk prototipe cepat.</p>
-      
-      <div class="grid sm:grid-cols-2 gap-4 text-xs font-mono">
-        <div class="bg-slate-900 text-slate-200 p-4 rounded-xl space-y-2">
-          <p class="text-slate-400 font-sans font-semibold">1. Install via NPM</p>
-          <code>npm install -D tailwindcss<br>npx tailwindcss init</code>
-        </div>
-        <div class="bg-slate-900 text-slate-200 p-4 rounded-xl space-y-2">
-          <p class="text-slate-400 font-sans font-semibold">2. Quick CDN Setup</p>
-          <code class="text-cyan-400">&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</code>
-        </div>
-      </div>
-      <div class="bg-purple-50 border-l-4 border-purple-500 p-3 rounded text-xs text-purple-900">
-        <strong>Editor Setup:</strong> Sangat disarankan memakai ekstensi VS Code resmi <em>Tailwind CSS IntelliSense</em> untuk fitur auto-complete class.
-      </div>
-    </section>
-
-    <!-- 2. Core Concepts -->
-    <section id="topik-2" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 2</span>
-        <h2 class="text-xl font-bold text-slate-900">Core Concepts</h2>
-      </div>
-      
-      <div class="grid sm:grid-cols-3 gap-4 text-xs">
-        <div class="p-4 rounded-xl border border-slate-200 space-y-2">
-          <p class="font-bold text-slate-800">State Modifiers</p>
-          <p class="text-slate-500">Gunakan prefix seperti <code>hover:</code>, <code>focus:</code>, <code>active:</code>.</p>
-          <button class="w-full py-2 bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-semibold rounded-lg transition">
-            Hover & Click Aku
-          </button>
-        </div>
-
-        <div class="p-4 rounded-xl border border-slate-200 space-y-2">
-          <p class="font-bold text-slate-800">Responsive Breakpoints</p>
-          <p class="text-slate-500">Mobile first: <code>sm:</code> (640px), <code>md:</code> (768px), <code>lg:</code> (1024px).</p>
-          <div class="p-2 bg-slate-100 rounded text-center font-mono">
-            <span class="block sm:hidden text-amber-600 font-bold">Layar: Mobile (&lt;640px)</span>
-            <span class="hidden sm:block md:hidden text-blue-600 font-bold">Layar: Tablet (sm)</span>
-            <span class="hidden md:block text-emerald-600 font-bold">Layar: Desktop (md+)</span>
-          </div>
-        </div>
-
-        <div class="p-4 rounded-xl border border-slate-200 space-y-2">
-          <p class="font-bold text-slate-800">Arbitrary Values</p>
-          <p class="text-slate-500">Bisa masukkan nilai kustom menggunakan kurung siku <code>[...]</code>.</p>
-          <div class="p-2 bg-[#7000ff] text-white rounded font-mono text-center">
-            bg-[#7000ff]
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. Base Styles -->
-    <section id="topik-3" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 3</span>
-        <h2 class="text-xl font-bold text-slate-900">Base Styles (Preflight)</h2>
-      </div>
-      <p class="text-sm text-slate-600">
-        Tailwind otomatis menyertakan <strong>Preflight</strong> (reset CSS berbasis modern-normalize). Margin default semua elemen dihapus, heading tidak memiliki ukuran default bawaan browser, dan list tidak memiliki bullet default sebelum diberi utility class.
+      <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        Pelajari cara menghidupkan website menggunakan filter visual dinamis, pergerakan halus, manipulasi geometri objek, hingga standarisasi screen-reader.
       </p>
-      <div class="p-3 bg-slate-100 rounded-lg text-xs font-mono text-slate-700">
-        Tag &lt;h1&gt;, &lt;p&gt;, &lt;button&gt; tampil polos tanpa style browser bawaan sampai ditambahkan class Tailwind.
-      </div>
-    </section>
 
-    <!-- 4. Layout -->
-    <section id="topik-4" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 4</span>
-        <h2 class="text-xl font-bold text-slate-900">Layout</h2>
+      <!-- Pill Navigasi Cepat -->
+      <div class="pt-4 flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
+        <a href="#topik11" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">11. Effects</a>
+        <a href="#topik12" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">12. Filters</a>
+        <a href="#topik13" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">13. Tables</a>
+        <a href="#topik14" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">14. Animation</a>
+        <a href="#topik15" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">15. Transforms</a>
+        <a href="#topik16" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">16. Interactivity</a>
+        <a href="#topik17" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">17. SVG</a>
+        <a href="#topik18" class="text-xs bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 px-3 py-1 rounded-full transition">18. Accessibility</a>
       </div>
-      <div class="grid sm:grid-cols-2 gap-4 text-xs">
-        <div class="space-y-2">
-          <span class="font-semibold text-slate-700">Position & Z-Index:</span>
-          <div class="relative h-28 bg-slate-100 rounded-xl p-3 border border-slate-200 overflow-hidden">
-            <div class="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded shadow z-10 font-mono">z-10 (Atas)</div>
-            <div class="absolute top-5 left-5 bg-purple-500 text-white px-4 py-3 rounded shadow z-0 font-mono">z-0 (Bawah)</div>
+    </div>
+  </section>
+
+  <!-- Container Konten Utama -->
+  <main class="max-w-6xl mx-auto px-5 py-12 space-y-12">
+
+    <!-- ================= 11. EFFECTS ================= -->
+    <section id="topik11" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-palette2 text-2xl"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 11</span>
+            <h3 class="text-lg font-bold">Visual Effects</h3>
           </div>
         </div>
-        <div class="space-y-2">
-          <span class="font-semibold text-slate-700">Overflow (overflow-auto):</span>
-          <div class="h-28 overflow-y-auto bg-slate-100 p-3 rounded-xl border border-slate-200 space-y-1 text-slate-600">
-            <p>Baris 1 - Scrollable container</p>
-            <p>Baris 2 - Scrollable container</p>
-            <p>Baris 3 - Scrollable container</p>
-            <p>Baris 4 - Scrollable container</p>
-            <p>Baris 5 - Scrollable container</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. Flexbox & Grid -->
-    <section id="topik-5" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 5</span>
-        <h2 class="text-xl font-bold text-slate-900">Flexbox & Grid</h2>
-      </div>
-      
-      <div class="space-y-3">
-        <span class="text-xs font-semibold text-slate-700">Flexbox: <code>flex justify-between items-center gap-2</code></span>
-        <div class="flex justify-between items-center gap-2 p-3 bg-slate-100 rounded-xl">
-          <div class="p-2 bg-purple-500 text-white text-xs font-semibold rounded">Item 1</div>
-          <div class="p-2 bg-purple-500 text-white text-xs font-semibold rounded">Item 2</div>
-          <div class="p-2 bg-purple-500 text-white text-xs font-semibold rounded">Item 3</div>
-        </div>
+        <span class="text-xs text-violet-100 hidden sm:inline">Shadow, Opacity & Blend</span>
       </div>
 
-      <div class="space-y-3">
-        <span class="text-xs font-semibold text-slate-700">Grid: <code>grid grid-cols-3 gap-3</code></span>
-        <div class="grid grid-cols-3 gap-3 text-center text-xs font-semibold text-white">
-          <div class="p-3 bg-blue-500 rounded-lg">Col 1</div>
-          <div class="p-3 bg-blue-500 rounded-lg">Col 2</div>
-          <div class="p-3 bg-blue-500 rounded-lg">Col 3</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. Spacing -->
-    <section id="topik-6" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 6</span>
-        <h2 class="text-xl font-bold text-slate-900">Spacing (Padding & Margin)</h2>
-      </div>
-      <p class="text-xs text-slate-500">Skala spacing Tailwind: 1 unit = 0.25rem (4px). Jadi <code>p-4</code> = 16px, <code>m-2</code> = 8px.</p>
-      
-      <div class="p-4 bg-amber-100 border border-amber-300 rounded-xl text-xs">
-        <span class="font-mono text-amber-800">Container luar: p-4</span>
-        <div class="my-3 p-3 bg-amber-300 rounded-lg text-amber-950 font-mono">
-          Elemen dalam: my-3 p-3
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. Sizing -->
-    <section id="topik-7" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 7</span>
-        <h2 class="text-xl font-bold text-slate-900">Sizing (Width & Height)</h2>
-      </div>
-      <div class="space-y-2 text-xs font-mono text-white">
-        <div class="w-full bg-slate-700 p-2 rounded">w-full (100%)</div>
-        <div class="w-3/4 bg-slate-600 p-2 rounded">w-3/4 (75%)</div>
-        <div class="w-1/2 bg-slate-500 p-2 rounded">w-1/2 (50%)</div>
-        <div class="w-1/4 bg-slate-400 p-2 rounded text-slate-900">w-1/4 (25%)</div>
-      </div>
-    </section>
-
-    <!-- 8. Typography -->
-    <section id="topik-8" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 8</span>
-        <h2 class="text-xl font-bold text-slate-900">Typography</h2>
-      </div>
-      <div class="space-y-2">
-        <p class="text-2xl font-black tracking-tight text-slate-900">text-2xl font-black tracking-tight</p>
-        <p class="text-base font-semibold text-purple-600 uppercase">text-base font-semibold uppercase</p>
-        <p class="text-sm italic underline decoration-wavy decoration-indigo-500 text-slate-600">
-          text-sm italic underline decoration-wavy
+      <div class="p-6 sm:p-8 space-y-6">
+        <p class="text-sm text-slate-600">
+          Memberikan kedalaman visual (*depth*) menggunakan ragam intensitas bayangan, transparansi warna, dan interaksi perpaduan warna latar.
         </p>
-        <p class="text-xs text-slate-400 font-mono">text-xs font-mono text-slate-400</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Shadow Playground -->
+          <div class="p-5 rounded-xl border border-slate-100 bg-slate-50 flex flex-col justify-between">
+            <span class="text-xs font-bold text-slate-700">Tingkatan Box Shadow</span>
+            <div class="my-4 flex items-center justify-center h-20">
+              <div class="px-5 py-2.5 bg-white rounded-xl shadow-xl shadow-indigo-500/20 text-xs font-semibold text-indigo-600">
+                shadow-xl shadow-indigo-500/20
+              </div>
+            </div>
+            <code class="text-[11px] font-mono bg-slate-900 text-emerald-400 p-2 rounded">shadow-sm | shadow-lg | shadow-2xl</code>
+          </div>
+
+          <!-- Opacity -->
+          <div class="p-5 rounded-xl border border-slate-100 bg-slate-50 flex flex-col justify-between">
+            <span class="text-xs font-bold text-slate-700">Tingkat Transparansi (Opacity)</span>
+            <div class="my-4 flex items-center justify-center gap-2">
+              <span class="px-3 py-2 bg-indigo-600 opacity-25 text-white rounded text-xs font-mono">25%</span>
+              <span class="px-3 py-2 bg-indigo-600 opacity-50 text-white rounded text-xs font-mono">50%</span>
+              <span class="px-3 py-2 bg-indigo-600 opacity-100 text-white rounded text-xs font-mono">100%</span>
+            </div>
+            <code class="text-[11px] font-mono bg-slate-900 text-emerald-400 p-2 rounded">opacity-25 ... opacity-100</code>
+          </div>
+
+          <!-- Blend Mode -->
+          <div class="p-5 rounded-xl border border-slate-100 bg-slate-50 flex flex-col justify-between">
+            <span class="text-xs font-bold text-slate-700">Mix Blend Mode</span>
+            <div class="my-4 relative h-20 bg-gradient-to-r from-amber-400 to-rose-500 rounded-lg overflow-hidden flex items-center justify-center">
+              <div class="px-4 py-1.5 bg-blue-600 text-white rounded text-xs font-bold mix-blend-multiply">
+                mix-blend-multiply
+              </div>
+            </div>
+            <code class="text-[11px] font-mono bg-slate-900 text-emerald-400 p-2 rounded">mix-blend-multiply | overlay</code>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 9. Backgrounds -->
-    <section id="topik-9" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 9</span>
-        <h2 class="text-xl font-bold text-slate-900">Backgrounds</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 gap-4 text-xs font-semibold text-white">
-        <div class="h-20 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center shadow">
-          bg-gradient-to-r from-violet-600 to-indigo-600
+    <!-- ================= 12. FILTERS ================= -->
+    <section id="topik12" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-funnel-fill text-2xl"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 12</span>
+            <h3 class="text-lg font-bold">Filters & Backdrop Filters</h3>
+          </div>
         </div>
-        <div class="h-20 bg-gradient-to-tr from-rose-500 via-purple-500 to-cyan-500 rounded-xl flex items-center justify-center shadow">
-          from-rose-500 via-purple-500 to-cyan-500
+        <span class="text-xs text-blue-100 hidden sm:inline">Blur, Grayscale, Contrast & Glassmorphism</span>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+        <p class="text-sm text-slate-600">
+          Tailwind mempermudah manipulasi grafis CSS secara real-time tanpa software editing grafis.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+          <div class="p-4 rounded-xl bg-slate-900 text-white space-y-3">
+            <p class="text-xs text-slate-400 font-semibold">Blur Effect</p>
+            <div class="py-3 px-2 bg-indigo-500 text-white rounded-lg blur-[2px] hover:blur-none transition cursor-pointer text-xs font-bold">
+              Hover untuk Clear
+            </div>
+            <code class="block text-[10px] font-mono text-cyan-300">blur-sm / blur-md</code>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 text-white space-y-3">
+            <p class="text-xs text-slate-400 font-semibold">Grayscale</p>
+            <div class="py-3 px-2 bg-rose-500 text-white rounded-lg grayscale hover:grayscale-0 transition cursor-pointer text-xs font-bold">
+              Hover Jadi Warna
+            </div>
+            <code class="block text-[10px] font-mono text-cyan-300">grayscale</code>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 text-white space-y-3">
+            <p class="text-xs text-slate-400 font-semibold">Hue Rotate</p>
+            <div class="py-3 px-2 bg-emerald-500 text-white rounded-lg hue-rotate-90 text-xs font-bold">
+              Hue +90 Deg
+            </div>
+            <code class="block text-[10px] font-mono text-cyan-300">hue-rotate-90</code>
+          </div>
+
+          <!-- Glassmorphism Preview -->
+          <div class="p-4 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 text-white space-y-3 relative overflow-hidden">
+            <p class="text-xs text-white/80 font-semibold">Backdrop Glass</p>
+            <div class="py-2.5 px-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-xs font-bold text-white shadow">
+              backdrop-blur-md
+            </div>
+            <code class="block text-[10px] font-mono text-white/90">backdrop-blur-md</code>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 10. Borders -->
-    <section id="topik-10" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <div class="border-b border-slate-100 pb-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Modul 10</span>
-        <h2 class="text-xl font-bold text-slate-900">Borders & Outline</h2>
+    <!-- ================= 13. TABLES ================= -->
+    <section id="topik13" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-table text-2xl"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 13</span>
+            <h3 class="text-lg font-bold">Tables Layout</h3>
+          </div>
+        </div>
+        <span class="text-xs text-emerald-100 hidden sm:inline">Border Collapse & Caption</span>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs font-medium">
-        <div class="p-3 border-2 border-dashed border-purple-400 rounded-lg text-purple-700">
-          border-dashed
+
+      <div class="p-6 sm:p-8 space-y-5">
+        <p class="text-sm text-slate-600">
+          Kerapian tabular data menggunakan utilitas khusus tabel di Tailwind:
+        </p>
+
+        <div class="overflow-hidden border border-slate-200 rounded-xl">
+          <table class="w-full text-left border-collapse text-xs">
+            <caption class="caption-bottom p-3 text-[11px] text-slate-400 bg-slate-50 border-t border-slate-200 text-center">
+              Caption Side Bottom: <code class="font-mono text-indigo-600 font-semibold">caption-bottom</code>
+            </caption>
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <th class="p-3">Class Tailwind</th>
+                <th class="p-3">Properti CSS Asli</th>
+                <th class="p-3">Penerapan Nyata</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              <tr class="hover:bg-indigo-50/40 transition">
+                <td class="p-3 font-mono text-indigo-600 font-semibold">border-collapse</td>
+                <td class="p-3 font-mono text-slate-500">border-collapse: collapse;</td>
+                <td class="p-3">Menghilangkan celah dobel border antar sel</td>
+              </tr>
+              <tr class="hover:bg-indigo-50/40 transition">
+                <td class="p-3 font-mono text-indigo-600 font-semibold">table-auto</td>
+                <td class="p-3 font-mono text-slate-500">table-layout: auto;</td>
+                <td class="p-3">Lebar kolom menyesuaikan isi konten teks</td>
+              </tr>
+              <tr class="hover:bg-indigo-50/40 transition">
+                <td class="p-3 font-mono text-indigo-600 font-semibold">table-fixed</td>
+                <td class="p-3 font-mono text-slate-500">table-layout: fixed;</td>
+                <td class="p-3">Lebar tiap kolom dibagi rata dan konsisten</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="p-3 border-2 border-purple-500 rounded-2xl text-purple-700">
-          rounded-2xl
+      </div>
+    </section>
+
+    <!-- ================= 14. ANIMATIONS ================= -->
+    <section id="topik14" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-play-circle-fill text-2xl"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 14</span>
+            <h3 class="text-lg font-bold">Transitions & Animations</h3>
+          </div>
         </div>
-        <div class="p-3 border-4 border-indigo-500 rounded-full text-indigo-700">
-          rounded-full
+        <span class="text-xs text-amber-100 hidden sm:inline">Keyframes, Duration & Easing</span>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Transition Showcase -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
+            <span class="text-xs font-bold text-slate-700">Interactive Transition</span>
+            <p class="text-xs text-slate-500">Tombol di bawah memiliki efek jeda warna & bayangan:</p>
+            <button class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/30 hover:-translate-y-0.5 active:scale-95 text-xs">
+              Hover & Klik Saya (Duration 300ms)
+            </button>
+            <code class="block text-[11px] font-mono bg-slate-900 text-emerald-400 p-2 rounded">
+              transition-all duration-300 ease-in-out
+            </code>
+          </div>
+
+          <!-- Built-in Animations -->
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
+            <span class="text-xs font-bold text-slate-700">Built-in Keyframe Animations</span>
+            <div class="grid grid-cols-4 gap-2 text-center pt-2">
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-7 h-7 bg-orange-500 rounded-full animate-bounce"></div>
+                <span class="text-[10px] font-mono text-slate-500">bounce</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-7 h-7 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                <span class="text-[10px] font-mono text-slate-500">spin</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-7 h-7 bg-amber-500 rounded-full animate-pulse"></div>
+                <span class="text-[10px] font-mono text-slate-500">pulse</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <span class="relative flex h-6 w-6">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-6 w-6 bg-rose-500"></span>
+                </span>
+                <span class="text-[10px] font-mono text-slate-500">ping</span>
+              </div>
+            </div>
+            <code class="block text-[11px] font-mono bg-slate-900 text-emerald-400 p-2 rounded">
+              animate-spin | bounce | pulse | ping
+            </code>
+          </div>
+
         </div>
-        <div class="p-3 outline outline-2 outline-offset-2 outline-blue-500 rounded-lg text-blue-700">
-          outline-offset-2
+      </div>
+    </section>
+
+    <!-- ================= 15. TRANSFORMS ================= -->
+    <section id="topik15" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-rose-600 to-pink-600 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-bounding-box-circles text-2xl"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 15</span>
+            <h3 class="text-lg font-bold">Transforms</h3>
+          </div>
+        </div>
+        <span class="text-xs text-pink-100 hidden sm:inline">Rotate, Scale, Skew & Translate</span>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+        <p class="text-sm text-slate-600">
+          Manipulasi fisik tanpa mengubah posisi alur dokumen normal:
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:rotate-12 transition duration-300 cursor-pointer group">
+            <div class="w-10 h-10 mx-auto bg-rose-500 rounded-lg mb-2 flex items-center justify-center text-white font-bold text-xs">
+              &circlearrowright;
+            </div>
+            <p class="text-xs font-bold text-slate-800">Rotate</p>
+            <code class="text-[10px] font-mono text-rose-600">hover:rotate-12</code>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:scale-110 transition duration-300 cursor-pointer group">
+            <div class="w-10 h-10 mx-auto bg-pink-500 rounded-lg mb-2 flex items-center justify-center text-white font-bold text-xs">
+              &plusmn;
+            </div>
+            <p class="text-xs font-bold text-slate-800">Scale</p>
+            <code class="text-[10px] font-mono text-pink-600">hover:scale-110</code>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:-skew-x-12 transition duration-300 cursor-pointer group">
+            <div class="w-10 h-10 mx-auto bg-purple-500 rounded-lg mb-2 flex items-center justify-center text-white font-bold text-xs">
+              /
+            </div>
+            <p class="text-xs font-bold text-slate-800">Skew</p>
+            <code class="text-[10px] font-mono text-purple-600">hover:-skew-x-12</code>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 hover:-translate-y-3 transition duration-300 cursor-pointer group">
+            <div class="w-10 h-10 mx-auto bg-indigo-500 rounded-lg mb-2 flex items-center justify-center text-white font-bold text-xs">
+              &uarr;
+            </div>
+            <p class="text-xs font-bold text-slate-800">Translate</p>
+            <code class="text-[10px] font-mono text-indigo-600">hover:-translate-y-3</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 16. INTERACTIVITY ================= -->
+    <section id="topik16" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-cursor-fill text-2xl"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 16</span>
+            <h3 class="text-lg font-bold">Interactivity</h3>
+          </div>
+        </div>
+        <span class="text-xs text-teal-100 hidden sm:inline">Pointer Events, User Select & Scroll Behavior</span>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <!-- Select None -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2 select-none">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5 text-teal-700">
+              <i class="bi bi-slash-circle"></i> select-none
+            </span>
+            <p class="text-slate-600">
+              Coba blok teks di kotak ini dengan mouse. Teks ini terkunci dan tidak dapat di-highlight/copy.
+            </p>
+          </div>
+
+          <!-- Cursor Custom -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2 cursor-wait">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5 text-teal-700">
+              <i class="bi bi-hourglass-split"></i> cursor-wait
+            </span>
+            <p class="text-slate-600">
+              Arahkan kursor mouse ke dalam kotak ini untuk melihat ikon jam pasir loading.
+            </p>
+          </div>
+
+          <!-- Pointer Events -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5 text-teal-700">
+              <i class="bi bi-mouse3"></i> pointer-events-none
+            </span>
+            <p class="text-slate-600">
+              Membuat elemen transparan terhadap klik (klik tembus ke elemen di baliknya).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 17. SVG ================= -->
+    <section id="topik17" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-700 to-indigo-800 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-vector-pen text-2xl"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 17</span>
+            <h3 class="text-lg font-bold">SVG Styling</h3>
+          </div>
+        </div>
+        <span class="text-xs text-blue-200 hidden sm:inline">Fill, Stroke & Stroke Width</span>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row items-center gap-8 p-6 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="flex gap-4">
+            <!-- Icon 1 -->
+            <svg class="w-12 h-12 fill-indigo-600 stroke-slate-900 hover:fill-amber-400 transition cursor-pointer" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <!-- Icon 2 -->
+            <svg class="w-12 h-12 fill-none stroke-indigo-600 hover:stroke-rose-500 transition cursor-pointer" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 8v4l3 3"/>
+            </svg>
+          </div>
+
+          <div class="text-xs space-y-2">
+            <p class="font-bold text-slate-800">Kontrol Warna Vector Langsung dengan Tailwind:</p>
+            <div class="space-y-1 font-mono text-[11px]">
+              <span class="block text-indigo-600">fill-indigo-600 &rarr; mengisi badan warna vector</span>
+              <span class="block text-indigo-600">stroke-slate-900 &rarr; mewarnai garis pinggir (outline)</span>
+              <span class="block text-indigo-600">stroke-2 &rarr; mengatur ketebalan garis (stroke-width)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 18. ACCESSIBILITY ================= -->
+    <section id="topik18" class="scroll-mt-20 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-universal-access text-2xl text-amber-400"></i>
+          <div>
+            <span class="text-[10px] font-mono tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded">MODUL 18</span>
+            <h3 class="text-lg font-bold">Accessibility (A11y)</h3>
+          </div>
+        </div>
+        <span class="text-xs text-slate-300 hidden sm:inline">Screen Reader & High Contrast</span>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-5">
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Membangun antarmuka inklusif yang ramah bagi pengguna disabilitas sensorik atau pengguna alat bantu dengar pembaca layar:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+            <span class="font-bold text-slate-800 block">1. Screen Reader Only (<code class="text-indigo-600">sr-only</code>)</span>
+            <p class="text-slate-500">
+              Menyembunyikan elemen secara visual dari layar tetapi tetap dapat terbaca dengan lantang oleh robot pembaca layar.
+            </p>
+            <code class="block bg-slate-900 text-emerald-400 p-2 rounded text-[11px] font-mono">
+              &lt;span class="sr-only"&gt;Notifikasi belum dibaca&lt;/span&gt;
+            </code>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+            <span class="font-bold text-slate-800 block">2. Forced Color Adjust (<code class="text-indigo-600">forced-color-adjust-*</code>)</span>
+            <p class="text-slate-500">
+              Mengontrol apakah mode kontras tinggi bawaan sistem operasi (Windows High Contrast Mode) boleh menimpa warna custom elemen ini.
+            </p>
+            <code class="block bg-slate-900 text-emerald-400 p-2 rounded text-[11px] font-mono">
+              forced-color-adjust-auto | forced-color-adjust-none
+            </code>
+          </div>
         </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-200">
-    Dokumentasi Praktik Modul Tailwind CSS 1 - 10
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 text-xs py-10 border-t border-slate-800 text-center">
+    <div class="max-w-5xl mx-auto px-5 space-y-2">
+      <p class="font-semibold text-slate-300">Modul Praktik Mandiri Tailwind CSS: Topik 11 - 18</p>
+      <p class="text-[11px] text-slate-500">Dibuat dengan Tailwind CSS & Bootstrap Icons</p>
+    </div>
   </footer>
 
 </body>
