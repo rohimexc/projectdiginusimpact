@@ -2,9 +2,17 @@
 input {
     transition: all 0.25s ease-in-out;
 }
+
 input:focus {
     background-color: #ffffff;
 }
+
 button:active {
     transform: scale(0.98);
+}
+
+/* Mematikan total ikon mata bawaan browser agar tidak tabrakan */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none !important;
 }
