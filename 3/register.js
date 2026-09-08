@@ -1,90 +1,115 @@
+// Menunggu semua elemen HTML selesai dimuat sebelum menjalankan perintah
 document.addEventListener("DOMContentLoaded", () => {
-  const registerForm = document.getElementById("registerForm");
-  const passwordInput = document.getElementById("password");
-  const confirmPasswordInput = document.getElementById("confirmPassword");
+  
+  // ==========================================================================
+  // 1. AKTIFKAN ANIMASI AOS
+  // ==========================================================================
+  if (typeof AOS !== "undefined") {
+    AOS.init({ once: true });
+  }
 
-  // Toggle Password Utama
+  // ==========================================================================
+  // 2. MENGAMBIL ELEMEN INPUT & TOMBOL MATA DARI HTML
+  // ==========================================================================
+  const passwordInput = document.getElementById("password");
   const togglePassword = document.getElementById("togglePassword");
   const eyeIcon = document.getElementById("eyeIcon");
-  if (togglePassword && passwordInput && eyeIcon) {
-    togglePassword.addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
-      eyeIcon.classList.toggle("bi-eye", !isPassword);
-      eyeIcon.classList.toggle("bi-eye-slash", isPassword);
-    });
-  }
 
-  // Toggle Konfirmasi Password
+  const confirmPasswordInput = document.getElementById("confirmPassword");
   const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
-  const eyeConfirmIcon = document.getElementById("eyeConfirmIcon");
-  if (toggleConfirmPassword && confirmPasswordInput && eyeConfirmIcon) {
-    toggleConfirmPassword.addEventListener("click", () => {
-      const isPassword = confirmPasswordInput.type === "password";
-      confirmPasswordInput.type = isPassword ? "text" : "password";
-      eyeConfirmIcon.classList.toggle("bi-eye", !isPassword);
-      eyeConfirmIcon.classList.toggle("bi-eye-slash", isPassword);
+  const eyeIconConfirm = document.getElementById("eyeIconConfirm");
+
+  // Elemen Bar Indikator Kekuatan Sandi
+  const bar1 = document.getElementById("strengthBar1");
+  const bar2 = document.getElementById("strengthBar2");
+  const bar3 = document.getElementById("strengthBar3");
+  const strengthText = document.getElementById("strengthText");
+
+  const registerForm = document.getElementById("registerForm");
+
+  // ==========================================================================
+  // 3. FUNGSI INTIP / SEMBUNYIKAN KATA SANDI (GANDA)
+  // ==========================================================================
+  const setupToggle = (button, input, icon) => {
+    if (!button || !input || !icon) return;
+    button.addEventListener("click", () => {
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      icon.classList.toggle("bi-eye", !isPassword);
+      icon.classList.toggle("bi-eye-slash", isPassword);
+    });
+  };
+
+  // Terapkan fungsi toggle ke kolom password dan konfirmasi password
+  setupToggle(togglePassword, passwordInput, eyeIcon);
+  setupToggle(toggleConfirmPassword, confirmPasswordInput, eyeIconConfirm);
+
+  // ==========================================================================
+  // 4. LOGIKA PENGUKUR KEKUATAN SANDI (Merah=Lemah, Kuning=Sedang, Hijau=Kuat)
+  // ==========================================================================
+  if (passwordInput) {
+    passwordInput.addEventListener("input", (e) => {
+      const val = e.target.value;
+      const hasLength = val.length >= 8;
+      const hasLetter = /[a-zA-Z]/.test(val);
+      const hasNumber = /[0-9]/.test(val);
+      const hasSpecial = /[^a-zA-Z0-9]/.test(val);
+
+      // Kembalikan 3 bar ke warna abu-abu default
+      bar1.className = "h-1.5 rounded-full bg-slate-200 transition-colors duration-300";
+      bar2.className = "h-1.5 rounded-full bg-slate-200 transition-colors duration-300";
+      bar3.className = "h-1.5 rounded-full bg-slate-200 transition-colors duration-300";
+
+      // Jika kolom kosong, hilangkan teks status
+      if (val.length === 0) {
+        strengthText.textContent = "";
+        return;
+      }
+
+      // Hitung skor kekuatan sandi
+      let score = 0;
+      if (val.length >= 6) score++;
+      if (hasLength && hasLetter && hasNumber) score++;
+      if (hasLength && hasLetter && hasNumber && hasSpecial) score++;
+
+      // Ubah warna batang berdasarkan skor
+      if (score <= 1) {
+        // 1 Batang Merah = Lemah
+        bar1.classList.replace("bg-slate-200", "bg-rose-500");
+        strengthText.textContent = "Lemah";
+        strengthText.className = "font-semibold text-rose-500 text-[11px]";
+      } else if (score === 2) {
+        // 2 Batang Kuning = Sedang
+        bar1.classList.replace("bg-slate-200", "bg-amber-400");
+        bar2.classList.replace("bg-slate-200", "bg-amber-400");
+        strengthText.textContent = "Sedang";
+        strengthText.className = "font-semibold text-amber-500 text-[11px]";
+      } else {
+        // 3 Batang Hijau = Kuat
+        bar1.classList.replace("bg-slate-200", "bg-emerald-500");
+        bar2.classList.replace("bg-slate-200", "bg-emerald-500");
+        bar3.classList.replace("bg-slate-200", "bg-emerald-500");
+        strengthText.textContent = "Kuat";
+        strengthText.className = "font-semibold text-emerald-600 text-[11px]";
+      }
     });
   }
 
-  // Indikator Password Strength (3 Segmen)
-  const bar1 = document.getElementById("bar1");
-  const bar2 = document.getElementById("bar2");
-  const bar3 = document.getElementById("bar3");
-  const strengthLabel = document.getElementById("strengthLabel");
-
-  passwordInput.addEventListener("input", (e) => {
-    const val = e.target.value;
-    const hasLength = val.length >= 8;
-    const hasLetters = /[a-zA-Z]/.test(val);
-    const hasNumbers = /[0-9]/.test(val);
-    const hasSpecial = /[^a-zA-Z0-9]/.test(val);
-
-    // Reset warna
-    [bar1, bar2, bar3].forEach(b => {
-      b.className = "rounded-full bg-slate-200 transition-colors duration-300";
-    });
-    strengthLabel.textContent = "";
-
-    if (!val) return;
-
-    let score = 0;
-    if (val.length >= 6) score++;
-    if (hasLength && hasLetters && hasNumbers) score++;
-    if (hasLength && hasLetters && hasNumbers && hasSpecial) score++;
-
-    if (score === 1) {
-      bar1.classList.remove("bg-slate-200");
-      bar1.classList.add("bg-rose-500");
-      strengthLabel.textContent = "Lemah";
-      strengthLabel.className = "font-semibold uppercase tracking-wider text-[10px] text-rose-500";
-    } else if (score === 2) {
-      bar1.classList.remove("bg-slate-200");
-      bar2.classList.remove("bg-slate-200");
-      bar1.classList.add("bg-amber-500");
-      bar2.classList.add("bg-amber-500");
-      strengthLabel.textContent = "Sedang";
-      strengthLabel.className = "font-semibold uppercase tracking-wider text-[10px] text-amber-500";
-    } else if (score >= 3) {
-      [bar1, bar2, bar3].forEach(b => {
-        b.classList.remove("bg-slate-200");
-        b.classList.add("bg-emerald-500");
-      });
-      strengthLabel.textContent = "Kuat";
-      strengthLabel.className = "font-semibold uppercase tracking-wider text-[10px] text-emerald-500";
-    }
-  });
-
-  // Validasi Submit
+  // ==========================================================================
+  // 5. VALIDASI KECOCOKAN KATA SANDI & PINDAH HALAMAN
+  // ==========================================================================
   if (registerForm) {
     registerForm.addEventListener("submit", (e) => {
       e.preventDefault();
+
+      // Cek apakah kolom sandi dan konfirmasi sama persis
       if (passwordInput.value !== confirmPasswordInput.value) {
-        alert("Konfirmasi kata sandi tidak sesuai!");
+        alert("Konfirmasi kata sandi tidak cocok dengan kata sandi!");
         confirmPasswordInput.focus();
         return;
       }
-      alert("Pendaftaran berhasil! Mengarahkan ke halaman login.");
+
+      // Berhasil registrasi -> arahkan ke halaman modul pembelajaran
       window.location.href = "login.html";
     });
   }
