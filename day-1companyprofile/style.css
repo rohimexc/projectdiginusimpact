@@ -1,3 +1,7 @@
+/* ====================================================
+   [BAGIAN 1: KONFIGURASI VARIABEL & RESET DOKUMEN] - MULAI
+   Menstandarkan warna tema korporat dan ukuran sudut kartu di satu tempat
+   ==================================================== */
 :root {
   --brand-blue: #0052ff;
   --brand-blue-hover: #0040cc;
@@ -15,12 +19,14 @@
   --radius: 14px;
 }
 
+/* Reset margin dan padding default browser */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Menetapkan scroll halus dan jenis font Poppins */
 html {
   scroll-behavior: smooth;
   font-family: 'Poppins', sans-serif;
@@ -33,14 +39,19 @@ body {
   overflow-x: hidden;
 }
 
+/* Pembatas lebar konten agar berada rapi di tengah layar */
 .container {
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
 }
+/* ====================================================
+   [BAGIAN 1: KONFIGURASI VARIABEL & RESET DOKUMEN] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   2. Tipografi Judul, Layout Section, dan Tombol Global
+   [BAGIAN 2: TIPOGRAFI, SECTION SPACING & TOMBOL] - MULAI
    ==================================================== */
 h1, h2, h3, h4 {
   color: var(--brand-navy);
@@ -54,6 +65,7 @@ a {
   transition: var(--transition);
 }
 
+/* Teks aksen dengan gradasi warna biru */
 .gradient-text {
   background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-sky) 100%);
   background-clip: text;
@@ -95,6 +107,7 @@ a {
   font-size: 1rem;
 }
 
+/* Styling dasar tombol utama (Primary & Outline) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -130,10 +143,15 @@ a {
   color: var(--white);
   transform: translateY(-2px);
 }
+/* ====================================================
+   [BAGIAN 2: TIPOGRAFI, SECTION SPACING & TOMBOL] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   3. Efek Angkat Kartu dan Micro-Interactions Ikon
+   [BAGIAN 3: EFEK HOVER KARTU & MICRO-INTERACTIONS] - MULAI
    ==================================================== */
+/* Mengangkat kartu 5px ke atas dan mempertebal bayangan saat disorot */
 .hover-lift {
   transition: var(--transition);
 }
@@ -144,6 +162,7 @@ a {
   border-color: var(--brand-blue) !important;
 }
 
+/* Animasi mikro pada pergerakan ikon dan nomor ketika mouse diarahkan */
 .card-icon i,
 .legal-head i,
 .client-icon,
@@ -219,9 +238,13 @@ a {
   transform: scale(1.1);
   color: var(--brand-blue);
 }
+/* ====================================================
+   [BAGIAN 3: EFEK HOVER KARTU & MICRO-INTERACTIONS] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   4. Bilah Navigasi Sticky
+   [BAGIAN 4: BILAH NAVIGASI / NAVBAR STICKY] - MULAI
    ==================================================== */
 .navbar {
   position: sticky;
@@ -234,6 +257,7 @@ a {
   transition: var(--transition);
 }
 
+/* Mengurangi padding dan menambah bayangan saat navbar di-scroll */
 .navbar.scrolled {
   box-shadow: var(--shadow-md);
   padding: 10px 0;
@@ -255,9 +279,13 @@ a {
   object-fit: contain;
   display: block;
 }
+/* ====================================================
+   [BAGIAN 4: BILAH NAVIGASI / NAVBAR STICKY] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   5. Section Statistik Pencapaian
+   [BAGIAN 5: SECTION STATISTIK PENCAPAIAN] - MULAI
    ==================================================== */
 .stats-section {
   background: var(--brand-navy);
@@ -298,10 +326,19 @@ a {
   color: rgba(255, 255, 255, 0.75);
   font-size: 0.9rem;
 }
+/* ====================================================
+   [BAGIAN 5: SECTION STATISTIK PENCAPAIAN] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   6. Section Tentang Kami (Visi & Misi)
+   [BAGIAN 6: SECTION PROFIL, VISI & MISI] - MULAI
    ==================================================== */
+
+/* ----------------------------------------------------
+   SUB-BAGIAN A: TATA LETAK PROFIL PERUSAHAAN (LAYOUT UMUM)
+   ---------------------------------------------------- */
+/* Pembungkus vertikal kartu profil dengan batas lebar maksimal 900px */
 .about-grid-stack {
   display: flex;
   flex-direction: column;
@@ -310,6 +347,7 @@ a {
   margin: 0 auto;
 }
 
+/* Kotak putih kartu profil (digunakan oleh kartu visi dan kartu misi) */
 .about-card {
   background: var(--white);
   padding: 32px;
@@ -318,29 +356,14 @@ a {
   border: 1px solid #e2e8f0;
 }
 
+/* Ikon header kartu profil di sisi kiri atas */
 .card-icon {
   font-size: 2rem;
   color: var(--brand-blue);
   margin-bottom: 15px;
 }
 
-.vision-quote {
-  font-style: italic;
-  font-weight: 500;
-  color: var(--brand-navy);
-  background: var(--brand-light-blue);
-  padding: 16px;
-  border-left: 4px solid var(--brand-blue);
-  border-radius: 4px;
-}
-
-.misi-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-top: 15px;
-}
-
+/* Baris butir misi yang dapat disorot */
 .hover-item {
   display: flex;
   gap: 15px;
@@ -355,6 +378,32 @@ a {
   transform: translateX(4px);
 }
 
+/* ----------------------------------------------------
+   SUB-BAGIAN B: KHUSUS STYLING KARTU VISI
+   ---------------------------------------------------- */
+/* Kotak kutipan teks visi dengan border biru tebal di sisi kiri */
+.vision-quote {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--brand-navy);
+  background: var(--brand-light-blue);
+  padding: 16px;
+  border-left: 4px solid var(--brand-blue);
+  border-radius: 4px;
+}
+
+/* ----------------------------------------------------
+   SUB-BAGIAN C: KHUSUS STYLING KARTU MISI
+   ---------------------------------------------------- */
+/* Grid 2 kolom untuk menata 4 butir misi secara sejajar */
+.misi-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+/* Kotak nomor urut biru (01, 02, 03, 04) */
 .misi-num {
   background: var(--brand-blue);
   color: var(--white);
@@ -368,9 +417,13 @@ a {
   flex-shrink: 0;
   font-size: 0.9rem;
 }
+/* ====================================================
+   [BAGIAN 6: SECTION PROFIL, VISI & MISI] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   7. Section Tiga Pilar Layanan
+   [BAGIAN 7: SECTION TIGA PILAR LAYANAN] - MULAI
    ==================================================== */
 .services-grid {
   display: grid;
@@ -417,9 +470,13 @@ a {
   border-radius: 20px;
   border: 1px solid #e2e8f0;
 }
+/* ====================================================
+   [BAGIAN 7: SECTION TIGA PILAR LAYANAN] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   8. Section Accordion Showcase & Preview Gambar
+   [BAGIAN 8: SECTION ACCORDION & SHOWCASE FOTO] - MULAI
    ==================================================== */
 .accordion-showcase-grid {
   display: grid;
@@ -501,6 +558,7 @@ a {
   color: var(--brand-blue);
 }
 
+/* Transisi ekspansi konten accordion */
 .accordion-body {
   max-height: 0;
   overflow: hidden;
@@ -520,6 +578,7 @@ a {
   margin: 0;
 }
 
+/* Kolom kanan pratinjau gambar tetap menempel */
 .accordion-preview-wrap {
   position: sticky;
   top: 90px;
@@ -562,14 +621,19 @@ a {
 .img-floating-badge i {
   color: var(--brand-sky);
 }
+/* ====================================================
+   [BAGIAN 8: SECTION ACCORDION & SHOWCASE FOTO] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   9. Dua Baris Marquee Portofolio (Anti-Bolong & Seamless)
+   [BAGIAN 9: SECTION PORTOFOLIO MARQUEE 2 BARIS] - MULAI
    ==================================================== */
 .portfolio-section {
   overflow: hidden;
 }
 
+/* Tombol filter portofolio */
 .portfolio-filter {
   display: flex;
   justify-content: center;
@@ -598,6 +662,7 @@ a {
   box-shadow: 0 4px 10px rgba(0, 82, 255, 0.3);
 }
 
+/* Wadah 100vw dengan mask-image gradasi memudar di kedua sisi */
 .marquee-wrapper {
   display: flex;
   flex-direction: column;
@@ -618,6 +683,7 @@ a {
   overflow: visible;
 }
 
+/* Baris 1: Bergerak ke kiri */
 .marquee-group {
   display: flex;
   gap: 24px;
@@ -626,10 +692,12 @@ a {
   animation: scrollLeft 32s linear infinite;
 }
 
+/* Baris 2: Bergerak ke kanan sejak detik pertama */
 .marquee-row-reverse .marquee-group {
   animation: scrollRight 32s linear infinite;
 }
 
+/* Berhenti otomatis saat mouse melayang di atas kartu */
 .marquee-row:hover .marquee-group {
   animation-play-state: paused;
 }
@@ -649,6 +717,7 @@ a {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* Menyembunyikan kartu yang tidak sesuai filter */
 .marquee-group .portfolio-card.hide {
   display: none !important;
 }
@@ -692,6 +761,7 @@ a {
   transition: var(--transition);
 }
 
+/* Keyframe perpindahan horizontal grup marquee */
 @keyframes scrollLeft {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
@@ -701,9 +771,13 @@ a {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(0); }
 }
+/* ====================================================
+   [BAGIAN 9: SECTION PORTOFOLIO MARQUEE 2 BARIS] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   10. Pop-Up Modal Detail Portofolio
+   [BAGIAN 10: POP-UP MODAL DETAIL PORTOFOLIO] - MULAI
    ==================================================== */
 .portfolio-modal {
   position: fixed;
@@ -808,13 +882,17 @@ a {
   display: flex;
   justify-content: flex-end;
 }
+/* ====================================================
+   [BAGIAN 10: POP-UP MODAL DETAIL PORTOFOLIO] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   11. Section Dokumen Legalitas Perusahaan
+   [BAGIAN 11: SECTION LEGALITAS PERUSAHAAN] - MULAI
    ==================================================== */
 .legal-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 20px;
 }
 
@@ -863,9 +941,13 @@ a {
   color: var(--brand-blue);
   margin-top: 6px;
 }
+/* ====================================================
+   [BAGIAN 11: SECTION LEGALITAS PERUSAHAAN] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   12. Section Daftar Klien & Mitra
+   [BAGIAN 12: SECTION KLIEN & MITRA] - MULAI
    ==================================================== */
 .clients-wrapper {
   display: flex;
@@ -901,9 +983,13 @@ a {
   font-size: 0.85rem;
   color: var(--text-muted);
 }
+/* ====================================================
+   [BAGIAN 12: SECTION KLIEN & MITRA] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   13. Section Informasi Kontak Perusahaan
+   [BAGIAN 13: SECTION KONTAK & ALAMAT] - MULAI
    ==================================================== */
 .contact-section {
   background: linear-gradient(180deg, var(--bg-light) 0%, #edf3fe 100%);
@@ -1013,6 +1099,7 @@ a {
   font-weight: 600;
 }
 
+/* Memotong kata panjang secara rapi agar kartu tidak pecah di layar kecil */
 .ch-text span {
   font-size: 0.95rem;
   color: var(--white);
@@ -1048,9 +1135,13 @@ a {
   background: var(--brand-blue);
   color: var(--white);
 }
+/* ====================================================
+   [BAGIAN 13: SECTION KONTAK & ALAMAT] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   14. Toast Notifikasi & Kaki Halaman (Footer)
+   [BAGIAN 14: TOAST NOTIFIKASI & FOOTER] - MULAI
    ==================================================== */
 .toast {
   position: fixed;
@@ -1089,9 +1180,13 @@ a {
   flex-wrap: wrap;
   gap: 12px;
 }
+/* ====================================================
+   [BAGIAN 14: TOAST NOTIFIKASI & FOOTER] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   15. Tombol Melayang (WhatsApp & Scroll to Top)
+   [BAGIAN 15: TOMBOL AKSI MELAYANG / FLOATING] - MULAI
    ==================================================== */
 .float-wa-left {
   position: fixed;
@@ -1144,9 +1239,13 @@ a {
   transform: translateY(-2px);
   background-color: var(--brand-blue-hover);
 }
+/* ====================================================
+   [BAGIAN 15: TOMBOL AKSI MELAYANG / FLOATING] - SELESAI
+   ==================================================== */
+
 
 /* ====================================================
-   16. Media Query Penyesuaian Responsif Layanan & Mobile
+   [BAGIAN 16: PENYESUAIAN RESPONSIF TABLET & MOBILE] - MULAI
    ==================================================== */
 @media (max-width: 992px) {
   .services-grid {
@@ -1164,6 +1263,7 @@ a {
 }
 
 @media (max-width: 768px) {
+  /* Statistik dipadatkan menjadi 2 kolom di HP */
   .stats-section {
     padding: 16px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -1197,6 +1297,7 @@ a {
     opacity: 0.85;
   }
 
+  /* Filter portofolio horizontal yang bisa digeser di HP */
   .portfolio-filter {
     justify-content: flex-start;
     flex-wrap: nowrap;
@@ -1216,6 +1317,7 @@ a {
     flex-shrink: 0;
   }
 
+  /* Menyesuaikan lebar kartu marquee menjadi 290px di HP */
   .marquee-wrapper {
     gap: 16px;
     mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
@@ -1253,3 +1355,6 @@ a {
     margin-top: 4px;
   }
 }
+/* ====================================================
+   [BAGIAN 16: PENYESUAIAN RESPONSIF TABLET & MOBILE] - SELESAI
+   ==================================================== */

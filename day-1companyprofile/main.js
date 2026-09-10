@@ -1,12 +1,6 @@
-/**
- * Logika Utama Halaman Landing Page DIGINUS
- * Dijalankan setelah struktur dokumen HTML selesai dimuat ke browser
- */
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ----------------------------------------------------
-  // 1. Inisialisasi AOS (Animate On Scroll)
-  // ----------------------------------------------------
+  // 1. Inisialisasi library AOS
   AOS.init({
     duration: 800,
     easing: 'ease-in-out',
@@ -14,33 +8,42 @@ document.addEventListener('DOMContentLoaded', () => {
     offset: 70
   });
 
-
-  // ----------------------------------------------------
-  // 2. Sticky Navbar & Tombol Scroll Langsung ke Puncak (Top 0)
-  // ----------------------------------------------------
+  // 2. Efek Scroll pada Navbar & Tombol Scroll-to-Top
   const navbar = document.getElementById('navbar');
   const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+  // Set initial state untuk scroll-top button
+  if (scrollTopBtn) {
+    scrollTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4', 'transition-all', 'duration-300');
+  }
 
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
 
+    // Navbar shadow effect
     if (navbar) {
       if (scrollY > 40) {
-        navbar.classList.add('scrolled');
+        navbar.classList.add('shadow-md', 'bg-white/95');
+        navbar.classList.remove('bg-white/90');
       } else {
-        navbar.classList.remove('scrolled');
+        navbar.classList.remove('shadow-md', 'bg-white/95');
+        navbar.classList.add('bg-white/90');
       }
     }
 
+    // Scroll-to-top visibility
     if (scrollTopBtn) {
       if (scrollY > 300) {
-        scrollTopBtn.classList.add('visible');
+        scrollTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        scrollTopBtn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
       } else {
-        scrollTopBtn.classList.remove('visible');
+        scrollTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        scrollTopBtn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
       }
     }
   });
 
+  // Kembali ke atas saat tombol panah diklik
   if (scrollTopBtn) {
     scrollTopBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -51,10 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-
-  // ----------------------------------------------------
-  // 3. Counter Statistics (Animasi Angka Berjalan)
-  // ----------------------------------------------------
+  // 3. Animasi Angka Counter Statistik
   const counters = document.querySelectorAll('.counter');
   let counterStarted = false;
 
@@ -86,67 +86,101 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // ----------------------------------------------------
-  // 4. Interaksi Accordion Keunggulan & Pergantian Gambar Showcase
-  // ----------------------------------------------------
-  const accordionItems = document.querySelectorAll('.accordion-item');
-  const previewImg = document.getElementById('accordionPreviewImg');
+// 4. Accordion Interaktif & Preview Gambar (Ultra Smooth Transition)
+const accordionItems = document.querySelectorAll('.accordion-item');
+const previewImg = document.getElementById('accordionPreviewImg');
 
-  accordionItems.forEach(item => {
-    const header = item.querySelector('.accordion-header');
+accordionItems.forEach(item => {
+  const header = item.querySelector('.accordion-header');
+  const body = item.querySelector('.accordion-body');
+  const arrow = item.querySelector('.acc-arrow');
 
-    header.addEventListener('click', () => {
-      const isActive = item.classList.contains('active');
+  // Set kondisi awal: jika item aktif (default), set row 1fr, sisanya 0fr
+  if (item.classList.contains('active')) {
+    body.style.gridTemplateRows = '1fr';
+    if (arrow) arrow.classList.add('rotate-180', 'text-brand-600');
+  } else {
+    body.style.gridTemplateRows = '0fr';
+  }
 
-      accordionItems.forEach(acc => acc.classList.remove('active'));
+  header.addEventListener('click', () => {
+    const isCurrentlyOpen = body.style.gridTemplateRows === '1fr';
 
-      if (!isActive) {
-        item.classList.add('active');
+    // 1. Tutup SEMUA accordion
+    accordionItems.forEach(acc => {
+      const accBody = acc.querySelector('.accordion-body');
+      const accArrow = acc.querySelector('.acc-arrow');
 
-        const newImgSrc = item.getAttribute('data-img');
-        if (previewImg && newImgSrc) {
-          previewImg.style.opacity = '0';
-          previewImg.style.transform = 'scale(0.96)';
+      acc.classList.remove('active', 'border-brand-500', 'ring-2', 'ring-brand-100');
+      acc.classList.add('border-slate-200');
 
-          setTimeout(() => {
-            previewImg.src = newImgSrc;
-            previewImg.style.opacity = '1';
-            previewImg.style.transform = 'scale(1)';
-          }, 180);
-        }
+      if (accBody) {
+        accBody.style.gridTemplateRows = '0fr';
+      }
+
+      if (accArrow) {
+        accArrow.classList.remove('rotate-180', 'text-brand-600');
+        accArrow.classList.add('text-slate-400');
       }
     });
+
+    // 2. Buka item yang diklik JIKA sebelumnya tertutup
+    if (!isCurrentlyOpen) {
+      item.classList.add('active', 'border-brand-500', 'ring-2', 'ring-brand-100');
+      item.classList.remove('border-slate-200');
+
+      // Animasi buka (transisi halus karena CSS transition menangani pergerakan grid-template-rows)
+      body.style.gridTemplateRows = '1fr';
+
+      if (arrow) {
+        arrow.classList.remove('text-slate-400');
+        arrow.classList.add('rotate-180', 'text-brand-600');
+      }
+
+      // 3. Animasi ganti gambar preview
+      const newImgSrc = item.getAttribute('data-img');
+      if (previewImg && newImgSrc && previewImg.src !== newImgSrc) {
+        previewImg.style.opacity = '0';
+        previewImg.style.transform = 'scale(0.96)';
+
+        setTimeout(() => {
+          previewImg.src = newImgSrc;
+          previewImg.style.opacity = '1';
+          previewImg.style.transform = 'scale(1)';
+        }, 180);
+      }
+    }
   });
+});
 
-
-  // ----------------------------------------------------
-  // 5. Filter Kategori Portofolio (Kompatibel dengan Marquee)
-  // ----------------------------------------------------
+  // 5. Filter Kategori Kartu Portofolio
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const portfolioCards = document.querySelectorAll('.marquee-track .portfolio-card');
+  const portfolioCards = document.querySelectorAll('.portfolio-card');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      // Style aktif untuk button filter
+      filterBtns.forEach(b => {
+        b.className = 'filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition';
+      });
+      btn.className = 'filter-btn active px-5 py-2 rounded-full text-xs font-semibold bg-brand-600 text-white shadow-md transition';
 
       const filterValue = btn.getAttribute('data-filter');
 
       portfolioCards.forEach(card => {
         const categories = card.getAttribute('data-category') || '';
         if (filterValue === 'all' || categories.includes(filterValue)) {
-          card.classList.remove('hide');
+          card.classList.remove('hidden');
+          card.classList.add('flex');
         } else {
-          card.classList.add('hide');
+          card.classList.add('hidden');
+          card.classList.remove('flex');
         }
       });
     });
   });
 
-
-  // ----------------------------------------------------
-  // 6. Modal Pop-Up Detail Portofolio
-  // ----------------------------------------------------
+  // 6. Modal Popup Detail Portofolio
   const portfolioModal = document.getElementById('portfolioModal');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalClose = document.getElementById('modalClose');
@@ -162,21 +196,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const domainHTML = card.querySelector('.portfolio-domain')?.innerHTML || '';
     const descText = card.querySelector('p')?.innerText || '';
 
-    modalBadge.innerText = badgeText;
-    modalTitle.innerText = titleText;
-    modalDomain.innerHTML = domainHTML;
-    modalDesc.innerText = descText;
+    if (modalBadge) modalBadge.innerText = badgeText;
+    if (modalTitle) modalTitle.innerText = titleText;
+    if (modalDomain) modalDomain.innerHTML = domainHTML;
+    if (modalDesc) modalDesc.innerText = descText;
 
-    portfolioModal.classList.add('active');
+    if (portfolioModal) {
+      portfolioModal.classList.remove('hidden');
+      portfolioModal.classList.add('flex');
+    }
     document.body.style.overflow = 'hidden';
   };
 
   const closePortfolioModal = () => {
-    portfolioModal.classList.remove('active');
+    if (portfolioModal) {
+      portfolioModal.classList.add('hidden');
+      portfolioModal.classList.remove('flex');
+    }
     document.body.style.overflow = '';
   };
 
-  // Pasang event klik ke setiap kartu marquee
   portfolioCards.forEach(card => {
     card.addEventListener('click', () => {
       openPortfolioModal(card);
@@ -187,25 +226,28 @@ document.addEventListener('DOMContentLoaded', () => {
   if (modalClose) modalClose.addEventListener('click', closePortfolioModal);
   if (btnModalClose) btnModalClose.addEventListener('click', closePortfolioModal);
 
-
-  // ----------------------------------------------------
-  // 7. Tombol Salin 1-Klik dengan Notifikasi Toast
-  // ----------------------------------------------------
+  // 7. Copy Nomor Legalitas & Toast Notification
   const copyBtns = document.querySelectorAll('.btn-copy');
   const toast = document.getElementById('toast');
+  let toastTimer = null;
 
   const showToast = (message) => {
     if (toast) {
-      toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
+      toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span>${message}</span>`;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      toast.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        toast.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
       }, 2500);
     }
   };
 
   copyBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Mencegah bubbling jika ada container pembungkus
       const textToCopy = btn.getAttribute('data-copy');
       if (textToCopy) {
         navigator.clipboard.writeText(textToCopy).then(() => {
