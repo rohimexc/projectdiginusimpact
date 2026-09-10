@@ -9,19 +9,19 @@ export function initAccordion() {
 
     accordionContainer.innerHTML = '';
 
-    whyDiginusData.forEach((item, index) => {
+    whyDiginusData.forEach((item) => {
         const accordionItem = document.createElement('div');
-        accordionItem.className = `accordion-item ${index === 0 ? 'active' : ''}`;
+        accordionItem.className = 'border border-slate-200 rounded-2xl mb-4 bg-white overflow-hidden transition-all duration-300 shadow-sm';
         accordionItem.setAttribute('data-img', item.img);
         accordionItem.setAttribute('data-caption', item.caption);
 
         accordionItem.innerHTML = `
-            <div class="accordion-header">
+            <div class="accordion-header px-6 py-5 font-bold text-slate-900 cursor-pointer flex justify-between items-center w-full text-left text-base">
                 <span><i class="${item.icon}"></i> ${item.title}</span>
-                <i class="fas fa-chevron-down"></i>
+                <i class="fas fa-chevron-down transition-transform duration-300"></i>
             </div>
-            <div class="accordion-body">
-                <p>${item.description}</p>
+            <div class="accordion-body overflow-hidden transition-all duration-500 ease-in-out px-6 text-slate-600 text-sm leading-relaxed" style="max-height: 0px;">
+                <p class="pb-6">${item.description}</p>
             </div>
         `;
         accordionContainer.appendChild(accordionItem);
@@ -35,26 +35,27 @@ export function initAccordion() {
         activeText.textContent = whyDiginusData[0].caption;
     }
 
-    const accordionItems = document.querySelectorAll('.why-diginus-grid .accordion-item');
-    const firstItem = accordionItems[0];
-    if (firstItem) {
-        const body = firstItem.querySelector('.accordion-body');
-        if (body) body.style.maxHeight = body.scrollHeight + "px";
-    }
+    // Ambil langsung dari accordionContainer yang baru di-generate
+    const accordionItems = accordionContainer.querySelectorAll('.border');
 
     accordionItems.forEach(item => {
         const header = item.querySelector('.accordion-header');
         header.addEventListener('click', () => {
             const isActive = item.classList.contains('active');
             
+            // Tutup semua item secara halus
             accordionItems.forEach(el => {
-                el.classList.remove('active');
+                el.classList.remove('active', 'border-indigo-600', 'shadow-lg', 'shadow-indigo-600/10');
+                el.classList.add('border-slate-200', 'shadow-sm');
                 const body = el.querySelector('.accordion-body');
-                if (body) body.style.maxHeight = null;
+                if (body) body.style.maxHeight = "0px";
             });
 
+            // Jika sebelumnya tidak aktif, buka yang diklik dengan mulus
             if (!isActive) {
-                item.classList.add('active');
+                item.classList.add('active', 'border-indigo-600', 'shadow-lg', 'shadow-indigo-600/10');
+                item.classList.remove('border-slate-200', 'shadow-sm');
+                
                 const body = item.querySelector('.accordion-body');
                 if (body) body.style.maxHeight = body.scrollHeight + "px";
 

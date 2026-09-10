@@ -17,4 +17,5 @@ export const portfolioData = [
     { title: "Prodi Administrasi Publik", category: "Digital Service", icon: "fas fa-book-reader", desc: "<strong>FISIP Untad:</strong> Sarana komunikasi akuntabilitas." },
     { title: "Pesantren Insan Cita", category: "Produk Digital", icon: "fas fa-school", desc: "Platform resmi pesantren & integrasi PPDB online." },
     
+    
 ];

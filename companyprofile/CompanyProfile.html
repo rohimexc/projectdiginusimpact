@@ -2,276 +2,275 @@
 <html lang="id">
 
 <head>
-    <!-- Pengaturan Karakter dan Responsivitas Layar -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIGINUS - Empowering Skills. Elevating Digital Future.</title>
     
-    <!-- Meta Tags SEO & Open Graph (Media Sosial) -->
     <meta name="description" content="CV. Cendika Digital Nusantara (DIGINUS) - Mitra strategis terpercaya dalam layanan digital, produk digital, serta course dan training berkualitas di Indonesia.">
     <meta property="og:title" content="DIGINUS - Empowering Skills. Elevating Digital Future.">
     <meta property="og:description" content="Solusi terintegrasi transformasi digital, layanan profesional, produk unggulan, dan pengembangan talenta bersama DIGINUS.">
     <meta property="og:image" content="https://diginus.web.id/static/images/diginus.png">
     <meta property="og:type" content="website">
 
-    <!-- Preconnect Link untuk Optimasi Kecepatan Koneksi Eksternal -->
     <link rel="preconnect" href="https://unpkg.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://images.unsplash.com">
 
-    <!-- Favicon Website -->
     <link rel="icon" type="image/jpeg" href="assets/LOGOONLY.jpeg">
 
-    <!-- Pustaka Animasi Eksternal: AOS (Animate On Scroll) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <!-- Pustaka Ikon Eksternal: FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Berkas Gaya Kustom Utama (Modular CSS) -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4F46E5",
+                        primaryDark: "#4338CA",
+                        secondary: "#EEF2FF",
+                        cream: "#F8FAFC",
+                        dark: "#0F172A"
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"]
+                    }
+                    
+                }
+            }
+            
+            
+        };
+
+    </script>
 </head>
 
-<body>
+<body class="bg-slate-50 font-sans text-slate-900 antialiased selection:bg-indigo-500 selection:text-white scroll-smooth">
 
-    <!-- ==========================================
-         HEADER & NAVBAR MINIMALIS
-         ========================================== -->
-    <header id="header">
-        <div class="container navbar">
-            <div class="logo">
-                <a href="#tentang">
-                    <img src="assets/LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" class="logo-img">
+    <!-- HEADER & NAVBAR -->
+    <header id="header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
+            <div class="w-32 sm:w-36">
+                <a href="#tentang" class="block">
+                    <img src="assets/LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" class="w-full h-auto object-contain">
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- ==========================================
-         STATISTIK PERUSAHAAN
-         ========================================== -->
-    <section class="statistics-section">
-        <div class="container">
-            <div class="stats-grid">
-                <!-- Kartu Statistik 1: Portofolio -->
-                <a href="#portofolio" onclick="smoothScrollTo(event, '#portofolio')" class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-project-diagram"></i></div>
-                    <div class="stat-number">8</div>
-                    <div class="stat-label">Portofolio Strategis Selesai</div>
+<!-- STATISTIK PERUSAHAAN -->
+    <section class="py-12 bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Kartu Statistik 1 -->
+                <a href="#portofolio" onclick="smoothScrollTo(event, '#portofolio')" class="group p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-500/30 hover:bg-indigo-50/20 hover:-translate-y-1.5 transition-all duration-300 text-center flex flex-col items-center shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-project-diagram"></i></div>
+                    <div class="text-3xl font-extrabold text-slate-900 mb-1">8</div>
+                    <div class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Portofolio Strategis Selesai</div>
                 </a>
-                <!-- Kartu Statistik 2: Pilar Layanan -->
-                <a href="#layanan" onclick="smoothScrollTo(event, '#layanan')" class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
-                    <div class="stat-number">3</div>
-                    <div class="stat-label">Pilar Layanan Utama</div>
+                <!-- Kartu Statistik 2 -->
+                <a href="#layanan" onclick="smoothScrollTo(event, '#layanan')" class="group p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-500/30 hover:bg-indigo-50/20 hover:-translate-y-1.5 transition-all duration-300 text-center flex flex-col items-center shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-layer-group"></i></div>
+                    <div class="text-3xl font-extrabold text-slate-900 mb-1">3</div>
+                    <div class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Pilar Layanan Utama</div>
                 </a>
-                <!-- Kartu Statistik 3: Keunggulan -->
-                <a href="#keunggulan" onclick="smoothScrollTo(event, '#keunggulan')" class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-award"></i></div>
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Keunggulan Solutif</div>
+                <!-- Kartu Statistik 3 -->
+                <a href="#keunggulan" onclick="smoothScrollTo(event, '#keunggulan')" class="group p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-500/30 hover:bg-indigo-50/20 hover:-translate-y-1.5 transition-all duration-300 text-center flex flex-col items-center shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-award"></i></div>
+                    <div class="text-3xl font-extrabold text-slate-900 mb-1">7</div>
+                    <div class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Keunggulan Solutif</div>
                 </a>
-                <!-- Kartu Statistik 4: Legalitas -->
-                <a href="#legalitas" onclick="smoothScrollTo(event, '#legalitas')" class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-file-invoice"></i></div>
-                    <div class="stat-number">100</div>
-                    <div class="stat-label">% Legalitas Sah Terverifikasi</div>
+                <!-- Kartu Statistik 4 -->
+                <a href="#legalitas" onclick="smoothScrollTo(event, '#legalitas')" class="group p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-500/30 hover:bg-indigo-50/20 hover:-translate-y-1.5 transition-all duration-300 text-center flex flex-col items-center shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-file-invoice"></i></div>
+                    <div class="text-3xl font-extrabold text-slate-900 mb-1">100</div>
+                    <div class="text-xs font-semibold text-slate-500 tracking-wide uppercase">% Legalitas Sah Terverifikasi</div>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- ==========================================
-         TENTANG KAMI & VISI-MISI
-         ========================================== -->
-    <section id="tentang" class="section">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Tentang Kami</h2>
-                <p>Mengenal lebih dekat CV. Cendika Digital Nusantara</p>
+<!-- TENTANG KAMI & VISI-MISI -->
+    <section id="tentang" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <span class="text-xs font-bold text-indigo-600 tracking-widest uppercase bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">Profil Perusahaan</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Tentang Kami</h2>
+                <p class="text-slate-500 text-sm mt-2">Mengenal lebih dekat CV. Cendika Digital Nusantara</p>
             </div>
 
-            <!-- Bagian Visi & Misi Terpusat -->
-            <div class="about-vm-grid about-vm-grid-container" data-aos="fade-up">
-                <div class="vm-card">
-                    <h3>Visi</h3>
-                    <p><em>"Menjadi perusahaan digital yang berperan aktif dalam pengembangan sumber daya manusia dan transformasi digital di Indonesia."</em></p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" data-aos="fade-up">
+                <!-- Card Visi -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300 shadow-sm flex flex-col justify-center">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm font-semibold">V</span>
+                        Visi
+                    </h3>
+                    <p class="text-slate-600 text-base leading-relaxed italic">"Menjadi perusahaan digital yang berperan aktif dalam pengembangan sumber daya manusia dan transformasi digital di Indonesia."</p>
                 </div>
-                <div class="vm-card mission-card">
-                    <h3>Misi</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> Menyediakan layanan, produk, dan pelatihan digital yang berkualitas dan relevan.</li>
-                        <li><i class="fas fa-check-circle"></i> Mendorong peningkatan kompetensi digital melalui pembelajaran praktis & aplikatif.</li>
-                        <li><i class="fas fa-check-circle"></i> Menjadi mitra strategis bagi individu dan organisasi dalam solusi digital.</li>
-                        <li><i class="fas fa-check-circle"></i> Menghadirkan teknologi yang berdampak, berkelanjutan, dan mudah diakses.</li>
+                <!-- Card Misi -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300 shadow-sm">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm font-semibold">M</span>
+                        Misi
+                    </h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-indigo-600 mt-1 flex-shrink-0"></i> <span>Menyediakan layanan, produk, dan pelatihan digital yang berkualitas dan relevan.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-indigo-600 mt-1 flex-shrink-0"></i> <span>Mendorong peningkatan kompetensi digital melalui pembelajaran praktis & aplikatif.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-indigo-600 mt-1 flex-shrink-0"></i> <span>Menjadi mitra strategis bagi individu dan organisasi dalam solusi digital.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-indigo-600 mt-1 flex-shrink-0"></i> <span>Menghadirkan teknologi yang berdampak, berkelanjutan, dan mudah diakses.</span></li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==========================================
-         LAYANAN KAMI (3 PILAR UTAMA)
-         ========================================== -->
-    <section id="layanan" class="section bg-light">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Layanan Kami</h2>
-                <p>Tiga pilar keunggulan solusi digital dan akselerasi talenta</p>
+<!-- LAYANAN KAMI -->
+    <section id="layanan" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <span class="text-xs font-bold text-indigo-600 tracking-widest uppercase bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">Solusi Kami</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Layanan Kami</h2>
+                <p class="text-slate-500 text-sm mt-2">Tiga pilar keunggulan solusi digital dan akselerasi talenta</p>
             </div>
-            <!-- Grid Kartu Layanan -->
-            <div class="services-grid">
-                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <h3>1. Course dan Training</h3>
-                    <p>Program pembelajaran digital komprehensif yang dirancang mengasah keterampilan praktis dan membangun kesiapan penuh menghadapi dinamika industri teknologi.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card Layanan 1 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-500/30 hover:-translate-y-3 transition-all duration-300 flex flex-col" style="transition: transform 0.3s ease, box-shadow 0.3s ease;" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl mb-6 shadow-md shadow-indigo-600/30"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">1. Course dan Training</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Program pembelajaran digital komprehensif yang dirancang mengasah keterampilan praktis dan membangun kesiapan penuh menghadapi dinamika industri teknologi.</p>
                 </div>
-                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
-                    <h3>2. Digital Services</h3>
-                    <p>Layanan profesional mengintegrasikan kecanggihan teknologi dengan kreativitas tinggi untuk mengarsiteki, mengelola, serta mengoptimalkan kehadiran digital.</p>
+                <!-- Card Layanan 2 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-500/30 hover:-translate-y-3 transition-all duration-300 flex flex-col" style="transition: transform 0.3s ease, box-shadow 0.3s ease;" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl mb-6 shadow-md shadow-indigo-600/30"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">2. Digital Services</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Layanan profesional mengintegrasikan kecanggihan teknologi dengan kreativitas tinggi untuk mengarsiteki, mengelola, serta mengoptimalkan kehadiran digital.</p>
                 </div>
-                <div class="service-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="service-icon"><i class="fas fa-box-open"></i></div>
-                    <h3>3. Produk & Penjualan Digital</h3>
-                    <p>Penyediaan aset digital inovatif yang fungsional sebagai katalis kuat untuk efektivitas pembelajaran, efisiensi produktivitas, dan akselerasi pertumbuhan bisnis.</p>
+                <!-- Card Layanan 3 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-500/30 hover:-translate-y-3 transition-all duration-300 flex flex-col" style="transition: transform 0.3s ease, box-shadow 0.3s ease;" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl mb-6 shadow-md shadow-indigo-600/30"><i class="fas fa-box-open"></i></div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">3. Produk & Penjualan Digital</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Penyediaan aset digital inovatif yang fungsional sebagai katalis kuat untuk efektivitas pembelajaran, efisiensi produktivitas, dan akselerasi pertumbuhan bisnis.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==========================================
-         KENAPA HARUS DIGINUS (ACCORDION & DYNAMIC IMAGE)
-         ========================================== -->
-    <section id="keunggulan" class="section">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Kenapa Harus DIGINUS?</h2>
-                <p>Nilai tambah yang kami tawarkan sebagai katalis perubahan dan pertumbuhan berkelanjutan</p>
+    <!-- KENAPA HARUS DIGINUS (ACCORDION) -->
+    <section id="keunggulan" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <span class="text-xs font-bold text-indigo-600 tracking-widest uppercase bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">Mengapa Kami</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Kenapa Harus DIGINUS?</h2>
+                <p class="text-slate-500 text-sm mt-2">Nilai tambah yang kami tawarkan sebagai katalis perubahan dan pertumbuhan berkelanjutan</p>
             </div>
 
-            <!-- Wrapper 2 Kolom: Kiri Menu Accordion (Dirender Dinamis via JS), Kanan Gambar Interaktif -->
-            <div class="why-diginus-grid" data-aos="fade-up">
-                
-                <!-- Kolom Kiri: Daftar Menu Accordion -->
-                <div class="accordion-container">
-                    <!-- Data akordeon otomatis di-generate oleh js/components/accordion.js -->
-                </div>
-
-                <!-- Kolom Kanan: Kotak Gambar Dinamis & Label Keterangan -->
+            <div class="why-diginus-grid grid grid-cols-1 lg:grid-cols-2 gap-12 items-center" data-aos="fade-up">
+                <div class="accordion-container space-y-4"></div>
                 <div class="why-diginus-image-wrapper">
-                    <div class="image-container">
-                        <img id="active-feature-img" src="" alt="Ilustrasi Keunggulan DIGINUS" loading="lazy">
-                        <div class="image-caption-badge">
-                            <span class="badge-dot"></span>
-                            <span id="active-feature-text">Memuat...</span>
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-white group aspect-video lg:aspect-square flex items-center justify-center">
+                        <img id="active-feature-img" src="" alt="Ilustrasi Keunggulan DIGINUS" loading="lazy" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105">
+                        <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-100 flex items-center gap-3 shadow-lg">
+                            <span class="w-3 h-3 rounded-full bg-indigo-600 animate-pulse flex-shrink-0"></span>
+                            <span id="active-feature-text" class="text-xs font-bold text-slate-800 tracking-wide">Memuat...</span>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- ==========================================
-         PORTOFOLIO KAMI (AUTO DUAL ROW MARQUEE)
-         ========================================== -->
-<section id="portofolio" class="section bg-light portfolio-section-wrapper">
-        <div class="container portfolio-container-fluid">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Portofolio Kami</h2>
-                <p>Rekam jejak implementasi digital service dan produk digital unggulan</p>
+    <!-- PORTOFOLIO KAMI -->
+    <section id="portofolio" class="py-20 bg-white overflow-hidden portfolio-section-wrapper">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 mb-12 portfolio-container-fluid">
+            <div class="text-center max-w-2xl mx-auto" data-aos="fade-up">
+                <span class="text-xs font-bold text-indigo-600 tracking-widest uppercase bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">Hasil Karya</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Portofolio Kami</h2>
+                <p class="text-slate-500 text-sm mt-2">Rekam jejak implementasi digital service dan produk digital unggulan</p>
             </div>
-            <div class="dynamic-portfolio-container" data-aos="fade-up" id="portfolio-main-container">
-                </div>
         </div>
-    </section>>
+        <div class="w-full" data-aos="fade-up" id="portfolio-main-container"></div>
+    </section>
 
-    <!-- ==========================================
-         LEGALITAS PERUSAHAAN
-         ========================================== -->
-    <section id="legalitas" class="section">
-        <div class="container">
-            <div class="section-title" data-aos="fade-up">
-                <h2>Legalitas Perusahaan</h2>
-                <p>CV. Cendika Digital Nusantara berbadan hukum resmi dan terpercaya</p>
+<!-- LEGALITAS PERUSAHAAN -->
+    <section id="legalitas" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <span class="text-xs font-bold text-indigo-600 tracking-widest uppercase bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">Legalitas</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Legalitas Perusahaan</h2>
+                <p class="text-slate-500 text-sm mt-2">CV. Cendika Digital Nusantara berbadan hukum resmi dan terpercaya</p>
             </div>
             <div class="legal-grid-container" data-aos="fade-up">
-                <div class="legal-row">
-                    <div class="legal-card">
-                        <i class="fas fa-file-alt"></i>
-                        <h4>Nomor Induk Berusaha (NIB)</h4>
-                        <p>No. 1302260040083</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                    <!-- Card Legalitas 1 -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-500/30 hover:-translate-y-2 text-center flex flex-col items-center" style="transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4"><i class="fas fa-file-alt"></i></div>
+                        <h4 class="text-base font-bold text-slate-900 mb-1">Nomor Induk Berusaha (NIB)</h4>
+                        <p class="text-sm text-slate-500 font-mono">No. 1302260040083</p>
                     </div>
-                    <div class="legal-card">
-                        <i class="fas fa-id-card"></i>
-                        <h4>Surat Keterangan Terdaftar</h4>
-                        <p>Nomor: AHU-0110487-AH.01.14 Tahun 2025</p>
+                    <!-- Card Legalitas 2 -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-500/30 hover:-translate-y-2 text-center flex flex-col items-center" style="transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4"><i class="fas fa-id-card"></i></div>
+                        <h4 class="text-base font-bold text-slate-900 mb-1">Surat Keterangan Terdaftar</h4>
+                        <p class="text-sm text-slate-500 font-mono">Nomor: AHU-0110487-AH.01.14 Tahun 2025</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==========================================
-         KONTAK & FOOTER TERPADU
-         ========================================== -->
-    <footer id="kontak" class="footer-section">
-        <div class="container">
-            <div class="section-title footer-title" data-aos="fade-up">
-                <h2>Kontak Kami</h2>
-                <p>Hubungi kami untuk konsultasi dan kolaborasi digital masa depan</p>
+    <!-- KONTAK & FOOTER -->
+    <footer id="kontak" class="bg-slate-900 text-white pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <span class="text-xs font-bold text-indigo-400 tracking-widest uppercase bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Hubungi Kami</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-3">Kontak Kami</h2>
+                <p class="text-slate-400 text-sm mt-2">Hubungi kami untuk konsultasi dan kolaborasi digital masa depan</p>
             </div>
             
-            <!-- Grid Informasi Kontak & Identitas Perusahaan -->
-            <div class="footer-grid">
-                
-                <!-- Kolom 1: Tentang Singkat -->
-                <div data-aos="fade-right" class="footer-card">
-                    <div class="footer-logo-box">
-                        <img src="assets/LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" class="footer-logo" loading="lazy">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                <div data-aos="fade-right" class="bg-slate-800/50 p-8 rounded-3xl border border-slate-700/50">
+                    <div class="w-36 mb-6">
+                        <img src="assets/LOGO DIGINUS NO BG.png" alt="Logo DIGINUS" class="w-full h-auto object-contain filter brightness-0 invert" loading="lazy">
                     </div>
-                    <p class="footer-desc">
+                    <p class="text-slate-400 text-sm leading-relaxed">
                         Mitra strategis terpercaya yang berkomitmen menjembatani tantangan di dunia digital melalui layanan, produk, dan pembelajaran aplikatif.
                     </p>
                 </div>
 
-                <!-- Kolom 2: Detail Kontak CV -->
-                <div data-aos="fade-left" class="footer-card">
-                    <h3>CV. CENDIKA DIGITAL NUSANTARA</h3>
-                    <div class="footer-contact-links">
-                        <a href="https://maps.google.com/?q=Jl.+Watunjamboko+RT.003+RW.003,+Kawatuna,+Mantikulore,+Kota+Palu,+Sulawesi+Tengah,+94233" target="_blank">
-                            <i class="fas fa-map-marker-alt"></i> 
+                <div data-aos="fade-left" class="bg-slate-800/50 p-8 rounded-3xl border border-slate-700/50 flex flex-col justify-between">
+                    <h3 class="text-lg font-bold text-white mb-6 uppercase tracking-wider">CV. CENDIKA DIGITAL NUSANTARA</h3>
+                    <div class="space-y-4 text-sm text-slate-300">
+                        <a href="https://maps.google.com/?q=Jl.+Watunjamboko+RT.003+RW.003,+Kawatuna,+Mantikulore,+Kota+Palu,+Sulawesi+Tengah,+94233" target="_blank" class="flex items-start gap-3 hover:text-indigo-400 transition-colors">
+                            <i class="fas fa-map-marker-alt mt-1 text-indigo-400 flex-shrink-0"></i> 
                             <span>Jl. Watunjamboko RT.003 RW.003, Kawatuna, Mantikulore, Kota Palu, Sulawesi Tengah, 94233</span>
                         </a>
-                        <a href="https://wa.me/62859106780884" target="_blank">
-                            <i class="fas fa-phone-alt"></i> 
+                        <a href="https://wa.me/62859106780884" target="_blank" class="flex items-center gap-3 hover:text-indigo-400 transition-colors">
+                            <i class="fas fa-phone-alt text-indigo-400 flex-shrink-0"></i> 
                             <span>+62 859-1067-80884</span>
                         </a>
-                        <a href="mailto:cendikadigitalnusantara@gmail.com">
-                            <i class="fas fa-envelope"></i> 
+                        <a href="mailto:cendikadigitalnusantara@gmail.com" class="flex items-center gap-3 hover:text-indigo-400 transition-colors">
+                            <i class="fas fa-envelope text-indigo-400 flex-shrink-0"></i> 
                             <span>cendikadigitalnusantara@gmail.com</span>
                         </a>
-                        <a href="https://diginus.web.id" target="_blank">
-                            <i class="fas fa-globe"></i> 
+                        <a href="https://diginus.web.id" target="_blank" class="flex items-center gap-3 hover:text-indigo-400 transition-colors">
+                            <i class="fas fa-globe text-indigo-400 flex-shrink-0"></i> 
                             <span>diginus.web.id</span>
                         </a>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Hak Cipta / Copyright -->
-            <div class="footer-bottom">
-                <p>&copy; 2026 <strong>DIGINUS (CV. Cendika Digital Nusantara)</strong>. All Rights Reserved.</p>
-                <p class="footer-subtext">Empowering Skills. Elevating Digital Future.</p>
+            <div class="border-t border-slate-800 pt-8 text-center text-xs text-slate-500 space-y-1">
+                <p>&copy; 2026 <strong class="text-slate-300">DIGINUS (CV. Cendika Digital Nusantara)</strong>. All Rights Reserved.</p>
+                <p class="text-indigo-400 font-medium">Empowering Skills. Elevating Digital Future.</p>
             </div>
         </div>
     </footer>
 
-    <!-- ==========================================
-         SKRIP PEMROGRAMAN & INISIALISASI (MODULAR JS)
-         ========================================== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script type="module" src="js/main.js"></script>
 </body>

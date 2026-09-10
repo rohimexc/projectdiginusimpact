@@ -5,54 +5,70 @@ export function initMarquee() {
 
     if (!mainContainer) return;
 
-    // Bersihkan kontainer utama sebelum dirender ulang
     mainContainer.innerHTML = '';
 
-    // Tentukan jumlah maksimal kartu per baris
+    if (!document.getElementById('dynamic-marquee-style')) {
+        const style = document.createElement('style');
+        style.id = 'dynamic-marquee-style';
+        style.innerHTML = `
+            @keyframes scrollRight {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+            @keyframes scrollLeft {
+                0% { transform: translateX(-50%); }
+                100% { transform: translateX(0); }
+            }
+            .anim-right {
+                animation: scrollRight 40s linear infinite;
+            }
+            .anim-left {
+                animation: scrollLeft 40s linear infinite;
+            }
+            .anim-right:hover, .anim-left:hover {
+                animation-play-state: paused;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
     const cardsPerGroup = 8;
-    
-    // Hitung total berapa baris yang dibutuhkan berdasarkan jumlah data
     const totalRows = Math.ceil(portfolioData.length / cardsPerGroup);
 
-    // Loop untuk membuat setiap baris (row) marquee secara dinamis
     for (let i = 0; i < totalRows; i++) {
-        // Ambil data sebanyak 8 item per baris (slice: 0-8, 8-16, dst)
         const rowData = portfolioData.slice(i * cardsPerGroup, (i + 1) * cardsPerGroup);
 
-        // Buat pembungkus baris (marquee-wrapper)
+        // Tambah padding vertikal (py-4) di wrapper biar pas card hover naik ke atas, tidak terpotong overflow hidden
         const wrapper = document.createElement('div');
-        wrapper.className = 'marquee-wrapper';
-        if (i > 0) wrapper.style.marginTop = '20px'; // Beri jarak antar baris
+        wrapper.className = 'overflow-hidden relative w-full py-4';
+        if (i > 0) wrapper.classList.add('mt-2');
 
-        // Buat jalur track marquee (baris genap gerak ke kanan, ganjil ke kiri biar estetik)
         const track = document.createElement('div');
-        const directionClass = i % 2 === 0 ? 'track-right' : 'track-left';
-        track.className = `marquee-track ${directionClass}`;
+        const animClass = i % 2 === 0 ? 'anim-right' : 'anim-left';
+        track.className = `flex gap-6 w-max ${animClass}`;
 
-        // Masukkan kartu portofolio ke dalam track baris tersebut
         rowData.forEach(item => {
             const card = document.createElement('div');
-            card.className = 'portfolio-card';
+            card.className = 'bg-white border border-slate-200 rounded-2xl p-6 w-[320px] flex-shrink-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-600 flex flex-col justify-between';
             card.innerHTML = `
-                <div class="portfolio-card-top">
-                    <div class="portfolio-icon-box"><i class="${item.icon}"></i></div>
-                    <span class="portfolio-badge">${item.category}</span>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl"><i class="${item.icon}"></i></div>
+                    <span class="text-xs font-bold text-indigo-600 tracking-wider uppercase bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">${item.category}</span>
                 </div>
-                <div class="portfolio-content">
-                    <h3>${item.title}</h3>
-                    <p>${item.desc}</p>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">${item.title}</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">${item.desc}</p>
                 </div>
             `;
             track.appendChild(card);
         });
 
-        // Duplikat isi track via JS untuk efek infinite loop yang mulus tanpa jeda
+        // Duplikat track untuk infinite loop mulus
         const items = Array.from(track.children);
         items.forEach(item => {
             track.appendChild(item.cloneNode(true));
         });
 
-        // Gabungkan elemen ke dalam DOM halaman
         wrapper.appendChild(track);
         mainContainer.appendChild(wrapper);
     }
