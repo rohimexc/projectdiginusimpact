@@ -4,6 +4,9 @@
  * Catatan: Berkas ini murni berisi modular @import sesuai arsitektur folder.
  * ==========================================================================
  */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @import url('base/reset.css');
 @import url('base/variables.css');

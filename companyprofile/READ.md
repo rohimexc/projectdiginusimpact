@@ -25,3 +25,18 @@ Memanfaatkan teknik duplikasi kartu elemen dalam kontainer fleksibel yang dikomb
 
 Efek Interaktif di Bagian Footer:
 Nambahin efek geser naik tipis (translateY) plus perubahan warna jadi lebih terang pas kursor nyentuh teks alamat, email, atau nomor telpon di footer. Jadi kelihatan lebih interaktif dan profesional.
+
+
+**4. Migrasi Setup Tailwind & Vite Lokal**
+Penyelarasan Konfigurasi PostCSS & Tailwind v3:
+Menyesuaikan file tailwind.config.js (terutama bagian palet warna kustom dan font) serta postcss.config.js. Ini penting banget supaya modul PostCSS di Windows tidak mengalami error native binding dan semua kelas warna kustom bisa ter-compile sempurna tanpa mengandalkan CDN eksternal.
+
+Manajemen Path & Struktur Direktori Root:
+Memastikan seluruh file kode utama berada di dalam satu direktori root proyek yang bersih. Langkah ini krusial agar bundler Vite tidak salah membaca jalur berkas (path), sehingga file CSS lokal berhasil dimuat dengan sempurna dan tampilan web tidak berantakan.
+
+**5. Optimalisasi Performa & Kemandirian Build (Production-Ready)**
+Bebas Ketergantungan Eksternal (Zero CDN Dependency):
+Memindahkan seluruh mekanisme pemrosesan gaya ke dalam local build pipeline menggunakan NPM. Ini penting agar performa web lebih konsisten, tidak rentan terhadap pemutusan jaringan CDN eksternal, dan siap langsung di-deploy ke server production layaknya aplikasi web profesional kelas industri.
+
+Manajemen Cache & Pembersihan Direktori Modul:
+Melakukan clean install (npm install dari nol setelah membersihkan cache dan direktori korup). Hal ini krusial dilakukan untuk memastikan semua dependensi biner (binary dependencies) terpasang dengan bersih tanpa ada sisa file korup yang kerap mengganggu kestabilan sistem operasi lokal saat proses bundling.

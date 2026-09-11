@@ -1,19 +1,27 @@
 /* ==========================================================================
    SECTION KEUNGGULAN (ACCORDION & DYNAMIC IMAGE)
    ========================================================================== */
+/* Ganti bagian why-diginus di CSS lu dengan ini */
 .why-diginus-grid {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
-    align-items: center;
-    max-width: 1150px;
+    align-items: start;
+    max-width: 1200px;
     margin: 0 auto;
+    position: relative;
+}
+
+.why-diginus-image-wrapper {
+    position: relative;
+    top: 0;
 }
 
 .accordion-container {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    height: auto !important; /* Pastikan tingginya fleksibel ngikutin isi yang kebuka */
 }
 
 .accordion-item {
