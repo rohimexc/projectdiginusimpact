@@ -53,38 +53,44 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
-  // 3. Animasi Angka Counter Statistik
+// 3. Animasi Angka Counter Statistik (Lebih Lambat & Halus)
   const counters = document.querySelectorAll('.counter');
   let counterStarted = false;
 
   const runCounter = () => {
     counters.forEach(counter => {
-      const target = +counter.getAttribute('data-target');
-      const count = +counter.innerText;
-      const increment = Math.ceil(target / 40);
+      const target = +counter.getAttribute('data-target') || 0;
+      let count = 0;
+      // Dibuat 80 langkah dengan jeda 25ms (durasi total ~2 detik agar santai dan terbaca)
+      const totalSteps = 15;
+      const stepTime = 10;
+      const increment = Math.max(1, Math.round(target / totalSteps));
 
-      if (count < target) {
-        counter.innerText = Math.min(count + increment, target);
-        setTimeout(runCounter, 30);
-      } else {
-        counter.innerText = target;
-      }
+      const timer = setInterval(() => {
+        count += increment;
+        if (count >= target) {
+          counter.innerText = target;
+          clearInterval(timer);
+        } else {
+          counter.innerText = count;
+        }
+      }, stepTime);
     });
   };
 
-  const statsSection = document.querySelector('.stats-section');
-  if (statsSection) {
-    window.addEventListener('scroll', () => {
-      const sectionPos = statsSection.getBoundingClientRect().top;
-      const screenPos = window.innerHeight;
-      if (sectionPos < screenPos && !counterStarted) {
+  const checkAndRunCounter = () => {
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection && !counterStarted) {
+      const rect = statsSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom >= 0) {
         counterStarted = true;
         runCounter();
       }
-    });
-  }
+    }
+  };
 
+  checkAndRunCounter();
+  window.addEventListener('scroll', checkAndRunCounter);  
 
 // 4. Accordion Interaktif & Preview Gambar (Ultra Smooth Transition)
 const accordionItems = document.querySelectorAll('.accordion-item');
