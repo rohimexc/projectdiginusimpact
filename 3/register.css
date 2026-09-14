@@ -1,0 +1,46 @@
+/* ==========================================================================
+   1. IMPORT FONT & LATAR BELAKANG HALAMAN
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+body {
+  /* Mengatur jenis tulisan seragam */
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  
+  /* Latar belakang abu-abu terang seragam dengan halaman login */
+  background-color: #f8fafc;
+}
+
+/* ==========================================================================
+   2. PANDUAN GERAKAN BULATAN CAHAYA (@keyframes blob)
+   ========================================================================== */
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.15);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+/* ==========================================================================
+   3. KELAS PENJALAN ANIMASI
+   ========================================================================== */
+.animate-blob {
+  animation: blob 8s infinite ease-in-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+/* ==========================================================================
+   4. EFEK KLIK PADA DUA TOMBOL MATA
+   ========================================================================== */
+#togglePassword:active i,
+#toggleConfirmPassword:active i {
+  transform: scale(0.85);
+}

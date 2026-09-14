@@ -1,0 +1,73 @@
+/* ==========================================================================
+   1. IMPORT FONT & TAMPILAN DASAR HALAMAN
+   Fungsi: Menyiapkan jenis tulisan dan warna dasar latar belakang layar
+   ========================================================================== */
+
+/* Mengambil font modern 'Plus Jakarta Sans' langsung dari server Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+body {
+  /* Mengatur agar seluruh teks di halaman otomatis menggunakan font Plus Jakarta Sans */
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  
+  /* Memberi warna abu-abu sangat terang dan bersih pada latar belakang website */
+  background-color: #f8fafc;
+}
+
+
+/* ==========================================================================
+   2. PANDUAN GERAKAN ANIMASI CAHAYA (@keyframes blob)
+   Fungsi: Mengatur rute pergeseran dan perubahan ukuran bulatan cahaya (blob)
+           agar bergerak mengambang pelan mirip lampu lava
+   ========================================================================== */
+@keyframes blob {
+  /* Di detik awal (0%) dan detik akhir (100%): Posisi normal di tempat semula */
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  
+  /* Di sepertiga durasi (33%): Bergeser sedikit ke kanan-atas dan membesar 15% */
+  33% {
+    transform: translate(30px, -40px) scale(1.15);
+  }
+  
+  /* Di dua pertiga durasi (66%): Bergeser ke kiri-bawah dan mengecil jadi 90% */
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+
+/* ==========================================================================
+   3. CLASS PENJALAN ANIMASI (.animate-blob)
+   Fungsi: Menempelkan gerakan animasi di atas ke elemen lingkaran di HTML
+   ========================================================================== */
+.animate-blob {
+  /* blob        : Mengikuti jalur gerakan @keyframes blob tadi
+     8s          : Butuh waktu 8 detik untuk satu putaran (gerakan santai dan halus)
+     infinite    : Bergerak terus berulang-ulang tanpa berhenti
+     ease-in-out : Awal dan akhir gerakan dibuat melambat perlahan biar tidak kaku */
+  animation: blob 8s infinite ease-in-out;
+}
+
+
+/* ==========================================================================
+   4. JEDA WAKTU MULAI ANIMASI (.animation-delay-2000)
+   Fungsi: Memberi jeda tunggu 2 detik sebelum animasi mulai berjalan
+   ========================================================================== */
+.animation-delay-2000 {
+  /* Dipakai untuk bulatan cahaya kedua, supaya gerakannya tidak berbarengan 
+     dengan bulatan pertama sehingga tampak lebih alami */
+  animation-delay: 2s;
+}
+
+
+/* ==========================================================================
+   5. EFEK KLIK IKON MATA (#togglePassword:active i)
+   Fungsi: Memberi respon visual saat tombol intip kata sandi ditekan
+   ========================================================================== */
+#togglePassword:active i {
+  /* Saat tombol mata ditekan/diklik dengan mouse, ukuran ikonnya sedikit menciut
+     menjadi 85% dari ukuran asli, memberikan sensasi membal seperti tombol nyata */
+  transform: scale(0.85);
+}
