@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense Tracker - INSTIKI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans p-4 sm:p-6 lg:p-8">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- Loading State Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 hidden flex items-center justify-center">
+        <div class="bg-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-3">
+            <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            <span class="text-sm font-semibold text-slate-700">Memproses data...</span>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <!-- Header / Dashboard Saldo -->
+        <div class="bg-indigo-600 rounded-2xl shadow-lg p-6 text-white">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <p class="text-indigo-100 text-xs font-semibold uppercase tracking-widest mb-1">Total Saldo Keuangan</p>
+                    <h1 id="balance" class="text-3xl sm:text-4xl font-extrabold">Rp 0</h1>
+                </div>
+                <div class="flex gap-4">
+                    <button id="reset-btn" class="text-xs bg-indigo-700/60 hover:bg-indigo-700 text-indigo-100 px-3 py-2 rounded-lg border border-indigo-500/40 transition">
+                        Reset Data
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-indigo-500/40">
+                <div class="bg-indigo-700/40 rounded-xl p-4">
+                    <p class="text-xs text-indigo-200 uppercase mb-1">Total Pemasukan</p>
+                    <p id="money-plus" class="text-xl font-bold text-emerald-300">+Rp 0</p>
+                </div>
+                <div class="bg-indigo-700/40 rounded-xl p-4">
+                    <p class="text-xs text-indigo-200 uppercase mb-1">Total Pengeluaran</p>
+                    <p id="money-minus" class="text-xl font-bold text-rose-300">-Rp 0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid Layout: Form Input & Data Management -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Kolom Kiri: Form CRUD Transaksi -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-fit">
+                <h3 id="form-title" class="text-base font-bold text-slate-800 border-b pb-3 mb-4">Tambah Transaksi Baru</h3>
+                
+                <!-- Error banner lokal form -->
+                <div id="form-error" class="hidden mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-600 text-xs rounded-lg"></div>
+
+                <form id="form" class="space-y-4">
+                    <input type="hidden" id="edit-id" value="">
+                    
+                    <div class="flex gap-4">
+                        <div class="w-1/2">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">JENIS</label>
+                            <select id="type" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="expense">Pengeluaran</option>
+                                <option value="income">Pemasukan</option>
+                            </select>
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">KATEGORI</label>
+                            <select id="category" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">KETERANGAN / NAMA TRANSAKSI</label>
+                        <input type="text" id="description" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Contoh: Makan siang di kantin" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">NOMINAL (Rp)</label>
+                        <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Masukkan angka" required>
+                    </div>
+
+                    <div class="flex gap-2 pt-2">
+                        <button type="submit" id="submit-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition text-sm">
+                            Simpan Transaksi
+                        </button>
+                        <button type="button" id="cancel-edit-btn" class="hidden bg-slate-200 text-slate-700 font-bold px-4 py-3 rounded-lg hover:bg-slate-300 transition text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Kolom Kanan: Filter, Search, & Datatable -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col justify-between">
+                <div>
+                    <!-- Filter & Search Toolbar -->
+                    <div class="flex flex-col sm:flex-row gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <input type="text" id="search-input" placeholder="Cari keterangan transaksi..." class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                        
+                        <select id="filter-type" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="all">Semua Jenis</option>
+                            <option value="income">Pemasukan</option>
+                            <option value="expense">Pengeluaran</option>
+                        </select>
+
+                        <select id="filter-category" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="all">Semua Kategori</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold text-slate-800">Daftar Transaksi</h3>
+                        <span id="data-count" class="text-xs text-slate-400 font-medium">0 data ditampilkan</span>
+                    </div>
+
+                    <!-- Responsive Datatable Wrapper -->
+                    <div class="overflow-x-auto rounded-xl border border-slate-100 max-h-[360px] overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase sticky top-0 z-10">
+                                <tr>
+                                    <th class="p-3 font-semibold">Jenis / Ket</th>
+                                    <th class="p-3 font-semibold">Kategori</th>
+                                    <th class="p-3 font-semibold text-right">Nominal</th>
+                                    <th class="p-3 font-semibold text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="datatable-body" class="divide-y divide-slate-100 text-sm">
+                                <!-- Row generated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Footer info table / Tantangan empty state handle -->
+                <div class="mt-4 text-xs text-slate-400 flex justify-between items-center">
+                    <span>* Data tersimpan aman di browser (LocalStorage)</span>
+                    <span id="storage-status">Synced</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Utama -->
+    <script src="belajarJS.js"></script>
+</body>
+</html>
