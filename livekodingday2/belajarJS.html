@@ -3,131 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Expense Tracker</title>
+    <title>ExpenseFlow - Personal Expense Tracker</title>
+    
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- CDN SweetAlert2 & Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 font-sans p-4 md:p-8">
+<body class="bg-slate-100/70 text-slate-800 font-sans antialiased min-h-screen">
 
-    <div class="max-w-4xl mx-auto space-y-6">
-        
-        <!-- KARTU RINGKASAN SALDO -->
-        <div class="bg-indigo-600 rounded-2xl shadow-lg border border-slate-100 overflow-hidden text-white p-6 text-center">
-            <p class="text-indigo-100 text-sm font-medium uppercase tracking-widest mb-1">Total Saldo</p>
-            <h1 id="balance" class="text-4xl font-bold">Rp 0</h1>
-            
-            <div class="grid grid-cols-2 gap-4 mt-6 bg-indigo-700/50 rounded-xl p-4">
-                <div class="border-r border-indigo-500/50">
-                    <p class="text-xs text-indigo-200 uppercase mb-1">Pemasukan</p>
-                    <p id="money-plus" class="text-xl font-semibold text-emerald-300">+Rp 0</p>
+    <!-- TOP NAVBAR -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                 </div>
                 <div>
-                    <p class="text-xs text-indigo-200 uppercase mb-1">Pengeluaran</p>
-                    <p id="money-minus" class="text-xl font-semibold text-rose-300">-Rp 0</p>
+                    <h1 class="text-lg font-extrabold tracking-tight text-slate-900 leading-tight">Expense<span class="text-indigo-600">Flow</span></h1>
+                    <p class="text-[11px] text-slate-400 font-medium">Personal Finance Dashboard</p>
                 </div>
             </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                    Live Mode
+                </span>
+            </div>
         </div>
+    </header>
 
-        <!-- FORM TAMBAH / EDIT TRANSAKSI -->
-        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-            <h2 id="form-title" class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Tambah Transaksi Baru</h2>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <!-- RINGKASAN SALDO (METRIC CARDS) -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Total Saldo -->
+            <div class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-2xl p-6 text-white shadow-xl shadow-indigo-600/15">
+                <div class="relative z-10 flex flex-col justify-between h-full space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs uppercase font-bold tracking-wider text-indigo-200">Total Saldo Aktif</span>
+                        <div class="p-2 bg-white/10 rounded-lg backdrop-blur-xs">
+                            <svg class="w-5 h-5 text-indigo-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 id="balance" class="text-3xl sm:text-4xl font-black tracking-tight">Rp 0</h2>
+                        <p class="text-[12px] text-indigo-200 mt-1 font-medium">Kalkulasi bersih pemasukan vs pengeluaran</p>
+                    </div>
+                </div>
+                <!-- Radial light accent -->
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+            </div>
+
+            <!-- Total Pemasukan -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Total Pemasukan</span>
+                    <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p id="money-plus" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">+Rp 0</p>
+                    <p class="text-[12px] text-slate-400 font-medium mt-1">Akumulasi seluruh sumber dana</p>
+                </div>
+            </div>
+
+            <!-- Total Pengeluaran -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Total Pengeluaran</span>
+                    <div class="p-2.5 bg-rose-50 text-rose-600 rounded-xl border border-rose-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p id="money-minus" class="text-2xl sm:text-3xl font-extrabold text-rose-600 tracking-tight">-Rp 0</p>
+                    <p class="text-[12px] text-slate-400 font-medium mt-1">Total beban dan pengeluaran belanja</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRID 2 KOLOM: FORM INPUT & GRAFIK DOUGHNUT -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <form id="form" class="space-y-4">
-                <!-- Hidden input untuk menampung ID saat proses update transaksi berlangsung -->
-                <input type="hidden" id="edit-id" value="">
+            <!-- FORM TAMBAH / EDIT TRANSAKSI -->
+            <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-7 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
+                        <div class="w-2.5 h-6 bg-indigo-600 rounded-full"></div>
+                        <h2 id="form-title" class="text-base font-bold text-slate-900 tracking-tight">Tambah Transaksi Baru</h2>
+                    </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form id="form" class="space-y-4">
+                        <input type="hidden" id="edit-id" value="">
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Jenis</label>
+                                <select id="type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                                    <option value="expense">Pengeluaran</option>
+                                    <option value="income">Pemasukan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Kategori</label>
+                                <select id="category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                                    <!-- Diisi dinamis via JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Keterangan Catatan</label>
+                            <input type="text" id="desc" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" placeholder="Contoh: Beli tiket kereta, Gaji">
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Nominal (Rp)</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-sm font-bold text-slate-400">Rp</span>
+                                <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-3.5 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 pt-2">
+                            <button type="submit" id="submit-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-indigo-500/20 transition-all duration-150 active:scale-[0.99]">
+                                Simpan Transaksi
+                            </button>
+                            <button type="button" id="cancel-edit-btn" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl transition-all">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- GRAFIK 1: DOUGHNUT CHART PENGELUARAN -->
+            <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-7 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2.5 h-6 bg-rose-500 rounded-full"></div>
+                        <h3 class="text-base font-bold text-slate-900 tracking-tight">Proporsi Pengeluaran</h3>
+                    </div>
+                    <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg">Per Kategori</span>
+                </div>
+                <div class="w-full h-64 sm:h-72 relative flex items-center justify-center">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- GRAFIK 2: BAR CHART PERBANDINGAN -->
+        <section class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-7">
+            <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-6 bg-emerald-500 rounded-full"></div>
+                    <h3 class="text-base font-bold text-slate-900 tracking-tight">Perbandingan Arus Kas</h3>
+                </div>
+                <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg">Pemasukan vs Pengeluaran</span>
+            </div>
+            <div class="w-full h-64 sm:h-80 relative flex items-center justify-center">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </section>
+
+        <!-- DATA TABEL & FILTER TRANSAKSI -->
+        <section class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            
+            <!-- HEADER TABEL & FILTER -->
+            <div class="p-6 border-b border-slate-100 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2.5 h-6 bg-violet-600 rounded-full"></div>
+                        <h3 class="text-base font-bold text-slate-900 tracking-tight">Riwayat Catatan Transaksi</h3>
+                    </div>
+                </div>
+
+                <!-- Control Bar: Search & Select Filter -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="relative">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" id="search-input" placeholder="Cari keterangan / kategori..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">JENIS</label>
-                        <select id="type" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                            <option value="expense">Pengeluaran</option>
-                            <option value="income">Pemasukan</option>
+                        <select id="filter-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                            <option value="all">Semua Tipe Transaksi</option>
+                            <option value="income">Hanya Pemasukan</option>
+                            <option value="expense">Hanya Pengeluaran</option>
                         </select>
                     </div>
+
                     <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">KATEGORI</label>
-                        <select id="category" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                            <!-- Diisi secara dinamis oleh JavaScript -->
+                        <select id="filter-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                            <option value="all">Semua Kategori</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">KETERANGAN</label>
-                        <input type="text" id="desc" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Contoh: Beli kopi, Gaji bulanan">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">NOMINAL (Rp)</label>
-                        <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Masukkan angka (min: 1)" min="1">
-                    </div>
-                </div>
-
-                <!-- Kontainer Pesan Error Validasi -->
-                <div id="error-message" class="hidden text-rose-500 text-xs font-semibold p-2 bg-rose-50 rounded-lg border border-rose-200"></div>
-
-                <div class="flex gap-2">
-                    <button type="submit" id="submit-btn" class="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition">
-                        Simpan Transaksi
-                    </button>
-                    <button type="button" id="cancel-edit-btn" class="hidden bg-slate-200 text-slate-700 font-bold px-4 py-3 rounded-lg hover:bg-slate-300 transition">
-                        Batal
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- TABEL DATA TRANSAKSI & FILTER -->
-        <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 space-y-4">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4">
-                <h3 class="text-lg font-bold text-slate-800">Riwayat Transaksi</h3>
-                
-                <!-- Panel Filter & Pencarian -->
-                <div class="flex flex-wrap gap-2 items-center">
-                    <input type="text" id="search-input" placeholder="Cari keterangan..." class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                    
-                    <select id="filter-type" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <option value="all">Semua Tipe</option>
-                        <option value="income">Pemasukan</option>
-                        <option value="expense">Pengeluaran</option>
-                    </select>
-
-                    <select id="filter-category" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <option value="all">Semua Kategori</option>
-                    </select>
                 </div>
             </div>
 
             <!-- Loading Spinner State -->
-            <div id="loading" class="hidden text-center py-6">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-500 border-t-transparent"></div>
-                <p class="text-xs text-slate-400 mt-2 font-medium">Memuat data transaksi...</p>
+            <div id="loading" class="hidden text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent"></div>
+                <p class="text-xs text-slate-400 mt-3 font-semibold uppercase tracking-wider">Memperbarui data...</p>
             </div>
 
-            <!-- Datatable Transaksi -->
+            <!-- TABEL TRANSAKSI -->
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm border-collapse">
+                <table class="w-full text-left text-sm">
                     <thead>
-                        <tr class="border-b text-slate-400 uppercase text-[11px] font-semibold bg-slate-50">
-                            <th class="p-3">Kategori</th>
-                            <th class="p-3">Keterangan</th>
-                            <th class="p-3 text-right">Nominal</th>
-                            <th class="p-3 text-center">Aksi</th>
+                        <tr class="border-b border-slate-100 bg-slate-50/60 text-slate-500 uppercase text-[11px] font-bold tracking-wider">
+                            <th class="px-6 py-4">Kategori</th>
+                            <th class="px-6 py-4">Keterangan</th>
+                            <th class="px-6 py-4 text-right">Nominal</th>
+                            <th class="px-6 py-4 text-center">Tindakan</th>
                         </tr>
                     </thead>
                     <tbody id="transaction-rows" class="divide-y divide-slate-100">
-                        <!-- Baris akan dimuat via JS -->
+                        <!-- Baris tabel di-generate via jsnya.js -->
                     </tbody>
                 </table>
             </div>
 
             <!-- Empty State -->
-            <div id="empty-state" class="hidden text-center py-8 text-slate-400">
-                <p class="text-sm">Belum ada catatan transaksi yang sesuai.</p>
+            <div id="empty-state" class="hidden text-center py-16 px-4">
+                <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400 mb-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <p class="text-sm font-semibold text-slate-700">Belum ada transaksi</p>
+                <p class="text-xs text-slate-400 mt-1">Data yang kamu tambahkan atau cari akan muncul di daftar ini.</p>
             </div>
-        </div>
 
-    </div>
+        </section>
+
+    </main>
 
     <!-- Hubungkan ke file JavaScript -->
     <script src="jsnya.js"></script>

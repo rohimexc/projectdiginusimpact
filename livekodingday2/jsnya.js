@@ -1,27 +1,28 @@
 /**
  * =========================================================================
- * 1. MANAJEMEN STATE (Penyimpanan Data di Memori Aplikasi)
+ * 1. MANAJEMEN STATE & PENYIMPANAN DATA
  * =========================================================================
  */
 
-// Kumpulan daftar kategori yang dipisah berdasarkan tipe transaksi
-// Struktur objek ini memudahkan pemanggilan kategori secara dinamis sesuai pilihan select type
+// Kumpulan daftar opsi kategori bawaan yang dipisahkan berdasarkan jenis transaksi
 const categories = {
     expense: ['Makanan & Minuman', 'Transportasi', 'Belanja', 'Tagihan', 'Hiburan', 'Lainnya'],
     income: ['Gaji', 'Uang Saku', 'Bonus', 'Investasi', 'Penjualan', 'Lainnya']
 };
 
-// Mengambil data dari localStorage saat browser dibuka pertama kali
-// JSON.parse mengubah teks string berformat JSON kembali menjadi Array of Objects JS
-// Menggunakan operator || [] agar jika penyimpanan masih kosong (null), variabel tetap berupa array kosong
+// Mengambil data dari localStorage saat aplikasi pertama kali dimuat
+// Jika tidak ada data tersimpan, buat array kosong default
 let transactions = JSON.parse(localStorage.getItem('transactions_data')) || [];
+
+// Variabel global untuk menyimpan referensi instance Chart agar bisa di-update dinamis
+let categoryChartInstance = null;
+let comparisonChartInstance = null;
 
 
 /**
  * =========================================================================
  * 2. SELEKSI ELEMEN DOM
  * =========================================================================
- * Mengambil referensi elemen HTML menggunakan getElementById untuk efisiensi performa seleksi
  */
 const balance = document.getElementById('balance');
 const moneyPlus = document.getElementById('money-plus');
@@ -36,7 +37,6 @@ const descInput = document.getElementById('desc');
 const amountInput = document.getElementById('amount');
 const submitBtn = document.getElementById('submit-btn');
 const cancelEditBtn = document.getElementById('cancel-edit-btn');
-const errorMessage = document.getElementById('error-message');
 
 const searchInput = document.getElementById('search-input');
 const filterType = document.getElementById('filter-type');
@@ -48,44 +48,41 @@ const loading = document.getElementById('loading');
 
 /**
  * =========================================================================
- * 3. LOGIKA PERSISTENSI DATA (localStorage & Error Handling)
+ * 3. PERSISTENSI KE LOCALSTORAGE
  * =========================================================================
  */
-
-// Menyimpan seluruh array transaksi ke localStorage
-// Menggunakan try...catch untuk mengantisipasi storage browser penuh (quota exceeded)
 const syncLocalStorage = () => {
     try {
         localStorage.setItem('transactions_data', JSON.stringify(transactions));
-    } catch (err) {
-        showError('Gagal menyimpan data ke penyimpanan lokal browser.');
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Penyimpanan Penuh',
+            text: 'Gagal menyimpan transaksi ke memori browser.'
+        });
     }
 };
 
 
 /**
  * =========================================================================
- * 4. FUNGSI FORMAT MATA UANG
+ * 4. HELPER FORMAT MATA UANG
  * =========================================================================
  */
 const formatRp = (num) => {
-    // Math.abs memastikan angka input selalu positif sebelum diformat
-    const absoluteNum = Math.abs(num);
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
         minimumFractionDigits: 0
-    }).format(absoluteNum);
+    }).format(Math.abs(num));
 };
 
 
 /**
  * =========================================================================
- * 5. MERENDER OPSI KATEGORI PADA FORM & FILTER
+ * 5. PENGATURAN DROPDOWN KATEGORI
  * =========================================================================
  */
-
-// Memperbarui isi dropdown kategori pada form input berdasarkan jenis yang aktif (income/expense)
 const renderCategories = () => {
     categorySelect.innerHTML = '';
     const currentList = categories[typeSelect.value] || [];
@@ -98,7 +95,6 @@ const renderCategories = () => {
     });
 };
 
-// Menggabungkan seluruh kategori unik (gabungan expense dan income) ke dropdown filter
 const renderFilterCategoryOptions = () => {
     filterCategory.innerHTML = '<option value="all">Semua Kategori</option>';
     const allCategories = [...new Set([...categories.expense, ...categories.income])];
@@ -118,19 +114,16 @@ const renderFilterCategoryOptions = () => {
  * =========================================================================
  */
 const updateValues = () => {
-    // Array.reduce mengakumulasikan nilai amount dari array transaksi bertipe 'income'
     const income = transactions
         .filter(t => t.type === 'income')
         .reduce((acc, t) => acc + t.amount, 0);
 
-    // Array.reduce mengakumulasikan nilai amount dari transaksi bertipe 'expense'
     const expense = transactions
         .filter(t => t.type === 'expense')
         .reduce((acc, t) => acc + t.amount, 0);
 
     const total = income - expense;
 
-    // Memperbarui UI tampilan saldo dengan format mata uang rupiah
     balance.innerText = formatRp(total);
     moneyPlus.innerText = `+ ${formatRp(income)}`;
     moneyMinus.innerText = `- ${formatRp(expense)}`;
@@ -139,29 +132,144 @@ const updateValues = () => {
 
 /**
  * =========================================================================
- * 7. MEMBUAT BARIS TABEL TRANSAKSI (Manipulasi DOM)
+ * 7. VISUALISASI CHART.JS & UPDATE DINAMIS
  * =========================================================================
  */
-const createRowDOM = (transaction) => {
-    const isIncome = transaction.type === 'income';
+
+// Menyiapkan data agregasi pengeluaran per kategori untuk Doughnut Chart
+const getExpenseCategoryData = () => {
+    // 1. Ambil seluruh transaksi yang berjenis pengeluaran
+    const expenseData = transactions.filter(t => t.type === 'expense');
+
+    // 2. Dapatkan daftar nama kategori unik dari pengeluaran yang ada
+    const categoryLabels = [...new Set(expenseData.map(t => t.category))];
+
+    // 3. Hitung total nominal untuk tiap kategori unik
+    const categoryTotals = categoryLabels.map(cat => {
+        return expenseData
+            .filter(t => t.category === cat)
+            .reduce((acc, t) => acc + t.amount, 0);
+    });
+
+    return {
+        labels: categoryLabels.length > 0 ? categoryLabels : ['Belum Ada Data'],
+        data: categoryTotals.length > 0 ? categoryTotals : [0]
+    };
+};
+
+// Menyiapkan data komparasi pemasukan vs pengeluaran untuk Bar Chart
+const getIncomeVsExpenseData = () => {
+    const totalIncome = transactions
+        .filter(t => t.type === 'income')
+        .reduce((acc, t) => acc + t.amount, 0);
+
+    const totalExpense = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, t) => acc + t.amount, 0);
+
+    return [totalIncome, totalExpense];
+};
+
+// Inisialisasi awal kedua objek Chart.js
+const initCharts = () => {
+    // Chart 1: Doughnut Chart
+    const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+    const catData = getExpenseCategoryData();
+
+    categoryChartInstance = new Chart(ctxCategory, {
+        type: 'doughnut',
+        data: {
+            labels: catData.labels,
+            datasets: [{
+                data: catData.data,
+                backgroundColor: [
+                    '#f43f5e', '#fb923c', '#facc15', 
+                    '#a855f7', '#06b6d4', '#64748b'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Chart 2: Bar Chart
+    const ctxComparison = document.getElementById('comparisonChart').getContext('2d');
+    comparisonChartInstance = new Chart(ctxComparison, {
+        type: 'bar',
+        data: {
+            labels: ['Pemasukan', 'Pengeluaran'],
+            datasets: [{
+                label: 'Total Nominal (Rp)',
+                data: getIncomeVsExpenseData(),
+                backgroundColor: ['#10b981', '#f43f5e'],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: (value) => 'Rp ' + value.toLocaleString('id-ID')
+                    }
+                }
+            }
+        }
+    });
+};
+
+// Fungsi krusial: Memperbarui isi chart setiap ada penambahan, pengubahan, atau penghapusan transaksi
+const updateCharts = () => {
+    if (!categoryChartInstance || !comparisonChartInstance) return;
+
+    // Perbarui Doughnut Chart
+    const catData = getExpenseCategoryData();
+    categoryChartInstance.data.labels = catData.labels;
+    categoryChartInstance.data.datasets[0].data = catData.data;
+    categoryChartInstance.update();
+
+    // Perbarui Bar Chart
+    comparisonChartInstance.data.datasets[0].data = getIncomeVsExpenseData();
+    comparisonChartInstance.update();
+};
+
+
+/**
+ * =========================================================================
+ * 8. MANIPULASI DOM TABEL & ASYNC LOADING
+ * =========================================================================
+ */
+const createRowDOM = (item) => {
+    const isIncome = item.type === 'income';
     const sign = isIncome ? '+' : '-';
-    const textBadgeColor = isIncome ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50';
+    const badgeColor = isIncome ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50';
 
     const tr = document.createElement('tr');
     tr.className = 'hover:bg-slate-50/80 transition-colors';
-    tr.dataset.id = transaction.id;
+    tr.dataset.id = item.id;
 
     tr.innerHTML = `
         <td class="p-3">
-            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-md ${textBadgeColor}">
-                ${transaction.category}
+            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-md ${badgeColor}">
+                ${item.category}
             </span>
         </td>
         <td class="p-3 font-medium text-slate-700">
-            ${transaction.desc || '-'}
+            ${item.desc || '-'}
         </td>
         <td class="p-3 text-right font-bold ${isIncome ? 'text-emerald-600' : 'text-rose-600'}">
-            ${sign} ${formatRp(transaction.amount)}
+            ${sign} ${formatRp(item.amount)}
         </td>
         <td class="p-3 text-center space-x-1">
             <button class="edit-btn text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold px-2 py-1 rounded transition">
@@ -172,31 +280,21 @@ const createRowDOM = (transaction) => {
             </button>
         </td>
     `;
-
     return tr;
 };
 
-
-/**
- * =========================================================================
- * 8. MENAMPILKAN DATA DENGAN ASYNC LOADING STATE & FILTER
- * =========================================================================
- */
 const renderTable = async () => {
-    // Menampilkan indikator loading untuk memberikan feedback visual pada proses komputasi
     loading.classList.remove('hidden');
     transactionRows.innerHTML = '';
     emptyState.classList.add('hidden');
 
-    // Menggunakan Promise simulasi delay (100ms) untuk demonstrasi async processing
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Jeda simulasi pemrosesan asinkron
+    await new Promise(resolve => setTimeout(resolve, 80));
 
-    // Ekstraksi nilai filter pencarian
     const searchTerm = searchInput.value.toLowerCase().trim();
     const selectedType = filterType.value;
     const selectedCat = filterCategory.value;
 
-    // Filter multi-kriteria: mencari kecocokan tipe, kategori, dan deskripsi teks
     const filtered = transactions.filter(t => {
         const matchesType = (selectedType === 'all') || (t.type === selectedType);
         const matchesCat = (selectedCat === 'all') || (t.category === selectedCat);
@@ -208,13 +306,11 @@ const renderTable = async () => {
 
     loading.classList.add('hidden');
 
-    // Menampilkan empty state bila tidak ada data transaksi yang cocok
     if (filtered.length === 0) {
         emptyState.classList.remove('hidden');
         return;
     }
 
-    // Memasukkan setiap baris data hasil filter ke tabel DOM
     filtered.forEach(item => {
         transactionRows.appendChild(createRowDOM(item));
     });
@@ -223,37 +319,18 @@ const renderTable = async () => {
 
 /**
  * =========================================================================
- * 9. VALIDASI FORM & ERROR HANDLING
+ * 9. STATE & LOGIKA CRUD
  * =========================================================================
  */
-const showError = (msg) => {
-    errorMessage.textContent = msg;
-    errorMessage.classList.remove('hidden');
-};
-
-const hideError = () => {
-    errorMessage.textContent = '';
-    errorMessage.classList.add('hidden');
-};
-
 const resetFormState = () => {
     form.reset();
     editIdInput.value = '';
     formTitle.textContent = 'Tambah Transaksi Baru';
     submitBtn.textContent = 'Simpan Transaksi';
     cancelEditBtn.classList.add('hidden');
-    hideError();
     renderCategories();
 };
 
-
-/**
- * =========================================================================
- * 10. CRUD: UPDATE & DELETE
- * =========================================================================
- */
-
-// Memasukkan data transaksi yang dipilih kembali ke form untuk diedit
 const startEditTransaction = (id) => {
     const item = transactions.find(t => t.id === id);
     if (!item) return;
@@ -268,45 +345,85 @@ const startEditTransaction = (id) => {
     formTitle.textContent = 'Edit Transaksi';
     submitBtn.textContent = 'Perbarui Transaksi';
     cancelEditBtn.classList.remove('hidden');
-    hideError();
+
+    window.scrollTo({ top: form.offsetTop - 20, behavior: 'smooth' });
 };
 
-// Menghapus data transaksi berdasarkan id unik
+// Implementasi SweetAlert Confirmation Dialog sebelum menghapus
 const deleteTransaction = (id) => {
-    transactions = transactions.filter(t => t.id !== id);
-    syncLocalStorage();
-    updateValues();
-    renderTable();
+    Swal.fire({
+        title: 'Konfirmasi Hapus',
+        text: 'Apakah kamu yakin ingin menghapus transaksi ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#4f46e5',
+        cancelButtonColor: '#e11d48',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        // Logika percabangan SweetAlert: Cek jika tombol konfirmasi ditekan
+        if (result.isConfirmed) {
+            transactions = transactions.filter(t => t.id !== id);
+
+            syncLocalStorage();
+            updateValues();
+            updateCharts();
+            renderTable();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Terhapus!',
+                text: 'Transaksi berhasil dihapus.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    });
 };
 
 
 /**
  * =========================================================================
- * 11. EVENT LISTENERS
+ * 10. EVENT LISTENERS
  * =========================================================================
  */
 
-// 1. Dropdown Type: Render ulang dropdown kategori saat jenis pengeluaran/pemasukan diganti
+// Render kategori saat dropdown tipe diubah
 typeSelect.addEventListener('change', renderCategories);
 
-// 2. Form Submit: Menangani penambahan data baru atau pembaruan data yang sudah ada
+// Submit form (Tambah atau Edit transaksi)
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    hideError();
 
     const amountVal = parseFloat(amountInput.value);
-    const descVal = descInput.value.trim();
+    const descVal = descInput.value.trim(); // .trim() menghapus spasi kosong
 
-    // Validasi nilai nominal agar tidak bernilai negatif, nol, atau kosong
+    // 1. Validasi Kolom Keterangan: Wajib diisi (tidak boleh kosong)
+    if (descVal === '') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal',
+            text: 'Keterangan transaksi wajib diisi!'
+        });
+        descInput.focus(); // Mengarahkan kursor langsung ke input keterangan
+        return;
+    }
+
+    // 2. Validasi Kolom Nominal: Harus angka lebih besar dari 0
     if (isNaN(amountVal) || amountVal <= 0) {
-        showError('Nominal transaksi harus berupa angka lebih besar dari 0!');
+        Swal.fire({
+            icon: 'error',
+            title: 'Validasi Gagal',
+            text: 'Nominal transaksi harus berupa angka lebih besar dari 0!'
+        });
+        amountInput.focus();
         return;
     }
 
     const editId = editIdInput.value;
 
     if (editId) {
-        // Mode Edit: Mencari transaksi lama lalu memperbarui nilainya
+        // Mode Update
         const index = transactions.findIndex(t => t.id === Number(editId));
         if (index !== -1) {
             transactions[index] = {
@@ -316,9 +433,17 @@ form.addEventListener('submit', (e) => {
                 desc: descVal,
                 amount: amountVal
             };
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Transaksi berhasil diperbarui!',
+                timer: 1500,
+                showConfirmButton: false
+            });
         }
     } else {
-        // Mode Tambah Baru: Buat objek transaksi dengan identifier ID unik berbasis timestamp
+        // Mode Tambah Baru
         const newTransaction = {
             id: Date.now(),
             type: typeSelect.value,
@@ -326,20 +451,27 @@ form.addEventListener('submit', (e) => {
             desc: descVal,
             amount: amountVal
         };
-        // Menambahkan transaksi baru ke urutan pertama array (unshift)
         transactions.unshift(newTransaction);
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Transaksi berhasil ditambahkan!',
+            timer: 1500,
+            showConfirmButton: false
+        });
     }
 
     syncLocalStorage();
     updateValues();
+    updateCharts();
     renderTable();
     resetFormState();
 });
 
-// 3. Tombol Batal Edit: Mengembalikan form ke mode tambah baru
 cancelEditBtn.addEventListener('click', resetFormState);
 
-// 4. Event Delegation pada Tabel untuk Tombol Edit dan Hapus
+// Event delegation pada baris tabel transaksi
 transactionRows.addEventListener('click', (e) => {
     const tr = e.target.closest('tr');
     if (!tr) return;
@@ -352,7 +484,7 @@ transactionRows.addEventListener('click', (e) => {
     }
 });
 
-// 5. Input Filter dan Search: Merender ulang tabel saat filter berubah
+// Event listener filter dan pencarian
 searchInput.addEventListener('input', renderTable);
 filterType.addEventListener('change', renderTable);
 filterCategory.addEventListener('change', renderTable);
@@ -360,13 +492,14 @@ filterCategory.addEventListener('change', renderTable);
 
 /**
  * =========================================================================
- * 12. INISIALISASI AWAL
+ * 11. BOOTSTRAP INISIALISASI APLIKASI
  * =========================================================================
  */
 const initApp = () => {
     renderCategories();
     renderFilterCategoryOptions();
     updateValues();
+    initCharts();
     renderTable();
 };
 
