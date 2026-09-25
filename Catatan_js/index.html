@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Manajemen Inventaris & Belajar JS</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk ikon UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-btn.active {
+            border-bottom: 3px solid #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+    <!-- HEADER APP -->
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-indigo-600 rounded-lg">
+                    <i class="fa-solid fa-boxes-stacked text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">InventarisJS Studio</h1>
+                    <p class="text-xs text-indigo-200">Media Pembelajaran Interactive Event, Object & Array JavaScript</p>
+                </div>
+            </div>
+            <!-- Tab Navigation -->
+            <nav class="flex space-x-1 bg-indigo-950 p-1 rounded-xl">
+                <button id="nav-app" onclick="switchTab('app')" class="px-4 py-2 text-sm font-medium rounded-lg text-white bg-indigo-600 transition-all">
+                    <i class="fa-solid fa-square-poll-vertical mr-2"></i>Aplikasi Inventaris
+                </button>
+                <button id="nav-edu" onclick="switchTab('edu')" class="px-4 py-2 text-sm font-medium rounded-lg text-indigo-200 hover:text-white transition-all">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i>Edukasi & Concept
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+
+        <!-- SECTION 1: APLIKASI MANAJEMEN INVENTARIS -->
+        <section id="section-app" class="space-y-6">
+
+            <!-- Stats Bar & Quick Info -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Total Produk (Array Length)</p>
+                        <h3 id="stat-total" class="text-2xl font-bold text-slate-800">0</h3>
+                    </div>
+                    <div class="p-3 bg-blue-100 text-blue-600 rounded-lg"><i class="fa-solid fa-box text-xl"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Produk Diskon (Filter)</p>
+                        <h3 id="stat-promo" class="text-2xl font-bold text-amber-600">0</h3>
+                    </div>
+                    <div class="p-3 bg-amber-100 text-amber-600 rounded-lg"><i class="fa-solid fa-tag text-xl"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Kondisi Baru</p>
+                        <h3 id="stat-baru" class="text-2xl font-bold text-emerald-600">0</h3>
+                    </div>
+                    <div class="p-3 bg-emerald-100 text-emerald-600 rounded-lg"><i class="fa-solid fa-certificate text-xl"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Total Nilai Stok</p>
+                        <h3 id="stat-nilai" class="text-xl font-bold text-indigo-600">Rp 0</h3>
+                    </div>
+                    <div class="p-3 bg-indigo-100 text-indigo-600 rounded-lg"><i class="fa-solid fa-sack-dollar text-xl"></i></div>
+                </div>
+            </div>
+
+            <!-- Form & Filter Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- PANEL FORMULIR INPUT -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-1">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b">
+                        <h2 id="form-title" class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-plus-circle text-indigo-600"></i> Tambah Produk Baru
+                        </h2>
+                        <button id="btn-cancel-edit" onclick="resetForm()" class="hidden text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded hover:bg-slate-300">
+                            Batal Edit
+                        </button>
+                    </div>
+
+                    <!-- FORM SUBMIT EVENT -->
+                    <form id="form-produk" class="space-y-4">
+                        <input type="hidden" id="input-id">
+
+                        <!-- INPUT TEXT EVENT -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Produk</label>
+                            <input type="text" id="input-nama" required placeholder="Contoh: Laptop Gaming" 
+                                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <p id="live-nama-preview" class="text-[11px] text-indigo-600 mt-1 italic hidden">Ketik: <span></span></p>
+                        </div>
+
+                        <!-- INPUT NUMBER & SELECT OPTION EVENT -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Harga (Rp)</label>
+                                <input type="number" id="input-harga" min="1000" required placeholder="15000"
+                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Stok</label>
+                                <input type="number" id="input-stok" min="1" required placeholder="10"
+                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                        </div>
+
+                        <!-- SELECT / OPTION EVENT -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Kategori</label>
+                            <select id="input-kategori" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="" disabled selected>-- Pilih Kategori --</option>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Pakaian">Pakaian</option>
+                                <option value="Makanan">Makanan & Minuman</option>
+                                <option value="Aksesoris">Aksesoris</option>
+                            </select>
+                        </div>
+
+                        <!-- RADIO BUTTON EVENT -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Kondisi Barang</label>
+                            <div class="flex gap-4 pt-1">
+                                <label class="inline-flex items-center text-sm cursor-pointer">
+                                    <input type="radio" name="input-kondisi" value="Baru" checked class="text-indigo-600 focus:ring-indigo-500">
+                                    <span class="ml-2 text-slate-700">Baru</span>
+                                </label>
+                                <label class="inline-flex items-center text-sm cursor-pointer">
+                                    <input type="radio" name="input-kondisi" value="Bekas" class="text-indigo-600 focus:ring-indigo-500">
+                                    <span class="ml-2 text-slate-700">Bekas</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- CHECKBOX EVENT -->
+                        <div class="p-3 bg-indigo-50 rounded-lg border border-indigo-100">
+                            <label class="inline-flex items-center text-sm cursor-pointer">
+                                <input type="checkbox" id="input-promo" class="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+                                <span class="ml-2 text-slate-700 font-medium">Status Promo / Diskon (10%)</span>
+                            </label>
+                        </div>
+
+                        <!-- DYNAMIC OBJECT KEY ADDITION -->
+                        <div class="pt-2 border-t">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">Dynamic Key (Uji Tambah Property Object)</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="input-custom-key" placeholder="Key (cth: Garansi)" class="px-2 py-1 text-xs border rounded">
+                                <input type="text" id="input-custom-val" placeholder="Value (cth: 1 Tahun)" class="px-2 py-1 text-xs border rounded">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btn-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition-all shadow-md">
+                            <i class="fa-solid fa-save mr-2"></i> Simpan Data Produk
+                        </button>
+                    </form>
+                </div>
+
+                <!-- PANEL TABEL DATA & KONTROL FILTER -->
+                <div class="lg:col-span-2 space-y-4">
+                    
+                    <!-- Search & Filter Controls -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-3 justify-between items-center">
+                        <!-- REALTIME SEARCH INPUT EVENT -->
+                        <div class="relative w-full md:w-1/2">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="search-input" placeholder="Cari produk (Realtime Event)..." 
+                                class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+
+                        <!-- SELECT FILTER EVENT -->
+                        <div class="flex gap-2 w-full md:w-auto">
+                            <select id="filter-kategori" class="w-full md:w-auto px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="ALL">Semua Kategori</option>
+                                <option value="Elektronik">Elektronik</option>
+                                <option value="Pakaian">Pakaian</option>
+                                <option value="Makanan">Makanan & Minuman</option>
+                                <option value="Aksesoris">Aksesoris</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- TABEL DATA PRODUK (ARRAY RENDERING) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-4 border-b flex justify-between items-center bg-slate-50">
+                            <h3 class="font-bold text-slate-700 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-list text-indigo-600"></i> Daftar Produk (Array of Objects)
+                            </h3>
+                            <span id="badge-count" class="text-xs bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-0.5 rounded-full">0 Item</span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm text-slate-600">
+                                <thead class="bg-slate-100 text-slate-700 font-semibold text-xs uppercase border-b">
+                                    <tr>
+                                        <th class="p-3">ID</th>
+                                        <th class="p-3">Produk</th>
+                                        <th class="p-3">Kategori & Kondisi</th>
+                                        <th class="p-3">Harga</th>
+                                        <th class="p-3">Stok</th>
+                                        <th class="p-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body" class="divide-y divide-slate-100">
+                                    <!-- Rendered dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- INSPEKTOR OBJECT & ARRAY UTILITY -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-code text-indigo-600"></i> Terminal Inspeksi Object & Array JS
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                            <!-- Object Keys Inspection -->
+                            <div class="bg-slate-900 text-slate-100 p-3 rounded-xl font-mono">
+                                <p class="text-indigo-400 font-semibold border-b border-slate-700 pb-1 mb-2">
+                                    // Live Object.keys() Item Terpilih
+                                </p>
+                                <div id="inspector-keys" class="text-emerald-400 break-words">
+                                    Pilih/Klik produk di tabel untuk inspect Object.
+                                </div>
+                            </div>
+
+                            <!-- Key Existence Checker ('key' in obj) -->
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                <p class="font-semibold text-slate-700 mb-2">Cek Keberadaan Key ('key' in obj)</p>
+                                <div class="flex gap-2 mb-2">
+                                    <input type="text" id="check-key-input" placeholder="Misal: isPromo / garansi" class="w-full px-2 py-1 text-xs border rounded">
+                                    <button onclick="checkKeyInObject()" class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 font-medium">Cek</button>
+                                </div>
+                                <p id="check-key-result" class="text-xs text-slate-600 italic">Hasil pengecekan akan tampil di sini.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2: EDUKASI PERBANDINGAN ARRAY & OBJECT -->
+        <section id="section-edu" class="hidden space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-indigo-600"></i> Panduan Konsep: Array vs Object
+                </h2>
+                <p class="text-sm text-slate-600 mb-6">
+                    Memahami kapan harus menggunakan Array, Object, atau Kombinasi keduanya adalah kunci utama pengembangan aplikasi web modern.
+                </p>
+
+                <!-- Comparison Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Object Card -->
+                    <div class="border border-indigo-200 bg-indigo-50/50 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="p-2 bg-indigo-600 text-white rounded-lg text-sm font-bold">{ }</span>
+                            <h3 class="font-bold text-indigo-900">JavaScript Object</h3>
+                        </div>
+                        <ul class="text-xs space-y-2 text-slate-700">
+                            <li><strong class="text-indigo-700">Fungsi:</strong> Menyimpan detail dari 1 entitas tunggal (Property & Value).</li>
+                            <li><strong class="text-indigo-700">Pengaksesan Data:</strong> Menggunakan Key (`obj.nama` atau `obj['harga']`).</li>
+                            <li><strong class="text-indigo-700">Operasi Kunci:</strong> `delete obj.key`, `'key' in obj`, `Object.keys(obj)`.</li>
+                            <li><strong class="text-indigo-700">Contoh Kasus:</strong> Data akun user yang sedang login, konfigurasi aplikasi.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Array Card -->
+                    <div class="border border-emerald-200 bg-emerald-50/50 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="p-2 bg-emerald-600 text-white rounded-lg text-sm font-bold">[ ]</span>
+                            <h3 class="font-bold text-emerald-900">JavaScript Array</h3>
+                        </div>
+                        <ul class="text-xs space-y-2 text-slate-700">
+                            <li><strong class="text-emerald-700">Fungsi:</strong> Menyimpan kumpulan/daftar data terurut berdasarkan Indeks.</li>
+                            <li><strong class="text-emerald-700">Pengaksesan Data:</strong> Menggunakan Indeks Angka (`arr[0]`, `arr[1]`).</li>
+                            <li><strong class="text-emerald-700">Operasi Kunci:</strong> `.push()`, `.splice()`, `.map()`, `.filter()`, `.find()`.</li>
+                            <li><strong class="text-emerald-700">Contoh Kasus:</strong> Daftar riwayat transaksi, antrean cetak, daftar tag produk.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Combination Case -->
+                <div class="bg-slate-900 text-slate-100 p-6 rounded-xl space-y-4">
+                    <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb"></i> Kombinasi Nyata: Array of Objects `[{...}, {...}]`
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Mengapa struktur ini standar standar industri REST API dan database?
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="font-semibold text-indigo-300 mb-1">1. Struktur Terorganisir</p>
+                            <p class="text-slate-400">Object memastikan tiap entitas produk punya atribut seragam (id, nama, harga).</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="font-semibold text-indigo-300 mb-1">2. Mudah Diolah (Array Method)</p>
+                            <p class="text-slate-400">Daftar produk bisa difilter, diurutkan, atau dicari menggunakan method bawaan Array.</p>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                            <p class="font-semibold text-indigo-300 mb-1">3. Mudah Render ke DOM</p>
+                            <p class="text-slate-400">Dapat di-loop dengan `.map()` atau `.forEach()` untuk langsung dikonversi menjadi elemen HTML.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="catatan.js"></script>
+</body>
+</html>

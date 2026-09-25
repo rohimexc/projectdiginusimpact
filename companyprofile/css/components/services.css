@@ -1,0 +1,68 @@
+/* ==========================================================================
+   SECTION LAYANAN KAMI (SERVICE CARDS)
+   ========================================================================== */
+#layanan {
+    background-color: #ffffff;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.service-card {
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    text-align: center;
+    transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                box-shadow 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                border-color 0.35s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 35px rgba(37, 99, 235, 0.06); 
+    border-color: #cbd5e1; 
+}
+
+.service-card:hover .service-icon {
+    background-color: #2563eb;
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+.service-icon {
+    font-size: 28px;
+    color: #2563eb;
+    margin-bottom: 20px;
+    background: #eff6ff;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.3s ease;
+}
+
+.service-card h3 {
+    color: #3258b0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.service-card p {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
