@@ -54,7 +54,7 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
-        <!-- RINGKASAN SALDO (METRIC CARDS) -->
+        <!-- 1. CARD STATISTIK SALDO -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <!-- Total Saldo -->
             <div class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-2xl p-6 text-white shadow-xl shadow-indigo-600/15">
@@ -72,7 +72,6 @@
                         <p class="text-[12px] text-indigo-200 mt-1 font-medium">Kalkulasi bersih pemasukan vs pengeluaran</p>
                     </div>
                 </div>
-                <!-- Radial light accent -->
                 <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
             </div>
 
@@ -109,104 +108,115 @@
             </div>
         </section>
 
-        <!-- GRID 2 KOLOM: FORM INPUT & GRAFIK DOUGHNUT -->
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- 2. AREA GRAFIK (SESUAI GAMBAR SKETSA: KIRI BARCHART, KANAN 2 PIE CHART BERTUMPUK) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             
-            <!-- FORM TAMBAH / EDIT TRANSAKSI -->
-            <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-7 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
-                        <div class="w-2.5 h-6 bg-indigo-600 rounded-full"></div>
-                        <h2 id="form-title" class="text-base font-bold text-slate-900 tracking-tight">Tambah Transaksi Baru</h2>
-                    </div>
-
-                    <form id="form" class="space-y-4">
-                        <input type="hidden" id="edit-id" value="">
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Jenis</label>
-                                <select id="type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
-                                    <option value="expense">Pengeluaran</option>
-                                    <option value="income">Pemasukan</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Kategori</label>
-                                <select id="category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
-                                    <!-- Diisi dinamis via JS -->
-                                </select>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Keterangan Catatan</label>
-                            <input type="text" id="desc" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" placeholder="Contoh: Beli tiket kereta, Gaji">
-                        </div>
-
-                        <div>
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Nominal (Rp)</label>
-                            <div class="relative">
-                                <span class="absolute left-3.5 top-2.5 text-sm font-bold text-slate-400">Rp</span>
-                                <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-3.5 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" placeholder="0">
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2 pt-2">
-                            <button type="submit" id="submit-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-indigo-500/20 transition-all duration-150 active:scale-[0.99]">
-                                Simpan Transaksi
-                            </button>
-                            <button type="button" id="cancel-edit-btn" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl transition-all">
-                                Batal
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- GRAFIK 1: DOUGHNUT CHART PENGELUARAN -->
-            <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-7 flex flex-col justify-between">
+            <!-- Kolom Kiri: Bar Chart Besar -->
+            <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 flex flex-col justify-between">
                 <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-4">
                     <div class="flex items-center gap-2">
-                        <div class="w-2.5 h-6 bg-rose-500 rounded-full"></div>
-                        <h3 class="text-base font-bold text-slate-900 tracking-tight">Proporsi Pengeluaran</h3>
+                        <div class="w-2.5 h-6 bg-emerald-500 rounded-full"></div>
+                        <h3 class="text-base font-bold text-slate-900 tracking-tight">Perbandingan Arus Kas</h3>
                     </div>
-                    <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg">Per Kategori</span>
+                    <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg">Pemasukan vs Pengeluaran</span>
                 </div>
-                <div class="w-full h-64 sm:h-72 relative flex items-center justify-center">
-                    <canvas id="categoryChart"></canvas>
+                <div class="w-full h-80 sm:h-96 lg:h-[500px] relative flex items-center justify-center">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: 2 Pie Chart (Atas Pemasukan, Bawah Pengeluaran) -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                <!-- Pie Chart 1: Pemasukan -->
+                <div class="flex-1 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-5 bg-emerald-500 rounded-full"></div>
+                            <h4 class="text-sm font-bold text-slate-900 tracking-tight">Kategori Pemasukan</h4>
+                        </div>
+                        <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md">Pie Chart</span>
+                    </div>
+                    <div class="w-full h-52 sm:h-56 relative flex items-center justify-center">
+                        <canvas id="incomeCategoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Pie Chart 2: Pengeluaran -->
+                <div class="flex-1 bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-5 bg-rose-500 rounded-full"></div>
+                            <h4 class="text-sm font-bold text-slate-900 tracking-tight">Kategori Pengeluaran</h4>
+                        </div>
+                        <span class="text-[11px] font-semibold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md">Pie Chart</span>
+                    </div>
+                    <div class="w-full h-52 sm:h-56 relative flex items-center justify-center">
+                        <canvas id="expenseCategoryChart"></canvas>
+                    </div>
                 </div>
             </div>
 
         </section>
 
-        <!-- GRAFIK 2: BAR CHART PERBANDINGAN -->
+        <!-- 3. FORM TAMBAH / EDIT TRANSAKSI -->
         <section class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-7">
-            <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
-                <div class="flex items-center gap-2">
-                    <div class="w-2.5 h-6 bg-emerald-500 rounded-full"></div>
-                    <h3 class="text-base font-bold text-slate-900 tracking-tight">Perbandingan Arus Kas</h3>
-                </div>
-                <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg">Pemasukan vs Pengeluaran</span>
+            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-4">
+                <div class="w-2.5 h-6 bg-indigo-600 rounded-full"></div>
+                <h2 id="form-title" class="text-base font-bold text-slate-900 tracking-tight">Tambah Transaksi Baru</h2>
             </div>
-            <div class="w-full h-64 sm:h-80 relative flex items-center justify-center">
-                <canvas id="comparisonChart"></canvas>
-            </div>
-        </section>
 
-        <!-- DATA TABEL & FILTER TRANSAKSI -->
-        <section class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-            
-            <!-- HEADER TABEL & FILTER -->
-            <div class="p-6 border-b border-slate-100 space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2.5 h-6 bg-violet-600 rounded-full"></div>
-                        <h3 class="text-base font-bold text-slate-900 tracking-tight">Riwayat Catatan Transaksi</h3>
+            <form id="form" class="space-y-4">
+                <input type="hidden" id="edit-id" value="">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Jenis</label>
+                        <select id="type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                            <option value="expense">Pengeluaran</option>
+                            <option value="income">Pemasukan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Kategori</label>
+                        <select id="category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
+                        </select>
                     </div>
                 </div>
 
-                <!-- Control Bar: Search & Select Filter -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Keterangan Catatan</label>
+                        <input type="text" id="desc" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" placeholder="Contoh: Beli tiket kereta, Gaji">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Nominal (Rp)</label>
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-2.5 text-sm font-bold text-slate-400">Rp</span>
+                            <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-3.5 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="submit" id="submit-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-indigo-500/20 transition-all duration-150 active:scale-[0.99]">
+                        Simpan Transaksi
+                    </button>
+                    <button type="button" id="cancel-edit-btn" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-3 rounded-xl transition-all">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 4. TABEL TRANSAKSI & FILTER -->
+        <section class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div class="p-6 border-b border-slate-100 space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-6 bg-violet-600 rounded-full"></div>
+                    <h3 class="text-base font-bold text-slate-900 tracking-tight">Riwayat Catatan Transaksi</h3>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div class="relative">
                         <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,13 +241,11 @@
                 </div>
             </div>
 
-            <!-- Loading Spinner State -->
             <div id="loading" class="hidden text-center py-12">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent"></div>
                 <p class="text-xs text-slate-400 mt-3 font-semibold uppercase tracking-wider">Memperbarui data...</p>
             </div>
 
-            <!-- TABEL TRANSAKSI -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
                     <thead>
@@ -248,13 +256,10 @@
                             <th class="px-6 py-4 text-center">Tindakan</th>
                         </tr>
                     </thead>
-                    <tbody id="transaction-rows" class="divide-y divide-slate-100">
-                        <!-- Baris tabel di-generate via jsnya.js -->
-                    </tbody>
+                    <tbody id="transaction-rows" class="divide-y divide-slate-100"></tbody>
                 </table>
             </div>
 
-            <!-- Empty State -->
             <div id="empty-state" class="hidden text-center py-16 px-4">
                 <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400 mb-3">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,12 +269,11 @@
                 <p class="text-sm font-semibold text-slate-700">Belum ada transaksi</p>
                 <p class="text-xs text-slate-400 mt-1">Data yang kamu tambahkan atau cari akan muncul di daftar ini.</p>
             </div>
-
         </section>
 
     </main>
 
-    <!-- Hubungkan ke file JavaScript -->
+    <!-- Terhubung ke jsnya.js -->
     <script src="jsnya.js"></script>
 </body>
 </html>
