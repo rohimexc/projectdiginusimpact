@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Program Studi Administrasi Publik - FISIP Untad{% endblock %}
+
+{% load static %}
+{% block content %}
+{% load static %}
+
+<!-- Hero Section dengan Background Video -->
+<header id="beranda" class="relative text-white py-32 px-6 text-center overflow-hidden min-h-[500px] flex items-center justify-center">
+    
+    <!-- Tag Video Background -->
+    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+        <source src="{% static 'video/banner.mp4' %}" type="video/mp4">
+        Browser kamu tidak mendukung tag video.
+    </video>
+
+    <!-- Overlay Gelap Supaya Teks Terbaca Jelas -->
+    <div class="absolute inset-0 bg-black/60 z-10"></div>
+
+    <!-- Konten Teks di Atas Video -->
+    <div class="relative z-20 max-w-4xl mx-auto space-y-4">
+        <h3 class="text-lg sm:text-xl font-medium tracking-wide text-slate-200">Welcome to</h3>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-amber-400 drop-shadow-md">Program Studi Administrasi Publik</h1>
+        <p class="text-slate-200 text-base sm:text-lg font-medium">Fakultas Ilmu Sosial dan Ilmu Politik<br>Universitas Tadulako</p>
+        <div class="pt-4">
+            <a href="#sambutan" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-6 py-3 rounded-full shadow-lg transition text-sm">Jelajahi Lebih Lanjut</a>
+        </div>
+    </div>
+</header>
+
+    <!-- Sambutan / Tentang (ID: sambutan / profil) -->
+    <section id="sambutan" class="max-w-6xl mx-auto py-20 px-6">
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 sm:p-12 grid md:grid-cols-12 gap-10 items-center">
+            <div class="md:col-span-4 flex justify-center">
+                <div class="w-64 h-72 bg-slate-200 rounded-2xl overflow-hidden shadow-inner border border-slate-300">
+                    <img src="{% static 'images/dosen1.jpg' %}" alt="Koordinator Prodi" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <div class="md:col-span-8 space-y-4">
+                <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Sambutan Koordinator Prodi</h2>
+                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed text-justify">
+                    Assalamu'alaikum warahmatullahi wabarakatuh, Salam sejahtera untuk kita semua. Selamat datang di website resmi Program Studi Administrasi Publik, Fakultas Ilmu Sosial dan Ilmu Politik Universitas Tadulako. Sebagai salah satu program studi tertua di Universitas Tadulako, Administrasi Publik terus berkembang melalui penguatan kelembagaan, peningkatan kualitas sumber daya manusia, serta pemanfaatan teknologi untuk mendukung tata kelola yang baik...
+                </p>
+                <div class="pt-2">
+                    <p class="font-semibold text-amber-600 italic text-sm border-l-4 border-amber-500 pl-3">Dr. Intam Kurnia, M.Si.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri Kegiatan (ID: galeri) -->
+    <section id="galeri" class="max-w-6xl mx-auto py-16 px-6 border-t border-slate-200">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-tealBrand">Galeri Kegiatan</h2>
+        </div>
+        <div class="flex justify-between items-center bg-white p-12 rounded-2xl border border-slate-200 shadow-sm relative">
+            <button class="w-10 h-10 bg-white border border-slate-300 rounded-full flex items-center justify-center shadow hover:bg-slate-50"><i class="fa-solid fa-chevron-left"></i></button>
+            <p class="text-slate-400 text-sm italic">Belum ada galeri.</p>
+            <button class="w-10 h-10 bg-white border border-slate-300 rounded-full flex items-center justify-center shadow hover:bg-slate-50"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <!-- Berita Terbaru (ID: berita) -->
+    <section id="berita" class="max-w-6xl mx-auto py-16 px-6">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-tealBrand">Berita Terbaru</h2>
+            <p class="text-slate-500 text-xs mt-1">Berita terbaru seputar Administrasi Publik</p>
+        </div>
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
+            <p class="text-slate-400 text-sm italic">Belum ada berita.</p>
+        </div>
+    </section>
+
+    <!-- Akademik / Kurikulum (ID: akademik) -->
+    <section id="akademik" class="max-w-6xl mx-auto py-16 px-6">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-tealBrand">Kurikulum & Akademik</h2>
+            <p class="text-slate-500 text-xs mt-1">Informasi mata kuliah dan panduan studi</p>
+        </div>
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
+            <p class="text-slate-400 text-sm italic">Informasi akademik akan segera diperbarui.</p>
+        </div>
+    </section>
+
+    <!-- Staf / Dosen (ID: staf) -->
+    <section id="staf" class="max-w-6xl mx-auto py-16 px-6">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-tealBrand">Staf & Dosen</h2>
+            <p class="text-slate-500 text-xs mt-1">Daftar dosen pengampu Program Studi Administrasi Publik</p>
+        </div>
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
+            <p class="text-slate-400 text-sm italic">Data staf dan dosen sedang dimuat.</p>
+        </div>
+    </section>
+
+    <!-- Akreditasi (ID: akreditasi) -->
+    <section id="akreditasi" class="max-w-6xl mx-auto py-16 px-6">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-tealBrand">Akreditasi Program Studi</h2>
+            <p class="text-slate-500 text-xs mt-1">Sertifikat dan status mutu lembaga</p>
+        </div>
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
+            <p class="text-slate-400 text-sm italic">Akreditasi: Unggul (A).</p>
+        </div>
+    </section>
+
+    <!-- Hubungi Kami & Peta (ID: kontak) -->
+    <section id="kontak" class="max-w-6xl mx-auto py-20 px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-tealBrand">Hubungi Kami</h2>
+        </div>
+        <div class="bg-tealBrand text-white rounded-3xl p-8 sm:p-12 grid md:grid-cols-2 gap-8 shadow-xl">
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold border-b border-teal-600 pb-3">Informasi Kontak</h3>
+                <div class="space-y-4 text-xs sm:text-sm leading-relaxed">
+                    <p class="flex items-start gap-3">
+                        <i class="fa-solid fa-location-dot mt-1 text-amber-400"></i>
+                        <span>Jl. Soekarno Hatta No.KM.9, Tondo, Kec. Mantikulore, Kota Palu, Sulawesi Tengah 94148</span>
+                    </p>
+                    <p class="flex items-center gap-3">
+                        <i class="fa-solid fa-phone text-amber-400"></i>
+                        <span>085330144401</span>
+                    </p>
+                    <p class="flex items-center gap-3">
+                        <i class="fa-solid fa-envelope text-amber-400"></i>
+                        <span>Admpublik.FISIP@untad.ac.id</span>
+                    </p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold border-b border-teal-600 pb-3">Lokasi Kami</h3>
+                <div class="w-full h-56 bg-slate-200 rounded-xl overflow-hidden border border-teal-600">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.3082596245!2d119.8912!3d-0.8587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zCsKuwqDCtsKqwqDCtsKqwqA!5e0!3m2!1sid!2sid!4v1600000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
