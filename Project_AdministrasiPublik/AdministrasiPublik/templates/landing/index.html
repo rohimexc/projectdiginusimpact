@@ -1,111 +1,148 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Program Studi Administrasi Publik - FISIP Untad{% endblock %}
 
-{% load static %}
 {% block content %}
-{% load static %}
-
-<!-- Hero Section dengan Background Video -->
-<header id="beranda" class="relative text-white py-32 px-6 text-center overflow-hidden min-h-[500px] flex items-center justify-center">
-    
-    <!-- Tag Video Background -->
-    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-        <source src="{% static 'video/banner.mp4' %}" type="video/mp4">
-        Browser kamu tidak mendukung tag video.
-    </video>
-
-    <!-- Overlay Gelap Supaya Teks Terbaca Jelas -->
-    <div class="absolute inset-0 bg-black/60 z-10"></div>
-
-    <!-- Konten Teks di Atas Video -->
-    <div class="relative z-20 max-w-4xl mx-auto space-y-4">
-        <h3 class="text-lg sm:text-xl font-medium tracking-wide text-slate-200">Welcome to</h3>
-        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-amber-400 drop-shadow-md">Program Studi Administrasi Publik</h1>
-        <p class="text-slate-200 text-base sm:text-lg font-medium">Fakultas Ilmu Sosial dan Ilmu Politik<br>Universitas Tadulako</p>
-        <div class="pt-4">
-            <a href="#sambutan" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-6 py-3 rounded-full shadow-lg transition text-sm">Jelajahi Lebih Lanjut</a>
+    <!-- Hero Section -->
+    <header id="beranda" class="relative text-white py-32 px-6 text-center overflow-hidden min-h-[500px] flex items-center justify-center">
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="{% static 'video/banner.mp4' %}" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-black/60 z-10"></div>
+        <div class="relative z-20 max-w-4xl mx-auto space-y-4">
+            <h3 class="text-lg sm:text-xl font-medium tracking-wide text-slate-200">Welcome to</h3>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-amber-400 drop-shadow-md">{{ title }}</h1>
+            <p class="text-slate-200 text-base sm:text-lg font-medium">{{ faculty }}<br>Universitas Tadulako</p>
+            <div class="pt-4">
+                <a href="#sambutan" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-6 py-3 rounded-full shadow-lg transition text-sm">Jelajahi Lebih Lanjut</a>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 
-    <!-- Sambutan / Tentang (ID: sambutan / profil) -->
+    <!-- Sambutan Koorprodi -->
     <section id="sambutan" class="max-w-6xl mx-auto py-20 px-6">
         <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 sm:p-12 grid md:grid-cols-12 gap-10 items-center">
             <div class="md:col-span-4 flex justify-center">
                 <div class="w-64 h-72 bg-slate-200 rounded-2xl overflow-hidden shadow-inner border border-slate-300">
-                    <img src="{% static 'images/dosen1.jpg' %}" alt="Koordinator Prodi" class="w-full h-full object-cover">
+                    <img src="{% static 'images/Dosen/dosen1.jpg' %}" alt="Koordinator Prodi" class="w-full h-full object-cover">
                 </div>
             </div>
             <div class="md:col-span-8 space-y-4">
-                <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Sambutan Koordinator Prodi</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">{{ sambutan.judul }}</h2>
                 <p class="text-slate-600 text-xs sm:text-sm leading-relaxed text-justify">
-                    Assalamu'alaikum warahmatullahi wabarakatuh, Salam sejahtera untuk kita semua. Selamat datang di website resmi Program Studi Administrasi Publik, Fakultas Ilmu Sosial dan Ilmu Politik Universitas Tadulako. Sebagai salah satu program studi tertua di Universitas Tadulako, Administrasi Publik terus berkembang melalui penguatan kelembagaan, peningkatan kualitas sumber daya manusia, serta pemanfaatan teknologi untuk mendukung tata kelola yang baik...
+                    {{ sambutan.isi_sambutan }}
                 </p>
                 <div class="pt-2">
-                    <p class="font-semibold text-amber-600 italic text-sm border-l-4 border-amber-500 pl-3">Dr. Intam Kurnia, M.Si.</p>
+                    <p class="font-semibold text-amber-600 italic text-sm border-l-4 border-amber-500 pl-3">{{ sambutan.nama_koor }}</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Galeri Kegiatan (ID: galeri) -->
+    <!-- Galeri Kegiatan -->
     <section id="galeri" class="max-w-6xl mx-auto py-16 px-6 border-t border-slate-200">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-tealBrand">Galeri Kegiatan</h2>
         </div>
-        <div class="flex justify-between items-center bg-white p-12 rounded-2xl border border-slate-200 shadow-sm relative">
-            <button class="w-10 h-10 bg-white border border-slate-300 rounded-full flex items-center justify-center shadow hover:bg-slate-50"><i class="fa-solid fa-chevron-left"></i></button>
-            <p class="text-slate-400 text-sm italic">Belum ada galeri.</p>
-            <button class="w-10 h-10 bg-white border border-slate-300 rounded-full flex items-center justify-center shadow hover:bg-slate-50"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+            {% if galeri_list %}
+                <div class="grid sm:grid-cols-3 gap-6">
+                    {% for g in galeri_list %}
+                        <div class="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <img src="{{ g.foto.url }}" alt="{{ g.judul }}" class="w-full h-48 object-cover rounded-lg">
+                            <p class="text-xs font-semibold text-slate-700 text-center">{{ g.judul }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-slate-400 text-sm italic text-center">Belum ada galeri kegiatan.</p>
+            {% endif %}
         </div>
     </section>
 
-    <!-- Berita Terbaru (ID: berita) -->
+    <!-- Berita Terbaru -->
     <section id="berita" class="max-w-6xl mx-auto py-16 px-6">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-tealBrand">Berita Terbaru</h2>
             <p class="text-slate-500 text-xs mt-1">Berita terbaru seputar Administrasi Publik</p>
         </div>
-        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
-            <p class="text-slate-400 text-sm italic">Belum ada berita.</p>
-        </div>
+        {% if berita_list %}
+            <div class="grid md:grid-cols-3 gap-6">
+                {% for b in berita_list %}
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-2">
+                        <img src="{{ b.gambar.url }}" alt="{{ b.judul }}" class="w-full h-36 object-cover rounded-lg">
+                        <span class="text-[10px] text-slate-400">{{ b.tanggal }}</span>
+                        <h3 class="font-bold text-slate-800 text-sm">{{ b.judul }}</h3>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
+                <p class="text-slate-400 text-sm italic">Belum ada berita.</p>
+            </div>
+        {% endif %}
     </section>
 
-    <!-- Akademik / Kurikulum (ID: akademik) -->
+    <!-- Akademik / Kurikulum -->
     <section id="akademik" class="max-w-6xl mx-auto py-16 px-6">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-tealBrand">Kurikulum & Akademik</h2>
             <p class="text-slate-500 text-xs mt-1">Informasi mata kuliah dan panduan studi</p>
         </div>
-        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
-            <p class="text-slate-400 text-sm italic">Informasi akademik akan segera diperbarui.</p>
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+            {% if akademik_list %}
+                <div class="space-y-4">
+                    {% for a in akademik_list %}
+                        <div class="border-b border-slate-100 pb-4">
+                            <h3 class="font-bold text-teal-800 text-base">{{ a.judul_informasi }}</h3>
+                            <p class="text-slate-600 text-xs mt-1">{{ a.deskripsi }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-slate-400 text-sm italic text-center">Informasi akademik belum tersedia.</p>
+            {% endif %}
         </div>
     </section>
 
-    <!-- Staf / Dosen (ID: staf) -->
+    <!-- Staf & Dosen -->
     <section id="staf" class="max-w-6xl mx-auto py-16 px-6">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-tealBrand">Staf & Dosen</h2>
             <p class="text-slate-500 text-xs mt-1">Daftar dosen pengampu Program Studi Administrasi Publik</p>
         </div>
-        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
-            <p class="text-slate-400 text-sm italic">Data staf dan dosen sedang dimuat.</p>
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+            {% if staf_list %}
+                <div class="grid sm:grid-cols-3 gap-6">
+                    {% for s in staf_list %}
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center space-y-2">
+                            <img src="{{ s.foto.url }}" alt="{{ s.nama }}" class="w-24 h-24 object-cover rounded-full mx-auto shadow">
+                            <h3 class="font-bold text-slate-800 text-sm">{{ s.nama }}</h3>
+                            <p class="text-teal-600 text-xs font-semibold">{{ s.jabatan }}</p>
+                            <p class="text-slate-400 text-[10px]">NIP/NIDN: {{ s.nip_nidn }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-slate-400 text-sm italic text-center">Data staf dan dosen belum diinput.</p>
+            {% endif %}
         </div>
     </section>
 
-    <!-- Akreditasi (ID: akreditasi) -->
+    <!-- Akreditasi -->
     <section id="akreditasi" class="max-w-6xl mx-auto py-16 px-6">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-tealBrand">Akreditasi Program Studi</h2>
             <p class="text-slate-500 text-xs mt-1">Sertifikat dan status mutu lembaga</p>
         </div>
-        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
-            <p class="text-slate-400 text-sm italic">Akreditasi: Unggul (A).</p>
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center space-y-3">
+            <h3 class="text-2xl font-extrabold text-amber-500">Akreditasi: {{ akreditasi.status_akreditasi|default:"Unggul (A)" }}</h3>
+            <p class="text-slate-600 text-xs">Nomor SK: {{ akreditasi.nomor_sk|default:"Belum diatur" }}</p>
         </div>
     </section>
 
-    <!-- Hubungi Kami & Peta (ID: kontak) -->
+    <!-- Hubungi Kami -->
     <section id="kontak" class="max-w-6xl mx-auto py-20 px-6">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-tealBrand">Hubungi Kami</h2>
@@ -116,15 +153,15 @@
                 <div class="space-y-4 text-xs sm:text-sm leading-relaxed">
                     <p class="flex items-start gap-3">
                         <i class="fa-solid fa-location-dot mt-1 text-amber-400"></i>
-                        <span>Jl. Soekarno Hatta No.KM.9, Tondo, Kec. Mantikulore, Kota Palu, Sulawesi Tengah 94148</span>
+                        <span>{{ kontak.alamat|default:"Jl. Soekarno Hatta No.KM.9, Tondo, Palu" }}</span>
                     </p>
                     <p class="flex items-center gap-3">
                         <i class="fa-solid fa-phone text-amber-400"></i>
-                        <span>085330144401</span>
+                        <span>{{ kontak.telepon|default:"085330144401" }}</span>
                     </p>
                     <p class="flex items-center gap-3">
                         <i class="fa-solid fa-envelope text-amber-400"></i>
-                        <span>Admpublik.FISIP@untad.ac.id</span>
+                        <span>{{ kontak.email|default:"Admpublik.FISIP@untad.ac.id" }}</span>
                     </p>
                 </div>
             </div>
