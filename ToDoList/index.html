@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Tailwind CSS</title>
+    <!-- Framework Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome untuk ikon UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex items-center justify-center p-4">
+
+    <!-- Container Toast Notifikasi (Melayang di kanan atas) -->
+    <div id="toast" class="fixed top-5 right-5 z-50 flex items-center gap-2 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-medium transition-all duration-300 opacity-0 translate-y-[-10px] pointer-events-none">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMsg">Notifikasi</span>
+    </div>
+
+    <!-- Card Utama Aplikasi Todolist -->
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 border border-slate-200">
+        
+        <!-- Header Aplikasi -->
+        <div class="mb-5">
+            <h1 class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-3">
+                <i class="fa-solid fa-square-check text-indigo-600"></i> To-Do List
+            </h1>
+
+            <!-- Section Statistik Real-time -->
+            <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                <div>
+                    <div id="statTotal" class="text-base font-bold text-indigo-600">0</div>
+                    <div class="text-[10px] font-semibold text-slate-500 uppercase">Total</div>
+                </div>
+                <div>
+                    <div id="statCompleted" class="text-base font-bold text-emerald-600">0</div>
+                    <div class="text-[10px] font-semibold text-slate-500 uppercase">Selesai</div>
+                </div>
+                <div>
+                    <div id="statPending" class="text-base font-bold text-amber-500">0</div>
+                    <div class="text-[10px] font-semibold text-slate-500 uppercase">Pending</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Input Tugas & Tombol Tambah -->
+        <div class="flex gap-2 mb-4">
+            <input type="text" id="taskInput" placeholder="Tambah tugas baru..." autocomplete="off" class="flex-1 px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-sm outline-none focus:border-indigo-500 transition">
+            <button id="addBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Filter Buttons (Semua, Pending, Selesai) -->
+        <div class="flex bg-slate-100 p-1 rounded-xl mb-4 text-xs font-semibold text-slate-500">
+            <button class="filter-btn flex-1 py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition" data-filter="all">Semua</button>
+            <button class="filter-btn flex-1 py-1.5 rounded-lg transition" data-filter="pending">Pending</button>
+            <button class="filter-btn flex-1 py-1.5 rounded-lg transition" data-filter="completed">Selesai</button>
+        </div>
+
+        <!-- Wadah List Tugas -->
+        <ul id="taskList" class="space-y-2 max-h-72 overflow-y-auto pr-1"></ul>
+
+    </div>
+
+    <!-- Menghubungkan File Script JS -->
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Program Studi Administrasi Publik</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              hovergold: '#e59900',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-50 text-slate-800 overflow-x-hidden antialiased">
+
+  <!-- Floating WhatsApp -->
+  <a href="#" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Header / Navbar -->
+  <nav class="fixed top-0 left-0 w-full h-[70px] bg-brand-teal flex justify-between items-center px-6 md:px-10 z-50 shadow-md">
+    <div class="flex items-center gap-3 text-white">
+      <i class="fas fa-graduation-cap text-3xl text-[#fcc419]"></i>
+      <div>
+        <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
+        <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      </div>
+    </div>
+    <ul class="hidden lg:flex list-none gap-4">
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Beranda</a></li>
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Tentang <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Penelitian <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Akademik <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Staf <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Akreditasi <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section dengan Background Video -->
+  <section class="relative w-full h-screen overflow-hidden flex items-center justify-center text-center pt-[70px]" id="hero">
+    <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
+      <source src="{% static 'vidio/vidio1.mp4' %}" type="video/mp4">
+      Browser kamu tidak mendukung tag video.
+    </video>
+
+    <!-- Overlay Gelap -->
+    <div class="absolute inset-0 bg-black/60 z-10"></div>
+
+    <div class="relative z-20 max-w-3xl px-5 text-white">
+      <h3 class="text-2xl md:text-3xl font-semibold mb-2 tracking-wide">Welcome to</h3>
+      <h1 class="text-3xl md:text-5xl font-bold text-brand-gold mb-3 leading-tight">Program Studi Administrasi Publik</h1>
+      <p class="text-base md:text-lg font-light text-slate-200 mb-7">Fakultas Ilmu Sosial dan Ilmu Politik<br>Universitas Tadulako</p>
+      <a href="#sambutan" class="inline-block bg-brand-gold text-slate-900 text-sm font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-brand-hovergold hover:-translate-y-0.5 hover:scale-105 transition duration-200">Jelajahi Lebih Lanjut</a>
+    </div>
+  </section>
+
+  <!-- Sambutan Koordinator Prodi -->
+  <section class="py-20 px-6 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-12" id="sambutan">
+    <div class="flex-1 flex justify-center">
+      {% if sambutan and sambutan.foto %}
+        <img src="{% static 'images/' %}{{ sambutan.foto }}" alt="Foto Koordinator Prodi" class="w-72 h-96 object-cover rounded-3xl shadow-xl bg-slate-300">
+      {% else %}
+        <img src="{% static 'images/foto1.jpg' %}" alt="Foto Koordinator Prodi" class="w-72 h-96 object-cover rounded-3xl shadow-xl bg-slate-300">
+      {% endif %}
+    </div>
+    <div class="flex-[2]">
+      <h2 class="text-brand-teal text-2xl font-bold mb-4">
+        {% if sambutan %}{{ sambutan.judul }}{% else %}Sambutan Koordinator Prodi{% endif %}
+      </h2>
+      <p class="text-sm leading-relaxed text-slate-600 mb-5 text-justify">
+        {% if sambutan %}
+          {{ sambutan.isi }}
+        {% else %}
+          Assalamu'alaikum warahmatullahi wabarakatuh, Salam sejahtera untuk kita semua. Selamat datang di website resmi Program Studi Administrasi Publik, Fakultas Ilmu Sosial dan Ilmu Politik Universitas Tadulako. Sebagai salah satu program studi tertua di Universitas Tadulako, Administrasi Publik terus berkembang melalui penguatan kelembagaan, peningkatan kualitas sumber daya manusia, serta pemanfaatan teknologi untuk mendukung tata kelola yang baik, pelaksanaan tridharma, dan pelayanan akademik. Website ini menjadi sarana informasi, akuntabilitas, dan komunikasi bagi mahasiswa, dosen, tenaga kependidikan, alumni, masyarakat, mitra pemerintah, dunia usaha, serta calon mahasiswa. Konten dan layanan akan terus diperbarui sesuai perkembangan teknologi dan kebutuhan publik. Kami juga terbuka terhadap saran dan masukan demi peningkatan kualitas layanan digital ini. Semoga website ini bermanfaat, memberikan informasi yang dibutuhkan, serta menjadi media komunikasi yang efektif bagi kita semua.
+        {% endif %}
+      </p>
+      <div class="text-sm font-semibold italic text-slate-700 border-l-4 border-brand-gold pl-3">
+        {% if sambutan %}{{ sambutan.nama_author }}{% else %}Dr. Intam Kurnia, M.Si.{% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Galeri Kegiatan -->
+  <section class="py-16 px-6 text-center bg-white" id="penelitian">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-2xl font-bold text-brand-teal mb-2">Galeri Kegiatan</h2>
+      <p class="text-xs text-slate-500 mb-8">Dokumentasi kegiatan dan agenda akademik terkini</p>
+
+      {% if daftar_galeri %}
+        <div class="flex flex-wrap justify-center gap-6">
+          {% for galeri in daftar_galeri %}
+            <div class="w-72 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200">
+              <img src="{% static 'images/' %}{{ galeri.gambar }}" alt="{{ galeri.judul }}" class="w-full h-44 object-cover bg-slate-100">
+              <div class="p-4 text-left">
+                <h3 class="text-sm font-semibold text-brand-teal line-clamp-2">{{ galeri.judul }}</h3>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-sm text-slate-500 py-10">Belum ada galeri.</div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Berita Terbaru -->
+  <section class="py-16 px-6 text-center bg-slate-50" id="akademik">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-2xl font-bold text-brand-teal mb-2">Berita Terbaru</h2>
+      <p class="text-xs text-slate-500 mb-8">Berita terbaru seputar Administrasi Publik</p>
+
+      {% if daftar_berita %}
+        <div class="flex flex-wrap justify-center gap-6">
+          {% for berita in daftar_berita %}
+            <div class="w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col">
+              {% if berita.gambar %}
+                <img src="{% static 'images/' %}{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-44 object-cover bg-slate-100">
+              {% endif %}
+              <div class="p-4 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 class="text-sm font-bold text-brand-teal mb-2 line-clamp-2">{{ berita.judul }}</h3>
+                  {% if berita.ringkasan %}
+                    <p class="text-xs text-slate-500 line-clamp-3 leading-relaxed">{{ berita.ringkasan }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-sm text-slate-500 py-10">Belum ada berita.</div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Event Terdekat -->
+  <section class="py-16 px-6 text-center bg-white" id="kemahasiswaan">
+    <h2 class="text-2xl font-bold text-brand-teal mb-2">Event Terdekat</h2>
+    <div class="text-sm text-slate-500 py-10">Belum ada event terjadwal.</div>
+  </section>
+
+  <!-- Sistem Informasi -->
+  <section class="py-16 px-6 text-center bg-slate-50" id="akreditasi">
+    <h2 class="text-2xl font-bold text-brand-teal mb-2">Sistem Informasi</h2>
+    <p class="text-xs text-slate-500 mb-8">Akses berbagai layanan akademik dan informasi di Universitas Tadulako</p>
+    <div class="text-sm text-slate-500 py-10">Belum ada sistem informasi.</div>
+  </section>
+
+  <!-- Footer & Hubungi Kami -->
+  <footer class="bg-brand-darkteal text-white pt-12">
+    <!-- Contact Card -->
+    <div class="max-w-5xl mx-auto px-6 -translate-y-12">
+      <div class="bg-brand-teal rounded-2xl p-8 flex flex-col md:flex-row gap-8 shadow-2xl">
+        <div class="flex-1 min-w-[280px]">
+          <h3 class="text-lg font-semibold mb-5">Informasi Kontak</h3>
+          <div class="flex items-start gap-3 text-xs leading-relaxed text-slate-200 mb-4">
+            <i class="fas fa-map-marker-alt text-brand-gold mt-1"></i>
+            <span>Jl. Soekarno Hatta No.KM.9, Tondo, Kec. Mantikulore, Kota Palu, Sulawesi Tengah 94148</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs leading-relaxed text-slate-200 mb-4">
+            <i class="fas fa-phone-alt text-brand-gold"></i>
+            <span>085330144401</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs leading-relaxed text-slate-200">
+            <i class="fas fa-envelope text-brand-gold"></i>
+            <span>Admpublik.FISIP@untad.ac.id</span>
+          </div>
+        </div>
+        <div class="flex-1 min-w-[280px] h-48 bg-slate-300 rounded-xl overflow-hidden">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15959.083313264639!2d119.8967912!3d-0.8354924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2d8bef5a3e1dfad5%3A0xe67db5d96a79fc29!2sUniversitas%20Tadulako!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
+            class="w-full h-full border-0" 
+            allowfullscreen="" 
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="max-w-6xl mx-auto px-6 pb-12 flex flex-wrap justify-between gap-10 border-b border-white/10">
+      <div class="w-full md:w-auto">
+        <h4 class="text-sm font-semibold text-brand-gold mb-4">Administrasi Publik</h4>
+        <p class="text-xs text-slate-300 max-w-xs">FISIP Untad</p>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold mb-4">Tautan Cepat</h4>
+        <ul class="text-xs space-y-2 text-slate-300">
+          <li><a href="#" class="hover:text-brand-gold transition">Website FISIP</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition">Website UNTAD</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition">Website Kepegawaian</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition">Siaga B</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition">Dosen Prodi Administrasi Publik</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition">Sertifikat Akreditasi</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold mb-4">Follow Us</h4>
+        <div class="flex gap-2">
+          <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="mt-4 bg-black/20 p-3 rounded-md text-xs leading-relaxed">
+          <p>Pengunjung</p>
+          <p>Hari ini: 0000</p>
+          <p>Total: 006320</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center py-6 text-xs text-slate-400">
+      &copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako. Crafted by Diginus
+    </div>
+  </footer>
+
+</body>
+</html>
