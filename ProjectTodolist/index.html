@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Todo List Canggih</title>
+    <!-- Memuat Tailwind CSS via CDN untuk desain responsif dan mobile-friendly -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+    <!-- Kontainer utama aplikasi Todo List (diperbesar jadi max-w-3xl agar lebih lebar) -->
+    <div class="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Todo List Canggih</h1>
+
+        <!-- Bagian Input Tugas (responsif: bertumpuk di HP, menyamping di layar besar) -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-6">
+            <input type="text" id="taskInput" placeholder="Tambahkan tugas baru..."
+                class="w-full sm:flex-1 px-5 py-3 border border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button id="addTaskBtn"
+                class="w-full sm:w-auto bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition">
+                Tambah
+            </button>
+        </div>
+
+        <!-- Bagian Statistik Tugas -->
+        <div class="flex justify-between text-base text-gray-700 bg-gray-50 p-4 rounded-xl mb-6 border">
+            <span>Total Tugas: <strong id="totalTasks" class="text-indigo-600">0</strong></span>
+            <span>Selesai: <strong id="completedTasks" class="text-green-600">0</strong></span>
+        </div>
+
+        <!-- Bagian Tombol Filter -->
+        <div class="flex gap-2 mb-6">
+            <button data-filter="all"
+                class="filter-btn flex-1 py-2 text-sm font-medium bg-gray-200 text-gray-700 rounded-lg transition">Semua</button>
+            <button data-filter="active"
+                class="filter-btn flex-1 py-2 text-sm font-medium bg-gray-200 text-gray-700 rounded-lg transition">Belum</button>
+            <button data-filter="completed"
+                class="filter-btn flex-1 py-2 text-sm font-medium bg-gray-200 text-gray-700 rounded-lg transition">Selesai</button>
+        </div>
+
+        <!-- Daftar Tabel Tugas (tinggi maksimum diperbesar jadi max-h-96) -->
+        <div class="overflow-x-auto max-h-96 overflow-y-auto border border-gray-200 rounded-xl">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-50 text-gray-700 text-xs uppercase tracking-wider sticky top-0 border-b">
+                    <tr>
+                        <th class="p-4 w-16 text-center">Status</th>
+                        <th class="p-4">Nama Tugas</th>
+                        <th class="p-4 text-right w-28">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="taskList" class="divide-y divide-gray-200 text-base">
+                    <!-- Baris item tugas akan dimasukkan secara dinamis lewat JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Menghubungkan file skrip eksternal -->
+    <script src="script.js"></script>
+</body>
+
+</html>

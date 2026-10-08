@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Administrasi Publik - FISIP Universitas Tadulako{% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tealBrand: '#008080',
+                        tealDark: '#005f5f',
+                        tealHeader: '#0b6666'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+
+    <!-- Navbar Utama -->
+    <nav class="bg-[#0f6b6b] text-white shadow-md sticky top-0 z-50 py-3.5 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo & Title -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow">
+                    <span class="text-xs font-bold text-red-600">🏛️</span>
+                </div>
+                <div>
+                    <span class="font-bold text-base tracking-wide block leading-tight">Administrasi Publik</span>
+                    <span class="text-[10px] text-teal-100 tracking-wider">FISIP Universitas Tadulako</span>
+                </div>
+            </div>
+
+<!-- Menu Navigation (Menu Utama Bisa Diklik) -->
+            <div class="hidden lg:flex items-center space-x-6 text-sm font-medium">
+                <a href="#" class="hover:text-amber-300 transition py-2">Beranda</a>
+                
+                <!-- Dropdown Tentang (Teks utamanya bisa diklik ke #sambutan) -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                        Tentang <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sambutan Koorprodi</a>
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Visi & Misi</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown Penelitian -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                        Penelitian <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Fokus Riset</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown Akademik -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                        Akademik <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Kurikulum & MK</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown Staf -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="# " class="hover:text-amber-300 flex items-center gap-1">
+                        Staf <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Dosen Pengampu</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown Kemahasiswaan -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                        Kemahasiswaan & Alumni <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Galeri Kegiatan</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown Akreditasi -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                        Akreditasi <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sertifikat BAN-PT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- KONTEN UTAMA -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer Bawah -->
+    <footer class="bg-[#0b5c5c] text-slate-200 pt-12 pb-6 px-6 border-t border-teal-900">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-8 pb-8 border-b border-teal-800 text-sm">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">🏛️</span>
+                    <div>
+                        <h3 class="font-bold text-white text-base">Administrasi Publik</h3>
+                        <p class="text-xs text-teal-200">FISIP Untad</p>
+                    </div>
+                </div>
+                <p class="text-xs text-teal-100 leading-relaxed space-y-1">
+                    <span class="block">📍 Jl. Soekarno Hatta No.KM.9, Tondo, Kec. Mantikulore, Kota Palu, Sulawesi Tengah 94148</span>
+                    <span class="block pt-1">📞 085330144401</span>
+                    <span class="block">📧 Admpublik.FISIP@untad.ac.id</span>
+                </p>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-white text-base mb-4">Tautan Cepat</h3>
+                <ul class="space-y-2 text-xs text-teal-100">
+                    <li><a href="#" class="hover:underline">Website FISIP</a></li>
+                    <li><a href="#" class="hover:underline">Website UNTAD</a></li>
+                    <li><a href="#" class="hover:underline">Website Kepegawaian</a></li>
+                    <li><a href="#" class="hover:underline">Siga B</a></li>
+                    <li><a href="#" class="hover:underline">Dosen Prodi Administrasi Publik</a></li>
+                    <li><a href="#" class="hover:underline">Sertifikat Akreditasi</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="font-bold text-white text-base">Follow Us</h3>
+                <div class="flex gap-3 text-lg">
+                    <a href="#" class="w-9 h-9 bg-white text-teal-800 rounded-full flex items-center justify-center hover:bg-teal-100"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-9 h-9 bg-white text-teal-800 rounded-full flex items-center justify-center hover:bg-teal-100"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-9 h-9 bg-white text-teal-800 rounded-full flex items-center justify-center hover:bg-teal-100"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+                <div class="bg-[#084848] p-4 rounded-xl text-xs space-y-1 text-teal-100 border border-teal-700/50">
+                    <p class="font-bold text-white mb-1">Pengunjung</p>
+                    <p>Hari Ini: 0000</p>
+                    <p>Total: 006320</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-6 text-center text-xs text-teal-300">
+            <p>&copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako. Crafted by Diginus</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-2xl text-2xl transition">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Floating Scroll Top Button (Hanya muncul saat discroll ke bawah) -->
+    <button id="scrollTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 left-6 z-50 bg-amber-400 hover:bg-amber-500 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg text-sm font-bold transition-all duration-300 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Script JavaScript untuk memunculkan tombol panah atas saat di-scroll -->
+    <script>
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollBtn.classList.remove('opacity-0', 'pointer-events-none');
+                scrollBtn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                scrollBtn.classList.add('opacity-0', 'pointer-events-none');
+                scrollBtn.classList.remove('opacity-100', 'pointer-events-auto');
+            }
+        });
+    </script>
+
+</body>
+</html>
