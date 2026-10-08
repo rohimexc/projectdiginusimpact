@@ -14,28 +14,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# Mengimpor modul panel admin bawaan Django
+#untuk menghubungkan#
 from django.contrib import admin
-
-# Mengimpor fungsi path untuk memetakan rute URL ke fungsi view
 from django.urls import path
-
-# Mengimpor fungsi view 'home' yang sudah dibuat di file core/views.py
+from django.conf import settings
+from django.conf.urls.static import static
 from core.views import home
 
-from django.conf.urls.static import static
-from django.conf import settings
-# Daftar pola rute URL yang bisa diakses di website
+# Daftar rute URL website
 urlpatterns = [
-    # Rute untuk mengakses dashboard/panel admin Django (contoh: 127.0.0.1:8000/admin/)
     path('admin/', admin.site.urls),
-    
-    # Rute halaman utama/root URL (127.0.0.1:8000/) yang akan menjalankan fungsi 'home'
     path('', home, name='home'),
 ]
 
+# Konfigurasi penyajian file statis dan media saat mode development (DEBUG = True)
 if settings.DEBUG:
+    # Membaca file statis dari STATICFILES_DIRS (bukan STATIC_ROOT saat development)
+    if hasattr(settings, 'STATICFILES_DIRS') and settings.STATICFILES_DIRS:
+        urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+    else:
+        urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Membaca file media jika MEDIA_URL dan MEDIA_ROOT sudah didefinisikan di settings.py
+    if hasattr(settings, 'MEDIA_ROOT') and settings.MEDIA_ROOT:
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
