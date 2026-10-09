@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Aplikasi kustom prodi yang memuat views, urls, dan template landing page
     'core',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -122,6 +123,7 @@ STATIC_URL = '/static/'
 # Tempat Django mencari file static dari semua app & folder global
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),  # ← folder static global
 ]
+AUTH_USER_MODEL = 'users.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
