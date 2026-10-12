@@ -1,0 +1,136 @@
+/* ==========================================================================
+   SECTION PORTOFOLIO (MARQUEE / CAROUSEL)
+   ========================================================================== */
+.portfolio-marquee::-webkit-scrollbar {
+    height: 6px;
+}
+
+.portfolio-marquee::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.portfolio-marquee::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.portfolio-marquee::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.portfolio-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.06);
+    border-color: #2563eb;
+}
+
+.portfolio-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.portfolio-icon-box {
+    font-size: 24px;
+    color: #2563eb;
+    transition: transform 0.3s ease;
+}
+
+.portfolio-card:hover .portfolio-icon-box {
+    transform: scale(1.15);
+}
+
+.portfolio-badge {
+    font-size: 11px;
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.portfolio-content h3 {
+    font-size: 18px;
+    color: #0d233a;
+    margin-bottom: 8px;
+}
+
+.portfolio-content p {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.dual-marquee-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+}
+
+.marquee-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    flex-shrink: 0; 
+}
+
+.track-right {
+    animation: scrollRight 150s linear infinite;
+}
+
+.track-left {
+    animation: scrollLeft 150s linear infinite;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.marquee-wrapper .portfolio-card {
+    min-width: 300px;
+    flex: 0 0 300px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+@keyframes scrollRight {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes scrollLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.portfolio-section-wrapper {
+    overflow: hidden;
+}
+
+.portfolio-container-fluid {
+    max-width: 100%;
+    padding: 0;
+}
+
+.portfolio-container-fluid .section-title {
+    padding: 0 20px;
+}

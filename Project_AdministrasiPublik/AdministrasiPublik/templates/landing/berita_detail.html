@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ berita.judul }} - Administrasi Publik{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-16 px-6 space-y-6">
+        <div class="mb-6">
+        <a href="/#beranda" class="inline-flex items-center gap-2 text-xs font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition">
+            &larr; Kembali ke Beranda
+        </a>
+    </div>
+    
+    <div class="space-y-2">
+        <span class="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md">{{ berita.post_date|date:"d M Y, H:i" }}</span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-tealBrand">{{ berita.judul }}</h1>
+    </div>
+
+    <div class="w-full h-80 bg-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+    </div>
+
+    <div class="text-slate-700 text-sm sm:text-base leading-relaxed space-y-4 text-justify bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+        {{ berita.konten|linebreaks }}
+    </div>
+</div>
+{% endblock %}
