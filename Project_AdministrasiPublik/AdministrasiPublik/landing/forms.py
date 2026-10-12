@@ -19,7 +19,12 @@ class GaleriForm(forms.ModelForm):
 class BeritaForm(forms.ModelForm):
     class Meta:
         model = Berita
-        fields = ['judul', 'konten', 'gambar']
+        fields = ['judul', 'konten', 'gambar', 'post_date']
+        widgets = {
+            'judul': forms.TextInput(attrs={'class': 'w-full p-2 border rounded-lg'}),
+            'konten': forms.Textarea(attrs={'class': 'w-full p-2 border rounded-lg', 'rows': 6}),
+            'post_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'w-full p-2 border rounded-lg'}),
+        }
 
 class StafForm(forms.ModelForm):
     class Meta:

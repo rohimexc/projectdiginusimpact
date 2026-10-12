@@ -15,10 +15,10 @@ class GaleriAdmin(admin.ModelAdmin):
 
 @admin.register(Berita)
 class BeritaAdmin(admin.ModelAdmin):
-    list_display = ('judul', 'tanggal')
-    list_filter = ('tanggal',)
+    list_display = ('judul', 'post_date')  # 'tanggal' diganti 'post_date'
+    list_filter = ('post_date',)           # 'tanggal' diganti 'post_date'
     search_fields = ('judul', 'konten')
-    ordering = ('-tanggal',)
+    ordering = ('-post_date',)             # 'tanggal' diganti 'post_date'
 
 @admin.register(Akademik)
 class AkademikAdmin(admin.ModelAdmin):

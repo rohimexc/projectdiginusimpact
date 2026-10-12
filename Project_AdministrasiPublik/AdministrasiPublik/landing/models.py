@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 class Sambutan(models.Model):
     judul = models.CharField(max_length=200, default="Sambutan Koordinator Prodi")
@@ -18,13 +19,25 @@ class Galeri(models.Model):
 
 class Berita(models.Model):
     judul = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     konten = models.TextField()
     gambar = models.ImageField(upload_to='images/berita/')
-    tanggal = models.DateField(auto_now_add=True)
+    
+    # Sesuai permintaan: datetime create, update, dan post untuk pengurutan
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    post_date = models.DateTimeField(help_text="Tanggal dan waktu publikasi berita")
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.judul)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.judul
 
+    class Meta:
+        ordering = ['-post_date'] # Urutkan otomatis berdasarkan post terbaru
 class Akademik(models.Model):
     judul_informasi = models.CharField(max_length=200)
     deskripsi = models.TextField()
