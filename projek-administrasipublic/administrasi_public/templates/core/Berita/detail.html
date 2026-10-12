@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ berita.judul }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <nav class="bg-white border-b py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="{% url 'berita_list' %}" class="font-bold text-blue-900 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Semua Berita
+            </a>
+            <div class="flex gap-2">
+                <a href="{% url 'berita_update' berita.pk %}" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg font-bold">Edit</a>
+                <a href="{% url 'berita_delete' berita.pk %}" class="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold">Hapus</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <span class="text-xs text-blue-800 font-bold bg-blue-50 px-3 py-1 rounded-full">
+            Diposting pada: {{ berita.posted_at|date:"d F Y, H:i" }}
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-6 leading-tight">
+            {{ berita.judul }}
+        </h1>
+        
+        {% if berita.gambar %}
+        <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full max-h-[450px] object-cover rounded-2xl mb-8 shadow-sm">
+        {% endif %}
+
+        <div class="text-slate-700 leading-relaxed text-base whitespace-pre-line">
+            {{ berita.konten|default:berita.ringkasan }}
+        </div>
+    </main>
+</body>
+</html>

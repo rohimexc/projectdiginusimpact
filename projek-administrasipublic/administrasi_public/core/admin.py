@@ -32,13 +32,8 @@ class GaleriAdmin(admin.ModelAdmin):
 
 @admin.register(Berita)
 class BeritaAdmin(admin.ModelAdmin):
-    list_display = ('judul', 'tanggal', 'gambar')
-    
-    # 1. Search bar
-    search_fields = ('judul', 'ringkasan')
-    
-    # 2. Filter di sidebar kanan (bisa filter berdasarkan tanggal publikasi)
-    list_filter = ('tanggal',)
-    
-    # 3. Sort default (berita tanggal terbaru paling atas)
-    ordering = ('-tanggal',)
+    # Ganti 'tanggal' dengan 'posted_at' dan 'created_at'
+    list_display = ('judul', 'posted_at', 'created_at')
+    search_fields = ('judul', 'ringkasan', 'konten')
+    list_filter = ('posted_at', 'created_at')
+    ordering = ('-posted_at',)
