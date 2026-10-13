@@ -9,4 +9,6 @@ urlpatterns = [
     path('berita/<slug:slug>/', views.berita_detail_view, name='berita_detail'),
     path('berita/<slug:slug>/edit/', views.berita_update_view, name='berita_update'),
     path('berita/<slug:slug>/hapus/', views.berita_delete_view, name='berita_delete'),
+    path('tenaga-pendidik/', views.tenaga_pendidik_view, name='tenaga_pendidik'),
+    path('tenaga-pendidik/<int:pk>/', views.detail_tenaga_pendidik_view, name='detail_tenaga_pendidik'),
 ]

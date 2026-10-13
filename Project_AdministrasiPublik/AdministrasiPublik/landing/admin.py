@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Sambutan, Galeri, Berita, Akademik, StafDosen, Akreditasi, Kontak
+from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak
 
 @admin.register(Sambutan)
 class SambutanAdmin(admin.ModelAdmin):
@@ -25,12 +25,10 @@ class AkademikAdmin(admin.ModelAdmin):
     list_display = ('judul_informasi',)
     search_fields = ('judul_informasi', 'deskripsi')
 
-@admin.register(StafDosen)
-class StafDosenAdmin(admin.ModelAdmin):
-    list_display = ('nama', 'jabatan', 'nip_nidn')
-    list_filter = ('jabatan',)
-    search_fields = ('nama', 'nip_nidn', 'jabatan')
-    ordering = ('nama',)
+@admin.register(TenagaPendidik)
+class TenagaPendidikAdmin(admin.ModelAdmin):
+    list_display = ('nama', 'nip', 'bidang_ilmu', 'pangkat_gol')
+    search_fields = ('nama', 'nip', 'bidang_ilmu')
 
 @admin.register(Akreditasi)
 class AkreditasiAdmin(admin.ModelAdmin):

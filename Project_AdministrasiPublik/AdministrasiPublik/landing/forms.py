@@ -1,5 +1,5 @@
 from django import forms
-from .models import Sambutan, Galeri, Berita, Akademik, StafDosen
+from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik
 
 class SambutanForm(forms.ModelForm):
     class Meta:
@@ -26,7 +26,7 @@ class BeritaForm(forms.ModelForm):
             'post_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'w-full p-2 border rounded-lg'}),
         }
 
-class StafForm(forms.ModelForm):
+class TenagaPendidikForm(forms.ModelForm):
     class Meta:
-        model = StafDosen
-        fields = ['nama', 'jabatan', 'nip_nidn', 'foto']
+        model = TenagaPendidik
+        fields = ['nama', 'email', 'bidang_ilmu', 'nip', 'pangkat_gol', 'jabatan', 'foto']

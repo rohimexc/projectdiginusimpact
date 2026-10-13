@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import Sambutan, Galeri, Berita, Akademik, StafDosen, Akreditasi, Kontak
+from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak 
+from django.db.models import Q
 from .forms import BeritaForm
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
     galeri_list = Galeri.objects.all()
     akademik_list = Akademik.objects.all()
-    staf_list = StafDosen.objects.all()
+    staf_list = TenagaPendidik.objects.all()
     akreditasi = Akreditasi.objects.first()
     kontak = Kontak.objects.first()
     sambutan = Sambutan.objects.first()
@@ -95,9 +96,48 @@ def berita_delete_view(request, slug):
         return redirect('berita_list')
     return render(request, 'landing/berita_confirm_delete.html', {'berita': berita})
 
-def staf_page(request):
-    staf_list = StafDosen.objects.all()
-    return render(request, 'landing/staf.html', {'staf_list': staf_list})
+def tenaga_pendidik_view(request):
+    query = request.GET.get('q', '')
+    if query:
+        # Filter berdasarkan nama, bidang ilmu, atau NIP menggunakan Q
+        pendidik_list = TenagaPendidik.objects.filter(
+            Q(nama__icontains=query) | 
+            Q(bidang_ilmu__icontains=query) | 
+            Q(nip__icontains=query)
+        )
+    else:
+        pendidik_list = TenagaPendidik.objects.all()
+
+    context = {
+        'pendidik_list': pendidik_list,
+        'query': query,
+    }
+    return render(request, 'landing/TenagaPendidik/Tenaga_Pendidik.html', context)
+    query = request.GET.get('q', '')
+    if query:
+        # Filter berdasarkan nama, bidang ilmu, atau NIP
+        pendidik_list = TenagaPendidik.objects.filter(
+            models.Q(nama__icontains=query) | 
+            models.Q(bidang_ilmu__icontains=query) | 
+            models.Q(nip__icontains=query)
+        )
+    else:
+        pendidik_list = TenagaPendidik.objects.all()
+
+    context = {
+        'pendidik_list': pendidik_list,
+        'query': query,
+    }
+    return render(request, 'landing/Tenaga_Pendidik.html', context)
+def detail_tenaga_pendidik_view(request, pk):
+    from django.shortcuts import get_object_or_404
+    # Sesuaikan TenagaPendidik atau StafDosen dengan nama model kamu
+    pendidik = get_object_or_404(TenagaPendidik, pk=pk)
+    
+    context = {
+        'pendidik': pendidik,
+    }
+    return render(request, 'landing/TenagaPendidik/detail_tenaga_pendidik.html', context)
 
 def galeri_page(request):
     galeri_list = Galeri.objects.all()

@@ -46,11 +46,15 @@ class Akademik(models.Model):
     def __str__(self):
         return self.judul_informasi
 
-class StafDosen(models.Model):
-    nama = models.CharField(max_length=150)
-    jabatan = models.CharField(max_length=100)
-    nip_nidn = models.CharField(max_length=50)
-    foto = models.ImageField(upload_to='images/staf/')
+class TenagaPendidik(models.Model): # atau StafDosen
+    nama = models.CharField(max_length=200)
+    email = models.EmailField(blank=True, null=True)
+    bidang_ilmu = models.CharField(max_length=150)
+    nip = models.CharField(max_length=50, blank=True, null=True)
+    pangkat_gol = models.CharField(max_length=100, blank=True, null=True)
+    jabatan = models.CharField(max_length=100, blank=True, null=True)
+    no_hp = models.CharField(max_length=20, blank=True, null=True)  # <-- Tambahkan baris ini
+    foto = models.ImageField(upload_to='tenaga_pendidik/')
 
     def __str__(self):
         return self.nama
