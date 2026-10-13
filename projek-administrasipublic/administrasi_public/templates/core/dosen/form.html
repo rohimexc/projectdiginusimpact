@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - Administrasi Publik</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { teal: '#0b7285', darkteal: '#084c5a', gold: '#fab005' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 py-10 px-4 min-h-screen flex items-center justify-center">
+
+  <div class="max-w-xl w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+    <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+      <h2 class="text-xl font-bold text-slate-900">{{ title }}</h2>
+      <a href="{% url 'tenaga_pendidik_list' %}" class="text-xs text-slate-400 hover:text-slate-600 transition">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </a>
+    </div>
+
+    <form method="POST" class="space-y-4 text-xs font-medium text-slate-700">
+      {% csrf_token %}
+      
+      <div>
+        <label class="block mb-1 font-semibold">Nama Lengkap & Gelar:</label>
+        {{ form.nama }}
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block mb-1 font-semibold">Bidang Ilmu:</label>
+          {{ form.bidang_ilmu }}
+        </div>
+        <div>
+          <label class="block mb-1 font-semibold">Status / Jabatan:</label>
+          {{ form.status }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold">URL Foto (Rasio 1:1):</label>
+        {{ form.foto }}
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block mb-1 font-semibold">NIDN:</label>
+          {{ form.nidn }}
+        </div>
+        <div>
+          <label class="block mb-1 font-semibold">NIP:</label>
+          {{ form.nip }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block mb-1 font-semibold">Email:</label>
+          {{ form.email }}
+        </div>
+        <div>
+          <label class="block mb-1 font-semibold">No. HP / WhatsApp:</label>
+          {{ form.no_hp }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold">Pangkat / Golongan:</label>
+        {{ form.pangkat_gol }}
+      </div>
+
+      <div class="flex justify-end gap-3 pt-6 border-t border-slate-100 mt-6">
+        <a href="{% url 'tenaga_pendidik_list' %}" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 transition">
+          Batal
+        </a>
+        <button type="submit" class="px-6 py-2.5 rounded-xl bg-brand-teal text-white hover:bg-brand-darkteal transition font-semibold shadow">
+          Simpan Data
+        </button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html> 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hapus Tenaga Pendidik - Administrasi Publik</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="font-['Poppins'] bg-slate-100 text-slate-800 min-h-screen flex items-center justify-center p-4">
+
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-8 text-center">
+    <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    
+    <h2 class="text-xl font-bold text-slate-900 mb-2">Hapus Tenaga Pendidik?</h2>
+    <p class="text-xs text-slate-500 mb-6">
+      Apakah Anda yakin ingin menghapus data <strong>{{ dosen.nama }}</strong>? Tindakan ini tidak dapat dibatalkan.
+    </p>
+
+    <form method="POST" class="flex justify-center gap-3">
+      {% csrf_token %}
+      <a href="{% url 'tenaga_pendidik_list' %}" class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-600 hover:bg-slate-50 transition">
+        Batal
+      </a>
+      <button type="submit" class="px-5 py-2.5 rounded-xl bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition">
+        Ya, Hapus
+      </button>
+    </form>
+  </div>
+
+</body>
+</html>
