@@ -51,13 +51,32 @@
         <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
       </div>
     </div>
-    <ul class="hidden lg:flex list-none gap-4">
+    <ul class="hidden lg:flex list-none items-center gap-4">
       <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Beranda</a></li>
       <li><a href="#sambutan" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Tentang</a></li>
       <li><a href="#penelitian" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Galeri</a></li>
       <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Berita</a></li>
       <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Akademik <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
-      <li><a href="{% url 'tenaga_pendidik_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Staf</a></li>
+      
+      <!-- Dropdown Staf -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition flex items-center gap-1.5 focus:outline-none">
+          Staf <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-52 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-chalkboard-teacher text-brand-gold w-4"></i>
+              Tenaga Pengajar
+            </a>
+            <a href="{% url 'tenaga_kependidikan_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-user-gear text-brand-gold w-4"></i>
+              Tenaga Kependidikan
+            </a>
+          </div>
+        </div>
+      </li>
+
       <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
       <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Akreditasi <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
     </ul>
@@ -159,7 +178,6 @@
                 </div>
               </div>
               <div class="p-4 pt-0">
-                <!-- Link Single Berita (Baca Selengkapnya) -->
                 <a href="{% url 'berita_detail' berita.pk %}" class="text-xs font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
                   Baca selengkapnya &rarr;
                 </a>
@@ -168,7 +186,6 @@
           {% endfor %}
         </div>
 
-        <!-- Tombol Menuju Katalog Lengkap Berita -->
         <div class="mt-10">
           <a href="{% url 'berita_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
             Lihat Semua Berita &rarr;
@@ -180,38 +197,38 @@
     </div>
   </section>
 
-  <!-- ================= TENAGA PENDIDIK ================= -->
+  <!-- ================= TENAGA KEPENDIDIKAN ================= -->
   <section class="py-16 px-6 text-center bg-white" id="staf-section">
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-2xl font-bold text-brand-teal mb-2">Tenaga Pendidik</h2>
-      <p class="text-xs text-slate-500 mb-8">Dosen & Pengajar Program Studi Administrasi Publik</p>
+      <h2 class="text-2xl font-bold text-brand-teal mb-2">Tenaga Kependidikan</h2>
+      <p class="text-xs text-slate-500 mb-8">Staf & Pengelola Administrasi Program Studi Administrasi Publik</p>
 
-      {% if daftar_dosen %}
+      {% if daftar_tenaga_kependidikan %}
         <div class="flex flex-wrap justify-center gap-6">
-          {% for dosen in daftar_dosen %}
+          {% for tendik in daftar_tenaga_kependidikan %}
             <div class="w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col justify-between">
               <div>
                 <!-- Foto Rasio 1:1 -->
                 <div class="w-full aspect-square overflow-hidden bg-slate-100">
-                  {% if dosen.foto %}
-                    <img src="{{ dosen.foto.url }}" alt="{{ dosen.nama }}" class="w-full h-full object-cover">
+                  {% if tendik.foto %}
+                    <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover">
                   {% else %}
                     <div class="w-full h-full flex items-center justify-center text-slate-300">
-                      <i class="fa-solid fa-user-tie text-5xl"></i>
+                      <i class="fa-solid fa-user-gear text-5xl"></i>
                     </div>
                   {% endif %}
                 </div>
                 <div class="p-4">
                   <span class="text-[10px] font-semibold text-brand-teal bg-teal-50 px-2 py-0.5 rounded uppercase">
-                    {{ dosen.status }}
+                    {{ tendik.status }}
                   </span>
-                  <h3 class="text-sm font-bold text-brand-teal mt-2 mb-1 line-clamp-1">{{ dosen.nama }}</h3>
-                  <p class="text-xs text-slate-500 line-clamp-2">{{ dosen.bidang_ilmu }}</p>
+                  <h3 class="text-sm font-bold text-brand-teal mt-2 mb-1 line-clamp-1">{{ tendik.nama }}</h3>
+                  <p class="text-xs text-slate-500 line-clamp-2">{{ tendik.bidang_ilmu }}</p>
                 </div>
               </div>
               <div class="p-4 pt-0">
-                <!-- Tombol Menuju Halaman Detail Dosen -->
-                <a href="{% url 'dosen_detail' dosen.pk %}" class="text-xs font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
+                <!-- Tombol Menuju Detail Tenaga Kependidikan -->
+                <a href="{% url 'tenaga_kependidikan_detail' tendik.pk %}" class="text-xs font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
                   Lihat selengkapnya &rarr;
                 </a>
               </div>
@@ -219,18 +236,17 @@
           {% endfor %}
         </div>
 
-        <!-- Tombol Menuju Halaman Lengkap Semua Dosen -->
         <div class="mt-10">
-          <a href="{% url 'tenaga_pendidik_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
-            Lihat Semua Dosen &rarr;
+          <a href="{% url 'tenaga_kependidikan_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
+            Lihat Semua Tenaga Kependidikan &rarr;
           </a>
         </div>
       {% else %}
-        <div class="text-sm text-slate-500 py-10">Belum ada data tenaga pendidik.</div>
+        <div class="text-sm text-slate-500 py-10">Belum ada data tenaga kependidikan.</div>
       {% endif %}
     </div>
   </section>
-  <!-- =================================================== -->
+  <!-- ======================================================= -->
 
   <!-- Event Terdekat -->
   <section class="py-16 px-6 text-center bg-slate-50" id="kemahasiswaan">
@@ -290,7 +306,6 @@
           <li><a href="#" class="hover:text-brand-gold transition">Website UNTAD</a></li>
           <li><a href="#" class="hover:text-brand-gold transition">Website Kepegawaian</a></li>
           <li><a href="#" class="hover:text-brand-gold transition">Siaga B</a></li>
-          <li><a href="{% url 'tenaga_pendidik_list' %}" class="hover:text-brand-gold transition">Dosen Prodi Administrasi Publik</a></li>
           <li><a href="#" class="hover:text-brand-gold transition">Sertifikat Akreditasi</a></li>
         </ul>
       </div>

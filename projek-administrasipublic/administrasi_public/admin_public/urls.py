@@ -7,7 +7,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 
-# Import view home, berita, dan tenaga pendidik dari core
+# Import view dari core (nama fungsi sudah disesuaikan)
 from core.views import (
     home,
     berita_list,
@@ -15,11 +15,11 @@ from core.views import (
     berita_create,
     berita_update,
     berita_delete,
-    tenaga_pendidik_list,
-    dosen_detail,
-    dosen_create,
-    dosen_update,
-    dosen_delete,
+    tenaga_kependidikan_list,
+    tenaga_kependidikan_detail,
+    tenaga_kependidikan_create,
+    tenaga_kependidikan_update,
+    tenaga_kependidikan_delete,
 )
 
 urlpatterns = [
@@ -33,14 +33,14 @@ urlpatterns = [
     path('Berita/<int:pk>/edit/', berita_update, name='berita_update'),
     path('Berita/<int:pk>/hapus/', berita_delete, name='berita_delete'),
 
-    # Rute Tenaga Pendidik / Staf Dosen
-    path('tenaga-pendidik/', tenaga_pendidik_list, name='tenaga_pendidik_list'),
-    path('tenaga-pendidik/<int:pk>/', dosen_detail, name='dosen_detail'),
-    path('tenaga-pendidik/tambah/', dosen_create, name='dosen_create'),
-    path('tenaga-pendidik/<int:pk>/edit/', dosen_update, name='dosen_update'),
-    path('tenaga-pendidik/<int:pk>/hapus/', dosen_delete, name='dosen_delete'),
+    # Rute Tenaga Kependidikan
+    path('tenaga-kependidikan/', tenaga_kependidikan_list, name='tenaga_kependidikan_list'),
+    path('tenaga-kependidikan/<int:pk>/', tenaga_kependidikan_detail, name='tenaga_kependidikan_detail'),
+    path('tenaga-kependidikan/tambah/', tenaga_kependidikan_create, name='tenaga_kependidikan_create'),
+    path('tenaga-kependidikan/<int:pk>/edit/', tenaga_kependidikan_update, name='tenaga_kependidikan_update'),
+    path('tenaga-kependidikan/<int:pk>/hapus/', tenaga_kependidikan_delete, name='tenaga_kependidikan_delete'),
 
-    # Jalur Media Langsung (Memaksa Django menyajikan gambar folder media)
+    # Jalur Media Upload
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 

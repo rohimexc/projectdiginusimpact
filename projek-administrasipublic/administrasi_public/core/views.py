@@ -13,14 +13,14 @@ def home(request):
     sambutan = Sambutan.objects.first()
     daftar_galeri = Galeri.objects.all()[:6]
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
-    # Ambil 3 tenaga pendidik untuk ditampilkan di seksi Beranda
-    daftar_dosen = TenagaPendidik.objects.all()[:3]
+    # Ambil 3 tenaga kependidikan untuk ditampilkan di seksi Beranda
+    daftar_tenaga_kependidikan = TenagaPendidik.objects.all()[:3]
 
     context = {
         'sambutan': sambutan,
         'daftar_galeri': daftar_galeri,
         'daftar_berita': daftar_berita,
-        'daftar_dosen': daftar_dosen,
+        'daftar_tenaga_kependidikan': daftar_tenaga_kependidikan,
     }
     return render(request, 'core/index.html', context)
 
@@ -102,68 +102,68 @@ def berita_delete(request, pk):
 
 
 # ==========================================
-# 2. TENAGA PENDIDIK / STAF DOSEN
+# 2. TENAGA KEPENDIDIKAN
 # ==========================================
 
-# View Halaman Katalog Tenaga Pendidik (Search Dosen/Bidang/NIDN)
-def tenaga_pendidik_list(request):
+# View Halaman Katalog Tenaga Kependidikan (Search Nama/Bidang/NIDN)
+def tenaga_kependidikan_list(request):
     query = request.GET.get('q', '')
-    dosen_qs = TenagaPendidik.objects.all().order_by('nama')
+    kependidikan_qs = TenagaPendidik.objects.all().order_by('nama')
 
     if query:
-        dosen_qs = dosen_qs.filter(
+        kependidikan_qs = kependidikan_qs.filter(
             Q(nama__icontains=query) |
             Q(bidang_ilmu__icontains=query) |
             Q(nidn__icontains=query)
         )
 
     context = {
-        'dosen_list': dosen_qs,
+        'tenaga_kependidikan_list': kependidikan_qs,
         'query': query,
     }
-    return render(request, 'core/dosen/list.html', context)
+    return render(request, 'core/kependidikan/list.html', context)
 
 
-# View Detail Tenaga Pendidik (Klik "Lihat Selengkapnya")
-def dosen_detail(request, pk):
-    dosen = get_object_or_404(TenagaPendidik, pk=pk)
-    dosen_lainnya = TenagaPendidik.objects.exclude(pk=pk)[:3]
+# View Detail Tenaga Kependidikan
+def tenaga_kependidikan_detail(request, pk):
+    tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
+    tenaga_kependidikan_lainnya = TenagaPendidik.objects.exclude(pk=pk)[:3]
     context = {
-        'dosen': dosen,
-        'dosen_lainnya': dosen_lainnya,
+        'tenaga_kependidikan': tenaga_kependidikan,
+        'tenaga_kependidikan_lainnya': tenaga_kependidikan_lainnya,
     }
-    return render(request, 'core/dosen/detail.html', context)
+    return render(request, 'core/kependidikan/detail.html', context)
 
 
-# View Tambah Tenaga Pendidik (Create)
-def dosen_create(request):
+# View Tambah Tenaga Kependidikan (Create)
+def tenaga_kependidikan_create(request):
     if request.method == 'POST':
         form = TenagaPendidikForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('tenaga_pendidik_list')
+            return redirect('tenaga_kependidikan_list')
     else:
         form = TenagaPendidikForm()
-    return render(request, 'core/dosen/form.html', {'form': form, 'title': 'Tambah Tenaga Pendidik'})
+    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Tambah Tenaga Kependidikan'})
 
 
-# View Edit Tenaga Pendidik (Update)
-def dosen_update(request, pk):
-    dosen = get_object_or_404(TenagaPendidik, pk=pk)
+# View Edit Tenaga Kependidikan (Update)
+def tenaga_kependidikan_update(request, pk):
+    tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
     if request.method == 'POST':
-        form = TenagaPendidikForm(request.POST, request.FILES, instance=dosen)
+        form = TenagaPendidikForm(request.POST, request.FILES, instance=tenaga_kependidikan)
         if form.is_valid():
             form.save()
-            return redirect('tenaga_pendidik_list')
+            return redirect('tenaga_kependidikan_list')
     else:
-        form = TenagaPendidikForm(instance=dosen)
-    return render(request, 'core/dosen/form.html', {'form': form, 'title': 'Edit Tenaga Pendidik'})
+        form = TenagaPendidikForm(instance=tenaga_kependidikan)
+    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Edit Tenaga Kependidikan'})
 
 
-# View Hapus Tenaga Pendidik (Delete)
-def dosen_delete(request, pk):
-    dosen = get_object_or_404(TenagaPendidik, pk=pk)
+# View Hapus Tenaga Kependidikan (Delete)
+def tenaga_kependidikan_delete(request, pk):
+    tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
     if request.method == 'POST':
-        dosen.delete()
-        return redirect('tenaga_pendidik_list')
-    return render(request, 'core/dosen/delete_confirm.html', {'dosen': dosen})
+        tenaga_kependidikan.delete()
+        return redirect('tenaga_kependidikan_list')
+    return render(request, 'core/kependidikan/delete_confirm.html', {'tenaga_kependidikan': tenaga_kependidikan})
