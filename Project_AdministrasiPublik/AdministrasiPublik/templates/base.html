@@ -39,7 +39,7 @@
 
 <!-- Menu Navigation (Menu Utama Bisa Diklik) -->
             <div class="hidden lg:flex items-center space-x-6 text-sm font-medium">
-                <a href="#beranda" class="hover:text-amber-300 transition py-2">Beranda</a>
+                <a href="{% url 'landing:landing_home' %}#beranda" class="hover:text-amber-300 transition py-2">Beranda</a>
                 
                 <!-- Dropdown Tentang (Teks utamanya bisa diklik ke #sambutan) -->
                 <div class="relative group cursor-pointer py-2">
@@ -72,16 +72,16 @@
                     </div>
                 </div>
 
-                <!-- Dropdown Staf -->
-                <div class="relative group cursor-pointer py-2">
-                    <!-- Ubah dari yang tadinya href="#staf" menjadi seperti ini: -->
-                     <a href="{% url 'landing:tenaga_pendidik' %}" class="hover:text-amber-300 flex items-center gap-1">
-                        Tenaga Pendidik<i class="fa-solid fa-chevron-down text-[10px]"></i>
-                    </a>
-                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
-                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Dosen Pengampu</a>
-                    </div>
-                </div>
+<div class="relative group">
+    <button class="flex items-center gap-1 hover:text-amber-300 transition py-2">
+        Staf <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+    </button>
+    <!-- Dropdown Menu -->
+    <div class="absolute left-0 mt-0 w-48 bg-white text-slate-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+        <a href="" class="block px-4 py-2.5 text-xs hover:bg-teal-50 hover:text-teal-700 rounded-t-lg">Tenaga Pengajar</a>
+        <a href="{% url 'landing:tenaga_pendidik' %}" class="block px-4 py-2.5 text-xs hover:bg-teal-50 hover:text-teal-700 rounded-b-lg">Tenaga Kependidikan</a>
+    </div>
+</div>
 
                 <!-- Dropdown Kemahasiswaan -->
                 <div class="relative group cursor-pointer py-2">
