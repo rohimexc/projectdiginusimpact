@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib import messages
+from django.contrib.auth.models import User
 from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak 
 from django.db.models import Q
-from .forms import BeritaForm
+from .forms import BeritaForm, LoginForm
+
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
     galeri_list = Galeri.objects.all()
@@ -13,7 +17,7 @@ def index(request):
     sambutan = Sambutan.objects.first()
 
     context = {
-        'berita_list': berita_list, # <-- Pastikan variabel ini ada di sini
+        'berita_list': berita_list,
         'galeri_list': galeri_list,
         'akademik_list': akademik_list,
         'staf_list': staf_list,
@@ -113,27 +117,9 @@ def tenaga_pendidik_view(request):
         'query': query,
     }
     return render(request, 'landing/TenagaPendidik/Tenaga_Pendidik.html', context)
-    query = request.GET.get('q', '')
-    if query:
-        # Filter berdasarkan nama, bidang ilmu, atau NIP
-        pendidik_list = TenagaPendidik.objects.filter(
-            models.Q(nama__icontains=query) | 
-            models.Q(bidang_ilmu__icontains=query) | 
-            models.Q(nip__icontains=query)
-        )
-    else:
-        pendidik_list = TenagaPendidik.objects.all()
 
-    context = {
-        'pendidik_list': pendidik_list,
-        'query': query,
-    }
-    return render(request, 'landing/Tenaga_Pendidik.html', context)
 def detail_tenaga_pendidik_view(request, pk):
-    from django.shortcuts import get_object_or_404
-    # Sesuaikan TenagaPendidik atau StafDosen dengan nama model kamu
     pendidik = get_object_or_404(TenagaPendidik, pk=pk)
-    
     context = {
         'pendidik': pendidik,
     }
@@ -147,10 +133,44 @@ def akreditasi_page(request):
     akreditasi = Akreditasi.objects.last()
     return render(request, 'landing/akreditasi.html', {'akreditasi': akreditasi})
 
-# --- CONTOH VIEW TERPROTEKSI (Hanya untuk User yang Login / Admin) ---
+# --- VIEW LOGIN BERDASARKAN EMAIL & ROLE ADMIN ---
+def login_view(request):
+    if request.method == 'POST':
+        email_input = request.POST.get('username')
+        password_input = request.POST.get('password')
+        
+        # Cari username berdasarkan email yang diinput di form
+        try:
+            user_obj = User.objects.get(email=email_input)
+            username_asli = user_obj.username
+        except User.DoesNotExist:
+            username_asli = None
+            
+        # Lakukan autentikasi menggunakan username asli yang terikat pada email tersebut
+        user = None
+        if username_asli:
+            user = authenticate(request, username=username_asli, password=password_input)
+            
+        if user is not None:
+            login(request, user)
+            messages.success(request, f"Selamat datang, {user.get_full_name() or user.username}!")
+            
+            # Pengecekan role sesuai instruksi mentor: Jika ADMIN masuk ke dashboard, jika bukan ditolak
+            if user.is_superuser or user.is_staff:
+                return redirect('/admin/') 
+            else:
+                messages.error(request, "Akun Anda bukan Admin! Tidak memiliki hak akses.")
+                logout(request)
+                return redirect('landing:login')
+        else:
+            messages.error(request, "Email atau password salah.")
+            
+    form = LoginForm()
+    return render(request, 'landing/Login/login.html', {'form': form})
+
+# --- VIEW TERPROTEKSI ---
 @login_required(login_url='/admin/login/')
 def dashboard_admin_khusus(request):
-    # Pastikan hanya user yang berstatus staff atau superuser yang bisa masuk
     if not request.user.is_staff:
-        return render(request, 'landing/403.html', status=403) # Atau redirect ke halaman lain
+        return render(request, 'landing/403.html', status=403)
     return render(request, 'landing/dashboard.html')

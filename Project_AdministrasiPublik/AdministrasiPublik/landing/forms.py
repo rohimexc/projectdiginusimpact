@@ -1,5 +1,6 @@
 from django import forms
 from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik
+from django.contrib.auth.forms import AuthenticationForm
 
 class SambutanForm(forms.ModelForm):
     class Meta:
@@ -30,3 +31,19 @@ class TenagaPendidikForm(forms.ModelForm):
     class Meta:
         model = TenagaPendidik
         fields = ['nama', 'email', 'bidang_ilmu', 'nip', 'pangkat_gol', 'jabatan', 'foto']
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label="Email",
+        widget=forms.EmailInput(attrs={
+            'class': 'w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-xs shadow-sm focus:outline-none focus:border-teal-600',
+            'placeholder': 'Masukkan email Anda...'
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-xs shadow-sm focus:outline-none focus:border-teal-600',
+            'placeholder': '••••••••'
+        })
+    )

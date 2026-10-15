@@ -11,4 +11,6 @@ urlpatterns = [
     path('berita/<slug:slug>/hapus/', views.berita_delete_view, name='berita_delete'),
     path('tenaga-pendidik/', views.tenaga_pendidik_view, name='tenaga_pendidik'),
     path('tenaga-pendidik/<int:pk>/', views.detail_tenaga_pendidik_view, name='detail_tenaga_pendidik'),
+    # --- URL HALAMAN LOGIN ---
+    path('login/', views.login_view, name='login'),
 ]
