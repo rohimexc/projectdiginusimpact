@@ -7,7 +7,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 
-# Import view dari core (nama fungsi sudah disesuaikan)
+# Import semua view dari core termasuk login & logout
 from core.views import (
     home,
     berita_list,
@@ -20,9 +20,16 @@ from core.views import (
     tenaga_kependidikan_create,
     tenaga_kependidikan_update,
     tenaga_kependidikan_delete,
+    user_login,
+    user_logout,
 )
 
 urlpatterns = [
+    # Rute logout admin diarahkan langsung ke halaman login sebelum rute bawaan admin
+    path('admin/logout/', user_logout, name='admin_logout'),
+    path('logout/', user_logout, name='user_logout'),
+    path('login/', user_login, name='user_login'),
+
     path('admin/', admin.site.urls),
     path('', home, name='home'),
 

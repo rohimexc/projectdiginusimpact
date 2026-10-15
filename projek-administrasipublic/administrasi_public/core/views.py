@@ -1,3 +1,5 @@
+from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -13,7 +15,7 @@ def home(request):
     sambutan = Sambutan.objects.first()
     daftar_galeri = Galeri.objects.all()[:6]
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
-    # Ambil 3 tenaga kependidikan untuk ditampilkan di seksi Beranda
+    # Ambil 3 tenaga kependidikan untuk dipaparkan di seksyen Laman Utama
     daftar_tenaga_kependidikan = TenagaPendidik.objects.all()[:3]
 
     context = {
@@ -25,7 +27,7 @@ def home(request):
     return render(request, 'core/index.html', context)
 
 
-# View Daftar Semua Berita (Search, Filter, Pagination)
+# View Senarai Semua Berita (Carian, Penapis, Penomboran Halaman)
 def berita_list(request):
     query = request.GET.get('q', '')
     tahun = request.GET.get('tahun', '')
@@ -60,7 +62,7 @@ def berita_list(request):
     return render(request, 'core/Berita/list.html', context)
 
 
-# View Detail Single Berita
+# View Terperinci Berita
 def berita_detail(request, pk):
     berita = get_object_or_404(Berita, pk=pk)
     berita_terkait = Berita.objects.exclude(pk=pk).order_by('-posted_at')[:3]
@@ -70,7 +72,7 @@ def berita_detail(request, pk):
 # View Tambah Berita (Create)
 def berita_create(request):
     if request.method == 'POST':
-        form = BeritaForm(request.POST)
+        form = BeritaForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('berita_list')
@@ -79,11 +81,11 @@ def berita_create(request):
     return render(request, 'core/Berita/form.html', {'form': form, 'title': 'Tambah Berita Baru'})
 
 
-# View Edit Berita (Update)
+# View Kemas Kini Berita (Update)
 def berita_update(request, pk):
     berita = get_object_or_404(Berita, pk=pk)
     if request.method == 'POST':
-        form = BeritaForm(request.POST, instance=berita)
+        form = BeritaForm(request.POST, request.FILES, instance=berita)
         if form.is_valid():
             form.save()
             return redirect('berita_detail', pk=berita.pk)
@@ -92,7 +94,7 @@ def berita_update(request, pk):
     return render(request, 'core/Berita/form.html', {'form': form, 'title': 'Edit Berita'})
 
 
-# View Hapus Berita (Delete)
+# View Padam Berita (Delete)
 def berita_delete(request, pk):
     berita = get_object_or_404(Berita, pk=pk)
     if request.method == 'POST':
@@ -105,7 +107,7 @@ def berita_delete(request, pk):
 # 2. TENAGA KEPENDIDIKAN
 # ==========================================
 
-# View Halaman Katalog Tenaga Kependidikan (Search Nama/Bidang/NIDN)
+# View Halaman Katalog Tenaga Kependidikan
 def tenaga_kependidikan_list(request):
     query = request.GET.get('q', '')
     kependidikan_qs = TenagaPendidik.objects.all().order_by('nama')
@@ -124,7 +126,7 @@ def tenaga_kependidikan_list(request):
     return render(request, 'core/kependidikan/list.html', context)
 
 
-# View Detail Tenaga Kependidikan
+# View Terperinci Tenaga Kependidikan
 def tenaga_kependidikan_detail(request, pk):
     tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
     tenaga_kependidikan_lainnya = TenagaPendidik.objects.exclude(pk=pk)[:3]
@@ -147,7 +149,7 @@ def tenaga_kependidikan_create(request):
     return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Tambah Tenaga Kependidikan'})
 
 
-# View Edit Tenaga Kependidikan (Update)
+# View Kemas Kini Tenaga Kependidikan (Update)
 def tenaga_kependidikan_update(request, pk):
     tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
     if request.method == 'POST':
@@ -160,10 +162,66 @@ def tenaga_kependidikan_update(request, pk):
     return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Edit Tenaga Kependidikan'})
 
 
-# View Hapus Tenaga Kependidikan (Delete)
+# View Padam Tenaga Kependidikan (Delete)
 def tenaga_kependidikan_delete(request, pk):
     tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
     if request.method == 'POST':
         tenaga_kependidikan.delete()
         return redirect('tenaga_kependidikan_list')
     return render(request, 'core/kependidikan/delete_confirm.html', {'tenaga_kependidikan': tenaga_kependidikan})
+
+
+# ==========================================
+# 3. AUTENTIKASI MENGGUNAKAN EMAIL / GMAIL
+# ==========================================
+
+# View Log Masuk Khusus Email & Semakan Peranan Admin
+def user_login(request):
+    User = get_user_model()
+
+    # Jika sudah log masuk dan merupakan admin
+    if request.user.is_authenticated:
+        user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+        if user_role == 'admin' or request.user.is_staff or request.user.is_superuser:
+            return redirect('/admin/')
+        logout(request)
+        messages.error(request, 'Akses ditolak! Akaun anda bukan Administrator.')
+        return redirect('user_login')
+
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '')
+
+        if not email or not password:
+            messages.error(request, 'Email dan kata laluan wajib diisi.')
+            return render(request, 'core/login.html')
+
+        # 1. Cari pengguna mengikut alamat Email / Gmail
+        user_obj = User.objects.filter(email__iexact=email).first()
+
+        user = None
+        if user_obj:
+            user = authenticate(request, username=user_obj.get_username(), password=password)
+        else:
+            user = authenticate(request, username=email, password=password)
+
+        if user is not None:
+            # 2. Semak peranan (mesti role admin atau is_staff/superuser)
+            user_role = getattr(user, 'role', '').lower() if hasattr(user, 'role') and user.role else ''
+            if user_role == 'admin' or user.is_staff or user.is_superuser:
+                login(request, user)
+                return redirect('/admin/')
+            else:
+                messages.error(request, 'Akses ditolak! Hanya akaun dengan role Admin dibenarkan masuk ke Dashboard.')
+                return redirect('user_login')
+        else:
+            messages.error(request, 'Email atau kata laluan yang dimasukkan salah.')
+
+    return render(request, 'core/login.html')
+
+
+# View Logout
+def user_logout(request):
+    logout(request)
+    messages.success(request, 'Anda telah berhasil keluar (logout).')
+    return redirect('user_login')

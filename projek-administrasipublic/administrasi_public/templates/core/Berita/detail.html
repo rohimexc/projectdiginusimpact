@@ -13,10 +13,6 @@
             <a href="{% url 'berita_list' %}" class="font-bold text-blue-900 text-sm flex items-center gap-2">
                 <i class="fa-solid fa-arrow-left"></i> Semua Berita
             </a>
-            <div class="flex gap-2">
-                <a href="{% url 'berita_update' berita.pk %}" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg font-bold">Edit</a>
-                <a href="{% url 'berita_delete' berita.pk %}" class="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg font-bold">Hapus</a>
-            </div>
         </div>
     </nav>
 
