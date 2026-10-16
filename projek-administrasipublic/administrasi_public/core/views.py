@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Sambutan, Galeri, Berita, TenagaPendidik
 from .forms import BeritaForm, TenagaPendidikForm
-
+from django.contrib.auth.decorators import login_required
 # ==========================================
 # 1. LANDING PAGE & BERITA
 # ==========================================
@@ -210,7 +210,7 @@ def user_login(request):
             user_role = getattr(user, 'role', '').lower() if hasattr(user, 'role') and user.role else ''
             if user_role == 'admin' or user.is_staff or user.is_superuser:
                 login(request, user)
-                return redirect('/admin/')
+                return redirect('admin_dashboard')
             else:
                 messages.error(request, 'Akses ditolak! Hanya akaun dengan role Admin dibenarkan masuk ke Dashboard.')
                 return redirect('user_login')
@@ -225,3 +225,111 @@ def user_logout(request):
     logout(request)
     messages.success(request, 'Anda telah berhasil keluar (logout).')
     return redirect('user_login')
+
+# ==========================================
+# 4. CUSTOM DASHBOARD ADMIN
+# ==========================================
+
+@login_required(login_url='user_login')
+def admin_dashboard(request):
+    # Cek apakah user adalah admin
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        messages.error(request, 'Akses ditolak! Anda bukan Administrator.')
+        return redirect('user_login')
+
+    total_berita = Berita.objects.count()
+    total_tendik = TenagaPendidik.objects.count()
+    daftar_berita = Berita.objects.all().order_by('-posted_at')[:5]
+    daftar_tendik = TenagaPendidik.objects.all().order_by('-id')[:5]
+
+    context = {
+        'total_berita': total_berita,
+        'total_tendik': total_tendik,
+        'daftar_berita': daftar_berita,
+        'daftar_tendik': daftar_tendik,
+    }
+    return render(request, 'core/admin/dashboard.html', context)
+
+@login_required(login_url='user_login')
+def admin_kelola_berita(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    daftar_berita = Berita.objects.all().order_by('-posted_at')
+    return render(request, 'core/admin/berita_kelola.html', {'daftar_berita': daftar_berita})
+def berita_create(request):
+    if request.method == 'POST':
+        form = BeritaForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_kelola_berita')  # <-- dialihkan kembali ke kelola berita admin
+    else:
+        form = BeritaForm()
+    return render(request, 'core/Berita/form.html', {'form': form, 'title': 'Tambah Berita Baru'})
+def berita_update(request, pk):
+    berita = get_object_or_404(Berita, pk=pk)
+    if request.method == 'POST':
+        form = BeritaForm(request.POST, request.FILES, instance=berita)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_kelola_berita')  # <-- dialihkan kembali ke kelola berita admin
+    else:
+        form = BeritaForm(instance=berita)
+    return render(request, 'core/Berita/form.html', {'form': form, 'title': 'Edit Berita'})
+
+# View Hapus Berita (Delete)
+def berita_delete(request, pk):
+    berita = get_object_or_404(Berita, pk=pk)
+    if request.method == 'POST':
+        berita.delete()
+        messages.success(request, 'Berita berhasil dihapus!')
+        return redirect('admin_kelola_berita')  # <-- Dialihkan kembali ke dashboard kelola berita
+    return render(request, 'core/Berita/delete_confirm.html', {'berita': berita})
+
+@login_required(login_url='user_login')
+def admin_kelola_tendik(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    # Mengambil semua data tendik
+    daftar_tendik = TenagaPendidik.objects.all().order_by('-id')
+    return render(request, 'core/admin/tendik_kelola.html', {'daftar_tendik': daftar_tendik})
+
+# View Tambah Tenaga Kependidikan (Create)
+def tenaga_kependidikan_create(request):
+    if request.method == 'POST':
+        form = TenagaPendidikForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_kelola_tendik')  # <-- Kembali ke dashboard kelola tendik
+    else:
+        form = TenagaPendidikForm()
+    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Tambah Tenaga Kependidikan'})
+
+
+# View Edit Tenaga Kependidikan (Update)
+def tenaga_kependidikan_update(request, pk):
+    tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
+    if request.method == 'POST':
+        form = TenagaPendidikForm(request.POST, request.FILES, instance=tenaga_kependidikan)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_kelola_tendik')  # <-- Kembali ke dashboard kelola tendik
+    else:
+        form = TenagaPendidikForm(instance=tenaga_kependidikan)
+    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Edit Tenaga Kependidikan'})
+
+# View Hapus Tenaga Kependidikan (Delete)
+def tenaga_kependidikan_delete(request, pk):
+    tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
+    if request.method == 'POST':
+        tenaga_kependidikan.delete()
+        messages.success(request, 'Data tenaga kependidikan berhasil dihapus!')
+        return redirect('admin_kelola_tendik')  # <-- Dialihkan kembali ke dashboard kelola tendik
+    return render(request, 'core/kependidikan/delete_confirm.html', {'tenaga_kependidikan': tenaga_kependidikan})

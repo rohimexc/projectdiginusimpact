@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Ringkasan - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-brand-deepteal text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex">
+    <div>
+      <div class="p-6 border-b border-white/10 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold text-lg border border-white/20">
+          <i class="fas fa-university"></i>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold leading-tight">Admin Portal</h2>
+          <p class="text-[10px] text-slate-300">FISIP UNTAD</p>
+        </div>
+      </div>
+
+      <nav class="p-4 space-y-1.5 text-xs">
+        <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/15 text-brand-gold font-semibold transition">
+          <i class="fas fa-chart-pie w-4"></i>
+          <span>Ringkasan Dashboard</span>
+        </a>
+        <a href="{% url 'admin_kelola_berita' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="fas fa-newspaper w-4"></i>
+          <span>Kelola Berita</span>
+        </a>
+        <a href="{% url 'admin_kelola_tendik' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="fas fa-users-gear w-4"></i>
+          <span>Kelola Tendik</span>
+        </a>
+        <a href="{% url 'home' %}" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="fas fa-globe w-4"></i>
+          <span>Lihat Website Utama</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-white/10">
+      <div class="flex items-center gap-3 px-3 py-2 mb-2">
+        <div class="w-8 h-8 rounded-full bg-brand-gold text-slate-900 font-bold flex items-center justify-center text-xs">
+          {{ request.user.username|make_list|first|upper }}
+        </div>
+        <div class="overflow-hidden">
+          <p class="text-xs font-semibold truncate">{{ request.user.email|default:request.user.username }}</p>
+          <span class="text-[10px] text-brand-accent uppercase font-bold tracking-wider">Administrator</span>
+        </div>
+      </div>
+      <a href="{% url 'user_logout' %}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white text-xs font-semibold transition duration-200">
+        <i class="fas fa-right-from-bracket text-xs"></i>
+        <span>Keluar (Logout)</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
+      <h1 class="text-lg font-bold text-slate-800">Ringkasan Dashboard</h1>
+      <a href="{% url 'home' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+        <i class="fas fa-arrow-up-right-from-square text-[10px]"></i> Buka Web Publik
+      </a>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+      
+      <!-- KARTU STATISTIK -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Stat Berita -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Total Berita</p>
+            <h3 class="text-3xl font-extrabold text-slate-800 mt-1">{{ total_berita }}</h3>
+            <a href="{% url 'admin_kelola_berita' %}" class="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-teal mt-3 hover:underline">
+              Kelola di Menu Berita &rarr;
+            </a>
+          </div>
+          <div class="w-14 h-14 rounded-2xl bg-teal-50 text-brand-teal flex items-center justify-center text-2xl">
+            <i class="fas fa-newspaper"></i>
+          </div>
+        </div>
+
+        <!-- Stat Tendik -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Total Tendik</p>
+            <h3 class="text-3xl font-extrabold text-slate-800 mt-1">{{ total_tendik }}</h3>
+            <a href="{% url 'admin_kelola_tendik' %}" class="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-teal mt-3 hover:underline">
+              Kelola di Menu Tendik &rarr;
+            </a>
+          </div>
+          <div class="w-14 h-14 rounded-2xl bg-amber-50 text-brand-gold flex items-center justify-center text-2xl">
+            <i class="fas fa-users-gear"></i>
+          </div>
+        </div>
+
+        <!-- Quick Info -->
+        <div class="bg-gradient-to-br from-brand-teal to-brand-darkteal p-6 rounded-2xl text-white shadow-md flex flex-col justify-between">
+          <div>
+            <h4 class="text-sm font-bold">Portal Manajemen Terpadu</h4>
+            <p class="text-xs text-slate-200 mt-1">Gunakan menu di sidebar samping untuk menambah, mengedit, atau menghapus postingan.</p>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <a href="{% url 'admin_kelola_berita' %}" class="flex-1 text-center py-2 bg-white text-brand-darkteal rounded-xl text-xs font-bold hover:bg-slate-100 transition shadow">
+              Buka Berita
+            </a>
+            <a href="{% url 'admin_kelola_tendik' %}" class="flex-1 text-center py-2 bg-brand-gold text-slate-900 rounded-xl text-xs font-bold hover:bg-brand-hovergold transition shadow">
+              Buka Tendik
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+</body>
+</html>

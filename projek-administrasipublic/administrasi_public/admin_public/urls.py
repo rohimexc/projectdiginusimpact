@@ -7,7 +7,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 
-# Import semua view dari core termasuk login & logout
+# Import semua view dari core termasuk login, logout, dan dashboard
 from core.views import (
     home,
     berita_list,
@@ -22,14 +22,21 @@ from core.views import (
     tenaga_kependidikan_delete,
     user_login,
     user_logout,
+    admin_dashboard,
+    admin_kelola_berita,  
+    admin_kelola_tendik,  
 )
 
 urlpatterns = [
-    # Rute logout admin diarahkan langsung ke halaman login sebelum rute bawaan admin
+    # Rute Logout & Login
     path('admin/logout/', user_logout, name='admin_logout'),
     path('logout/', user_logout, name='user_logout'),
     path('login/', user_login, name='user_login'),
 
+    # Rute Custom Dashboard Admin
+    path('dashboard/', admin_dashboard, name='admin_dashboard'),
+
+    # Django Admin Bawaan & Beranda Publik
     path('admin/', admin.site.urls),
     path('', home, name='home'),
 
@@ -46,7 +53,9 @@ urlpatterns = [
     path('tenaga-kependidikan/tambah/', tenaga_kependidikan_create, name='tenaga_kependidikan_create'),
     path('tenaga-kependidikan/<int:pk>/edit/', tenaga_kependidikan_update, name='tenaga_kependidikan_update'),
     path('tenaga-kependidikan/<int:pk>/hapus/', tenaga_kependidikan_delete, name='tenaga_kependidikan_delete'),
-
+    path('dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('dashboard/berita/', admin_kelola_berita, name='admin_kelola_berita'),
+    path('dashboard/tendik/', admin_kelola_tendik, name='admin_kelola_tendik'),
     # Jalur Media Upload
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

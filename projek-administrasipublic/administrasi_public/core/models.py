@@ -21,25 +21,26 @@ class Galeri(models.Model):
         return self.judul
 
 
-# Model untuk data section Berita Terbaru (Sudah disesuaikan revisi mentor)
+# gambar = models.CharField(max_length=255, blank=True, null=True, default="https://placehold.co/600x400")
+
+# MENJADI ImageField:
 class Berita(models.Model):
     judul = models.CharField(max_length=255)
     ringkasan = models.TextField(blank=True, null=True)
     konten = models.TextField(blank=True, null=True)
-    gambar = models.CharField(max_length=255, blank=True, null=True, default="https://placehold.co/600x400")
     
-    # 3 field datetime yang diminta mentor
+    # Kolom Upload Berkas Gambar dari Folder/Laptop
+    gambar = models.ImageField(upload_to='berita/', blank=True, null=True, help_text="Upload foto/gambar berita")
+    
     posted_at = models.DateTimeField(default=timezone.now, verbose_name="Waktu Tayang / Post")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Dibuat")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Waktu Diperbarui")
 
     class Meta:
-        # Urutan otomatis agar berita dengan post terbaru tampil paling atas
         ordering = ['-posted_at']
 
     def __str__(self):
         return self.judul
-
 
 # Model untuk data Halaman Tenaga Pendidik / Staf Dosen
 class TenagaPendidik(models.Model):

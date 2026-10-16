@@ -160,13 +160,22 @@
           {% for berita in daftar_berita %}
             <div class="w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col justify-between">
               <div>
-                {% if berita.gambar %}
-                  {% if 'http' in berita.gambar %}
-                    <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-44 object-cover bg-slate-100">
-                  {% else %}
-                    <img src="{% static 'images/' %}{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-44 object-cover bg-slate-100">
-                  {% endif %}
-                {% endif %}
+                <!-- Wadah Gambar Berita Rasio 4:5 -->
+<div class="w-full overflow-hidden bg-slate-100 rounded-t-xl" style="aspect-ratio: 4 / 5;">
+  {% if berita.gambar %}
+    {% if berita.gambar.url %}
+      <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+    {% else %}
+      <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+    {% endif %}
+  {% else %}
+    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+      <i class="fas fa-newspaper text-5xl mb-2"></i>
+      <span class="text-[11px] text-slate-400">Tidak ada gambar</span>
+    </div>
+  {% endif %}
+</div>
+
                 <div class="p-4">
                   <span class="text-[10px] font-semibold text-brand-teal bg-teal-50 px-2 py-0.5 rounded">
                     {{ berita.posted_at|date:"d M Y" }}

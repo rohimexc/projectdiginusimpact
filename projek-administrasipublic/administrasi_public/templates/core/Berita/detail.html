@@ -1,36 +1,81 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ berita.judul }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ berita.judul }} - Administrasi Publik UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-50 text-slate-800">
-    <nav class="bg-white border-b py-4 px-6 sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <a href="{% url 'berita_list' %}" class="font-bold text-blue-900 text-sm flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> Semua Berita
-            </a>
-        </div>
-    </nav>
+<body class="font-poppins bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <span class="text-xs text-blue-800 font-bold bg-blue-50 px-3 py-1 rounded-full">
-            Diposting pada: {{ berita.posted_at|date:"d F Y, H:i" }}
+  <!-- Navigasi Atas -->
+  <header class="max-w-4xl mx-auto w-full px-6 pt-8 pb-4">
+    <a href="{% url 'berita_list' %}" class="inline-flex items-center gap-2 text-xs font-semibold text-teal-800 hover:text-teal-950 transition">
+      &larr; Semua Berita
+    </a>
+  </header>
+
+  <!-- Konten Utama Detail Berita -->
+  <main class="max-w-4xl mx-auto px-6 pb-20 w-full flex-1">
+    <article class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm">
+      
+      <!-- Tanggal Terbit -->
+      <div class="mb-3">
+        <span class="inline-block text-[11px] font-semibold text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-100">
+          Diposting pada: {{ berita.posted_at|date:"d F Y, H:i" }}
         </span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-6 leading-tight">
-            {{ berita.judul }}
-        </h1>
-        
-        {% if berita.gambar %}
-        <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full max-h-[450px] object-cover rounded-2xl mb-8 shadow-sm">
-        {% endif %}
+      </div>
 
-        <div class="text-slate-700 leading-relaxed text-base whitespace-pre-line">
-            {{ berita.konten|default:berita.ringkasan }}
+      <!-- Judul Berita -->
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-snug mb-6">
+        {{ berita.judul }}
+      </h1>
+
+      <!-- Foto Utama Berita (Mendukung File Upload Lokal & URL Luar) -->
+      {% if berita.gambar %}
+        <div class="w-full max-h-[480px] overflow-hidden rounded-2xl mb-8 bg-slate-100 border border-slate-100">
+          {% if berita.gambar.url %}
+            <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+          {% else %}
+            <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+          {% endif %}
         </div>
-    </main>
+      {% endif %}
+
+      <!-- Ringkasan Singkat (Jika Ada) -->
+      {% if berita.ringkasan %}
+        <div class="p-4 bg-slate-50 rounded-2xl border-l-4 border-brand-teal text-xs text-slate-600 font-medium leading-relaxed mb-6">
+          {{ berita.ringkasan }}
+        </div>
+      {% endif %}
+
+      <!-- Isi Artikel Berita -->
+      <div class="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-4 text-justify whitespace-pre-line">
+        {{ berita.konten|default:berita.ringkasan }}
+      </div>
+
+    </article>
+  </main>
+
 </body>
 </html>

@@ -20,9 +20,10 @@ class BeritaForm(forms.ModelForm):
                 'rows': 5,
                 'placeholder': 'Tulis isi artikel berita selengkapnya...'
             }),
-            'gambar': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300',
-                'placeholder': 'URL gambar (misal: https://...)'
+            # Menggunakan FileInput agar menjadi tombol upload berkas
+            'gambar': forms.FileInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': 'image/*'
             }),
             'posted_at': forms.DateTimeInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300',
@@ -33,41 +34,22 @@ class BeritaForm(forms.ModelForm):
 class TenagaPendidikForm(forms.ModelForm):
     class Meta:
         model = TenagaPendidik
-        fields = ['nama', 'bidang_ilmu', 'status', 'foto', 'email', 'nidn', 'nip', 'no_hp', 'pangkat_gol']
+        fields = [
+            'nama', 'bidang_ilmu', 'status', 'foto',
+            'email', 'nidn', 'nip', 'no_hp', 'pangkat_gol'
+        ]
         widgets = {
-            'nama': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': 'Contoh: Dr. Ahmad Fauzi, M.Si'
+            'nama': forms.TextInput(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300', 'placeholder': 'Nama lengkap & gelar'}),
+            'bidang_ilmu': forms.TextInput(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300', 'placeholder': 'Bidang keilmuan / kepakaran'}),
+            'status': forms.Select(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300'}),
+            # GANTI MENJADI FileInput AGAR MUNCUL TOMBOL CHOOSE FILE:
+            'foto': forms.FileInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': 'image/*'
             }),
-            'bidang_ilmu': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': 'Contoh: Kebijakan Publik'
-            }),
-            'status': forms.Select(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500'
-            }),
-            'foto': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': 'URL foto rasio 1:1'
-            }),
-            'email': forms.EmailInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': 'email@untad.ac.id'
-            }),
-            'nidn': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': 'Nomor NIDN'
-            }),
-            'nip': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': 'Nomor NIP'
-            }),
-            'no_hp': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': '0812xxxxxxx'
-            }),
-            'pangkat_gol': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-teal-500 focus:border-teal-500',
-                'placeholder': 'Contoh: Lektor Kepala / IV-a'
-            }),
+            'email': forms.EmailInput(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300', 'placeholder': 'email@untad.ac.id'}),
+            'nidn': forms.TextInput(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300', 'placeholder': 'Nomor NIDN'}),
+            'nip': forms.TextInput(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300', 'placeholder': 'Nomor NIP'}),
+            'no_hp': forms.TextInput(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300', 'placeholder': '0812xxxxxxxx'}),
+            'pangkat_gol': forms.TextInput(attrs={'class': 'w-full p-2.5 border rounded-xl border-slate-300', 'placeholder': 'Contoh: Lektor Kepala / IV-a'}),
         }
