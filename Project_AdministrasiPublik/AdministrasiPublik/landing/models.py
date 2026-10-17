@@ -1,4 +1,5 @@
 from django.db import models
+from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
 
 class Sambutan(models.Model):
@@ -19,9 +20,10 @@ class Galeri(models.Model):
 
 class Berita(models.Model):
     judul = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True, null=True)
-    konten = models.TextField()
-    gambar = models.ImageField(upload_to='images/berita/')
+    slug = models.SlugField(unique=True)
+    gambar = models.ImageField(upload_to='berita/', blank=True, null=True) # Pastikan field ini ada
+    konten = CKEditor5Field('Konten', config_name='extends')
+    post_date = models.DateTimeField(auto_now_add=True)
     
     # Sesuai permintaan: datetime create, update, dan post untuk pengurutan
     created_at = models.DateTimeField(auto_now_add=True)

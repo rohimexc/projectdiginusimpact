@@ -9,3 +9,20 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
+    # Model untuk mencatat riwayat login user
+class RiwayatLogin(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    waktu_login = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.waktu_login}"
+
+# Model untuk mencatat aktivitas/audit log admin (Tambah, Edit, Hapus data)
+class AuditLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    aktivitas = models.CharField(max_length=255)
+    waktu = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"[{self.waktu}] {self.user.username if self.user else 'Sistem'} - {self.aktivitas}"

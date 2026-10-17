@@ -1,11 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from akun.views import manajemen_user_view, audit_log_view
 
 app_name = 'landing'
 urlpatterns = [
     path('', views.index , name='landing_home'),
     path('berita/', views.berita_list_view, name='berita_list'),
     path('berita/tambah/', views.berita_create_view, name='berita_create'),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
     path('berita/<slug:slug>/', views.berita_detail_view, name='berita_detail'),
     path('berita/<slug:slug>/edit/', views.berita_update_view, name='berita_update'),
     path('berita/<slug:slug>/hapus/', views.berita_delete_view, name='berita_delete'),
@@ -18,4 +20,7 @@ path('dashboard/tendik/<int:pk>/hapus/', views.tendik_delete_view, name='tendik_
     path('login/', views.login_view, name='login'),
     path('dashboard-admin/', views.dashboard_admin_khusus, name='dashboard_admin'),
     path('dashboard/berita/', views.dashboard_berita_view, name='dashboard_berita'),
+    # Rute Manajemen User & Audit Log (Khusus Admin/Superuser)
+    path('dashboard/manajemen-user/', manajemen_user_view, name='manajemen_user'),
+    path('dashboard/audit-log/', audit_log_view, name='audit_log'),
 ]

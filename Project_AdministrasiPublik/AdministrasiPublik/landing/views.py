@@ -7,6 +7,7 @@ from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akredita
 from django.db.models import Q
 from .forms import BeritaForm, LoginForm, TenagaPendidikForm
 from django.contrib import messages
+from akun.views import catat_log
 
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
