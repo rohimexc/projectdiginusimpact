@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 # Model untuk data section Sambutan Koordinator Prodi
 class Sambutan(models.Model):
@@ -21,15 +22,11 @@ class Galeri(models.Model):
         return self.judul
 
 
-# gambar = models.CharField(max_length=255, blank=True, null=True, default="https://placehold.co/600x400")
-
-# MENJADI ImageField:
+# Model Berita
 class Berita(models.Model):
     judul = models.CharField(max_length=255)
     ringkasan = models.TextField(blank=True, null=True)
     konten = models.TextField(blank=True, null=True)
-    
-    # Kolom Upload Berkas Gambar dari Folder/Laptop
     gambar = models.ImageField(upload_to='berita/', blank=True, null=True, help_text="Upload foto/gambar berita")
     
     posted_at = models.DateTimeField(default=timezone.now, verbose_name="Waktu Tayang / Post")
@@ -42,41 +39,60 @@ class Berita(models.Model):
     def __str__(self):
         return self.judul
 
-# Model untuk data Halaman Tenaga Pendidik / Staf Dosen
+
+# Model Tenaga Pendidik & Kependidikan (Dibedakan lewat field jenis)
 class TenagaPendidik(models.Model):
+    JENIS_CHOICES = [
+        ('DOSEN', 'Dosen Pengajar'),
+        ('TENDIK', 'Tenaga Kependidikan'),
+    ]
+
     STATUS_CHOICES = [
         ('DOSEN TETAP', 'DOSEN TETAP'),
         ('DOSEN LUAR BIASA', 'DOSEN LUAR BIASA'),
         ('PROFESOR', 'PROFESOR'),
+        ('STAF ADMINISTRASI', 'STAF ADMINISTRASI'),
+        ('KEPALA TATA USAHA', 'KEPALA TATA USAHA'),
     ]
 
-    # Data Tampak Depan Kartu
-    nama = models.CharField(max_length=200, help_text="Nama lengkap beserta gelar (cth: Dr. Ahmad Fauzi, M.Si)")
-    bidang_ilmu = models.CharField(max_length=200, help_text="Bidang keilmuan / kepakaran (cth: Kebijakan Publik)")
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='DOSEN TETAP')
-    
-    # Foto: Menggunakan ImageField agar bisa browse/pilih file dari folder laptop (rasio 1:1)
-    foto = models.ImageField(
-        upload_to='dosen/',
-        blank=True,
-        null=True,
-        help_text="Upload foto dosen (disarankan rasio 1:1 / persegi)"
-    )
+    # Pemisah Dosen dan Tendik
+    jenis = models.CharField(max_length=20, choices=JENIS_CHOICES, default='DOSEN')
 
-    # Data Tampak Belakang Kartu (Muncul saat di-hover)
+    # Data Depan Kartu
+    nama = models.CharField(max_length=200, help_text="Nama lengkap beserta gelar")
+    bidang_ilmu = models.CharField(max_length=200, verbose_name="Bidang Ilmu / Jabatan")
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='DOSEN TETAP')
+    foto = models.ImageField(upload_to='dosen/', blank=True, null=True, help_text="Upload foto rasio 1:1")
+
+    # Data Belakang Kartu
     email = models.EmailField(blank=True, null=True)
     nidn = models.CharField(max_length=50, blank=True, null=True, verbose_name="NIDN")
     nip = models.CharField(max_length=50, blank=True, null=True, verbose_name="NIP")
     no_hp = models.CharField(max_length=30, blank=True, null=True, verbose_name="No. HP / WhatsApp")
-    pangkat_gol = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pangkat / Golongan", help_text="cth: Lektor Kepala / IV-a atau Guru Besar / IV-d")
+    pangkat_gol = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pangkat / Golongan")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Tenaga Pendidik"
-        verbose_name_plural = "Tenaga Pendidik"
+        verbose_name = "Tenaga Pendidik & Kependidikan"
+        verbose_name_plural = "Tenaga Pendidik & Kependidikan"
         ordering = ['nama']
 
     def __str__(self):
-        return self.nama
+        return f"{self.nama} ({self.jenis})"
+
+
+# Model Audit Log (Pencatat Riwayat Aktivitas & Riwayat Login Admin)
+class AuditLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    action = models.CharField(max_length=100)
+    description = models.TextField()
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"[{self.timestamp.strftime('%d/%m/%Y %H:%M')}] {self.action} oleh {self.user}"

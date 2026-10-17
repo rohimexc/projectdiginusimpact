@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Ringkasan - Admin Portal UNTAD</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Bootstrap Icons & SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
@@ -14,13 +16,7 @@
         extend: {
           fontFamily: { poppins: ['Poppins', 'sans-serif'] },
           colors: {
-            brand: {
-              teal: '#0b7285',
-              darkteal: '#084c5a',
-              deepteal: '#05313a',
-              gold: '#fab005',
-              accent: '#ffd43b',
-            }
+            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
           }
         }
       }
@@ -29,12 +25,12 @@
 </head>
 <body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
 
-  <!-- SIDEBAR -->
-  <aside class="w-64 bg-brand-deepteal text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex">
+  <!-- SIDEBAR ADMIN -->
+  <aside class="w-64 bg-brand-deepteal text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex min-h-screen sticky top-0">
     <div>
       <div class="p-6 border-b border-white/10 flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold text-lg border border-white/20">
-          <i class="fas fa-university"></i>
+          <i class="bi bi-bank2"></i>
         </div>
         <div>
           <h2 class="text-sm font-bold leading-tight">Admin Portal</h2>
@@ -44,102 +40,169 @@
 
       <nav class="p-4 space-y-1.5 text-xs">
         <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/15 text-brand-gold font-semibold transition">
-          <i class="fas fa-chart-pie w-4"></i>
-          <span>Ringkasan Dashboard</span>
+          <i class="bi bi-pie-chart-fill w-4"></i> <span>Ringkasan Dashboard</span>
         </a>
         <a href="{% url 'admin_kelola_berita' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="fas fa-newspaper w-4"></i>
-          <span>Kelola Berita</span>
+          <i class="bi bi-newspaper w-4"></i> <span>Kelola Berita</span>
+        </a>
+        <a href="{% url 'admin_kelola_dosen' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="bi bi-person-video3 w-4"></i> <span>Kelola Dosen</span>
         </a>
         <a href="{% url 'admin_kelola_tendik' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="fas fa-users-gear w-4"></i>
-          <span>Kelola Tendik</span>
+          <i class="bi bi-people-fill w-4"></i> <span>Kelola Tendik</span>
+        </a>
+        <a href="{% url 'admin_kelola_user' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="bi bi-person-gear w-4"></i> <span>Manajemen User</span>
         </a>
         <a href="{% url 'home' %}" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="fas fa-globe w-4"></i>
-          <span>Lihat Website Utama</span>
+          <i class="bi bi-box-arrow-up-right w-4"></i> <span>Lihat Website Utama</span>
         </a>
       </nav>
     </div>
 
     <div class="p-4 border-t border-white/10">
-      <div class="flex items-center gap-3 px-3 py-2 mb-2">
-        <div class="w-8 h-8 rounded-full bg-brand-gold text-slate-900 font-bold flex items-center justify-center text-xs">
-          {{ request.user.username|make_list|first|upper }}
-        </div>
-        <div class="overflow-hidden">
-          <p class="text-xs font-semibold truncate">{{ request.user.email|default:request.user.username }}</p>
-          <span class="text-[10px] text-brand-accent uppercase font-bold tracking-wider">Administrator</span>
-        </div>
-      </div>
-      <a href="{% url 'user_logout' %}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white text-xs font-semibold transition duration-200">
-        <i class="fas fa-right-from-bracket text-xs"></i>
-        <span>Keluar (Logout)</span>
+      <a href="{% url 'user_logout' %}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white text-xs font-semibold transition">
+        <i class="bi bi-box-arrow-left"></i> <span>Keluar (Logout)</span>
       </a>
     </div>
   </aside>
 
   <!-- KONTEN UTAMA -->
-  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-    
-    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
-      <h1 class="text-lg font-bold text-slate-800">Ringkasan Dashboard</h1>
-      <a href="{% url 'home' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
-        <i class="fas fa-arrow-up-right-from-square text-[10px]"></i> Buka Web Publik
-      </a>
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <h1 class="text-base font-bold text-slate-800">Ringkasan Sistem & Aktivitas</h1>
+      <!-- User Profile Kanan Atas -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-brand-gold text-slate-900 font-bold flex items-center justify-center text-xs">
+          {{ request.user.username|make_list|first|upper }}
+        </div>
+        <div class="hidden sm:block text-right">
+          <p class="text-xs font-semibold text-slate-800 leading-tight">{{ request.user.username }}</p>
+          <span class="text-[10px] text-teal-600 font-medium">{{ request.user.email }}</span>
+        </div>
+      </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+    <main class="flex-1 p-6 md:p-8 space-y-8">
       
-      <!-- KARTU STATISTIK -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Stat Berita -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+      <!-- 4 KARTU STATISTIK UTAMA -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Berita -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
-            <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Total Berita</p>
-            <h3 class="text-3xl font-extrabold text-slate-800 mt-1">{{ total_berita }}</h3>
-            <a href="{% url 'admin_kelola_berita' %}" class="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-teal mt-3 hover:underline">
-              Kelola di Menu Berita &rarr;
+            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Berita</p>
+            <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_berita }}</h3>
+            <a href="{% url 'admin_kelola_berita' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+              Buka Berita &rarr;
             </a>
           </div>
-          <div class="w-14 h-14 rounded-2xl bg-teal-50 text-brand-teal flex items-center justify-center text-2xl">
-            <i class="fas fa-newspaper"></i>
+          <div class="w-12 h-12 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center text-xl">
+            <i class="bi bi-newspaper"></i>
           </div>
         </div>
 
-        <!-- Stat Tendik -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <!-- Dosen -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
-            <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Total Tendik</p>
-            <h3 class="text-3xl font-extrabold text-slate-800 mt-1">{{ total_tendik }}</h3>
-            <a href="{% url 'admin_kelola_tendik' %}" class="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-teal mt-3 hover:underline">
-              Kelola di Menu Tendik &rarr;
+            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Dosen</p>
+            <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_dosen }}</h3>
+            <a href="{% url 'admin_kelola_dosen' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+              Buka Dosen &rarr;
             </a>
           </div>
-          <div class="w-14 h-14 rounded-2xl bg-amber-50 text-brand-gold flex items-center justify-center text-2xl">
-            <i class="fas fa-users-gear"></i>
+          <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+            <i class="bi bi-person-video3"></i>
           </div>
         </div>
 
-        <!-- Quick Info -->
-        <div class="bg-gradient-to-br from-brand-teal to-brand-darkteal p-6 rounded-2xl text-white shadow-md flex flex-col justify-between">
+        <!-- Tendik -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
           <div>
-            <h4 class="text-sm font-bold">Portal Manajemen Terpadu</h4>
-            <p class="text-xs text-slate-200 mt-1">Gunakan menu di sidebar samping untuk menambah, mengedit, atau menghapus postingan.</p>
-          </div>
-          <div class="flex gap-2 mt-4">
-            <a href="{% url 'admin_kelola_berita' %}" class="flex-1 text-center py-2 bg-white text-brand-darkteal rounded-xl text-xs font-bold hover:bg-slate-100 transition shadow">
-              Buka Berita
-            </a>
-            <a href="{% url 'admin_kelola_tendik' %}" class="flex-1 text-center py-2 bg-brand-gold text-slate-900 rounded-xl text-xs font-bold hover:bg-brand-hovergold transition shadow">
-              Buka Tendik
+            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Tendik</p>
+            <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_tendik }}</h3>
+            <a href="{% url 'admin_kelola_tendik' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+              Buka Tendik &rarr;
             </a>
           </div>
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-brand-gold flex items-center justify-center text-xl">
+            <i class="bi bi-people-fill"></i>
+          </div>
+        </div>
+
+        <!-- User -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Pengguna</p>
+            <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_user }}</h3>
+            <a href="{% url 'admin_kelola_user' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+              Buka User &rarr;
+            </a>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+            <i class="bi bi-person-gear"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABEL AUDIT LOG & RIWAYAT AKTIVITAS -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <i class="bi bi-clock-history text-brand-teal"></i> Audit Log & Riwayat Aktivitas
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Catatan tindakan perubahan data dan riwayat autentikasi sistem</p>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-100">
+              <tr>
+                <th class="py-3 px-6">Waktu Kejadian</th>
+                <th class="py-3 px-6">Pengguna</th>
+                <th class="py-3 px-6">Aksi</th>
+                <th class="py-3 px-6">Rincian Perubahan</th>
+                <th class="py-3 px-6">Alamat IP</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {% for log in logs %}
+                <tr class="hover:bg-slate-50/70 transition">
+                  <td class="py-3.5 px-6 text-slate-500">{{ log.timestamp|date:"d M Y, H:i:s" }}</td>
+                  <td class="py-3.5 px-6 font-semibold text-slate-800">{{ log.user.username|default:"Sistem" }}</td>
+                  <td class="py-3.5 px-6">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                      {{ log.action }}
+                    </span>
+                  </td>
+                  <td class="py-3.5 px-6 text-slate-600">{{ log.description }}</td>
+                  <td class="py-3.5 px-6 text-slate-400">{{ log.ip_address|default:"127.0.0.1" }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" class="py-10 text-center text-slate-400">Belum ada riwayat aktivitas yang tercatat.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
 
     </main>
   </div>
 
+  <script>
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  </script>
 </body>
 </html>

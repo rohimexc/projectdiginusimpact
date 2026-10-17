@@ -15,6 +15,7 @@ from core.views import (
     berita_create,
     berita_update,
     berita_delete,
+    tenaga_pendidik_list,
     tenaga_kependidikan_list,
     tenaga_kependidikan_detail,
     tenaga_kependidikan_create,
@@ -23,8 +24,11 @@ from core.views import (
     user_login,
     user_logout,
     admin_dashboard,
-    admin_kelola_berita,  
-    admin_kelola_tendik,  
+    admin_kelola_berita,
+    admin_kelola_dosen,
+    admin_kelola_tendik,
+    admin_kelola_user,
+    user_toggle_status,
 )
 
 urlpatterns = [
@@ -35,6 +39,11 @@ urlpatterns = [
 
     # Rute Custom Dashboard Admin
     path('dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('dashboard/berita/', admin_kelola_berita, name='admin_kelola_berita'),
+    path('dashboard/dosen/', admin_kelola_dosen, name='admin_kelola_dosen'),
+    path('dashboard/tendik/', admin_kelola_tendik, name='admin_kelola_tendik'),
+    path('dashboard/users/', admin_kelola_user, name='admin_kelola_user'),
+    path('dashboard/users/<int:pk>/toggle/', user_toggle_status, name='user_toggle_status'),
 
     # Django Admin Bawaan & Beranda Publik
     path('admin/', admin.site.urls),
@@ -47,15 +56,14 @@ urlpatterns = [
     path('Berita/<int:pk>/edit/', berita_update, name='berita_update'),
     path('Berita/<int:pk>/hapus/', berita_delete, name='berita_delete'),
 
-    # Rute Tenaga Kependidikan
+    # Rute Tenaga Pendidik (Dosen Publik) & Kependidikan (Tendik Publik)
+    path('tenaga-pendidik/', tenaga_pendidik_list, name='tenaga_pendidik_list'),
     path('tenaga-kependidikan/', tenaga_kependidikan_list, name='tenaga_kependidikan_list'),
     path('tenaga-kependidikan/<int:pk>/', tenaga_kependidikan_detail, name='tenaga_kependidikan_detail'),
     path('tenaga-kependidikan/tambah/', tenaga_kependidikan_create, name='tenaga_kependidikan_create'),
     path('tenaga-kependidikan/<int:pk>/edit/', tenaga_kependidikan_update, name='tenaga_kependidikan_update'),
     path('tenaga-kependidikan/<int:pk>/hapus/', tenaga_kependidikan_delete, name='tenaga_kependidikan_delete'),
-    path('dashboard/', admin_dashboard, name='admin_dashboard'),
-    path('dashboard/berita/', admin_kelola_berita, name='admin_kelola_berita'),
-    path('dashboard/tendik/', admin_kelola_tendik, name='admin_kelola_tendik'),
+
     # Jalur Media Upload
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
