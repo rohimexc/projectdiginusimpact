@@ -7,7 +7,9 @@ from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akredita
 from django.db.models import Q
 from .forms import BeritaForm, LoginForm, TenagaPendidikForm
 from django.contrib import messages
-from akun.views import catat_log
+from akun.views import catat_log, catat_riwayat_login
+from .forms import CustomAuthenticationForm
+from django.utils import timezone
 
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
@@ -73,12 +75,18 @@ def berita_create_view(request):
     if request.method == 'POST':
         form = BeritaForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            # Berikan notifikasi sukses
-            messages.success(request, "Data berita berhasil ditambahkan!")
+            berita = form.save(commit=False)
+            berita.post_date = timezone.now()  # <--- Isi tanggal otomatis di sini
+            berita.save()
+            
+            # Catat ke audit log
+            catat_log(request.user, f"Menambahkan berita baru berjudul: '{berita.judul}'")
+            
+            messages.success(request, "Berita berhasil dipublikasikan!")
             return redirect('landing:dashboard_berita')
     else:
         form = BeritaForm()
+    
     return render(request, 'landing/berita/berita_form.html', {'form': form})
 
 # 4. Update Berita (Edit)
@@ -199,27 +207,30 @@ def akreditasi_page(request):
     akreditasi = Akreditasi.objects.last()
     return render(request, 'landing/akreditasi.html', {'akreditasi': akreditasi})
 
-# --- VIEW LOGIN BERDASARKAN EMAIL & ROLE ADMIN ---
 def login_view(request):
     if request.method == 'POST':
-        email_input = request.POST.get('username')
+        email_input = request.POST.get('username')  # Karena input form menampung email/username
         password_input = request.POST.get('password')
         
+        # Cari user berdasarkan email yang diinput
         try:
             user_obj = User.objects.get(email=email_input)
             username_asli = user_obj.username
         except User.DoesNotExist:
-            username_asli = None
+            username_asli = email_input  # Fallback kalau yang diinput ternyata langsung username-nya
             
-        user = None
-        if username_asli:
-            user = authenticate(request, username=username_asli, password=password_input)
+        # Autentikasi menggunakan username asli & password
+        user = authenticate(request, username=username_asli, password=password_input)
             
         if user is not None:
             login(request, user)
+            
+            # Catat riwayat login ke database secara otomatis
+            catat_riwayat_login(user, request)
+            
             messages.success(request, f"Selamat datang, {user.get_full_name() or user.username}!")
             
-            # CEK ROLE: Jika Admin / Staff, arahkan ke Dashboard Admin buatan sendiri
+            # Cek role: Hanya admin/staff yang boleh masuk dashboard admin
             if user.is_superuser or user.is_staff:
                 return redirect('landing:dashboard_admin') 
             else:
@@ -229,39 +240,7 @@ def login_view(request):
         else:
             messages.error(request, "Email atau password salah.")
             
-    form = LoginForm()
-    return render(request, 'landing/Login/login.html', {'form': form})
-    if request.method == 'POST':
-        email_input = request.POST.get('username')
-        password_input = request.POST.get('password')
-        
-        # Cari username berdasarkan email yang diinput di form
-        try:
-            user_obj = User.objects.get(email=email_input)
-            username_asli = user_obj.username
-        except User.DoesNotExist:
-            username_asli = None
-            
-        # Lakukan autentikasi menggunakan username asli yang terikat pada email tersebut
-        user = None
-        if username_asli:
-            user = authenticate(request, username=username_asli, password=password_input)
-            
-        if user is not None:
-            login(request, user)
-            messages.success(request, f"Selamat datang, {user.get_full_name() or user.username}!")
-            
-            # Pengecekan role sesuai instruksi mentor: Jika ADMIN masuk ke dashboard, jika bukan ditolak
-            if user.is_superuser or user.is_staff:
-                return redirect('/admin/') 
-            else:
-                messages.error(request, "Akun Anda bukan Admin! Tidak memiliki hak akses.")
-                logout(request)
-                return redirect('landing:login')
-        else:
-            messages.error(request, "Email atau password salah.")
-            
-    form = LoginForm()
+    form = CustomAuthenticationForm()
     return render(request, 'landing/Login/login.html', {'form': form})
 
 @login_required(login_url='landing:login')

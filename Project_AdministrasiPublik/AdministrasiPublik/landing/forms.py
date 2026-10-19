@@ -1,7 +1,10 @@
 from django import forms
 from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik
+from django.core.exceptions import ValidationError
+import re
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django.contrib.auth.forms import AuthenticationForm
+from django import forms
 
 class SambutanForm(forms.ModelForm):
     class Meta:
@@ -18,8 +21,8 @@ class GaleriForm(forms.ModelForm):
         model = Galeri
         fields = ['judul', 'foto']
 
+# Form Berita (Lengkap dengan CKEditor 5 dan Peringatan Slug Bahasa Indonesia)
 class BeritaForm(forms.ModelForm):
-    # Definisikan secara eksplisit agar widget CKEditor 5 aktif
     konten = forms.CharField(widget=CKEditor5Widget(config_name='extends'))
 
     class Meta:
@@ -27,7 +30,8 @@ class BeritaForm(forms.ModelForm):
         fields = ['judul', 'slug', 'gambar', 'konten']
         widgets = {
             'judul': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none'
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Masukkan judul berita...'
             }),
             'slug': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50',
@@ -37,6 +41,13 @@ class BeritaForm(forms.ModelForm):
                 'class': 'w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100'
             }),
         }
+
+    # Validasi custom agar pesan error slug menjadi Bahasa Indonesia
+    def clean_slug(self):
+        slug = self.cleaned_data.get('slug')
+        if not re.match(r'^[-a-zA-Z0-9_]+$', slug):
+            raise ValidationError("Slug hanya boleh berisi huruf, angka, garis bawah (_), atau tanda hubung (-), serta TIDAK BOLEH menggunakan spasi atau huruf besar.")
+        return slug
 
 class TenagaPendidikForm(forms.ModelForm):
     class Meta:
@@ -58,3 +69,13 @@ class LoginForm(AuthenticationForm):
             'placeholder': '••••••••'
         })
     )
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+        'placeholder': 'email atau username'
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+        'placeholder': '••••••••'
+    }))

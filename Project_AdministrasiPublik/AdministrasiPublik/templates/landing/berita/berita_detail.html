@@ -20,8 +20,8 @@
         <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
     </div>
 
-    <div class="text-slate-700 text-sm sm:text-base leading-relaxed space-y-4 text-justify bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-        {{ berita.konten|linebreaks }}
+<div class="text-slate-700 text-sm sm:text-base leading-relaxed space-y-4 text-justify bg-white p-8 rounded-2xl border border-slate-200 shadow-sm break-words overflow-hidden">
+        {{ berita.konten|safe }}
     </div>
 </div>
 {% endblock %}

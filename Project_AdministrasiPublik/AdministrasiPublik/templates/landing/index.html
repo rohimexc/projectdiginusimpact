@@ -96,7 +96,7 @@
                 <span class="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
                     {{b.post_date|date:"d M Y" }}</span>
                 <h3 class="font-bold text-slate-800 text-sm mt-2 line-clamp-2">{{ b.judul }}</h3>
-                <p class="text-slate-600 text-xs mt-1 line-clamp-2">{{ b.konten }}</p>
+                <p class="text-slate-600 text-xs mt-1 line-clamp-2"><div>{{ b.konten|safe }}</div></p>
             </div>
             <div class="pt-3 border-t border-slate-100">
                 <a href="{% url 'landing:berita_detail' b.slug %}"
