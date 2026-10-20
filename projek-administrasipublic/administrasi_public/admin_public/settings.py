@@ -134,3 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Pengalihan setelah Logout langsung ke halaman login
 LOGOUT_REDIRECT_URL = '/login/'
+
+# Konfigurasi Pengiriman Email Reset Password (Console Backend untuk Development)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'admin.publik@untad.ac.id'

@@ -29,7 +29,7 @@
 </head>
 <body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
 
-  <!-- SIDEBAR ADMIN -->
+  <!-- SIDEBAR ADMIN (5 MENU RESMI) -->
   <aside class="w-64 bg-brand-deepteal text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex min-h-screen sticky top-0">
     <div>
       <div class="p-6 border-b border-white/10 flex items-center gap-3">
@@ -44,22 +44,19 @@
 
       <nav class="p-4 space-y-1.5 text-xs">
         <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-pie-chart-fill w-4"></i> <span>Ringkasan Dashboard</span>
-        </a>
-        <a href="{% url 'admin_kelola_berita' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-newspaper w-4"></i> <span>Kelola Berita</span>
-        </a>
-        <a href="{% url 'admin_kelola_dosen' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-person-video3 w-4"></i> <span>Kelola Dosen</span>
-        </a>
-        <a href="{% url 'admin_kelola_tendik' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-people-fill w-4"></i> <span>Kelola Tendik</span>
+          <i class="bi bi-pie-chart-fill w-4"></i> <span>1. Dashboard</span>
         </a>
         <a href="{% url 'admin_kelola_user' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/15 text-brand-gold font-semibold transition">
-          <i class="bi bi-person-gear w-4"></i> <span>Manajemen User</span>
+          <i class="bi bi-person-gear w-4"></i> <span>2. Manajemen User</span>
         </a>
-        <a href="{% url 'home' %}" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-box-arrow-up-right w-4"></i> <span>Lihat Website Utama</span>
+        <a href="{% url 'admin_kelola_berita' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="bi bi-newspaper w-4"></i> <span>3. Manajemen Berita</span>
+        </a>
+        <a href="{% url 'admin_kelola_dosen' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="bi bi-person-video3 w-4"></i> <span>4. Manajemen Dosen</span>
+        </a>
+        <a href="{% url 'admin_kelola_tendik' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
+          <i class="bi bi-people-fill w-4"></i> <span>5. Manajemen Tendik</span>
         </a>
       </nav>
     </div>
@@ -95,9 +92,17 @@
 
     <main class="flex-1 p-6 md:p-8">
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 w-full">
-        <div class="mb-6">
-          <h2 class="text-lg font-bold text-slate-800">Daftar Akun Pengguna</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Kelola role, hak akses, dan kendali status aktif/nonaktif akun</p>
+        
+        <!-- HEADER TABEL & TOMBOL TAMBAH USER -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Daftar Akun Pengguna</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Kelola role, hak akses, dan kendali status aktif/nonaktif akun</p>
+          </div>
+          <!-- TOMBOL TAMBAH USER DI SINI -->
+          <a href="{% url 'user_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-sm self-start sm:self-auto">
+            <i class="bi bi-person-plus-fill"></i> Tambah User Baru
+          </a>
         </div>
 
         <table id="tabelUser" class="display w-full text-xs text-slate-600">
@@ -108,7 +113,7 @@
               <th>Role</th>
               <th>Status</th>
               <th>Tanggal Dibuat</th>
-              <th class="text-center">Aksi Status</th>
+              <th class="text-center">Aksi (CRUD)</th>
             </tr>
           </thead>
           <tbody>
@@ -134,17 +139,26 @@
                 </td>
                 <td>{{ u.date_joined|date:"d M Y, H:i" }}</td>
                 <td class="text-center">
-                  {% if u == request.user %}
-                    <span class="text-[10px] text-slate-400 italic font-medium">Akun Anda</span>
-                  {% else %}
-                    <a href="{% url 'user_toggle_status' u.pk %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition {% if u.is_active %}bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200{% else %}bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200{% endif %}">
-                      {% if u.is_active %}
-                        <i class="bi bi-person-x"></i> Nonaktifkan
-                      {% else %}
-                        <i class="bi bi-person-check"></i> Aktifkan
-                      {% endif %}
+                  <div class="inline-flex items-center gap-1.5">
+                    <!-- Tombol Edit User -->
+                    <a href="{% url 'user_update' u.pk %}" title="Edit User" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                      <i class="bi bi-pencil-square"></i>
                     </a>
-                  {% endif %}
+
+                    {% if u != request.user %}
+                      <!-- Tombol Toggle Status -->
+                      <a href="{% url 'user_toggle_status' u.pk %}" title="{% if u.is_active %}Nonaktifkan{% else %}Aktifkan{% endif %}" class="p-2 rounded-lg transition border {% if u.is_active %}bg-slate-50 text-slate-600 hover:bg-slate-100 border-slate-200{% else %}bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border-emerald-200{% endif %}">
+                        {% if u.is_active %}<i class="bi bi-person-x"></i>{% else %}<i class="bi bi-person-check"></i>{% endif %}
+                      </a>
+
+                      <!-- Tombol Hapus User -->
+                      <a href="{% url 'user_delete' u.pk %}" onclick="return confirm('Apakah Anda yakin ingin menghapus akun {{ u.username }}?')" title="Hapus User" class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
+                        <i class="bi bi-trash"></i>
+                      </a>
+                    {% else %}
+                      <span class="text-[10px] text-slate-400 italic px-2">Akun Anda</span>
+                    {% endif %}
+                  </div>
                 </td>
               </tr>
             {% endfor %}

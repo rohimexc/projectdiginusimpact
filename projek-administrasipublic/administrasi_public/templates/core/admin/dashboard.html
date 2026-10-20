@@ -5,31 +5,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Ringkasan - Admin Portal UNTAD</title>
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
   <!-- Bootstrap Icons & SweetAlert2 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <!-- jQuery & DataTables CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+  <!-- Google Fonts Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: { poppins: ['Poppins', 'sans-serif'] },
           colors: {
-            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
           }
         }
       }
     }
   </script>
+
+  <style>
+    /* Styling DataTables agar pas dan rapi dengan Tailwind */
+    .dataTables_wrapper .dataTables_length select {
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.25rem 1.75rem 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      background-color: #ffffff;
+      outline: none;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      background-color: #ffffff;
+      outline: none;
+      margin-left: 0.5rem;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus,
+    .dataTables_wrapper .dataTables_length select:focus {
+      border-color: #0b7285;
+      box-shadow: 0 0 0 2px rgba(11, 114, 133, 0.15);
+    }
+    table.dataTable.no-footer {
+      border-bottom: 1px solid #f1f5f9;
+    }
+    table.dataTable thead th {
+      border-bottom: 1px solid #e2e8f0;
+      color: #64748b;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 1rem;
+    }
+    table.dataTable tbody td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid #f8fafc;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: #0b7285 !important;
+      color: #ffffff !important;
+      border: 1px solid #0b7285 !important;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: #084c5a !important;
+      color: #ffffff !important;
+      border: 1px solid #084c5a !important;
+      border-radius: 0.5rem;
+    }
+  </style>
 </head>
 <body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
 
   <!-- SIDEBAR ADMIN -->
-  <aside class="w-64 bg-brand-deepteal text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex min-h-screen sticky top-0">
+  <aside class="w-64 bg-[#05313a] text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex min-h-screen sticky top-0">
     <div>
       <div class="p-6 border-b border-white/10 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold text-lg border border-white/20">
+        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-amber-400 text-lg border border-white/20">
           <i class="bi bi-bank2"></i>
         </div>
         <div>
@@ -39,7 +111,7 @@
       </div>
 
       <nav class="p-4 space-y-1.5 text-xs">
-        <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/15 text-brand-gold font-semibold transition">
+        <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/15 text-amber-400 font-semibold transition">
           <i class="bi bi-pie-chart-fill w-4"></i> <span>Ringkasan Dashboard</span>
         </a>
         <a href="{% url 'admin_kelola_berita' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
@@ -71,9 +143,8 @@
   <div class="flex-1 flex flex-col min-w-0">
     <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
       <h1 class="text-base font-bold text-slate-800">Ringkasan Sistem & Aktivitas</h1>
-      <!-- User Profile Kanan Atas -->
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-brand-gold text-slate-900 font-bold flex items-center justify-center text-xs">
+        <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-900 font-bold flex items-center justify-center text-xs">
           {{ request.user.username|make_list|first|upper }}
         </div>
         <div class="hidden sm:block text-right">
@@ -85,103 +156,119 @@
 
     <main class="flex-1 p-6 md:p-8 space-y-8">
       
-      <!-- 4 KARTU STATISTIK UTAMA -->
+      <!-- 4 KARTU STATISTIK ATAS -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <!-- Berita -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between">
           <div>
-            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Berita</p>
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Berita</p>
             <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_berita }}</h3>
-            <a href="{% url 'admin_kelola_berita' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+            <a href="{% url 'admin_kelola_berita' %}" class="text-[11px] text-teal-700 font-semibold hover:underline mt-2 inline-flex items-center gap-1">
               Buka Berita &rarr;
             </a>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-teal-50 text-brand-teal flex items-center justify-center text-xl">
+          <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center text-xl">
             <i class="bi bi-newspaper"></i>
           </div>
         </div>
 
         <!-- Dosen -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between">
           <div>
-            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Dosen</p>
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Dosen</p>
             <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_dosen }}</h3>
-            <a href="{% url 'admin_kelola_dosen' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+            <a href="{% url 'admin_kelola_dosen' %}" class="text-[11px] text-teal-700 font-semibold hover:underline mt-2 inline-flex items-center gap-1">
               Buka Dosen &rarr;
             </a>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+          <div class="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
             <i class="bi bi-person-video3"></i>
           </div>
         </div>
 
         <!-- Tendik -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between">
           <div>
-            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Tendik</p>
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Tendik</p>
             <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_tendik }}</h3>
-            <a href="{% url 'admin_kelola_tendik' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+            <a href="{% url 'admin_kelola_tendik' %}" class="text-[11px] text-teal-700 font-semibold hover:underline mt-2 inline-flex items-center gap-1">
               Buka Tendik &rarr;
             </a>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-amber-50 text-brand-gold flex items-center justify-center text-xl">
+          <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl">
             <i class="bi bi-people-fill"></i>
           </div>
         </div>
 
-        <!-- User -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <!-- Pengguna -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between">
           <div>
-            <p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Total Pengguna</p>
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Pengguna</p>
             <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_user }}</h3>
-            <a href="{% url 'admin_kelola_user' %}" class="text-[11px] text-brand-teal font-semibold hover:underline mt-2 inline-block">
+            <a href="{% url 'admin_kelola_user' %}" class="text-[11px] text-teal-700 font-semibold hover:underline mt-2 inline-flex items-center gap-1">
               Buka User &rarr;
             </a>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+          <div class="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
             <i class="bi bi-person-gear"></i>
           </div>
         </div>
       </div>
 
-      <!-- TABEL AUDIT LOG & RIWAYAT AKTIVITAS -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-          <div>
-            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
-              <i class="bi bi-clock-history text-brand-teal"></i> Audit Log & Riwayat Aktivitas
-            </h2>
-            <p class="text-xs text-slate-400 mt-0.5">Catatan tindakan perubahan data dan riwayat autentikasi sistem</p>
-          </div>
+      <!-- KARTU TABEL AUDIT LOG DENGAN DATATABLES -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 w-full">
+        <div class="mb-5">
+          <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            <i class="bi bi-clock-history text-teal-700"></i> Audit Log & Riwayat Aktivitas
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Catatan tindakan perubahan data dan riwayat autentikasi sistem</p>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-slate-600">
-            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-100">
+        <div class="w-full overflow-x-auto">
+          <table id="tabelAudit" class="display w-full text-xs text-slate-600">
+            <thead>
               <tr>
-                <th class="py-3 px-6">Waktu Kejadian</th>
-                <th class="py-3 px-6">Pengguna</th>
-                <th class="py-3 px-6">Aksi</th>
-                <th class="py-3 px-6">Rincian Perubahan</th>
-                <th class="py-3 px-6">Alamat IP</th>
+                <th>Waktu Kejadian</th>
+                <th>Pengguna</th>
+                <th>Aksi</th>
+                <th>Rincian Perubahan</th>
+                <th>Alamat IP</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody>
               {% for log in logs %}
                 <tr class="hover:bg-slate-50/70 transition">
-                  <td class="py-3.5 px-6 text-slate-500">{{ log.timestamp|date:"d M Y, H:i:s" }}</td>
-                  <td class="py-3.5 px-6 font-semibold text-slate-800">{{ log.user.username|default:"Sistem" }}</td>
-                  <td class="py-3.5 px-6">
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">
-                      {{ log.action }}
-                    </span>
+                  <td class="font-medium text-slate-600">{{ log.timestamp|date:"d M Y, H:i:s" }}</td>
+                  <td class="font-bold text-slate-800">{{ log.user.username|default:"Sistem" }}</td>
+                  <td>
+                    {% if "Login" in log.action %}
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        {{ log.action }}
+                      </span>
+                    {% elif "Logout" in log.action %}
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                        {{ log.action }}
+                      </span>
+                    {% elif "Hapus" in log.action %}
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                        {{ log.action }}
+                      </span>
+                    {% elif "Edit" in log.action or "Ubah" in log.action %}
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                        {{ log.action }}
+                      </span>
+                    {% else %}
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                        {{ log.action }}
+                      </span>
+                    {% endif %}
                   </td>
-                  <td class="py-3.5 px-6 text-slate-600">{{ log.description }}</td>
-                  <td class="py-3.5 px-6 text-slate-400">{{ log.ip_address|default:"127.0.0.1" }}</td>
+                  <td class="text-slate-600">{{ log.description }}</td>
+                  <td class="text-slate-400">{{ log.ip_address|default:"127.0.0.1" }}</td>
                 </tr>
               {% empty %}
                 <tr>
-                  <td colspan="5" class="py-10 text-center text-slate-400">Belum ada riwayat aktivitas yang tercatat.</td>
+                  <td colspan="5" class="text-center py-6 text-slate-400">Belum ada riwayat aktivitas yang tercatat.</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -193,6 +280,24 @@
   </div>
 
   <script>
+    $(document).ready(function() {
+      $('#tabelAudit').DataTable({
+        lengthMenu: [1, 2, 5],
+        pageLength: 2,
+        language: {
+          search: "Cari Aktivitas:",
+          lengthMenu: "Tampilkan _MENU_ data",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+          paginate: {
+            next: "Berikutnya",
+            previous: "Sebelumnya"
+          },
+          emptyTable: "Belum ada riwayat aktivitas"
+        },
+        order: [[0, 'desc']]
+      });
+    });
+
     {% if messages %}
       {% for message in messages %}
         Swal.fire({

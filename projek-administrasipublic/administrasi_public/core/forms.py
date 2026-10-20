@@ -1,5 +1,9 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from .models import Berita, TenagaPendidik
+
+User = get_user_model()
+
 
 class BeritaForm(forms.ModelForm):
     class Meta:
@@ -78,3 +82,61 @@ class TenagaPendidikForm(forms.ModelForm):
                 'placeholder': 'Contoh: Lektor Kepala / IV-a atau Pengadministrasi Umum'
             }),
         }
+
+
+# Form Tambah & Edit Pengguna (Manajemen User)
+class UserForm(forms.ModelForm):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+            'placeholder': 'Masukkan kata sandi'
+        }),
+        required=False,
+        help_text="Wajib diisi saat membuat user baru. Kosongkan jika tidak ingin mengubah sandi saat edit."
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'role', 'is_active', 'password']
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Username akun'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'user@gmail.com'
+            }),
+            # Menggunakan widget Select langsung dari pilihan model User
+            'role': forms.Select(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs font-semibold'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500'
+            }),
+        }
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not self.instance.pk and not password:
+            raise forms.ValidationError("Kata sandi wajib diisi untuk pengguna baru.")
+        return password
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        if password:
+            user.set_password(password)
+
+        # Otomatis atur status staff dan superuser jika rolenya admin
+        role_str = str(user.role).strip().lower()
+        if role_str == 'admin':
+            user.is_staff = True
+            user.is_superuser = True
+        else:
+            user.is_staff = False
+            user.is_superuser = False
+
+        if commit:
+            user.save()
+        return user

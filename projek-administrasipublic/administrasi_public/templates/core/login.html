@@ -148,13 +148,16 @@
               </button>
             </div>
           </div>
-
-          <!-- Remember Me -->
+          
+          <!-- Remember Me & Lupa Sandi -->
           <div class="flex items-center justify-between text-xs pt-1">
             <label class="flex items-center gap-2 text-slate-600 cursor-pointer select-none">
               <input type="checkbox" class="w-3.5 h-3.5 rounded border-slate-300 text-brand-teal focus:ring-brand-teal">
               <span>Ingat sesi saya</span>
             </label>
+            <a href="{% url 'password_reset' %}" class="text-teal-700 hover:text-teal-900 hover:underline font-semibold transition">
+              Lupa kata sandi?
+            </a>
           </div>
 
           <!-- Submit Button -->

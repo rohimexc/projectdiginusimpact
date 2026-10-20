@@ -1,13 +1,14 @@
 """
 URL configuration for admin_public project.
 """
+from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 
-# Import semua view dari core termasuk login, logout, dan dashboard
+# Import semua view dari core
 from core.views import (
     home,
     berita_list,
@@ -29,6 +30,9 @@ from core.views import (
     admin_kelola_tendik,
     admin_kelola_user,
     user_toggle_status,
+    user_create,
+    user_update,
+    user_delete,
 )
 
 urlpatterns = [
@@ -37,12 +41,46 @@ urlpatterns = [
     path('logout/', user_logout, name='user_logout'),
     path('login/', user_login, name='user_login'),
 
-    # Rute Custom Dashboard Admin
+    # Alur Reset Password via Email
+    path('password-reset/', 
+         auth_views.PasswordResetView.as_view(
+             template_name='core/auth/password_reset.html',
+             email_template_name='core/auth/password_reset_email.html',
+             subject_template_name='core/auth/password_reset_subject.txt',
+             success_url='/password-reset/done/'
+         ), 
+         name='password_reset'),
+
+    path('password-reset/done/', 
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='core/auth/password_reset_done.html'
+         ), 
+         name='password_reset_done'),
+
+    path('password-reset-confirm/<uidb64>/<token>/', 
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='core/auth/password_reset_confirm.html',
+             success_url='/password-reset-complete/'
+         ), 
+         name='password_reset_confirm'),
+
+    path('password-reset-complete/', 
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='core/auth/password_reset_complete.html'
+         ), 
+         name='password_reset_complete'),
+
+    # Rute Dashboard Admin
     path('dashboard/', admin_dashboard, name='admin_dashboard'),
     path('dashboard/berita/', admin_kelola_berita, name='admin_kelola_berita'),
     path('dashboard/dosen/', admin_kelola_dosen, name='admin_kelola_dosen'),
     path('dashboard/tendik/', admin_kelola_tendik, name='admin_kelola_tendik'),
+
+    # Rute CRUD Manajemen User
     path('dashboard/users/', admin_kelola_user, name='admin_kelola_user'),
+    path('dashboard/users/tambah/', user_create, name='user_create'),
+    path('dashboard/users/<int:pk>/edit/', user_update, name='user_update'),
+    path('dashboard/users/<int:pk>/hapus/', user_delete, name='user_delete'),
     path('dashboard/users/<int:pk>/toggle/', user_toggle_status, name='user_toggle_status'),
 
     # Django Admin Bawaan & Beranda Publik
@@ -56,7 +94,7 @@ urlpatterns = [
     path('Berita/<int:pk>/edit/', berita_update, name='berita_update'),
     path('Berita/<int:pk>/hapus/', berita_delete, name='berita_delete'),
 
-    # Rute Tenaga Pendidik (Dosen Publik) & Kependidikan (Tendik Publik)
+    # Rute Tenaga Pendidik & Kependidikan
     path('tenaga-pendidik/', tenaga_pendidik_list, name='tenaga_pendidik_list'),
     path('tenaga-kependidikan/', tenaga_kependidikan_list, name='tenaga_kependidikan_list'),
     path('tenaga-kependidikan/<int:pk>/', tenaga_kependidikan_detail, name='tenaga_kependidikan_detail'),

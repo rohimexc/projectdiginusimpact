@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Sambutan, Galeri, Berita, TenagaPendidik, AuditLog
-from .forms import BeritaForm, TenagaPendidikForm
+from .forms import BeritaForm, TenagaPendidikForm, UserForm
 
 User = get_user_model()
 
@@ -193,30 +193,52 @@ def admin_dashboard(request):
 
 @login_required(login_url='user_login')
 def admin_kelola_berita(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
     daftar_berita = Berita.objects.all().order_by('-posted_at')
     return render(request, 'core/admin/berita_kelola.html', {'daftar_berita': daftar_berita})
 
 
 @login_required(login_url='user_login')
 def admin_kelola_dosen(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
     daftar_dosen = TenagaPendidik.objects.filter(jenis='DOSEN').order_by('-id')
     return render(request, 'core/admin/dosen_kelola.html', {'daftar_dosen': daftar_dosen})
 
 
 @login_required(login_url='user_login')
 def admin_kelola_tendik(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
     daftar_tendik = TenagaPendidik.objects.filter(jenis='TENDIK').order_by('-id')
     return render(request, 'core/admin/tendik_kelola.html', {'daftar_tendik': daftar_tendik})
 
 
 @login_required(login_url='user_login')
 def admin_kelola_user(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        messages.error(request, 'Akses ditolak! Hanya Administrator yang boleh mengakses.')
+        return redirect('user_login')
     daftar_user = User.objects.all().order_by('-date_joined')
     return render(request, 'core/admin/user_kelola.html', {'daftar_user': daftar_user})
 
 
 @login_required(login_url='user_login')
 def user_toggle_status(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
     target_user = get_object_or_404(User, pk=pk)
     target_user.is_active = not target_user.is_active
     target_user.save()
@@ -313,3 +335,70 @@ def tenaga_kependidikan_delete(request, pk):
         messages.success(request, f"Data {nama} berhasil dihapus!")
         return redirect(target)
     return render(request, 'core/kependidikan/delete_confirm.html', {'tenaga_kependidikan': pegawai, 'back_url': target})
+
+
+# ==========================================
+# 5. CRUD MANAJEMEN USER (RBAC VALIDATED)
+# ==========================================
+
+@login_required(login_url='user_login')
+def user_create(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        messages.error(request, 'Akses ditolak!')
+        return redirect('user_login')
+
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            u = form.save()
+            catat_audit(request, 'Tambah User', f"Membuat akun user: {u.username} ({u.email})")
+            messages.success(request, f"Akun {u.username} berhasil dibuat!")
+            return redirect('admin_kelola_user')
+    else:
+        form = UserForm()
+        
+    # Pastikan memanggil file user_form.html
+    return render(request, 'core/admin/user_form.html', {'form': form, 'title': 'Tambah User Baru'})
+
+
+@login_required(login_url='user_login')
+def user_update(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        messages.error(request, 'Akses ditolak!')
+        return redirect('user_login')
+
+    target_user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=target_user)
+        if form.is_valid():
+            u = form.save()
+            catat_audit(request, 'Edit User', f"Memperbarui profil user: {u.username}")
+            messages.success(request, f"Akun {u.username} berhasil diperbarui!")
+            return redirect('admin_kelola_user')
+    else:
+        form = UserForm(instance=target_user)
+    return render(request, 'core/admin/user_form.html', {'form': form, 'title': f'Edit Akun: {target_user.username}'})
+
+
+@login_required(login_url='user_login')
+def user_delete(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        messages.error(request, 'Akses ditolak!')
+        return redirect('user_login')
+
+    target_user = get_object_or_404(User, pk=pk)
+    if target_user == request.user:
+        messages.error(request, 'Anda tidak dapat menghapus akun Anda sendiri!')
+        return redirect('admin_kelola_user')
+
+    username = target_user.username
+    target_user.delete()
+    catat_audit(request, 'Hapus User', f"Menghapus user: {username}")
+    messages.success(request, f"Akun {username} berhasil dihapus!")
+    return redirect('admin_kelola_user')
