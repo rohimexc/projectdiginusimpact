@@ -1,0 +1,75 @@
+{% extends 'landing/admin/template/base.html' %}
+
+{% block title %}
+    {% if target_user %}Edit User: {{ target_user.username }}{% else %}Tambah User Baru{% endif %} - Admin Portal
+{% endblock %}
+
+{% block header_title %}Manajemen Akun Administrator{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl space-y-6">
+    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+            <h2 class="text-base font-bold text-slate-800">
+                {% if target_user %}Edit Akun: {{ target_user.username }}{% else %}Tambah Akun Administrator Baru{% endif %}
+            </h2>
+            <p class="text-xs text-slate-400">Silakan isi formulir akun administrator di bawah ini dengan lengkap.</p>
+        </div>
+
+        <form method="POST" class="space-y-4 text-xs">
+            {% csrf_token %}
+            
+            <!-- Field lainnya (Username, First Name, Last Name, Email, dll) -->
+            {% for field in form %}
+                {% if field.name != 'password' %}
+                <div class="space-y-1">
+                    <label class="block font-semibold text-slate-700">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-red-500 text-[11px]">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- KOTAK PASSWORD DINAMIS (Otomatis menyesuaikan Tambah / Edit) -->
+            <div class="space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                <label class="block font-semibold text-slate-700">
+                    {% if target_user %}Password Baru (Opsional){% else %}Password <span class="text-red-500">*</span>{% endif %}
+                </label>
+                {{ form.password }}
+                <p class="text-[10px] text-slate-400">
+                    {% if target_user %}
+                        Kosongkan saja jika tidak ingin mengubah password akun ini.
+                    {% else %}
+                        Masukkan password untuk akun baru administrator.
+                    {% endif %}
+                </p>
+                {% if form.password.errors %}
+                    <p class="text-red-500 text-[11px]">{{ form.password.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4">
+                <a href="{% url 'landing:manajemen_user' %}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-lg transition">Batal</a>
+                <button type="submit" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition shadow-sm">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll("input, select, textarea");
+        inputs.forEach(input => {
+            if (input.type !== "checkbox" && input.type !== "radio") {
+                input.className = "w-full mt-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition";
+            } else if (input.type === "checkbox") {
+                input.className = "w-4 h-4 text-teal-600 bg-slate-50 border-slate-300 rounded focus:ring-teal-500";
+            }
+        });
+    });
+</script>
+{% endblock %}

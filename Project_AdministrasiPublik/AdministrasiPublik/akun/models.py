@@ -18,11 +18,12 @@ class RiwayatLogin(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.waktu_login}"
 
-# Model untuk mencatat aktivitas/audit log admin (Tambah, Edit, Hapus data)
+# Model untuk mencatat rekam jejak aktivitas admin/sistem
 class AuditLog(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    aktivitas = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='akun_auditlogs')
+    aktivitas = models.TextField()
     waktu = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"[{self.waktu}] {self.user.username if self.user else 'Sistem'} - {self.aktivitas}"
+        username = self.user.username if self.user else "Sistem"
+        return f"[{self.waktu}] {username}: {self.aktivitas}"

@@ -154,3 +154,5 @@ CKEDITOR_5_CONFIGS = {
         'height': '400px',
     }
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

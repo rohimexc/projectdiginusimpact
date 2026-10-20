@@ -1,105 +1,74 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Administrasi Publik</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: { colors: { tealBrand: '#0b7a75' } }
-            }
-        }
-    </script>
-</head>
-<body class="bg-slate-100 min-h-screen flex">
+{% extends 'landing/admin/template/base.html' %}
 
-    <!-- Sidebar Admin (Lengkap dengan Menu Kelola Berita) -->
-    <aside class="w-64 bg-tealBrand text-white hidden md:flex flex-col justify-between p-6 shadow-md">
-        <div class="space-y-6">
-            <div>
-                <h2 class="text-lg font-bold">Admin Portal</h2>
-                <p class="text-amber-300 text-xs font-medium">Administrasi Publik</p>
-            </div>
-            
-<nav class="space-y-2 text-xs font-medium">
-    <a href="{% url 'landing:dashboard_admin' %}" class="block px-4 py-2.5 rounded-lg transition hover:bg-teal-700 text-slate-100">Dashboard Utama</a>
-    <a href="{% url 'landing:dashboard_berita' %}" class="block px-4 py-2.5 rounded-lg transition hover:bg-teal-700 text-slate-100">Kelola Berita</a>
-    <a href="{% url 'landing:tenaga_pendidik' %}" class="block px-4 py-2.5 rounded-lg transition hover:bg-teal-700 text-slate-100">Kelola Tendik</a>
-    
-    <!-- TAMBAHKAN DUA MENU INI DI SINI -->
-    <a href="{% url 'landing:manajemen_user' %}" class="block px-4 py-2.5 rounded-lg transition hover:bg-teal-700 text-slate-100">Manajemen User</a>
-    <a href="{% url 'landing:audit_log' %}" class="block px-4 py-2.5 rounded-lg transition hover:bg-teal-700 text-slate-100">Audit Log Aktivitas</a>
-</nav>
+{% block title %}Dashboard Admin - Administrasi Publik{% endblock %}
+
+{% block header_title %}Dashboard Kendali Utama{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Kartu Statistik Atas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Kartu Total Berita -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Berita Dipublikasi</p>
+            <h3 class="text-2xl font-bold text-slate-800">{{ total_berita }} Berita</h3>
+            <p class="text-xs text-slate-500">Data aktif yang saat ini tampil di halaman website publik.</p>
         </div>
 
-        <div class="pt-4 border-t border-teal-700">
-            <a href="{% url 'landing:login' %}" class="block px-4 py-2 text-xs text-red-200 hover:bg-red-600/20 hover:text-white rounded-lg transition font-semibold">
-                &rarr; Keluar / Logout
-            </a>
+        <!-- Kartu Total Tendik & Dosen -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Tendik & Dosen</p>
+            <h3 class="text-2xl font-bold text-teal-700">{{ total_tendik }} Orang</h3>
+            <p class="text-xs text-slate-500">Jumlah keseluruhan tenaga kependidikan terdaftar.</p>
         </div>
-    </aside>
 
-    <!-- Konten Utama -->
-    <main class="flex-1 flex flex-col min-w-0">
-        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shadow-sm">
-            <h1 class="font-bold text-slate-800 text-sm">Dashboard Kendali Utama</h1>
-            <a href="{% url 'landing:landing_home' %}" class="text-xs font-semibold text-teal-600 hover:underline">Lihat Website &rarr;</a>
-            <div class="flex items-center gap-3">
-    <div class="text-right">
-        <p class="text-xs font-bold text-slate-800">{{ request.user.get_full_name|default:request.user.username }}</p>
-        <p class="text-[10px] text-teal-600 font-medium">{% if request.user.is_superuser %}Super Admin{% else %}Staff Admin{% endif %}</p>
+        <!-- Kartu Status Sistem -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Status Sistem</p>
+            <h3 class="text-lg font-bold text-teal-600">Aman & Terkendali</h3>
+            <p class="text-xs text-slate-500">Login menggunakan autentikasi email khusus admin.</p>
+        </div>
     </div>
-    <div class="w-9 h-9 bg-teal-600 text-white font-bold rounded-full flex items-center justify-center text-xs shadow-inner">
-        {{ request.user.username|slice:":2"|upper }}
+
+    <!-- TABEL AUDIT LOG AKTIVITAS -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div>
+            <h3 class="font-bold text-slate-800 text-sm">Rekam Jejak Aktivitas Sistem & Admin</h3>
+            <p class="text-xs text-slate-400">Memantau seluruh aksi tambah, ubah, atau hapus data terbaru yang dilakukan dalam sistem.</p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500">
+                        <th class="p-3">Waktu Kejadian</th>
+                        <th class="p-3">Administrator</th>
+                        <th class="p-3">Detail Aktivitas</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for log in logs %}
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 text-slate-500 font-mono">{{ log.waktu|date:"d M Y, H:i:s" }}</td>
+                        <td class="p-3 font-semibold text-slate-800">{{ log.user.username|default:"Sistem Otomatis" }}</td>
+                        <td class="p-3 text-slate-700">{{ log.aktivitas }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="p-6 text-center text-slate-400 italic">Belum ada catatan aktivitas audit log.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Kotak Sambutan -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <h3 class="font-bold text-slate-800 text-sm">Selamat Datang di Portal Admin Departemen</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">
+            Silakan gunakan menu navigasi di sebelah kiri (<b>Kelola Berita</b> atau <b>Kelola Tendik & Dosen</b>) untuk melakukan penambahan, pengubahan, maupun penghapusan data secara penuh.
+        </p>
     </div>
 </div>
-        </header>
-
-        <div class="p-6 sm:p-8 space-y-6 flex-1">
-            
-            <!-- Notifikasi Pesan Sukses -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="p-4 text-xs font-semibold rounded-xl bg-teal-50 text-teal-700 border border-teal-200 shadow-sm">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-    <!-- Kartu Total Berita -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Berita Dipublikasi</p>
-        <h3 class="text-2xl font-bold text-slate-800">{{ total_berita }} Berita</h3>
-        <p class="text-xs text-slate-500">Data aktif yang saat ini tampil di halaman website publik.</p>
-    </div>
-
-    <!-- Kartu Total Tendik & Dosen (BARU) -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Tendik & Dosen</p>
-        <h3 class="text-2xl font-bold text-teal-700">{{ total_tendik }} Orang</h3>
-        <p class="text-xs text-slate-500">Jumlah keseluruhan tenaga kependidikan terdaftar.</p>
-    </div>
-
-    <!-- Kartu Status Sistem -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Status Sistem</p>
-        <h3 class="text-lg font-bold text-teal-600">Aman & Terkendali</h3>
-        <p class="text-xs text-slate-500">Login menggunakan autentikasi email khusus admin.</p>
-    </div>
-</div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                <h3 class="font-bold text-slate-800 text-sm">Selamat Datang di Portal Admin Departemen</h3>
-                <p class="text-xs text-slate-500 leading-relaxed">
-                    Silakan gunakan menu navigasi di sebelah kiri (<b>Kelola Berita</b> atau <b>Kelola Tendik & Dosen</b>) untuk melakukan penambahan, pengubahan, maupun penghapusan data secara penuh.
-                </p>
-            </div>
-
-        </div>
-    </main>
-
-</body>
-</html>
+{% endblock %}

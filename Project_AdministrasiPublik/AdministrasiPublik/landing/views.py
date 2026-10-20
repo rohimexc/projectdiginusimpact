@@ -7,8 +7,12 @@ from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akredita
 from django.db.models import Q
 from .forms import BeritaForm, LoginForm, TenagaPendidikForm
 from django.contrib import messages
+from django.core.paginator import Paginator
 from akun.views import catat_log, catat_riwayat_login
+from .forms import AdminUserCreateForm, AdminUserUpdateForm
+from akun.models import RiwayatLogin, UserProfile
 from .forms import CustomAuthenticationForm
+from .forms import AdminUserForm
 from django.utils import timezone
 
 def index(request):
@@ -97,6 +101,8 @@ def berita_update_view(request, slug):
         form = BeritaForm(request.POST, request.FILES, instance=berita)
         if form.is_valid():
             form.save()
+            catat_log(request.user, f"Mengubah berita berjudul: '{berita.judul}'")
+            messages.success(request, "Berita berhasil diperbarui!")
             return redirect('landing:dashboard_berita') # Mengarah ke dashboard admin berita
     else:
         form = BeritaForm(instance=berita)
@@ -128,6 +134,7 @@ def berita_delete_view(request, slug):
     if request.method == 'POST':
         berita.delete()
         messages.success(request, "Data berita berhasil dihapus!")
+        catat_log(request.user, f"Menghapus berita: '{berita.judul}'")
         return redirect('landing:dashboard_berita')  # <-- Ganti 'berita_list' jadi ini
     
     return render(request, 'landing/admin/dashboard_berita.html', {'berita': berita, 'delete_mode': True})
@@ -168,12 +175,17 @@ def tendik_create_view(request):
     if request.method == 'POST':
         form = TenagaPendidikForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            tendik_baru = form.save()
+            
+            # ---> CATAT LOG TAMBAH TENDIK <---
+            catat_log(request.user, f"Menambahkan data tendik baru: '{tendik_baru.nama}'")
+            
             messages.success(request, "Data tenaga pendidik berhasil ditambahkan!")
             return redirect('landing:tenaga_pendidik')
     else:
         form = TenagaPendidikForm()
     return render(request, 'landing/TenagaPendidik/tendik_form.html', {'form': form})
+
 
 # 3. UPDATE / EDIT TENDIK
 @login_required(login_url='landing:login')
@@ -183,18 +195,28 @@ def tendik_update_view(request, pk):
         form = TenagaPendidikForm(request.POST, request.FILES, instance=tendik)
         if form.is_valid():
             form.save()
+            
+            # ---> CATAT LOG EDIT TENDIK <---
+            catat_log(request.user, f"Memperbarui data tendik: '{tendik.nama}'")
+            
             messages.success(request, "Data tenaga pendidik berhasil diperbarui!")
             return redirect('landing:tenaga_pendidik')
     else:
         form = TenagaPendidikForm(instance=tendik)
     return render(request, 'landing/TenagaPendidik/tendik_form.html', {'form': form, 'tendik': tendik})
 
+
 # 4. DELETE / HAPUS TENDIK
 @login_required(login_url='landing:login')
 def tendik_delete_view(request, pk):
     tendik = get_object_or_404(TenagaPendidik, pk=pk)
     if request.method == 'POST':
+        nama_tendik = tendik.nama  # Simpan nama sebelum dihapus dari database
         tendik.delete()
+        
+        # ---> CATAT LOG HAPUS TENDIK <---
+        catat_log(request.user, f"Menghapus data tendik: '{nama_tendik}'")
+        
         messages.success(request, "Data tenaga pendidik berhasil dihapus!")
         return redirect('landing:tenaga_pendidik')
     return redirect('landing:tenaga_pendidik')
@@ -243,6 +265,8 @@ def login_view(request):
     form = CustomAuthenticationForm()
     return render(request, 'landing/Login/login.html', {'form': form})
 
+from .models import Berita, TenagaPendidik, AuditLog  # Pastikan AuditLog di-import
+
 @login_required(login_url='landing:login')
 def dashboard_admin_khusus(request):
     if not (request.user.is_superuser or request.user.is_staff):
@@ -253,12 +277,77 @@ def dashboard_admin_khusus(request):
     berita_list = Berita.objects.all().order_by('-post_date')
     total_berita = berita_list.count()
     total_tendik = TenagaPendidik.objects.count() # Hitung total tendik
+    
+    # ---> AMBIL DATA AUDIT LOG DI SINI (Contoh ambil 10 aktivitas terbaru) <---
+    logs = AuditLog.objects.all().order_by('-waktu')[:10]
 
     context = {
         'berita_list': berita_list,
         'total_berita': total_berita,
         'total_tendik': total_tendik,
+        'logs': logs,  # ---> MASUKKAN KE DICTIONARY CONTEXT <---
     }
-    return render(request, 'landing/admin/dashboard.html', context)
+    return render(request, 'landing/admin/dashboard.html', context) # Sesuaikan path file HTML dashboard lu
 
+def catat_log(user, aktivitas):
+    AuditLog.objects.create(user=user, aktivitas=aktivitas)
 
+@login_required(login_url='landing:login')
+def manajemen_user_view(request):
+    users = User.objects.all().order_by('-date_joined')
+    riwayat_login = RiwayatLogin.objects.all().order_by('-waktu_login') # Ganti '-waktu' jika field di models.py beda (misal: -timestamp)
+    
+    context = {
+        'users': users,
+        'riwayat_login': riwayat_login,
+    }
+    return render(request, 'landing/User/manajemen_user.html', context)
+
+@login_required(login_url='landing:login')
+def user_create_view(request):
+    if request.method == 'POST':
+        form = AdminUserCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Akun administrator baru berhasil ditambahkan!")
+            return redirect('landing:manajemen_user')
+    else:
+        form = AdminUserCreateForm()
+    
+    return render(request, 'landing/User/user_form.html', {'form': form})
+
+# 2. Pada fungsi edit user
+@login_required(login_url='landing:login')
+def user_update_view(request, pk):
+    if not request.user.is_superuser:
+        messages.error(request, "Akses ditolak!")
+        return redirect('landing:manajemen_user')
+        
+    target_user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = AdminUserForm(request.POST, instance=target_user)
+        if form.is_valid():
+            form.save()
+            catat_log(request.user, f"Memperbarui akun administrator: '{target_user.username}'")
+            messages.success(request, "Akun administrator berhasil diperbarui!")
+            return redirect('landing:manajemen_user')
+    else:
+        form = AdminUserForm(instance=target_user)
+        
+    # ---> SESUAIKAN PATH FOLDER DI SINI <---
+    return render(request, 'landing/User/user_form.html', {'form': form, 'target_user': target_user})
+
+@login_required(login_url='landing:login')
+def user_delete_view(request, pk):
+    target_user = get_object_or_404(User, pk=pk)
+    
+    if request.method == 'POST':
+        # IMPLEMENTASI SOFT DELETE (Alih-alih target_user.delete())
+        target_user.is_active = False
+        target_user.save()
+        
+        catat_log(request.user, f"Melakukan soft delete / menonaktifkan akun: '{target_user.username}'")
+        messages.success(request, "Akun berhasil dinonaktifkan (Soft Delete).")
+        return redirect('landing:manajemen_user')
+        
+    return render(request, 'landing/User/user_confirm_delete.html', {'target_user': target_user})

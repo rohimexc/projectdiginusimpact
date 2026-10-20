@@ -57,7 +57,12 @@
                 </button>
             </div>
         </form>
-
+        <div class="flex items-center justify-between text-xs">
+    <label class="flex items-center gap-2">
+        <input type="checkbox" class="rounded border-slate-300 text-teal-600 focus:ring-teal-500"> Ingat saya
+    </label>
+    <a href="{% url 'landing:password_reset' %}" class="text-teal-600 font-semibold hover:underline">Lupa Password?</a>
+</div>
         <!-- Tombol Kembali ke Beranda -->
         <div class="text-center pt-2 border-t border-slate-100">
             <a href="{% url 'landing:landing_home' %}" class="text-teal-600 hover:text-teal-700 text-xs font-medium transition inline-flex items-center gap-1">

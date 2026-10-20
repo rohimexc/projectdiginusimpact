@@ -3,6 +3,7 @@ from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik
 from django.core.exceptions import ValidationError
 import re
 from django_ckeditor_5.widgets import CKEditor5Widget
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 
@@ -79,3 +80,100 @@ class CustomAuthenticationForm(AuthenticationForm):
         'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
         'placeholder': '••••••••'
     }))
+
+class AdminUserForm(forms.ModelForm):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Isi hanya jika ingin mengganti password baru'
+        }), 
+        required=False, 
+        label="Password Baru"
+    )
+    
+    class Meta:
+        model = User
+        # Tambahkan 'is_active' di sini
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_active', 'is_superuser', 'password']
+        
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        
+        if password and password.strip():
+            user.set_password(password)
+            
+        if commit:
+            user.save()
+        return user
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Isi hanya jika ingin mengganti password baru'
+        }), 
+        required=False, 
+        label="Password Baru"
+    )
+    
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'password']
+        
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        
+        # Hanya ubah password jika kolomnya benar-benar diketik
+        if password and password.strip():
+            user.set_password(password)
+            
+        if commit:
+            user.save()
+        return user
+
+# Form khusus Tambah User (Password Wajib)
+class AdminUserCreateForm(forms.ModelForm):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Masukkan password untuk akun baru',
+            'class': 'w-full px-3 py-2 border rounded-lg'
+        }),
+        required=True,
+        label="Password"
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'password']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        if password:
+            user.set_password(password)
+        if commit:
+            user.save()
+        return user
+
+
+# Form khusus Edit User (Password Opsional - seperti yang tampil di screenshot lu)
+class AdminUserUpdateForm(forms.ModelForm):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Isi hanya jika ingin mengganti password baru',
+            'class': 'w-full px-3 py-2 border rounded-lg'
+        }),
+        required=False,
+        label="Password Baru (Opsional)"
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'password']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        if password and password.strip():
+            user.set_password(password)
+        if commit:
+            user.save()
+        return user

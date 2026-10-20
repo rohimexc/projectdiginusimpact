@@ -1,5 +1,6 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
+from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 class Sambutan(models.Model):
@@ -77,3 +78,18 @@ class Kontak(models.Model):
 
     def __str__(self):
         return "Informasi Kontak Prodi"
+
+class AuditLog(models.Model):
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='landing_auditlogs'  # <--- Tambahin ini biar nggak bentrok
+    )
+    aktivitas = models.TextField()
+    waktu = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        username = self.user.username if self.user else "Sistem"
+        return f"[{self.waktu}] {username}: {self.aktivitas}"
