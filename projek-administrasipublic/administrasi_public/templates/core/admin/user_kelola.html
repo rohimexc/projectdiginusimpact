@@ -26,47 +26,64 @@
       }
     }
   </script>
+  <style>
+    .dataTables_wrapper .dataTables_length select {
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.25rem 1.75rem 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      background-color: #ffffff;
+      outline: none;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      background-color: #ffffff;
+      outline: none;
+      margin-left: 0.5rem;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus,
+    .dataTables_wrapper .dataTables_length select:focus {
+      border-color: #0b7285;
+      box-shadow: 0 0 0 2px rgba(11, 114, 133, 0.15);
+    }
+    table.dataTable.no-footer {
+      border-bottom: 1px solid #f1f5f9;
+    }
+    table.dataTable thead th {
+      border-bottom: 1px solid #e2e8f0;
+      color: #64748b;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 0.75rem;
+    }
+    table.dataTable tbody td {
+      padding: 0.75rem 0.75rem;
+      border-bottom: 1px solid #f8fafc;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: #0b7285 !important;
+      color: #ffffff !important;
+      border: 1px solid #0b7285 !important;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: #084c5a !important;
+      color: #ffffff !important;
+      border: 1px solid #084c5a !important;
+      border-radius: 0.5rem;
+    }
+  </style>
 </head>
 <body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
 
-  <!-- SIDEBAR ADMIN (5 MENU RESMI) -->
-  <aside class="w-64 bg-brand-deepteal text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex min-h-screen sticky top-0">
-    <div>
-      <div class="p-6 border-b border-white/10 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold text-lg border border-white/20">
-          <i class="bi bi-bank2"></i>
-        </div>
-        <div>
-          <h2 class="text-sm font-bold leading-tight">Admin Portal</h2>
-          <p class="text-[10px] text-slate-300">FISIP UNTAD</p>
-        </div>
-      </div>
-
-      <nav class="p-4 space-y-1.5 text-xs">
-        <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-pie-chart-fill w-4"></i> <span>1. Dashboard</span>
-        </a>
-        <a href="{% url 'admin_kelola_user' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/15 text-brand-gold font-semibold transition">
-          <i class="bi bi-person-gear w-4"></i> <span>2. Manajemen User</span>
-        </a>
-        <a href="{% url 'admin_kelola_berita' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-newspaper w-4"></i> <span>3. Manajemen Berita</span>
-        </a>
-        <a href="{% url 'admin_kelola_dosen' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-person-video3 w-4"></i> <span>4. Manajemen Dosen</span>
-        </a>
-        <a href="{% url 'admin_kelola_tendik' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-people-fill w-4"></i> <span>5. Manajemen Tendik</span>
-        </a>
-      </nav>
-    </div>
-
-    <div class="p-4 border-t border-white/10">
-      <a href="{% url 'user_logout' %}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white text-xs font-semibold transition">
-        <i class="bi bi-box-arrow-left"></i> <span>Keluar (Logout)</span>
-      </a>
-    </div>
-  </aside>
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
 
   <!-- KONTEN UTAMA -->
   <div class="flex-1 flex flex-col min-w-0">
@@ -99,85 +116,164 @@
             <h2 class="text-lg font-bold text-slate-800">Daftar Akun Pengguna</h2>
             <p class="text-xs text-slate-400 mt-0.5">Kelola role, hak akses, dan kendali status aktif/nonaktif akun</p>
           </div>
-          <!-- TOMBOL TAMBAH USER DI SINI -->
           <a href="{% url 'user_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-sm self-start sm:self-auto">
             <i class="bi bi-person-plus-fill"></i> Tambah User Baru
           </a>
         </div>
 
-        <table id="tabelUser" class="display w-full text-xs text-slate-600">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Tanggal Dibuat</th>
-              <th class="text-center">Aksi (CRUD)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for u in daftar_user %}
+        <!-- FILTER BY ROLE & STATUS -->
+        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 mb-5 flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-2">
+            <i class="bi bi-funnel text-teal-700 text-sm"></i>
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Filter:</span>
+          </div>
+
+          <!-- Dropdown Filter Role -->
+          <div class="flex items-center gap-2">
+            <label for="filterRole" class="text-xs font-medium text-slate-600">Role:</label>
+            <select id="filterRole" class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:ring-2 focus:ring-teal-500 outline-none">
+              <option value="">Semua Role</option>
+              {% for r in roles_list %}
+                <option value="{{ r }}">{{ r }}</option>
+              {% empty %}
+                <option value="Admin">Admin</option>
+                <option value="Staff">Staff</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Dropdown Filter Status -->
+          <div class="flex items-center gap-2">
+            <label for="filterStatus" class="text-xs font-medium text-slate-600">Status:</label>
+            <select id="filterStatus" class="text-xs border border-slate-300 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:ring-2 focus:ring-teal-500 outline-none">
+              <option value="">Semua Status</option>
+              <option value="Aktif">Aktif</option>
+              <option value="Nonaktif">Nonaktif</option>
+            </select>
+          </div>
+
+          <!-- Tombol Reset Filter -->
+          <button type="button" id="resetFilter" class="text-[11px] font-semibold text-slate-500 hover:text-rose-600 underline ml-auto transition">
+            Reset Filter
+          </button>
+        </div>
+
+        <!-- TABEL USER DATATABLES: No, Username, Nama Lengkap, Email, Role, Status, Login Terakhir, Aksi -->
+        <div class="w-full overflow-x-auto">
+          <table id="tabelUser" class="display w-full text-xs text-slate-600">
+            <thead>
               <tr>
-                <td class="font-semibold text-slate-800">{{ u.username }}</td>
-                <td>{{ u.email|default:"-" }}</td>
-                <td>
-                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase">
-                    {{ u.role|default:"Administrator" }}
-                  </span>
-                </td>
-                <td>
-                  {% if u.is_active %}
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      Aktif
-                    </span>
-                  {% else %}
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-                      Nonaktif
-                    </span>
-                  {% endif %}
-                </td>
-                <td>{{ u.date_joined|date:"d M Y, H:i" }}</td>
-                <td class="text-center">
-                  <div class="inline-flex items-center gap-1.5">
-                    <!-- Tombol Edit User -->
-                    <a href="{% url 'user_update' u.pk %}" title="Edit User" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
-                      <i class="bi bi-pencil-square"></i>
-                    </a>
-
-                    {% if u != request.user %}
-                      <!-- Tombol Toggle Status -->
-                      <a href="{% url 'user_toggle_status' u.pk %}" title="{% if u.is_active %}Nonaktifkan{% else %}Aktifkan{% endif %}" class="p-2 rounded-lg transition border {% if u.is_active %}bg-slate-50 text-slate-600 hover:bg-slate-100 border-slate-200{% else %}bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border-emerald-200{% endif %}">
-                        {% if u.is_active %}<i class="bi bi-person-x"></i>{% else %}<i class="bi bi-person-check"></i>{% endif %}
-                      </a>
-
-                      <!-- Tombol Hapus User -->
-                      <a href="{% url 'user_delete' u.pk %}" onclick="return confirm('Apakah Anda yakin ingin menghapus akun {{ u.username }}?')" title="Hapus User" class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
-                        <i class="bi bi-trash"></i>
-                      </a>
-                    {% else %}
-                      <span class="text-[10px] text-slate-400 italic px-2">Akun Anda</span>
-                    {% endif %}
-                  </div>
-                </td>
+                <th class="w-12 text-center">No</th>
+                <th>Username</th>
+                <th>Nama Lengkap</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Login Terakhir</th>
+                <th class="text-center w-28">Aksi</th>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% for u in daftar_user %}
+                <tr>
+                  <td class="text-center font-medium text-slate-500">{{ forloop.counter }}</td>
+                  <td class="font-bold text-slate-800">{{ u.username }}</td>
+                  <td class="font-medium text-slate-700">
+                    {% if u.get_full_name %}{{ u.get_full_name }}{% elif u.nama %}{{ u.nama }}{% else %}-{% endif %}
+                  </td>
+                  <td>{{ u.email|default:"-" }}</td>
+                  <td>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase">
+                      {{ u.role|default:"Administrator" }}
+                    </span>
+                  </td>
+                  <td>
+                    {% if u.is_active %}
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Aktif
+                      </span>
+                    {% else %}
+                      <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                        Nonaktif
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td class="text-slate-500">
+                    {% if u.last_login %}
+                      {{ u.last_login|date:"d M Y, H:i" }}
+                    {% else %}
+                      <span class="text-slate-400 italic">Belum pernah login</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    <div class="inline-flex items-center gap-1.5">
+                      <!-- Tombol Edit User -->
+                      <a href="{% url 'user_update' u.pk %}" title="Edit User" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                        <i class="bi bi-pencil-square"></i>
+                      </a>
+
+                      {% if u != request.user %}
+                        <!-- Tombol Toggle Status -->
+                        <a href="{% url 'user_toggle_status' u.pk %}" title="{% if u.is_active %}Nonaktifkan{% else %}Aktifkan{% endif %}" class="p-2 rounded-lg transition border {% if u.is_active %}bg-slate-50 text-slate-600 hover:bg-slate-100 border-slate-200{% else %}bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border-emerald-200{% endif %}">
+                          {% if u.is_active %}<i class="bi bi-person-x"></i>{% else %}<i class="bi bi-person-check"></i>{% endif %}
+                        </a>
+
+                        <!-- Tombol Hapus User -->
+                        <a href="{% url 'user_delete' u.pk %}" onclick="return confirm('Apakah Anda yakin ingin menghapus akun {{ u.username }}?')" title="Hapus User" class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
+                          <i class="bi bi-trash"></i>
+                        </a>
+                      {% else %}
+                        <span class="text-[10px] text-slate-400 italic px-1.5">Akun Anda</span>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   </div>
 
   <script>
     $(document).ready(function() {
-      $('#tabelUser').DataTable({
+      // Inisialisasi DataTable
+      var table = $('#tabelUser').DataTable({
+        lengthMenu: [
+          [5, 10, 25, -1],
+          [5, 10, 25, "Semua"]
+        ],
+        pageLength: 5,
         language: {
           search: "Cari User:",
           lengthMenu: "Tampilkan _MENU_ akun",
           info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ user",
           paginate: { next: "Berikutnya", previous: "Sebelumnya" },
           emptyTable: "Belum ada user terdaftar"
-        }
+        },
+        columnDefs: [
+          { orderable: false, targets: [0, 7] } // Kolom No dan Aksi tidak bisa disortir
+        ]
+      });
+
+      // Filter by Role (Kolom Index 4)
+      $('#filterRole').on('change', function() {
+        var val = $(this).val();
+        table.column(4).search(val ? val : '', true, false).draw();
+      });
+
+      // Filter by Status (Kolom Index 5)
+      $('#filterStatus').on('change', function() {
+        var val = $(this).val();
+        table.column(5).search(val ? '^' + val + '$' : '', true, false).draw();
+      });
+
+      // Reset Filter
+      $('#resetFilter').on('click', function() {
+        $('#filterRole').val('');
+        $('#filterStatus').val('');
+        table.column(4).search('').column(5).search('').draw();
       });
     });
 

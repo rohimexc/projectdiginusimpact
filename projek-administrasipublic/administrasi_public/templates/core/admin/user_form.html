@@ -40,10 +40,17 @@
       {% endif %}
     </div>
 
-    <!-- Role -->
+    <!-- Role (Kotak Centang / Checkbox Multi-Role) -->
     <div>
-      <label class="block mb-1.5 font-semibold text-slate-700">Role / Hak Akses</label>
-      {{ form.role }}
+      <label class="block mb-1.5 font-semibold text-slate-700">Role / Hak Akses (Pilih satu atau lebih)</label>
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5">
+        {% for widget in form.role %}
+          <label class="flex items-center gap-2.5 cursor-pointer hover:text-teal-700 select-none">
+            {{ widget.tag }}
+            <span class="font-medium text-slate-700">{{ widget.choice_label }}</span>
+          </label>
+        {% endfor %}
+      </div>
       {% if form.role.errors %}
         <p class="text-xs text-rose-600 mt-1 font-semibold">{{ form.role.errors.0 }}</p>
       {% endif %}

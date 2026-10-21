@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Sambutan, Galeri, Berita, TenagaPendidik, AuditLog
-from .forms import BeritaForm, TenagaPendidikForm, UserForm
+from .forms import BeritaForm, TenagaPendidikForm, UserForm, SambutanForm
 
 User = get_user_model()
 
@@ -176,15 +176,30 @@ def admin_dashboard(request):
         return redirect('user_login')
 
     total_berita = Berita.objects.count()
-    total_dosen = TenagaPendidik.objects.filter(jenis='DOSEN').count()
-    total_tendik = TenagaPendidik.objects.filter(jenis='TENDIK').count()
+
+    # Dosen (Total, Laki-laki, Perempuan) sesuai catatan
+    dosen_qs = TenagaPendidik.objects.filter(jenis='DOSEN')
+    total_dosen = dosen_qs.count()
+    dosen_l = dosen_qs.filter(jenis_kelamin='L').count()
+    dosen_p = dosen_qs.filter(jenis_kelamin='P').count()
+
+    # Tendik (Total, Laki-laki, Perempuan) sesuai catatan
+    tendik_qs = TenagaPendidik.objects.filter(jenis='TENDIK')
+    total_tendik = tendik_qs.count()
+    tendik_l = tendik_qs.filter(jenis_kelamin='L').count()
+    tendik_p = tendik_qs.filter(jenis_kelamin='P').count()
+
     total_user = User.objects.count()
-    logs = AuditLog.objects.all()[:8]
+    logs = AuditLog.objects.all().order_by('-timestamp')
 
     context = {
         'total_berita': total_berita,
         'total_dosen': total_dosen,
+        'dosen_l': dosen_l,
+        'dosen_p': dosen_p,
         'total_tendik': total_tendik,
+        'tendik_l': tendik_l,
+        'tendik_p': tendik_p,
         'total_user': total_user,
         'logs': logs,
     }
@@ -228,8 +243,16 @@ def admin_kelola_user(request):
         logout(request)
         messages.error(request, 'Akses ditolak! Hanya Administrator yang boleh mengakses.')
         return redirect('user_login')
+
     daftar_user = User.objects.all().order_by('-date_joined')
-    return render(request, 'core/admin/user_kelola.html', {'daftar_user': daftar_user})
+    roles_list = User.objects.values_list('role', flat=True).distinct()
+    roles_list = [r for r in roles_list if r]
+
+    context = {
+        'daftar_user': daftar_user,
+        'roles_list': roles_list,
+    }
+    return render(request, 'core/admin/user_kelola.html', context)
 
 
 @login_required(login_url='user_login')
@@ -249,7 +272,7 @@ def user_toggle_status(request, pk):
 
 
 # ==========================================
-# 4. CRUD OPERATIONS (BERITA & PEGAWAI)
+# 4. CRUD OPERATIONS (BERITA)
 # ==========================================
 
 @login_required(login_url='user_login')
@@ -293,52 +316,117 @@ def berita_delete(request, pk):
     return render(request, 'core/Berita/delete_confirm.html', {'berita': berita})
 
 
+# ==========================================
+# 5. CRUD KHUSUS DOSEN
+# ==========================================
+
 @login_required(login_url='user_login')
-def tenaga_kependidikan_create(request):
+def dosen_create(request):
     if request.method == 'POST':
         form = TenagaPendidikForm(request.POST, request.FILES)
         if form.is_valid():
-            t = form.save()
-            target = 'admin_kelola_tendik' if t.jenis == 'TENDIK' else 'admin_kelola_dosen'
-            catat_audit(request, 'Tambah Pegawai', f"Menambahkan {t.jenis}: {t.nama}")
-            messages.success(request, f"Data {t.nama} berhasil ditambahkan!")
-            return redirect(target)
+            pegawai = form.save(commit=False)
+            pegawai.jenis = 'DOSEN'
+            pegawai.save()
+            catat_audit(request, 'Tambah Dosen', f"Menambahkan Dosen: {pegawai.nama}")
+            messages.success(request, f"Data dosen {pegawai.nama} berhasil ditambahkan!")
+            return redirect('admin_kelola_dosen')
     else:
-        form = TenagaPendidikForm()
-    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Tambah Data Pegawai'})
+        form = TenagaPendidikForm(initial={'jenis': 'DOSEN'})
+    return render(request, 'core/admin/dosen_form.html', {'form': form, 'title': 'Tambah Dosen Baru'})
+
+
+@login_required(login_url='user_login')
+def dosen_update(request, pk):
+    dosen = get_object_or_404(TenagaPendidik, pk=pk, jenis='DOSEN')
+    if request.method == 'POST':
+        form = TenagaPendidikForm(request.POST, request.FILES, instance=dosen)
+        if form.is_valid():
+            form.save()
+            catat_audit(request, 'Edit Dosen', f"Memperbarui Dosen: {dosen.nama}")
+            messages.success(request, f"Data dosen {dosen.nama} berhasil diperbarui!")
+            return redirect('admin_kelola_dosen')
+    else:
+        form = TenagaPendidikForm(instance=dosen)
+    return render(request, 'core/admin/dosen_form.html', {'form': form, 'title': f'Edit Dosen: {dosen.nama}'})
+
+
+@login_required(login_url='user_login')
+def dosen_delete(request, pk):
+    dosen = get_object_or_404(TenagaPendidik, pk=pk, jenis='DOSEN')
+    nama = dosen.nama
+    dosen.delete()
+    catat_audit(request, 'Hapus Dosen', f"Menghapus Dosen: {nama}")
+    messages.success(request, f"Data dosen {nama} berhasil dihapus!")
+    return redirect('admin_kelola_dosen')
+
+
+# ==========================================
+# 6. CRUD KHUSUS TENDIK (Template diarahkan ke core/kependidikan/form.html)
+# ==========================================
+
+@login_required(login_url='user_login')
+def tendik_create(request):
+    if request.method == 'POST':
+        form = TenagaPendidikForm(request.POST, request.FILES)
+        if form.is_valid():
+            pegawai = form.save(commit=False)
+            pegawai.jenis = 'TENDIK'
+            pegawai.save()
+            catat_audit(request, 'Tambah Tendik', f"Menambahkan Tendik: {pegawai.nama}")
+            messages.success(request, f"Data tendik {pegawai.nama} berhasil ditambahkan!")
+            return redirect('admin_kelola_tendik')
+    else:
+        form = TenagaPendidikForm(initial={'jenis': 'TENDIK'})
+    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Tambah Tendik Baru'})
+
+
+@login_required(login_url='user_login')
+def tendik_update(request, pk):
+    tendik = get_object_or_404(TenagaPendidik, pk=pk, jenis='TENDIK')
+    if request.method == 'POST':
+        form = TenagaPendidikForm(request.POST, request.FILES, instance=tendik)
+        if form.is_valid():
+            form.save()
+            catat_audit(request, 'Edit Tendik', f"Memperbarui Tendik: {tendik.nama}")
+            messages.success(request, f"Data tendik {tendik.nama} berhasil diperbarui!")
+            return redirect('admin_kelola_tendik')
+    else:
+        form = TenagaPendidikForm(instance=tendik)
+    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': f'Edit Tendik: {tendik.nama}'})
+
+
+@login_required(login_url='user_login')
+def tendik_delete(request, pk):
+    tendik = get_object_or_404(TenagaPendidik, pk=pk, jenis='TENDIK')
+    nama = tendik.nama
+    tendik.delete()
+    catat_audit(request, 'Hapus Tendik', f"Menghapus Tendik: {nama}")
+    messages.success(request, f"Data tendik {nama} berhasil dihapus!")
+    return redirect('admin_kelola_tendik')
+
+
+# ==========================================
+# 7. ROUTE LAMA TENAGA KEPENDIDIKAN (KOMPATIBILITAS)
+# ==========================================
+
+@login_required(login_url='user_login')
+def tenaga_kependidikan_create(request):
+    return tendik_create(request)
 
 
 @login_required(login_url='user_login')
 def tenaga_kependidikan_update(request, pk):
-    pegawai = get_object_or_404(TenagaPendidik, pk=pk)
-    if request.method == 'POST':
-        form = TenagaPendidikForm(request.POST, request.FILES, instance=pegawai)
-        if form.is_valid():
-            t = form.save()
-            target = 'admin_kelola_tendik' if t.jenis == 'TENDIK' else 'admin_kelola_dosen'
-            catat_audit(request, 'Edit Pegawai', f"Memperbarui {t.jenis}: {t.nama}")
-            messages.success(request, f"Data {t.nama} berhasil diperbarui!")
-            return redirect(target)
-    else:
-        form = TenagaPendidikForm(instance=pegawai)
-    return render(request, 'core/kependidikan/form.html', {'form': form, 'title': 'Edit Data Pegawai'})
+    return tendik_update(request, pk)
 
 
 @login_required(login_url='user_login')
 def tenaga_kependidikan_delete(request, pk):
-    pegawai = get_object_or_404(TenagaPendidik, pk=pk)
-    target = 'admin_kelola_tendik' if pegawai.jenis == 'TENDIK' else 'admin_kelola_dosen'
-    if request.method == 'POST':
-        nama = pegawai.nama
-        pegawai.delete()
-        catat_audit(request, 'Hapus Pegawai', f"Menghapus pegawai: {nama}")
-        messages.success(request, f"Data {nama} berhasil dihapus!")
-        return redirect(target)
-    return render(request, 'core/kependidikan/delete_confirm.html', {'tenaga_kependidikan': pegawai, 'back_url': target})
+    return tendik_delete(request, pk)
 
 
 # ==========================================
-# 5. CRUD MANAJEMEN USER (RBAC VALIDATED)
+# 8. CRUD MANAJEMEN USER (RBAC VALIDATED)
 # ==========================================
 
 @login_required(login_url='user_login')
@@ -359,7 +447,6 @@ def user_create(request):
     else:
         form = UserForm()
         
-    # Pastikan memanggil file user_form.html
     return render(request, 'core/admin/user_form.html', {'form': form, 'title': 'Tambah User Baru'})
 
 
@@ -402,3 +489,38 @@ def user_delete(request, pk):
     catat_audit(request, 'Hapus User', f"Menghapus user: {username}")
     messages.success(request, f"Akun {username} berhasil dihapus!")
     return redirect('admin_kelola_user')
+
+
+# ==========================================
+# 9. KELOLA SAMBUTAN (CKEDITOR 5)
+# ==========================================
+
+@login_required(login_url='user_login')
+def admin_kelola_sambutan(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    sambutan = Sambutan.objects.first()
+    if not sambutan:
+        sambutan = Sambutan.objects.create(
+            judul="Sambutan Koordinator Prodi", 
+            nama_author="Koordinator Prodi",
+            isi="<p>Selamat datang di Program Studi Administrasi Publik.</p>"
+        )
+
+    if request.method == 'POST':
+        form = SambutanForm(request.POST, request.FILES, instance=sambutan)
+        if form.is_valid():
+            form.save()
+            catat_audit(request, 'Edit Sambutan', 'Memperbarui sambutan koordinator prodi')
+            messages.success(request, 'Sambutan Koordinator Prodi berhasil diperbarui!')
+            return redirect('admin_kelola_sambutan')
+    else:
+        form = SambutanForm(instance=sambutan)
+
+    return render(request, 'core/admin/sambutan_form.html', {
+        'form': form,
+        'title': 'Kelola Sambutan Koordinator Prodi'
+    })

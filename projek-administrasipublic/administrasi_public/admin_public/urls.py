@@ -3,12 +3,12 @@ URL configuration for admin_public project.
 """
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 
-# Import semua view dari core
+# Import view dari core
 from core.views import (
     home,
     berita_list,
@@ -22,9 +22,17 @@ from core.views import (
     tenaga_kependidikan_create,
     tenaga_kependidikan_update,
     tenaga_kependidikan_delete,
+    # View CRUD Dosen & Tendik
+    dosen_create,
+    dosen_update,
+    dosen_delete,
+    tendik_create,
+    tendik_update,
+    tendik_delete,
     user_login,
     user_logout,
     admin_dashboard,
+    admin_kelola_sambutan,
     admin_kelola_berita,
     admin_kelola_dosen,
     admin_kelola_tendik,
@@ -36,6 +44,9 @@ from core.views import (
 )
 
 urlpatterns = [
+    # Route Wajib CKEditor 5 (Penyelesai Error ck_editor_5_upload_file)
+    path('ckeditor5/', include('django_ckeditor_5.urls')),
+
     # Rute Logout & Login
     path('admin/logout/', user_logout, name='admin_logout'),
     path('logout/', user_logout, name='user_logout'),
@@ -70,11 +81,22 @@ urlpatterns = [
          ), 
          name='password_reset_complete'),
 
-    # Rute Dashboard Admin
+    # Rute Dashboard Admin & Sambutan
     path('dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('dashboard/sambutan/', admin_kelola_sambutan, name='admin_kelola_sambutan'),
     path('dashboard/berita/', admin_kelola_berita, name='admin_kelola_berita'),
+    
+    # Rute Dosen Admin
     path('dashboard/dosen/', admin_kelola_dosen, name='admin_kelola_dosen'),
+    path('dashboard/dosen/tambah/', dosen_create, name='dosen_create'),
+    path('dashboard/dosen/<int:pk>/edit/', dosen_update, name='dosen_update'),
+    path('dashboard/dosen/<int:pk>/hapus/', dosen_delete, name='dosen_delete'),
+
+    # Rute Tendik Admin
     path('dashboard/tendik/', admin_kelola_tendik, name='admin_kelola_tendik'),
+    path('dashboard/tendik/tambah/', tendik_create, name='tendik_create'),
+    path('dashboard/tendik/<int:pk>/edit/', tendik_update, name='tendik_update'),
+    path('dashboard/tendik/<int:pk>/hapus/', tendik_delete, name='tendik_delete'),
 
     # Rute CRUD Manajemen User
     path('dashboard/users/', admin_kelola_user, name='admin_kelola_user'),
@@ -94,7 +116,7 @@ urlpatterns = [
     path('Berita/<int:pk>/edit/', berita_update, name='berita_update'),
     path('Berita/<int:pk>/hapus/', berita_delete, name='berita_delete'),
 
-    # Rute Tenaga Pendidik & Kependidikan
+    # Rute Publik Tenaga Pendidik & Kependidikan
     path('tenaga-pendidik/', tenaga_pendidik_list, name='tenaga_pendidik_list'),
     path('tenaga-kependidikan/', tenaga_kependidikan_list, name='tenaga_kependidikan_list'),
     path('tenaga-kependidikan/<int:pk>/', tenaga_kependidikan_detail, name='tenaga_kependidikan_detail'),

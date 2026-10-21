@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Berita, TenagaPendidik
+from django_ckeditor_5.widgets import CKEditor5Widget
+from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan
 
 User = get_user_model()
 
@@ -36,11 +37,30 @@ class BeritaForm(forms.ModelForm):
 
 
 class TenagaPendidikForm(forms.ModelForm):
+    pangkat_golongan = forms.ModelChoiceField(
+        queryset=PangkatGolongan.objects.all().order_by('kategori', 'id'),
+        required=False,
+        empty_label="-- Pilih Pangkat / Golongan (PNS / PPPK) --",
+        widget=forms.Select(attrs={
+            'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs bg-slate-50 focus:bg-white'
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Bikin field jenis opsional karena diset otomatis di views (DOSEN / TENDIK)
+        if 'jenis' in self.fields:
+            self.fields['jenis'].required = False
+        # Pastikan field opsional tidak memblokir simpan
+        for f in ['nidn', 'nip', 'nuptk', 'no_hp', 'email', 'foto', 'bidang_ilmu', 'status']:
+            if f in self.fields:
+                self.fields[f].required = False
+
     class Meta:
         model = TenagaPendidik
         fields = [
-            'jenis', 'nama', 'bidang_ilmu', 'status', 'foto',
-            'email', 'nidn', 'nip', 'no_hp', 'pangkat_gol'
+            'jenis', 'nama', 'jenis_kelamin', 'bidang_ilmu', 'status', 'foto',
+            'email', 'nidn', 'nip', 'nuptk', 'no_hp', 'pangkat_golongan'
         ]
         widgets = {
             'jenis': forms.Select(attrs={
@@ -49,6 +69,9 @@ class TenagaPendidikForm(forms.ModelForm):
             'nama': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
                 'placeholder': 'Nama lengkap & gelar'
+            }),
+            'jenis_kelamin': forms.Select(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs'
             }),
             'bidang_ilmu': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
@@ -67,25 +90,40 @@ class TenagaPendidikForm(forms.ModelForm):
             }),
             'nidn': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
-                'placeholder': 'Nomor NIDN'
+                'placeholder': 'Nomor NIDN (opsional)'
             }),
             'nip': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
-                'placeholder': 'Nomor NIP'
+                'placeholder': 'Nomor NIP (opsional)'
+            }),
+            'nuptk': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Nomor NUPTK (opsional)'
             }),
             'no_hp': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
                 'placeholder': '0812xxxxxxxx'
             }),
-            'pangkat_gol': forms.TextInput(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
-                'placeholder': 'Contoh: Lektor Kepala / IV-a atau Pengadministrasi Umum'
-            }),
         }
 
 
-# Form Tambah & Edit Pengguna (Manajemen User)
+# Pilihan Role
+ROLE_CHOICES = (
+    ('Admin Prodi', 'Admin Prodi'),
+    ('Editor', 'Editor'),
+    ('Contributor', 'Contributor'),
+)
+
+# Form Tambah & Edit Pengguna (Manajemen User dengan Kotak Centang / Checkbox)
 class UserForm(forms.ModelForm):
+    role = forms.MultipleChoiceField(
+        choices=ROLE_CHOICES,
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': 'w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500'
+        }),
+        required=True,
+        label="Role / Hak Akses"
+    )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
@@ -97,7 +135,8 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'role', 'is_active', 'password']
+        # PERBAIKAN: 'role' dihapus dari sini agar tidak kena validasi bawaan model CharField
+        fields = ['username', 'email', 'is_active', 'password']
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
@@ -107,14 +146,17 @@ class UserForm(forms.ModelForm):
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
                 'placeholder': 'user@gmail.com'
             }),
-            # Menggunakan widget Select langsung dari pilihan model User
-            'role': forms.Select(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs font-semibold'
-            }),
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500'
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Jika sedang edit user, muat role yang sudah ada ke dalam bentuk centang
+        if self.instance and self.instance.pk and hasattr(self.instance, 'role') and self.instance.role:
+            roles_aktif = [r.strip() for r in str(self.instance.role).split(',') if r.strip()]
+            self.initial['role'] = roles_aktif
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
@@ -128,9 +170,13 @@ class UserForm(forms.ModelForm):
         if password:
             user.set_password(password)
 
-        # Otomatis atur status staff dan superuser jika rolenya admin
-        role_str = str(user.role).strip().lower()
-        if role_str == 'admin':
+        # Gabungkan role yang dicentang dengan koma, misal: "Admin Prodi, Editor"
+        selected_roles = self.cleaned_data.get('role', [])
+        user.role = ", ".join(selected_roles)
+
+        # Jika salah satu role yang dicentang adalah Admin Prodi, aktifkan hak akses staff & superuser
+        role_str = user.role.lower()
+        if 'admin' in role_str:
             user.is_staff = True
             user.is_superuser = True
         else:
@@ -140,3 +186,32 @@ class UserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+# Form Khusus Sambutan (CKEditor 5)
+class SambutanForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['isi'].required = False
+
+    class Meta:
+        model = Sambutan
+        fields = ['judul', 'nama_author', 'foto', 'isi']
+        widgets = {
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Judul Sambutan'
+            }),
+            'nama_author': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Nama Koordinator Prodi'
+            }),
+            'foto': forms.FileInput(attrs={
+                'class': 'w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': 'image/*'
+            }),
+            'isi': CKEditor5Widget(
+                attrs={'class': 'django_ckeditor_5'}, 
+                config_name='extends'
+            )
+        }

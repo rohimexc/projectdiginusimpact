@@ -29,47 +29,8 @@
 </head>
 <body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
 
-  <!-- SIDEBAR ADMIN -->
-  <aside class="w-64 bg-brand-deepteal text-white flex flex-col justify-between shrink-0 shadow-xl hidden md:flex min-h-screen sticky top-0">
-    <div>
-      <div class="p-6 border-b border-white/10 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold text-lg border border-white/20">
-          <i class="bi bi-bank2"></i>
-        </div>
-        <div>
-          <h2 class="text-sm font-bold leading-tight">Admin Portal</h2>
-          <p class="text-[10px] text-slate-300">FISIP UNTAD</p>
-        </div>
-      </div>
-
-      <nav class="p-4 space-y-1.5 text-xs">
-        <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-pie-chart-fill w-4"></i> <span>Ringkasan Dashboard</span>
-        </a>
-        <a href="{% url 'admin_kelola_berita' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-newspaper w-4"></i> <span>Kelola Berita</span>
-        </a>
-        <a href="{% url 'admin_kelola_dosen' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-person-video3 w-4"></i> <span>Kelola Dosen</span>
-        </a>
-        <a href="{% url 'admin_kelola_tendik' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/15 text-brand-gold font-semibold transition">
-          <i class="bi bi-people-fill w-4"></i> <span>Kelola Tendik</span>
-        </a>
-        <a href="{% url 'admin_kelola_user' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-person-gear w-4"></i> <span>Manajemen User</span>
-        </a>
-        <a href="{% url 'home' %}" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition">
-          <i class="bi bi-box-arrow-up-right w-4"></i> <span>Lihat Website Utama</span>
-        </a>
-      </nav>
-    </div>
-
-    <div class="p-4 border-t border-white/10">
-      <a href="{% url 'user_logout' %}" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white text-xs font-semibold transition">
-        <i class="bi bi-box-arrow-left"></i> <span>Keluar (Logout)</span>
-      </a>
-    </div>
-  </aside>
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
 
   <!-- KONTEN UTAMA -->
   <div class="flex-1 flex flex-col min-w-0">
@@ -112,7 +73,7 @@
               <th>Nama Lengkap</th>
               <th>Jabatan / Tugas</th>
               <th>Status</th>
-              <th>NIP / NIDN</th>
+              <th>NIP</th>
               <th class="text-center">Aksi</th>
             </tr>
           </thead>
@@ -135,21 +96,40 @@
                     {{ t.status }}
                   </span>
                 </td>
-                <td>{{ t.nip|default:t.nidn|default:"-" }}</td>
+                <td>{{ t.nip|default:"-" }}</td>
                 <td class="text-center">
                   <div class="inline-flex items-center gap-1.5">
-                    <!-- Preview -->
-                    <a href="{% url 'tenaga_kependidikan_detail' t.pk %}" target="_blank" title="Lihat Profil Publik" class="p-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition">
+                    <!-- Tombol View Detail (Membuka Modal) -->
+                    <button type="button" 
+                            onclick="bukaModalDetail(
+                              '{{ t.nama|escapejs }}',
+                              '{% if t.foto %}{{ t.foto.url }}{% endif %}',
+                              '{{ t.get_jenis_kelamin_display|default:t.jenis_kelamin|escapejs }}',
+                              '{{ t.bidang_ilmu|default:"-"|escapejs }}',
+                              '{{ t.status|default:"-"|escapejs }}',
+                              '{{ t.pangkat_golongan|default:"-"|escapejs }}',
+                              '{{ t.nip|default:"-"|escapejs }}',
+                              '{{ t.nidn|default:"-"|escapejs }}',
+                              '{{ t.nuptk|default:"-"|escapejs }}',
+                              '{{ t.email|default:"-"|escapejs }}',
+                              '{{ t.no_hp|default:"-"|escapejs }}',
+                              'Tenaga Kependidikan'
+                            )"
+                            title="Lihat Detail Tendik" 
+                            class="p-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition border border-teal-200">
                       <i class="bi bi-eye"></i>
-                    </a>
-                    <!-- Edit -->
-                    <a href="{% url 'tenaga_kependidikan_update' t.pk %}" title="Edit Data" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition">
+                    </button>
+                    <!-- Edit Tendik -->
+                    <a href="{% url 'tenaga_kependidikan_update' t.pk %}" title="Edit Data Tendik" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
                       <i class="bi bi-pencil-square"></i>
                     </a>
-                    <!-- Hapus -->
-                    <a href="{% url 'tenaga_kependidikan_delete' t.pk %}" title="Hapus Data" class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition">
+                    <!-- Tombol Hapus Tendik (Memicu Modal Konfirmasi) -->
+                    <button type="button" 
+                            onclick="konfirmasiHapusTendik('{% url 'tenaga_kependidikan_delete' t.pk %}', '{{ t.nama|escapejs }}')"
+                            title="Hapus Data Tendik" 
+                            class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
                       <i class="bi bi-trash"></i>
-                    </a>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -160,9 +140,116 @@
     </main>
   </div>
 
+  <!-- MODAL POP-UP VIEW DETAIL TENDIK -->
+  <div id="modalDetail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
+      
+      <div class="bg-gradient-to-r from-teal-800 to-teal-900 px-6 py-4 flex items-center justify-between text-white">
+        <div class="flex items-center gap-2.5">
+          <i class="bi bi-person-badge text-xl text-amber-300"></i>
+          <div>
+            <h3 class="text-sm font-bold leading-tight" id="modalJudul">Detail Data Tendik</h3>
+            <span class="text-[10px] text-teal-200" id="modalSubjudul">Program Studi Administrasi Publik</span>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalDetail()" class="text-teal-200 hover:text-white text-lg transition">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-6 max-h-[75vh] overflow-y-auto space-y-5">
+        <div class="flex items-center gap-4 pb-4 border-b border-slate-100">
+          <div class="w-16 h-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 shadow-sm flex items-center justify-center">
+            <img id="modalFoto" src="" alt="Foto Tendik" class="w-full h-full object-cover hidden">
+            <i id="modalIconEmpty" class="bi bi-person text-3xl text-slate-300"></i>
+          </div>
+          <div>
+            <h4 id="modalNama" class="text-sm font-bold text-slate-800 leading-snug">Nama Tendik</h4>
+            <span id="modalStatus" class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200 uppercase">Status</span>
+            <p id="modalBidang" class="text-xs text-slate-500 mt-1">Jabatan / Tugas</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Jenis Kelamin</span>
+            <p id="modalGender" class="font-semibold text-slate-700 mt-0.5">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Pangkat / Golongan</span>
+            <p id="modalPangkat" class="font-semibold text-slate-700 mt-0.5">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">NIP</span>
+            <p id="modalNip" class="font-semibold text-slate-700 mt-0.5 font-mono">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">NIDN / NUPTK</span>
+            <p id="modalNidn" class="font-semibold text-slate-700 mt-0.5 font-mono">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 col-span-2">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">No. WhatsApp / HP</span>
+            <p id="modalHp" class="font-semibold text-slate-700 mt-0.5 font-mono">-</p>
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+          <span class="text-[10px] font-bold text-slate-400 uppercase">Email</span>
+          <p id="modalEmail" class="font-semibold text-teal-700 mt-0.5 break-all">-</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end">
+        <button type="button" onclick="tutupModalDetail()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs rounded-xl transition">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI HAPUS (PERSIS SEPERTI DI MODAL HAPUS BERITA) -->
+  <div id="modalHapus" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 md:p-8 text-center animate-in fade-in zoom-in duration-200">
+      
+      <!-- Icon Trash Kotak Pink -->
+      <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600 text-2xl shadow-inner">
+        <i class="bi bi-trash3-fill"></i>
+      </div>
+
+      <!-- Judul & Keterangan -->
+      <h3 class="text-lg font-bold text-slate-800 mb-2">Hapus Tendik?</h3>
+      <p class="text-xs text-slate-500 leading-relaxed mb-6">
+        Apakah Anda yakin ingin menghapus data tenaga kependidikan <br>
+        <span id="namaHapusTarget" class="font-bold text-slate-800">"Nama Tendik"</span>? <br>
+        <span class="text-[11px] text-slate-400">Tindakan ini tidak dapat dibatalkan.</span>
+      </p>
+
+      <!-- Tombol Aksi -->
+      <div class="flex items-center justify-center gap-3">
+        <button type="button" 
+                onclick="tutupModalHapus()"
+                class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+          Batal
+        </button>
+        <a id="btnKonfirmasiHapus" 
+           href="#" 
+           class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition shadow-sm">
+          Ya, Hapus
+        </a>
+      </div>
+
+    </div>
+  </div>
+
   <script>
     $(document).ready(function() {
       $('#tabelTendik').DataTable({
+        lengthMenu: [
+          [5, 10, 25, -1],
+          [5, 10, 25, "All"]
+        ],
+        pageLength: 5,
         language: {
           search: "Cari Tendik:",
           lengthMenu: "Tampilkan _MENU_ data",
@@ -171,6 +258,56 @@
           emptyTable: "Belum ada data tenaga kependidikan"
         }
       });
+    });
+
+    // Fungsi Pop-up Modal View Detail
+    function bukaModalDetail(nama, fotoUrl, gender, bidang, status, pangkat, nip, nidn, nuptk, email, hp, kategori) {
+      document.getElementById('modalNama').innerText = nama;
+      document.getElementById('modalStatus').innerText = status;
+      document.getElementById('modalBidang').innerText = bidang;
+      document.getElementById('modalGender').innerText = gender;
+      document.getElementById('modalPangkat').innerText = pangkat;
+      document.getElementById('modalNip').innerText = nip;
+      document.getElementById('modalNidn').innerText = (nidn !== '-' ? nidn : (nuptk !== '-' ? nuptk : '-'));
+      document.getElementById('modalEmail').innerText = email;
+      document.getElementById('modalHp').innerText = hp;
+      document.getElementById('modalJudul').innerText = "Detail " + kategori;
+
+      var imgElem = document.getElementById('modalFoto');
+      var iconElem = document.getElementById('modalIconEmpty');
+      if (fotoUrl && fotoUrl !== '') {
+        imgElem.src = fotoUrl;
+        imgElem.classList.remove('hidden');
+        iconElem.classList.add('hidden');
+      } else {
+        imgElem.classList.add('hidden');
+        iconElem.classList.remove('hidden');
+      }
+
+      document.getElementById('modalDetail').classList.remove('hidden');
+    }
+
+    function tutupModalDetail() {
+      document.getElementById('modalDetail').classList.add('hidden');
+    }
+
+    // Fungsi Pop-up Konfirmasi Hapus Tendik
+    function konfirmasiHapusTendik(urlHapus, nama) {
+      document.getElementById('namaHapusTarget').innerText = '"' + nama + '"';
+      document.getElementById('btnKonfirmasiHapus').setAttribute('href', urlHapus);
+      document.getElementById('modalHapus').classList.remove('hidden');
+    }
+
+    function tutupModalHapus() {
+      document.getElementById('modalHapus').classList.add('hidden');
+    }
+
+    // Event listener tutup modal saat klik area luar/gelap
+    document.getElementById('modalDetail').addEventListener('click', function(e) {
+      if (e.target === this) { tutupModalDetail(); }
+    });
+    document.getElementById('modalHapus').addEventListener('click', function(e) {
+      if (e.target === this) { tutupModalHapus(); }
     });
 
     {% if messages %}

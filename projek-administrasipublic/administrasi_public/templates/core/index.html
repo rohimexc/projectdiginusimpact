@@ -65,7 +65,7 @@
         </button>
         <div class="absolute left-0 top-full pt-2 w-52 hidden group-hover:block z-50">
           <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
-            <a href="" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+            <a href="{% url 'tenaga_pendidik_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
               <i class="fas fa-chalkboard-teacher text-brand-gold w-4"></i>
               Tenaga Pengajar
             </a>
@@ -104,7 +104,11 @@
   <section class="py-20 px-6 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-12" id="sambutan">
     <div class="flex-1 flex justify-center">
       {% if sambutan and sambutan.foto %}
-        <img src="{% static 'images/' %}{{ sambutan.foto }}" alt="Foto Koordinator Prodi" class="w-72 h-96 object-cover rounded-3xl shadow-xl bg-slate-300">
+        {% if sambutan.foto.url %}
+          <img src="{{ sambutan.foto.url }}" alt="Foto Koordinator Prodi" class="w-72 h-96 object-cover rounded-3xl shadow-xl bg-slate-300">
+        {% else %}
+          <img src="{% static 'images/' %}{{ sambutan.foto }}" alt="Foto Koordinator Prodi" class="w-72 h-96 object-cover rounded-3xl shadow-xl bg-slate-300">
+        {% endif %}
       {% else %}
         <img src="{% static 'images/foto1.jpg' %}" alt="Foto Koordinator Prodi" class="w-72 h-96 object-cover rounded-3xl shadow-xl bg-slate-300">
       {% endif %}
@@ -113,13 +117,13 @@
       <h2 class="text-brand-teal text-2xl font-bold mb-4">
         {% if sambutan %}{{ sambutan.judul }}{% else %}Sambutan Koordinator Prodi{% endif %}
       </h2>
-      <p class="text-sm leading-relaxed text-slate-600 mb-5 text-justify">
+      <div class="text-sm leading-relaxed text-slate-600 mb-5 text-justify space-y-3">
         {% if sambutan %}
-          {{ sambutan.isi }}
+          {{ sambutan.isi|safe }}
         {% else %}
-          Assalamu'alaikum warahmatullahi wabarakatuh, Salam sejahtera untuk kita semua. Selamat datang di website resmi Program Studi Administrasi Publik, Fakultas Ilmu Sosial dan Ilmu Politik Universitas Tadulako. Sebagai salah satu program studi tertua di Universitas Tadulako, Administrasi Publik terus berkembang melalui penguatan kelembagaan, peningkatan kualitas sumber daya manusia, serta pemanfaatan teknologi untuk mendukung tata kelola yang baik, pelaksanaan tridharma, dan pelayanan akademik. Website ini menjadi sarana informasi, akuntabilitas, dan komunikasi bagi mahasiswa, dosen, tenaga kependidikan, alumni, masyarakat, mitra pemerintah, dunia usaha, serta calon mahasiswa. Konten dan layanan akan terus diperbarui sesuai perkembangan teknologi dan kebutuhan publik. Kami juga terbuka terhadap saran dan masukan demi peningkatan kualitas layanan digital ini. Semoga website ini bermanfaat, memberikan informasi yang dibutuhkan, serta menjadi media komunikasi yang efektif bagi kita semua.
+          <p>Assalamu'alaikum warahmatullahi wabarakatuh, Salam sejahtera untuk kita semua. Selamat datang di website resmi Program Studi Administrasi Publik, Fakultas Ilmu Sosial dan Ilmu Politik Universitas Tadulako. Sebagai salah satu program studi tertua di Universitas Tadulako, Administrasi Publik terus berkembang melalui penguatan kelembagaan, peningkatan kualitas sumber daya manusia, serta pemanfaatan teknologi untuk mendukung tata kelola yang baik, pelaksanaan tridharma, dan pelayanan akademik. Website ini menjadi sarana informasi, akuntabilitas, dan komunikasi bagi mahasiswa, dosen, tenaga kependidikan, alumni, masyarakat, mitra pemerintah, dunia usaha, serta calon mahasiswa. Konten dan layanan akan terus diperbarui sesuai perkembangan teknologi dan kebutuhan publik. Kami juga terbuka terhadap saran dan masukan demi peningkatan kualitas layanan digital ini. Semoga website ini bermanfaat, memberikan informasi yang dibutuhkan, serta menjadi media komunikasi yang efektif bagi kita semua.</p>
         {% endif %}
-      </p>
+      </div>
       <div class="text-sm font-semibold italic text-slate-700 border-l-4 border-brand-gold pl-3">
         {% if sambutan %}{{ sambutan.nama_author }}{% else %}Dr. Intam Kurnia, M.Si.{% endif %}
       </div>
@@ -161,20 +165,20 @@
             <div class="w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col justify-between">
               <div>
                 <!-- Wadah Gambar Berita Rasio 4:5 -->
-<div class="w-full overflow-hidden bg-slate-100 rounded-t-xl" style="aspect-ratio: 4 / 5;">
-  {% if berita.gambar %}
-    {% if berita.gambar.url %}
-      <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
-    {% else %}
-      <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
-    {% endif %}
-  {% else %}
-    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
-      <i class="fas fa-newspaper text-5xl mb-2"></i>
-      <span class="text-[11px] text-slate-400">Tidak ada gambar</span>
-    </div>
-  {% endif %}
-</div>
+                <div class="w-full overflow-hidden bg-slate-100 rounded-t-xl" style="aspect-ratio: 4 / 5;">
+                  {% if berita.gambar %}
+                    {% if berita.gambar.url %}
+                      <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+                    {% else %}
+                      <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+                    {% endif %}
+                  {% else %}
+                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                      <i class="fas fa-newspaper text-5xl mb-2"></i>
+                      <span class="text-[11px] text-slate-400">Tidak ada gambar</span>
+                    </div>
+                  {% endif %}
+                </div>
 
                 <div class="p-4">
                   <span class="text-[10px] font-semibold text-brand-teal bg-teal-50 px-2 py-0.5 rounded">
@@ -217,8 +221,8 @@
           {% for tendik in daftar_tenaga_kependidikan %}
             <div class="w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col justify-between">
               <div>
-                <!-- Foto Rasio 1:1 -->
-                <div class="w-full aspect-square overflow-hidden bg-slate-100">
+                <!-- Foto Rasio 4:5 -->
+                <div class="w-full overflow-hidden bg-slate-100 rounded-t-xl" style="aspect-ratio: 4 / 5;">
                   {% if tendik.foto %}
                     <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover">
                   {% else %}
@@ -236,7 +240,6 @@
                 </div>
               </div>
               <div class="p-4 pt-0">
-                <!-- Tombol Menuju Detail Tenaga Kependidikan -->
                 <a href="{% url 'tenaga_kependidikan_detail' tendik.pk %}" class="text-xs font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
                   Lihat selengkapnya &rarr;
                 </a>
