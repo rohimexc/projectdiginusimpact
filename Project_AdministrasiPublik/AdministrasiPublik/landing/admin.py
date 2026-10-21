@@ -27,8 +27,9 @@ class AkademikAdmin(admin.ModelAdmin):
 
 @admin.register(TenagaPendidik)
 class TenagaPendidikAdmin(admin.ModelAdmin):
-    list_display = ('nama', 'nip', 'bidang_ilmu', 'pangkat_gol')
-    search_fields = ('nama', 'nip', 'bidang_ilmu')
+    # Sesuaikan dengan nama field baru di models.py
+    list_display = ('nama', 'jk', 'kategori', 'status', 'pangkat', 'nip') 
+    search_fields = ('nama', 'nip', 'email')
 
 @admin.register(Akreditasi)
 class AkreditasiAdmin(admin.ModelAdmin):

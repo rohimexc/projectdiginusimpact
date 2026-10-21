@@ -1,74 +1,147 @@
-{% extends 'landing/admin/template/base.html' %}
+{% extends 'landing/admin/template/base.html' %} <!-- Sesuaikan dengan base template lu -->
 
-{% block title %}Dashboard Admin - Administrasi Publik{% endblock %}
-
-{% block header_title %}Dashboard Kendali Utama{% endblock %}
+{% block title %}Dashboard Admin - Admin Portal{% endblock %}
 
 {% block content %}
 <div class="space-y-6">
-    <!-- Kartu Statistik Atas -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Kartu Total Berita -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Berita Dipublikasi</p>
-            <h3 class="text-2xl font-bold text-slate-800">{{ total_berita }} Berita</h3>
-            <p class="text-xs text-slate-500">Data aktif yang saat ini tampil di halaman website publik.</p>
-        </div>
-
-        <!-- Kartu Total Tendik & Dosen -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Tendik & Dosen</p>
-            <h3 class="text-2xl font-bold text-teal-700">{{ total_tendik }} Orang</h3>
-            <p class="text-xs text-slate-500">Jumlah keseluruhan tenaga kependidikan terdaftar.</p>
-        </div>
-
-        <!-- Kartu Status Sistem -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Status Sistem</p>
-            <h3 class="text-lg font-bold text-teal-600">Aman & Terkendali</h3>
-            <p class="text-xs text-slate-500">Login menggunakan autentikasi email khusus admin.</p>
-        </div>
+    
+    <!-- Judul Halaman -->
+    <div>
+        <h1 class="text-xl font-bold text-slate-800">Selamat Datang Kembali, {{ request.user.first_name }}!</h1>
+        <p class="text-xs text-slate-500">Ringkasan data dan aktivitas terkini di portal administrasi publik.</p>
     </div>
 
-    <!-- TABEL AUDIT LOG AKTIVITAS -->
+    <!-- BAGIAN 1: TIGA KOTAK RINGKASAN (STATISTIK) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+        <!-- Kotak 1: Total Dosen -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4 hover:border-teal-200 transition">
+            <div class="p-3 bg-teal-50 text-teal-600 rounded-xl">
+                <!-- Icon User/Dosen -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-500">Total Dosen</p>
+                <p class="text-2xl font-extrabold text-slate-800">{{ total_dosen }}</p> <!-- Variabel dari views.py -->
+                <p class="text-[10px] text-slate-400 mt-1">{{ jml_dosen_l }} Laki-laki, {{ jml_dosen_p }} Perempuan</p>
+            </div>
+        </div>
+
+        <!-- Kotak 2: Total Tendik -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4 hover:border-sky-200 transition">
+            <div class="p-3 bg-sky-50 text-sky-600 rounded-xl">
+                <!-- Icon Briefcase/Tendik -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-500">Total Tendik</p>
+                <p class="text-2xl font-extrabold text-slate-800">{{ total_tendik }}</p> <!-- Variabel dari views.py -->
+                <p class="text-[10px] text-slate-400 mt-1">{{ jml_tendik_l }} Laki-laki, {{ jml_tendik_p }} Perempuan</p>
+            </div>
+        </div>
+
+        <!-- Kotak 3: Total Berita -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-4 hover:border-amber-200 transition">
+            <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
+                <!-- Icon Newspaper/Berita -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-500">Total Berita Publik</p>
+                <p class="text-2xl font-extrabold text-slate-800">{{ total_berita }}</p> <!-- Variabel dari views.py -->
+                <p class="text-[10px] text-slate-400 mt-1">{{ jml_berita_aktif }} Aktif, {{ jml_berita_draft }} Draft</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BAGIAN 2: TABEL LOG AKTIVITAS (DATATABLE STYLE) -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div>
-            <h3 class="font-bold text-slate-800 text-sm">Rekam Jejak Aktivitas Sistem & Admin</h3>
-            <p class="text-xs text-slate-400">Memantau seluruh aksi tambah, ubah, atau hapus data terbaru yang dilakukan dalam sistem.</p>
+            <h2 class="text-base font-bold text-slate-800">Log Aktivitas Administrator</h2>
+            <p class="text-xs text-slate-400">Memantau aktivitas login dan perubahan data yang dilakukan oleh admin.</p>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+            <table id="logTable" class="w-full text-left border-collapse text-xs whitespace-nowrap">
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200 text-slate-500">
-                        <th class="p-3">Waktu Kejadian</th>
-                        <th class="p-3">Administrator</th>
-                        <th class="p-3">Detail Aktivitas</th>
+                        <th class="p-3">Waktu</th>
+                        <th class="p-3">Admin User</th>
+                        <th class="p-3">Aktivitas</th>
+                        <th class="p-3">Keterangan</th>
+                        <th class="p-3">Alamat IP</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
-                    {% for log in logs %}
-                    <tr class="hover:bg-slate-50">
-                        <td class="p-3 text-slate-500 font-mono">{{ log.waktu|date:"d M Y, H:i:s" }}</td>
-                        <td class="p-3 font-semibold text-slate-800">{{ log.user.username|default:"Sistem Otomatis" }}</td>
-                        <td class="p-3 text-slate-700">{{ log.aktivitas }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3" class="p-6 text-center text-slate-400 italic">Belum ada catatan aktivitas audit log.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+<tbody>
+    {% for log in log_aktivitas %}
+    <tr class="border-b border-slate-100 hover:bg-slate-50/50">
+        <td class="p-3 text-slate-600">{{ log.waktu|date:"d M Y, H:i" }}</td>
+        <td class="p-3">
+            <div class="font-bold text-slate-800">{{ log.user.username }}</div>
+            <div class="text-[11px] text-slate-400">{{ log.user.email }}</div>
+        </td>
+        <td class="p-3">
+            <span class="px-2 py-0.5 bg-slate-100 text-slate-700 font-semibold rounded-full text-[10px]">{{ log.aktivitas }}</span>
+        </td>
+        <td>{{ log.keterangan }}</td>   <!-- Pastikan ini ada -->
+    <td>{{ log.ip_address }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5" class="p-6 text-center text-slate-400">Belum ada log aktivitas tercatat di database.</td>
+    </tr>
+    {% endfor %}
+</tbody>
             </table>
         </div>
+        
+        <!-- Contoh Info Paginasi Sederhana -->
+        {% if log_aktivitas.has_other_pages %}
+        <div class="flex justify-between items-center pt-2 text-xs text-slate-500">
+            <span>Menampilkan log {{ log_aktivitas.start_index }} - {{ log_aktivitas.end_index }} dari total {{ log_aktivitas.paginator.count }}</span>
+            <div class="flex gap-1">
+                {% if log_aktivitas.has_previous %}
+                    <a href="?page={{ log_aktivitas.previous_page_number }}" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Sebelumnya</a>
+                {% endif %}
+                {% if log_aktivitas.has_next %}
+                    <a href="?page={{ log_aktivitas.next_page_number }}" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Berikutnya</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
     </div>
 
-    <!-- Kotak Sambutan -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-        <h3 class="font-bold text-slate-800 text-sm">Selamat Datang di Portal Admin Departemen</h3>
-        <p class="text-xs text-slate-500 leading-relaxed">
-            Silakan gunakan menu navigasi di sebelah kiri (<b>Kelola Berita</b> atau <b>Kelola Tendik & Dosen</b>) untuk melakukan penambahan, pengubahan, maupun penghapusan data secara penuh.
-        </p>
-    </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Tambahkan Script Datatable (Contoh pakai jQuery + DataTables CDN) -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#logTable').DataTable({
+            "language": {
+                "search": "Cari:",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "first": "Pertama",
+                    "last": "Terakhir",
+                    "next": "Berikutnya",
+                    "previous": "Sebelumnya"
+                },
+                "zeroRecords": "Data tidak ditemukan",
+                "infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
+                "infoFiltered": "(difilter dari _MAX_ total data)"
+            },
+            "order": [[0, "desc"]], // Urutkan berdasarkan waktu terbaru
+            "pageLength": 5, // Default awal tampil 5 baris
+            "lengthMenu": [ [5, 10, 25, -1], [5, 10, 25, "Semua"] ] // Pilihan: 5, 10, 25, dan Semua
+        });
+    });
+</script>
 {% endblock %}

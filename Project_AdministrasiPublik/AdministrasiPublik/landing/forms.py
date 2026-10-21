@@ -3,7 +3,8 @@ from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik
 from django.core.exceptions import ValidationError
 import re
 from django_ckeditor_5.widgets import CKEditor5Widget
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from akun.models import UserProfile
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 
@@ -53,7 +54,7 @@ class BeritaForm(forms.ModelForm):
 class TenagaPendidikForm(forms.ModelForm):
     class Meta:
         model = TenagaPendidik
-        fields = ['nama', 'email', 'bidang_ilmu', 'nip', 'pangkat_gol', 'jabatan', 'foto']
+        fields = ['nama', 'jk', 'kategori', 'status', 'pangkat', 'email', 'nip', 'nidn', 'telepon', 'foto']
 
 
 class LoginForm(AuthenticationForm):
@@ -129,51 +130,97 @@ class AdminUserForm(forms.ModelForm):
             user.save()
         return user
 
-# Form khusus Tambah User (Password Wajib)
+# Pilihan Role
+ROLE_CHOICES = [
+    ('Super Admin', 'Super Admin'),
+    ('Admin Prodi', 'Admin Prodi'),
+    ('Editor', 'Editor'),
+    ('Contributor', 'Contributor'),
+]
+
 class AdminUserCreateForm(forms.ModelForm):
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Masukkan password untuk akun baru',
-            'class': 'w-full px-3 py-2 border rounded-lg'
-        }),
-        required=True,
-        label="Password"
-    )
-
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'password']
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        password = self.cleaned_data.get('password')
-        if password:
-            user.set_password(password)
-        if commit:
-            user.save()
-        return user
-
-
-# Form khusus Edit User (Password Opsional - seperti yang tampil di screenshot lu)
-class AdminUserUpdateForm(forms.ModelForm):
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Isi hanya jika ingin mengganti password baru',
-            'class': 'w-full px-3 py-2 border rounded-lg'
-        }),
+    is_superuser = forms.BooleanField(
         required=False,
-        label="Password Baru (Opsional)"
+        label="Super Admin (Akses Penuh Sistem)",
+        widget=forms.CheckboxInput(attrs={
+            'class': 'w-4 h-4 text-teal-600 bg-white border-slate-300 rounded focus:ring-teal-500 cursor-pointer'
+        })
+    )
+    groups = forms.ModelMultipleChoiceField(
+        queryset=Group.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Role Tambahan (Grup)"
+    )
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'w-full mt-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition',
+        'placeholder': '••••••••'
+    }))
+    
+    is_active = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'w-4 h-4 text-teal-600 bg-white border-slate-300 rounded focus:ring-teal-500 cursor-pointer'
+        })
+    )
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'groups', 'password']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        
+        # Jika is_superuser dicentang, otomatis jadikan is_staff juga
+        if self.cleaned_data.get('is_superuser'):
+            user.is_superuser = True
+            user.is_staff = True
+        else:
+            user.is_superuser = False
+            user.is_staff = True
+            
+        if commit:
+            user.save()
+            user.groups.set(self.cleaned_data['groups'])
+        return user
+
+
+class AdminUserUpdateForm(forms.ModelForm):
+    is_superuser = forms.BooleanField(
+        required=False,
+        label="Super Admin (Akses Penuh Sistem)",
+        widget=forms.CheckboxInput(attrs={
+            'class': 'w-4 h-4 text-teal-600 bg-white border-slate-300 rounded focus:ring-teal-500 cursor-pointer'
+        })
+    )
+    groups = forms.ModelMultipleChoiceField(
+        queryset=Group.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Role Tambahan (Grup)"
     )
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'password']
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'groups', 'is_active']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.fields['is_superuser'].initial = self.instance.is_superuser
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        password = self.cleaned_data.get('password')
-        if password and password.strip():
-            user.set_password(password)
+        
+        if self.cleaned_data.get('is_superuser'):
+            user.is_superuser = True
+            user.is_staff = True
+        else:
+            user.is_superuser = False
+            user.is_staff = True
+            
         if commit:
             user.save()
+            user.groups.set(self.cleaned_data['groups'])
         return user
+    

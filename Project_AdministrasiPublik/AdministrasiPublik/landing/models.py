@@ -49,15 +49,17 @@ class Akademik(models.Model):
     def __str__(self):
         return self.judul_informasi
 
-class TenagaPendidik(models.Model): # atau StafDosen
-    nama = models.CharField(max_length=200)
+class TenagaPendidik(models.Model):
+    nama = models.CharField(max_length=255)
+    jk = models.CharField(max_length=1, choices=[('L', 'Laki-laki'), ('P', 'Perempuan')])
+    kategori = models.CharField(max_length=100, blank=True, null=True) # Bidang Ilmu / Unit Kerja
+    status = models.CharField(max_length=100, blank=True, null=True)    # Status Kepegawaian
+    pangkat = models.CharField(max_length=150, blank=True, null=True)   # Pangkat / Golongan
     email = models.EmailField(blank=True, null=True)
-    bidang_ilmu = models.CharField(max_length=150)
     nip = models.CharField(max_length=50, blank=True, null=True)
-    pangkat_gol = models.CharField(max_length=100, blank=True, null=True)
-    jabatan = models.CharField(max_length=100, blank=True, null=True)
-    no_hp = models.CharField(max_length=20, blank=True, null=True)  # <-- Tambahkan baris ini
-    foto = models.ImageField(upload_to='tenaga_pendidik/')
+    nidn = models.CharField(max_length=50, blank=True, null=True)
+    telepon = models.CharField(max_length=30, blank=True, null=True)
+    foto = models.ImageField(upload_to='tenaga_tendik/', blank=True, null=True)
 
     def __str__(self):
         return self.nama
@@ -80,16 +82,15 @@ class Kontak(models.Model):
         return "Informasi Kontak Prodi"
 
 class AuditLog(models.Model):
-    user = models.ForeignKey(
-        User, 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True,
-        related_name='landing_auditlogs'  # <--- Tambahin ini biar nggak bentrok
-    )
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     aktivitas = models.TextField()
+    
+    # --- TAMBAHKAN DUA BARIS INI ---
+    keterangan = models.CharField(max_length=255, default="-", blank=True, null=True)
+    ip_address = models.CharField(max_length=50, default="-", blank=True, null=True)
+    # -----------------------------
+    
     waktu = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        username = self.user.username if self.user else "Sistem"
-        return f"[{self.waktu}] {username}: {self.aktivitas}"
+        return f"{self.user} - {self.aktivitas} pada {self.waktu}"

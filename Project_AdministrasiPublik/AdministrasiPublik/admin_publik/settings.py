@@ -156,3 +156,11 @@ CKEDITOR_5_CONFIGS = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# --- KOKURASI PENGIRIMAN EMAIL (SMTP GMAIL) ---
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'imadeapriana65@gmail.com'
+EMAIL_HOST_PASSWORD = 'hcer nfkp khtr okti'  # Sandi aplikasi 16 digit yang sudah kamu buat
+DEFAULT_FROM_EMAIL = 'Admin Portal Departemen <imadeapriana65@gmail.com>'

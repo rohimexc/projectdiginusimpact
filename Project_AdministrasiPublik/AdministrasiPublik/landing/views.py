@@ -3,16 +3,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak 
+from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog 
 from django.db.models import Q
-from .forms import BeritaForm, LoginForm, TenagaPendidikForm
-from django.contrib import messages
+from .forms import BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, CustomAuthenticationForm
 from django.core.paginator import Paginator
-from akun.views import catat_log, catat_riwayat_login
-from .forms import AdminUserCreateForm, AdminUserUpdateForm
+from akun.views import catat_riwayat_login
 from akun.models import RiwayatLogin, UserProfile
-from .forms import CustomAuthenticationForm
-from .forms import AdminUserForm
 from django.utils import timezone
 
 def index(request):
@@ -84,7 +80,7 @@ def berita_create_view(request):
             berita.save()
             
             # Catat ke audit log
-            catat_log(request.user, f"Menambahkan berita baru berjudul: '{berita.judul}'")
+            catat_log(request, request.user, f"Menambahkan berita baru berjudul: '{berita.judul}'", "Berita berhasil dipublikasikan")
             
             messages.success(request, "Berita berhasil dipublikasikan!")
             return redirect('landing:dashboard_berita')
@@ -101,7 +97,7 @@ def berita_update_view(request, slug):
         form = BeritaForm(request.POST, request.FILES, instance=berita)
         if form.is_valid():
             form.save()
-            catat_log(request.user, f"Mengubah berita berjudul: '{berita.judul}'")
+            catat_log(request, request.user, f"Mengubah berita berjudul: '{berita.judul}'", "Berita berhasil diperbarui")
             messages.success(request, "Berita berhasil diperbarui!")
             return redirect('landing:dashboard_berita') # Mengarah ke dashboard admin berita
     else:
@@ -132,9 +128,10 @@ def dashboard_berita_view(request):
 def berita_delete_view(request, slug):
     berita = get_object_or_404(Berita, slug=slug)
     if request.method == 'POST':
+        judul_berita = berita.judul
         berita.delete()
         messages.success(request, "Data berita berhasil dihapus!")
-        catat_log(request.user, f"Menghapus berita: '{berita.judul}'")
+        catat_log(request, request.user, f"Menghapus berita: '{judul_berita}'", "Berita dihapus dari sistem")
         return redirect('landing:dashboard_berita')  # <-- Ganti 'berita_list' jadi ini
     
     return render(request, 'landing/admin/dashboard_berita.html', {'berita': berita, 'delete_mode': True})
@@ -161,7 +158,6 @@ def tenaga_pendidik_view(request):
     id_hapus = request.GET.get('hapus')
     delete_tendik = None
     if id_hapus:
-        # UBAH DARI slug=id_hapus MENJADI pk=id_hapus (karena model pakai ID)
         delete_tendik = get_object_or_404(TenagaPendidik, pk=id_hapus)
 
     return render(request, 'landing/admin/dashboard_tendik.html', {
@@ -176,10 +172,7 @@ def tendik_create_view(request):
         form = TenagaPendidikForm(request.POST, request.FILES)
         if form.is_valid():
             tendik_baru = form.save()
-            
-            # ---> CATAT LOG TAMBAH TENDIK <---
-            catat_log(request.user, f"Menambahkan data tendik baru: '{tendik_baru.nama}'")
-            
+            catat_log(request, request.user, f"Menambahkan data tendik baru: '{tendik_baru.nama}'", "Data tendik ditambahkan")
             messages.success(request, "Data tenaga pendidik berhasil ditambahkan!")
             return redirect('landing:tenaga_pendidik')
     else:
@@ -195,10 +188,7 @@ def tendik_update_view(request, pk):
         form = TenagaPendidikForm(request.POST, request.FILES, instance=tendik)
         if form.is_valid():
             form.save()
-            
-            # ---> CATAT LOG EDIT TENDIK <---
-            catat_log(request.user, f"Memperbarui data tendik: '{tendik.nama}'")
-            
+            catat_log(request, request.user, f"Memperbarui data tendik: '{tendik.nama}'", "Data tendik diperbarui")
             messages.success(request, "Data tenaga pendidik berhasil diperbarui!")
             return redirect('landing:tenaga_pendidik')
     else:
@@ -211,12 +201,9 @@ def tendik_update_view(request, pk):
 def tendik_delete_view(request, pk):
     tendik = get_object_or_404(TenagaPendidik, pk=pk)
     if request.method == 'POST':
-        nama_tendik = tendik.nama  # Simpan nama sebelum dihapus dari database
+        nama_tendik = tendik.nama 
         tendik.delete()
-        
-        # ---> CATAT LOG HAPUS TENDIK <---
-        catat_log(request.user, f"Menghapus data tendik: '{nama_tendik}'")
-        
+        catat_log(request, request.user, f"Menghapus data tendik: '{nama_tendik}'", "Data tendik dihapus")
         messages.success(request, "Data tenaga pendidik berhasil dihapus!")
         return redirect('landing:tenaga_pendidik')
     return redirect('landing:tenaga_pendidik')
@@ -231,28 +218,22 @@ def akreditasi_page(request):
 
 def login_view(request):
     if request.method == 'POST':
-        email_input = request.POST.get('username')  # Karena input form menampung email/username
+        email_input = request.POST.get('username') 
         password_input = request.POST.get('password')
         
-        # Cari user berdasarkan email yang diinput
         try:
             user_obj = User.objects.get(email=email_input)
             username_asli = user_obj.username
         except User.DoesNotExist:
-            username_asli = email_input  # Fallback kalau yang diinput ternyata langsung username-nya
+            username_asli = email_input 
             
-        # Autentikasi menggunakan username asli & password
         user = authenticate(request, username=username_asli, password=password_input)
             
         if user is not None:
             login(request, user)
-            
-            # Catat riwayat login ke database secara otomatis
             catat_riwayat_login(user, request)
-            
             messages.success(request, f"Selamat datang, {user.get_full_name() or user.username}!")
             
-            # Cek role: Hanya admin/staff yang boleh masuk dashboard admin
             if user.is_superuser or user.is_staff:
                 return redirect('landing:dashboard_admin') 
             else:
@@ -265,37 +246,91 @@ def login_view(request):
     form = CustomAuthenticationForm()
     return render(request, 'landing/Login/login.html', {'form': form})
 
-from .models import Berita, TenagaPendidik, AuditLog  # Pastikan AuditLog di-import
-
 @login_required(login_url='landing:login')
 def dashboard_admin_khusus(request):
-    if not (request.user.is_superuser or request.user.is_staff):
-        messages.error(request, "Akses ditolak!")
-        logout(request)
-        return redirect('landing:login')
-        
-    berita_list = Berita.objects.all().order_by('-post_date')
-    total_berita = berita_list.count()
-    total_tendik = TenagaPendidik.objects.count() # Hitung total tendik
+    # Total Dosen: Hanya jika kategori atau status persis mengandung kata 'DOSEN'
+    total_dosen = TenagaPendidik.objects.filter(
+        Q(status__icontains='DOSEN') | Q(kategori__icontains='DOSEN')
+    ).count()
     
-    # ---> AMBIL DATA AUDIT LOG DI SINI (Contoh ambil 10 aktivitas terbaru) <---
-    logs = AuditLog.objects.all().order_by('-waktu')[:10]
+    # Total Tendik: Semua data yang TIDAK mengandung kata 'DOSEN' di status maupun kategorinya
+    total_tendik = TenagaPendidik.objects.exclude(
+        Q(status__icontains='DOSEN') | Q(kategori__icontains='DOSEN')
+    ).count()
+    
+    total_berita = Berita.objects.count()
+    
+    jml_dosen_l = TenagaPendidik.objects.filter(
+        Q(status__icontains='DOSEN') | Q(kategori__icontains='DOSEN'), jk='L'
+    ).count()
+    jml_dosen_p = TenagaPendidik.objects.filter(
+        Q(status__icontains='DOSEN') | Q(kategori__icontains='DOSEN'), jk='P'
+    ).count()
+    
+    jml_tendik_l = TenagaPendidik.objects.filter(jk='L').exclude(
+        Q(status__icontains='DOSEN') | Q(kategori__icontains='DOSEN')
+    ).count()
+    jml_tendik_p = TenagaPendidik.objects.filter(jk='P').exclude(
+        Q(status__icontains='DOSEN') | Q(kategori__icontains='DOSEN')
+    ).count()
+    
+    jml_berita_aktif = Berita.objects.filter(status='A').count() if hasattr(Berita, 'status') else total_berita
+    jml_berita_draft = Berita.objects.filter(status='D').count() if hasattr(Berita, 'status') else 0
+    
+    log_aktivitas = AuditLog.objects.all().order_by('-waktu')
 
     context = {
-        'berita_list': berita_list,
-        'total_berita': total_berita,
+        'total_dosen': total_dosen,
+        'jml_dosen_l': jml_dosen_l,
+        'jml_dosen_p': jml_dosen_p,
         'total_tendik': total_tendik,
-        'logs': logs,  # ---> MASUKKAN KE DICTIONARY CONTEXT <---
+        'jml_tendik_l': jml_tendik_l,
+        'jml_tendik_p': jml_tendik_p,
+        'total_berita': total_berita,
+        'jml_berita_aktif': jml_berita_aktif,
+        'jml_berita_draft': jml_berita_draft,
+        'log_aktivitas': log_aktivitas,
     }
-    return render(request, 'landing/admin/dashboard.html', context) # Sesuaikan path file HTML dashboard lu
+    return render(request, 'landing/admin/dashboard.html', context)
 
-def catat_log(user, aktivitas):
-    AuditLog.objects.create(user=user, aktivitas=aktivitas)
+# --- FUNGSI HELPER UNTUK MENGAMBIL IP & CATAT LOG SECARA AMAN ---
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+def catat_log(request_or_user, user_or_aktivitas, aktivitas_or_keterangan="", keterangan_opsional=""):
+    if hasattr(request_or_user, 'META'): 
+        request = request_or_user
+        user = user_or_aktivitas
+        aktivitas = aktivitas_or_keterangan
+        keterangan = keterangan_opsional
+    else: 
+        request = None
+        user = request_or_user
+        aktivitas = user_or_aktivitas
+        keterangan = aktivitas_or_keterangan
+
+    ip = get_client_ip(request) if request else "-"
+    
+    # Pastikan jika keterangan kosong, diisi teks yang jelas atau argumennya masuk
+    final_keterangan = keterangan if keterangan else "Aktivitas berhasil dilakukan"
+    
+    AuditLog.objects.create(
+        user=user,
+        aktivitas=aktivitas,
+        keterangan=final_keterangan,
+        ip_address=ip
+    )
+
 
 @login_required(login_url='landing:login')
 def manajemen_user_view(request):
     users = User.objects.all().order_by('-date_joined')
-    riwayat_login = RiwayatLogin.objects.all().order_by('-waktu_login') # Ganti '-waktu' jika field di models.py beda (misal: -timestamp)
+    riwayat_login = RiwayatLogin.objects.all().order_by('-waktu_login')
     
     context = {
         'users': users,
@@ -308,7 +343,8 @@ def user_create_view(request):
     if request.method == 'POST':
         form = AdminUserCreateForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_user = form.save()
+            catat_log(request, request.user, f"Menambahkan akun administrator baru: '{new_user.username}'", "Akun baru berhasil dibuat")
             messages.success(request, "Akun administrator baru berhasil ditambahkan!")
             return redirect('landing:manajemen_user')
     else:
@@ -316,7 +352,6 @@ def user_create_view(request):
     
     return render(request, 'landing/User/user_form.html', {'form': form})
 
-# 2. Pada fungsi edit user
 @login_required(login_url='landing:login')
 def user_update_view(request, pk):
     if not request.user.is_superuser:
@@ -325,16 +360,15 @@ def user_update_view(request, pk):
         
     target_user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        form = AdminUserForm(request.POST, instance=target_user)
+        form = AdminUserUpdateForm(request.POST, instance=target_user)
         if form.is_valid():
             form.save()
-            catat_log(request.user, f"Memperbarui akun administrator: '{target_user.username}'")
+            catat_log(request, request.user, f"Memperbarui akun administrator: '{target_user.username}'", "Berhasil memperbarui data user")
             messages.success(request, "Akun administrator berhasil diperbarui!")
             return redirect('landing:manajemen_user')
     else:
-        form = AdminUserForm(instance=target_user)
+        form = AdminUserUpdateForm(instance=target_user)
         
-    # ---> SESUAIKAN PATH FOLDER DI SINI <---
     return render(request, 'landing/User/user_form.html', {'form': form, 'target_user': target_user})
 
 @login_required(login_url='landing:login')
@@ -342,11 +376,10 @@ def user_delete_view(request, pk):
     target_user = get_object_or_404(User, pk=pk)
     
     if request.method == 'POST':
-        # IMPLEMENTASI SOFT DELETE (Alih-alih target_user.delete())
         target_user.is_active = False
         target_user.save()
         
-        catat_log(request.user, f"Melakukan soft delete / menonaktifkan akun: '{target_user.username}'")
+        catat_log(request, request.user, f"Melakukan soft delete / menonaktifkan akun: '{target_user.username}'", "Akun dinonaktifkan")
         messages.success(request, "Akun berhasil dinonaktifkan (Soft Delete).")
         return redirect('landing:manajemen_user')
         
