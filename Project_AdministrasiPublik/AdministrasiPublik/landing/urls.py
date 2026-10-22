@@ -31,6 +31,11 @@ urlpatterns = [
     path('admin-portal/user/edit/<int:pk>/', views.user_update_view, name='user_update'),
     path('admin-portal/user/hapus/<int:pk>/', views.user_delete_view, name='user_delete'),
 
+    path('admin-portal/dosen/', views.dashboard_dosen, name='dashboard_dosen'),
+    path('admin-portal/dosen/tambah/', views.dosen_create, name='dosen_create'),
+    path('admin-portal/dosen/ubah/<int:pk>/', views.dosen_update, name='dosen_update'),
+    path('admin-portal/dosen/hapus/<int:pk>/', views.dosen_delete, name='dosen_delete'),
+
 # --- URL PASSWORD RESET ---
 path('admin-portal/password-reset/', 
          auth_views.PasswordResetView.as_view(

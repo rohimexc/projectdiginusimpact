@@ -1,11 +1,11 @@
 from django import forms
-from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik
+from .models import Sambutan, Galeri, Berita, Dosen, TenagaPendidik
 from django.core.exceptions import ValidationError
 import re
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django.contrib.auth.models import User, Group
 from akun.models import UserProfile
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django import forms
 
 class SambutanForm(forms.ModelForm):
@@ -56,6 +56,29 @@ class TenagaPendidikForm(forms.ModelForm):
         model = TenagaPendidik
         fields = ['nama', 'jk', 'kategori', 'status', 'pangkat', 'email', 'nip', 'nidn', 'telepon', 'foto']
 
+class DosenForm(forms.ModelForm):
+    class Meta:
+        model = Dosen
+        fields = [
+            'nama', 'nip', 'nidn', 'nuptk', 'jenis_kelamin', 
+            'bidang_ilmu', 'jabatan', 'pangkat_golongan', 
+            'email', 'no_hp', 'status', 'foto'
+        ]
+        widgets = {
+            'nama': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'nip': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'nidn': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'nuptk': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'jenis_kelamin': forms.Select(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-slate-800 focus:ring-2 focus:ring-teal-500'}),
+            'bidang_ilmu': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'jabatan': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'pangkat_golongan': forms.Select(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-slate-800 focus:ring-2 focus:ring-teal-500'}),
+            'status': forms.Select(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs bg-white text-slate-800 focus:ring-2 focus:ring-teal-500'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'no_hp': forms.TextInput(attrs={'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500'}),
+            'foto': forms.FileInput(attrs={'class': 'w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100'}),
+        }
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -71,6 +94,22 @@ class LoginForm(AuthenticationForm):
             'placeholder': '••••••••'
         })
     )
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Tambahkan styling Tailwind ke semua field form
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({
+                'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800'
+            })
+            
+        # Ubah label ke bahasa Indonesia
+        self.fields['old_password'].label = 'Password Lama'
+        self.fields['new_password1'].label = 'Password Baru'
+        self.fields['new_password2'].label = 'Konfirmasi Password Baru'
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={

@@ -3,9 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog 
+from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog, Dosen
 from django.db.models import Q
-from .forms import BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, CustomAuthenticationForm
+from .forms import BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, CustomAuthenticationForm, DosenForm
 from django.core.paginator import Paginator
 from akun.views import catat_riwayat_login
 from akun.models import RiwayatLogin, UserProfile
@@ -384,3 +384,69 @@ def user_delete_view(request, pk):
         return redirect('landing:manajemen_user')
         
     return render(request, 'landing/User/user_confirm_delete.html', {'target_user': target_user})
+
+
+
+@login_required(login_url='landing:login')
+def dashboard_dosen(request):
+    # Mengambil seluruh data dari model Dosen yang baru
+    dosen_list = Dosen.objects.all().order_by('-id')
+    
+    # Logika modal konfirmasi hapus via query parameter ?hapus=ID
+    delete_dosen = None
+    dosen_id = request.GET.get('hapus')
+    if dosen_id:
+        delete_dosen = get_object_or_404(Dosen, id=dosen_id)
+
+    context = {
+        'dosen_list': dosen_list,
+        'delete_dosen': delete_dosen,
+    }
+    return render(request, 'landing/admin/dashboard_dosen.html', context)
+
+@login_required(login_url='landing:login')
+def dosen_create(request):
+    if request.method == 'POST':
+        form = DosenForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Data dosen berhasil ditambahkan!")
+            return redirect('landing:dashboard_dosen')
+    else:
+        form = DosenForm()
+    
+    return render(request, 'landing/Dosen/dosen_form.html', {'form': form, 'action': 'Tambah'})
+
+@login_required(login_url='landing:login')
+def dosen_update(request, pk):
+    dosen = get_object_or_404(Dosen, pk=pk)
+    if request.method == 'POST':
+        form = DosenForm(request.POST, request.FILES, instance=dosen)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Data dosen berhasil diperbarui!")
+            return redirect('landing:dashboard_dosen')
+    else:
+        form = DosenForm(instance=dosen)
+        
+    return render(request, 'landing/Dosen/dosen_form.html', {'form': form, 'action': 'Ubah'})
+
+@login_required(login_url='landing:login')
+def dosen_delete(request, pk):
+    dosen = get_object_or_404(Dosen, pk=pk)
+    if request.method == 'POST':
+        nama_dosen = dosen.nama
+        dosen.delete()
+        messages.success(request, f"Data dosen '{nama_dosen}' berhasil dihapus!")
+        return redirect('landing:dashboard_dosen')
+    return redirect('landing:dashboard_dosen')
+
+@login_required(login_url='landing:login')
+def dosen_delete(request, pk):
+    dosen = get_object_or_404(TenagaPendidik, pk=pk)
+    if request.method == 'POST':
+        nama_dosen = dosen.nama
+        dosen.delete()
+        messages.success(request, f"Data dosen '{nama_dosen}' berhasil dihapus!")
+        return redirect('landing:dashboard_dosen')
+    return redirect('landing:dashboard_dosen')

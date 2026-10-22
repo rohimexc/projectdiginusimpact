@@ -64,6 +64,45 @@ class TenagaPendidik(models.Model):
     def __str__(self):
         return self.nama
 
+PANGKAT_GOLONGAN_CHOICES = [
+    ('', '--- Pilih Pangkat / Golongan ---'),
+    ('III/a', 'III/a - Penata Muda'),
+    ('III/b', 'III/b - Penata Muda Tingkat I'),
+    ('III/c', 'III/c - Penata'),
+    ('III/d', 'III/d - Penata Tingkat I'),
+    ('IV/a', 'IV/a - Pembina'),
+    ('IV/b', 'IV/b - Pembina Tingkat I'),
+    ('IV/c', 'IV/c - Pembina Utama Muda'),
+    ('IV/d', 'IV/d - Pembina Utama Madya'),
+    ('IV/e', 'IV/e - Pembina Utama'),
+]
+
+STATUS_KEPEGAWAIAN_CHOICES = [
+    ('', '--- Pilih Status Kepegawaian ---'),
+    ('Dosen Tetap', 'Dosen Tetap'),
+    ('Dosen Tetap Yayasan', 'Dosen Tetap Yayasan'),
+    ('Dosen Luar Biasa', 'Dosen Luar Biasa'),
+    ('Dosen PNS', 'Dosen PNS'),
+    ('Dosen PPPK', 'Dosen PPPK'),
+]
+
+class Dosen(models.Model):
+    nama = models.CharField(max_length=200)
+    nip = models.CharField(max_length=50, blank=True, null=True)
+    nidn = models.CharField(max_length=50, blank=True, null=True)
+    nuptk = models.CharField(max_length=50, blank=True, null=True)
+    jenis_kelamin = models.CharField(max_length=1, choices=[('', '--- Pilih Jenis Kelamin ---'), ('L', 'Laki-laki'), ('P', 'Perempuan')], blank=True, null=True)
+    bidang_ilmu = models.CharField(max_length=150, blank=True, null=True)
+    jabatan = models.CharField(max_length=100, blank=True, null=True)
+    pangkat_golongan = models.CharField(max_length=50, choices=PANGKAT_GOLONGAN_CHOICES, blank=True, null=True)
+    status = models.CharField(max_length=100, choices=STATUS_KEPEGAWAIAN_CHOICES, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    no_hp = models.CharField(max_length=30, blank=True, null=True)
+    foto = models.ImageField(upload_to='dosen/', blank=True, null=True)
+
+    def __str__(self):
+        return self.nama
+
 class Akreditasi(models.Model):
     status_akreditasi = models.CharField(max_length=50, default="Unggul (A)")
     nomor_sk = models.CharField(max_length=100)
