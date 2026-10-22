@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense Tracker - Layout Sesuai Mentor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans p-4 sm:p-6 lg:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <!-- Header / Dashboard Saldo (Layout Asli Sebelumnya) -->
+        <div class="bg-blue-600 rounded-2xl shadow-lg p-6 text-white">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <p class="text-blue-100 text-xs font-bold uppercase tracking-widest mb-1">Total Saldo Keuangan</p>
+                    <h1 id="balance" class="text-3xl sm:text-4xl font-extrabold text-white">Rp 0</h1>
+                </div>
+                <div>
+                    <button id="reset-btn" class="text-xs bg-blue-700/60 hover:bg-blue-700 text-blue-100 font-semibold px-3 py-2 rounded-lg border border-blue-500/40 transition">
+                        Reset Data
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-blue-500/40">
+                <div class="bg-blue-700/40 rounded-xl p-4">
+                    <p class="text-xs text-blue-100 font-semibold uppercase mb-1">Total Pemasukan</p>
+                    <p id="money-plus" class="text-xl font-bold text-emerald-300">+Rp 0</p>
+                </div>
+                <div class="bg-blue-700/40 rounded-xl p-4">
+                    <p class="text-xs text-blue-100 font-semibold uppercase mb-1">Total Pengeluaran</p>
+                    <p id="money-minus" class="text-xl font-bold text-rose-300">-Rp 0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- POSISI GRAFIK DIPERBAIKI SESUAI PERINTAH MENTOR -->
+        <!-- Bagian Grafik: Bar Chart di Kiri (Lebar), 2 Pie Chart di Kanan Bertumpuk -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Kolom Kiri (7 Kolom): Bar Chart Perbandingan Arus Kas -->
+            <div class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                    <h3 class="text-sm font-bold text-slate-800">Perbandingan Arus Kas (Pemasukan vs Pengeluaran)</h3>
+                    <span class="text-xs text-slate-400 font-medium">Bar Chart</span>
+                </div>
+                <div class="relative w-full h-72 flex justify-center items-center">
+                    <canvas id="incomeExpenseChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan (5 Kolom): Dua Pie/Doughnut Chart Bertumpuk -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                
+                <!-- Pie Chart Kiri/Atas: Kategori Pemasukan -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xs font-bold text-slate-800">Kategori Pemasukan</h3>
+                        <span class="text-[10px] text-slate-400 font-medium">Pie Chart</span>
+                    </div>
+                    <div class="relative w-full h-40 flex justify-center items-center">
+                        <canvas id="incomeCategoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Pie Chart Kanan/Bawah: Kategori Pengeluaran -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xs font-bold text-slate-800">Kategori Pengeluaran</h3>
+                        <span class="text-[10px] text-slate-400 font-medium">Pie Chart</span>
+                    </div>
+                    <div class="relative w-full h-40 flex justify-center items-center">
+                        <canvas id="expenseCategoryChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Grid Layout Bawah: Form CRUD & Datatable (Tetap Seperti Semula) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Kolom Kiri: Form CRUD -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 h-fit">
+                <h3 id="form-title" class="text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-4">Tambah Transaksi Baru</h3>
+
+                <form id="form" class="space-y-4">
+                    <input type="hidden" id="edit-id" value="">
+                    
+                    <div class="flex gap-4">
+                        <div class="w-1/2">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">JENIS</label>
+                            <select id="type" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option value="expense">Pengeluaran</option>
+                                <option value="income">Pemasukan</option>
+                            </select>
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">KATEGORI</label>
+                            <select id="category" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"></select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">KETERANGAN</label>
+                        <input type="text" id="description" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Makan siang">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">NOMINAL (Rp)</label>
+                        <input type="number" id="amount" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan angka">
+                    </div>
+
+                    <div class="flex gap-2 pt-2">
+                        <button type="submit" id="submit-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition text-sm">
+                            Simpan Transaksi
+                        </button>
+                        <button type="button" id="cancel-edit-btn" class="hidden bg-slate-200 text-slate-700 font-bold px-4 py-3 rounded-lg hover:bg-slate-300 transition text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Kolom Kanan: Filter & Datatable -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex flex-col sm:flex-row gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <input type="text" id="search-input" placeholder="Cari keterangan..." class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="filter-type" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+                            <option value="all">Semua Jenis</option>
+                            <option value="income">Pemasukan</option>
+                            <option value="expense">Pengeluaran</option>
+                        </select>
+                        <select id="filter-category" class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+                            <option value="all">Semua Kategori</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold text-slate-800">Daftar Transaksi</h3>
+                        <span id="data-count" class="text-xs text-slate-400 font-medium">0 data</span>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-100 max-h-[340px] overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase sticky top-0 z-10">
+                                <tr>
+                                    <th class="p-3">Jenis / Ket</th>
+                                    <th class="p-3">Kategori</th>
+                                    <th class="p-3 text-right">Nominal</th>
+                                    <th class="p-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="datatable-body" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Gunakan file main.js yang terakhir -->
+    <script src="belajarJS.js"></script>
+</body>
+</html>
