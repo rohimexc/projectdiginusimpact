@@ -5,10 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }} - Admin Portal UNTAD</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Asset CKEditor 5 (Wajib agar editor konten berita aktif) -->
+  {{ form.media }}
+
   <script>
     tailwind.config = {
       theme: {
@@ -50,7 +55,7 @@
     </header>
 
     <main class="flex-1 p-6 md:p-8">
-      <div class="max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+      <div class="max-w-3xl bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
         <h2 class="text-xl font-bold text-slate-800 mb-6">{{ title }}</h2>
 
         <form method="POST" enctype="multipart/form-data" class="space-y-5">
@@ -78,7 +83,7 @@
               Batal
             </a>
             <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow transition">
-              Simpan
+              Simpan Berita
             </button>
           </div>
         </form>
@@ -102,6 +107,11 @@
       background-color: #ffffff;
       border-color: #0b7285;
       box-shadow: 0 0 0 2px rgba(11, 114, 133, 0.15);
+    }
+    /* Menjaga styling CKEditor tetap proporsional */
+    .ck-editor__editable_inline {
+      min-height: 220px;
+      font-size: 0.85rem;
     }
   </style>
 

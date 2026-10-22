@@ -6,19 +6,15 @@ from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan
 User = get_user_model()
 
 
+# Form Berita (Field 'ringkasan' sudah dihapus)
 class BeritaForm(forms.ModelForm):
     class Meta:
         model = Berita
-        fields = ['judul', 'ringkasan', 'konten', 'gambar', 'posted_at']
+        fields = ['judul', 'konten', 'gambar', 'posted_at']
         widgets = {
             'judul': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
                 'placeholder': 'Masukkan judul berita'
-            }),
-            'ringkasan': forms.Textarea(attrs={
-                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
-                'rows': 2,
-                'placeholder': 'Ringkasan singkat untuk kartu berita'
             }),
             'konten': forms.Textarea(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
@@ -48,10 +44,8 @@ class TenagaPendidikForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Bikin field jenis opsional karena diset otomatis di views (DOSEN / TENDIK)
         if 'jenis' in self.fields:
             self.fields['jenis'].required = False
-        # Pastikan field opsional tidak memblokir simpan
         for f in ['nidn', 'nip', 'nuptk', 'no_hp', 'email', 'foto', 'bidang_ilmu', 'status']:
             if f in self.fields:
                 self.fields[f].required = False
@@ -135,7 +129,6 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        # PERBAIKAN: 'role' dihapus dari sini agar tidak kena validasi bawaan model CharField
         fields = ['username', 'email', 'is_active', 'password']
         widgets = {
             'username': forms.TextInput(attrs={
@@ -153,7 +146,6 @@ class UserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Jika sedang edit user, muat role yang sudah ada ke dalam bentuk centang
         if self.instance and self.instance.pk and hasattr(self.instance, 'role') and self.instance.role:
             roles_aktif = [r.strip() for r in str(self.instance.role).split(',') if r.strip()]
             self.initial['role'] = roles_aktif
@@ -170,11 +162,9 @@ class UserForm(forms.ModelForm):
         if password:
             user.set_password(password)
 
-        # Gabungkan role yang dicentang dengan koma, misal: "Admin Prodi, Editor"
         selected_roles = self.cleaned_data.get('role', [])
         user.role = ", ".join(selected_roles)
 
-        # Jika salah satu role yang dicentang adalah Admin Prodi, aktifkan hak akses staff & superuser
         role_str = user.role.lower()
         if 'admin' in role_str:
             user.is_staff = True

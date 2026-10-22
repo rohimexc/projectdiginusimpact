@@ -73,7 +73,7 @@
               <tr>
                 <th class="py-3.5 px-6">Judul Berita</th>
                 <th class="py-3.5 px-6">Tanggal Post</th>
-                <th class="py-3.5 px-6 text-center">Aksi (CRUD)</th>
+                <th class="py-3.5 px-6 text-center w-28">Aksi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -81,20 +81,23 @@
                 <tr class="hover:bg-slate-50/70 transition">
                   <td class="py-4 px-6 font-semibold text-slate-800">{{ b.judul }}</td>
                   <td class="py-4 px-6 text-slate-500">{{ b.posted_at|date:"d M Y, H:i" }}</td>
-                  <td class="py-4 px-6 text-center">
-                    <div class="inline-flex items-center gap-2">
-                      <!-- Tombol Preview ke Halaman Berita Detail Publik -->
-                      <a href="{% url 'berita_detail' b.pk %}" target="_blank" title="Lihat Tampilan Publik" class="px-3 py-1.5 bg-teal-50 text-teal-700 border border-teal-200 rounded-lg hover:bg-teal-100 font-semibold transition inline-flex items-center gap-1.5">
-                        <i class="bi bi-eye text-[12px]"></i> Preview
+                  <td class="py-4 px-6 text-center align-middle">
+                    <div class="inline-flex items-center justify-center gap-1.5">
+                      <!-- Tombol Preview -->
+                      <a href="{% url 'berita_detail' b.pk %}" target="_blank" title="Lihat Tampilan Publik" class="p-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition border border-teal-200">
+                        <i class="bi bi-eye"></i>
                       </a>
                       <!-- Tombol Edit -->
-                      <a href="{% url 'berita_update' b.pk %}" class="px-3 py-1.5 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg hover:bg-amber-100 font-semibold transition inline-flex items-center gap-1.5">
-                        <i class="bi bi-pencil-square text-[11px]"></i> Edit
+                      <a href="{% url 'berita_update' b.pk %}" title="Edit Data Berita" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                        <i class="bi bi-pencil-square"></i>
                       </a>
-                      <!-- Tombol Hapus -->
-                      <a href="{% url 'berita_delete' b.pk %}" class="px-3 py-1.5 bg-rose-50 text-rose-600 border border-rose-200 rounded-lg hover:bg-rose-100 font-semibold transition inline-flex items-center gap-1.5">
-                        <i class="bi bi-trash text-[11px]"></i> Hapus
-                      </a>
+                      <!-- Tombol Hapus (Dialog Konfirmasi) -->
+                      <button type="button" 
+                              onclick="konfirmasiHapusBerita('{% url 'berita_delete' b.pk %}', '{{ b.judul|escapejs }}')" 
+                              title="Hapus Berita" 
+                              class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
+                        <i class="bi bi-trash"></i>
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -114,6 +117,40 @@
     </main>
   </div>
 
+  <!-- MODAL KONFIRMASI HAPUS BERITA -->
+  <div id="modalHapusBerita" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 md:p-8 text-center animate-in fade-in zoom-in duration-200">
+      
+      <!-- Icon Trash Kotak Pink -->
+      <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600 text-2xl shadow-inner">
+        <i class="bi bi-trash3-fill"></i>
+      </div>
+
+      <!-- Judul & Keterangan -->
+      <h3 class="text-lg font-bold text-slate-800 mb-2">Hapus Berita?</h3>
+      <p class="text-xs text-slate-500 leading-relaxed mb-6">
+        Apakah Anda yakin ingin menghapus postingan <br>
+        <span id="targetJudulBerita" class="font-bold text-slate-800">"Judul Berita"</span>? <br>
+        <span class="text-[11px] text-slate-400">Tindakan ini tidak dapat dibatalkan.</span>
+      </p>
+
+      <!-- Tombol Aksi -->
+      <div class="flex items-center justify-center gap-3">
+        <button type="button" 
+                onclick="tutupModalHapusBerita()"
+                class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+          Batal
+        </button>
+        <a id="btnKonfirmasiHapusBerita" 
+           href="#" 
+           class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition shadow-sm">
+          Ya, Hapus
+        </a>
+      </div>
+
+    </div>
+  </div>
+
   <script>
     $(document).ready(function() {
       $('#tabelBerita').DataTable({
@@ -130,6 +167,23 @@
           emptyTable: "Belum ada berita"
         }
       });
+    });
+
+    // Dialog Konfirmasi Hapus Berita
+    function konfirmasiHapusBerita(urlHapus, judul) {
+      document.getElementById('targetJudulBerita').innerText = '"' + judul + '"';
+      document.getElementById('btnKonfirmasiHapusBerita').setAttribute('href', urlHapus);
+      document.getElementById('modalHapusBerita').classList.remove('hidden');
+    }
+
+    function tutupModalHapusBerita() {
+      document.getElementById('modalHapusBerita').classList.add('hidden');
+    }
+
+    document.getElementById('modalHapusBerita').addEventListener('click', function(e) {
+      if (e.target === this) {
+        tutupModalHapusBerita();
+      }
     });
 
     {% if messages %}

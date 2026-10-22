@@ -48,7 +48,7 @@ def berita_list(request):
 
     if query:
         berita_qs = berita_qs.filter(
-            Q(judul__icontains=query) | Q(konten__icontains=query) | Q(ringkasan__icontains=query)
+            Q(judul__icontains=query) | Q(konten__icontains=query)
         )
 
     if tahun:
@@ -122,7 +122,7 @@ def tenaga_kependidikan_detail(request, pk):
 def user_login(request):
     if request.user.is_authenticated:
         user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-        if user_role == 'admin' or request.user.is_staff or request.user.is_superuser:
+        if 'admin' in user_role or request.user.is_staff or request.user.is_superuser:
             return redirect('admin_dashboard')
         logout(request)
         messages.error(request, 'Akses ditolak! Akun Anda bukan Administrator.')
@@ -141,7 +141,7 @@ def user_login(request):
 
         if user is not None:
             user_role = getattr(user, 'role', '').lower() if hasattr(user, 'role') and user.role else ''
-            if user_role == 'admin' or user.is_staff or user.is_superuser:
+            if 'admin' in user_role or user.is_staff or user.is_superuser:
                 login(request, user)
                 catat_audit(request, 'Login Berhasil', f"User {user.email} masuk ke sistem.")
                 messages.success(request, f"Selamat datang, {user.username}!")
@@ -170,20 +170,18 @@ def user_logout(request):
 @login_required(login_url='user_login')
 def admin_dashboard(request):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         messages.error(request, 'Akses ditolak! Anda bukan Administrator.')
         return redirect('user_login')
 
     total_berita = Berita.objects.count()
 
-    # Dosen (Total, Laki-laki, Perempuan) sesuai catatan
     dosen_qs = TenagaPendidik.objects.filter(jenis='DOSEN')
     total_dosen = dosen_qs.count()
     dosen_l = dosen_qs.filter(jenis_kelamin='L').count()
     dosen_p = dosen_qs.filter(jenis_kelamin='P').count()
 
-    # Tendik (Total, Laki-laki, Perempuan) sesuai catatan
     tendik_qs = TenagaPendidik.objects.filter(jenis='TENDIK')
     total_tendik = tendik_qs.count()
     tendik_l = tendik_qs.filter(jenis_kelamin='L').count()
@@ -209,7 +207,7 @@ def admin_dashboard(request):
 @login_required(login_url='user_login')
 def admin_kelola_berita(request):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         return redirect('user_login')
     daftar_berita = Berita.objects.all().order_by('-posted_at')
@@ -219,7 +217,7 @@ def admin_kelola_berita(request):
 @login_required(login_url='user_login')
 def admin_kelola_dosen(request):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         return redirect('user_login')
     daftar_dosen = TenagaPendidik.objects.filter(jenis='DOSEN').order_by('-id')
@@ -229,7 +227,7 @@ def admin_kelola_dosen(request):
 @login_required(login_url='user_login')
 def admin_kelola_tendik(request):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         return redirect('user_login')
     daftar_tendik = TenagaPendidik.objects.filter(jenis='TENDIK').order_by('-id')
@@ -239,7 +237,7 @@ def admin_kelola_tendik(request):
 @login_required(login_url='user_login')
 def admin_kelola_user(request):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         messages.error(request, 'Akses ditolak! Hanya Administrator yang boleh mengakses.')
         return redirect('user_login')
@@ -258,16 +256,28 @@ def admin_kelola_user(request):
 @login_required(login_url='user_login')
 def user_toggle_status(request, pk):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         return redirect('user_login')
 
     target_user = get_object_or_404(User, pk=pk)
-    target_user.is_active = not target_user.is_active
-    target_user.save()
-    status_str = "diaktifkan" if target_user.is_active else "dinonaktifkan"
-    catat_audit(request, 'Ubah Status User', f"Akun {target_user.email} {status_str}.")
-    messages.success(request, f"Akun {target_user.username} berhasil {status_str}!")
+    
+    # Ambil status saat ini sebelum diubah
+    status_sekarang = target_user.is_active
+
+    if status_sekarang:
+        # Jika sekarang aktif, ubah jadi nonaktif
+        target_user.is_active = False
+        target_user.save()
+        catat_audit(request, 'Ubah Status User', f"Akun {target_user.email} dinonaktifkan.")
+        messages.success(request, f"Akun {target_user.username} berhasil dinonaktifkan!")
+    else:
+        # Jika sekarang nonaktif, ubah jadi aktif
+        target_user.is_active = True
+        target_user.save()
+        catat_audit(request, 'Ubah Status User', f"Akun {target_user.email} diaktifkan.")
+        messages.success(request, f"Akun {target_user.username} berhasil diaktifkan!")
+
     return redirect('admin_kelola_user')
 
 
@@ -307,13 +317,11 @@ def berita_update(request, pk):
 @login_required(login_url='user_login')
 def berita_delete(request, pk):
     berita = get_object_or_404(Berita, pk=pk)
-    if request.method == 'POST':
-        judul = berita.judul
-        berita.delete()
-        catat_audit(request, 'Hapus Berita', f"Menghapus berita: {judul}")
-        messages.success(request, 'Berita berhasil dihapus!')
-        return redirect('admin_kelola_berita')
-    return render(request, 'core/Berita/delete_confirm.html', {'berita': berita})
+    judul = berita.judul
+    berita.delete()
+    catat_audit(request, 'Hapus Berita', f"Menghapus berita: {judul}")
+    messages.success(request, 'Berita berhasil dihapus!')
+    return redirect('admin_kelola_berita')
 
 
 # ==========================================
@@ -362,7 +370,7 @@ def dosen_delete(request, pk):
 
 
 # ==========================================
-# 6. CRUD KHUSUS TENDIK (Template diarahkan ke core/kependidikan/form.html)
+# 6. CRUD KHUSUS TENDIK
 # ==========================================
 
 @login_required(login_url='user_login')
@@ -432,7 +440,7 @@ def tenaga_kependidikan_delete(request, pk):
 @login_required(login_url='user_login')
 def user_create(request):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         messages.error(request, 'Akses ditolak!')
         return redirect('user_login')
@@ -453,7 +461,7 @@ def user_create(request):
 @login_required(login_url='user_login')
 def user_update(request, pk):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         messages.error(request, 'Akses ditolak!')
         return redirect('user_login')
@@ -474,7 +482,7 @@ def user_update(request, pk):
 @login_required(login_url='user_login')
 def user_delete(request, pk):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         messages.error(request, 'Akses ditolak!')
         return redirect('user_login')
@@ -498,7 +506,7 @@ def user_delete(request, pk):
 @login_required(login_url='user_login')
 def admin_kelola_sambutan(request):
     user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not (user_role == 'admin' or request.user.is_staff or request.user.is_superuser):
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         return redirect('user_login')
 
