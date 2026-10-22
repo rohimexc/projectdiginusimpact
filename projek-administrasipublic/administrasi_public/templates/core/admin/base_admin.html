@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin Portal - UNTAD{% endblock %}</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons & SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- DataTables CSS & jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- Include Sidebar Modular -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN UTAMA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <!-- Header / Navbar Atas Terpadu -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-2">
+        {% block page_header %}
+          <h1 class="text-base font-bold text-slate-800">Admin Portal</h1>
+        {% endblock %}
+      </div>
+
+      <!-- Profil & Username Kanan Atas -->
+      <div class="flex items-center gap-3">
+        <a href="{% url 'home' %}" target="_blank" class="text-xs text-teal-700 hover:underline flex items-center gap-1 font-medium mr-2">
+          <i class="bi bi-box-arrow-up-right"></i> Lihat Web
+        </a>
+        <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-900 font-bold flex items-center justify-center text-xs">
+          {{ request.user.username|make_list|first|upper }}
+        </div>
+        <div class="hidden sm:block text-right">
+          <p class="text-xs font-semibold text-slate-800 leading-tight">{{ request.user.username }}</p>
+          <span class="text-[10px] text-teal-600 font-medium">{{ request.user.email|default:"Administrator" }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Konten Halaman Spesifik -->
+    <main class="flex-1 p-6 md:p-8">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+  </div>
+
+  <!-- SweetAlert Flash Notification -->
+  <script>
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'info' %}info{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

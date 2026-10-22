@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons & SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN FORM DI DALAM DASHBOARD -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_kelola_tendik' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Kelola Tendik
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">{{ title }}</h1>
+      </div>
+      <a href="{% url 'tenaga_kependidikan_list' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+        <i class="bi bi-box-arrow-up-right text-[10px]"></i> Lihat Halaman Tendik
+      </a>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      <div class="max-w-4xl bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">{{ title }}</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Lengkapi profil tenaga kependidikan untuk portal akademik</p>
+          </div>
+          <a href="{% url 'admin_kelola_tendik' %}" class="text-slate-400 hover:text-slate-600 transition text-lg">
+            <i class="bi bi-x-lg"></i>
+          </a>
+        </div>
+
+        <!-- NOTIFIKASI ERROR JIKA VALIDASI GAGAL -->
+        {% if form.errors %}
+          <div class="mb-5 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
+            <p class="font-bold mb-1 flex items-center gap-1.5">
+              <i class="bi bi-exclamation-triangle-fill"></i> Ada kesalahan pada isian form:
+            </p>
+            <ul class="list-disc list-inside space-y-0.5 text-[11px]">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <form method="POST" action="" enctype="multipart/form-data" class="space-y-5 text-xs font-medium text-slate-700">
+          {% csrf_token %}
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Nama Lengkap -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">Nama Lengkap & Gelar <span class="text-rose-500">*</span></label>
+              {{ form.nama }}
+              {% for error in form.nama.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Jenis Kelamin -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">Jenis Kelamin</label>
+              {{ form.jenis_kelamin }}
+              {% for error in form.jenis_kelamin.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Bidang Ilmu / Jabatan -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">Bidang Ilmu / Unit Kerja</label>
+              {{ form.bidang_ilmu }}
+              {% for error in form.bidang_ilmu.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Status Pegawai -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">Status Kepegawaian</label>
+              {{ form.status }}
+              {% for error in form.status.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Pangkat / Golongan -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">Pangkat / Golongan</label>
+              {{ form.pangkat_golongan }}
+              {% for error in form.pangkat_golongan.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">Email</label>
+              {{ form.email }}
+              {% for error in form.email.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- NIP -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">NIP (Opsional)</label>
+              {{ form.nip }}
+              {% for error in form.nip.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- NIDN / NUPTK -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">NIDN / NUPTK (Opsional)</label>
+              {{ form.nidn }}
+              {% for error in form.nidn.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Nomor HP / WhatsApp -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">No. WhatsApp / HP</label>
+              {{ form.no_hp }}
+              {% for error in form.no_hp.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Foto -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">Foto Profil</label>
+              {{ form.foto }}
+              {% if form.instance.foto %}
+                <p class="text-[11px] text-teal-700 mt-1">Foto saat ini: {{ form.instance.foto.name }}</p>
+              {% endif %}
+              {% for error in form.foto.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-5 border-t border-slate-100 mt-6">
+            <a href="{% url 'admin_kelola_tendik' %}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              Batal
+            </a>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow transition">
+              Simpan Data Tendik
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  </script>
+</body>
+</html>
