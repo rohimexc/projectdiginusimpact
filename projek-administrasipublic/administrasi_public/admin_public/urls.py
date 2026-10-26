@@ -41,6 +41,9 @@ from core.views import (
     user_create,
     user_update,
     user_delete,
+    # View Kelola Halaman Tentang
+    admin_kelola_tentang,
+    tentang_detail,
 )
 
 urlpatterns = [
@@ -85,6 +88,10 @@ urlpatterns = [
     path('dashboard/', admin_dashboard, name='admin_dashboard'),
     path('dashboard/sambutan/', admin_kelola_sambutan, name='admin_kelola_sambutan'),
     path('dashboard/berita/', admin_kelola_berita, name='admin_kelola_berita'),
+    
+    # Rute Kelola Halaman Tentang (Profil, Visi Misi, Tujuan, dll)
+    path('dashboard/tentang/<str:kategori>/', admin_kelola_tentang, name='admin_kelola_tentang'),
+    path('tentang/<str:kategori>/', tentang_detail, name='tentang_detail'),
     
     # Rute Dosen Admin
     path('dashboard/dosen/', admin_kelola_dosen, name='admin_kelola_dosen'),

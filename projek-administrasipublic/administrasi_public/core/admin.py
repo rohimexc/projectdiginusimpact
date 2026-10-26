@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Sambutan, Galeri, Berita, TenagaPendidik
+from .models import HalamanTentang
 
 @admin.register(Sambutan)
 class SambutanAdmin(admin.ModelAdmin):
@@ -31,3 +32,9 @@ class TenagaPendidikAdmin(admin.ModelAdmin):
     search_fields = ('nama', 'bidang_ilmu', 'nidn', 'nip')
     list_filter = ('status', 'bidang_ilmu')
     ordering = ('nama',)
+    
+@admin.register(HalamanTentang)
+class HalamanTentangAdmin(admin.ModelAdmin):
+    list_display = ('judul', 'kategori', 'updated_at')
+    list_filter = ('kategori',)
+    search_fields = ('judul', 'isi')

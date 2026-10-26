@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Sambutan, Galeri, Berita, TenagaPendidik, AuditLog
-from .forms import BeritaForm, TenagaPendidikForm, UserForm, SambutanForm
+from .models import Sambutan, Galeri, Berita, TenagaPendidik, AuditLog, HalamanTentang
+from .forms import BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, HalamanTentangForm
 
 User = get_user_model()
 
@@ -261,18 +261,14 @@ def user_toggle_status(request, pk):
         return redirect('user_login')
 
     target_user = get_object_or_404(User, pk=pk)
-    
-    # Ambil status saat ini sebelum diubah
     status_sekarang = target_user.is_active
 
     if status_sekarang:
-        # Jika sekarang aktif, ubah jadi nonaktif
         target_user.is_active = False
         target_user.save()
         catat_audit(request, 'Ubah Status User', f"Akun {target_user.email} dinonaktifkan.")
         messages.success(request, f"Akun {target_user.username} berhasil dinonaktifkan!")
     else:
-        # Jika sekarang nonaktif, ubah jadi aktif
         target_user.is_active = True
         target_user.save()
         catat_audit(request, 'Ubah Status User', f"Akun {target_user.email} diaktifkan.")
@@ -532,3 +528,43 @@ def admin_kelola_sambutan(request):
         'form': form,
         'title': 'Kelola Sambutan Koordinator Prodi'
     })
+
+
+# ==========================================
+# 10. KELOLA HALAMAN TENTANG (PROFIL, VISI MISI, DLL)
+# ==========================================
+
+@login_required(login_url='user_login')
+def admin_kelola_tentang(request, kategori='profil'):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    default_judul = dict(HalamanTentang.KATEGORI_CHOICES).get(kategori, 'Halaman Tentang')
+    halaman, created = HalamanTentang.objects.get_or_create(
+        kategori=kategori,
+        defaults={'judul': default_judul, 'isi': '<p>Konten belum diisi.</p>'}
+    )
+
+    if request.method == 'POST':
+        form = HalamanTentangForm(request.POST, instance=halaman)
+        if form.is_valid():
+            form.save()
+            catat_audit(request, 'Edit Halaman Tentang', f"Memperbarui konten {halaman.get_kategori_display()}")
+            messages.success(request, f"{halaman.get_kategori_display()} berhasil diperbarui!")
+            return redirect('admin_kelola_tentang', kategori=kategori)
+    else:
+        form = HalamanTentangForm(instance=halaman)
+
+    return render(request, 'core/admin/tentang_form.html', {
+        'form': form,
+        'halaman': halaman,
+        'kategori_aktif': kategori,
+        'daftar_kategori': HalamanTentang.KATEGORI_CHOICES,
+        'title': f"Kelola {halaman.get_kategori_display()}"
+    })
+
+def tentang_detail(request, kategori):
+    halaman = get_object_or_404(HalamanTentang, kategori=kategori)
+    return render(request, 'core/admin/tentang_detail.html', {'halaman': halaman})

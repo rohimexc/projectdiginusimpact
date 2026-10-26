@@ -140,3 +140,25 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f"[{self.timestamp.strftime('%d/%m/%Y %H:%M')}] {self.action} oleh {self.user}"
+
+
+# 7. Model Halaman Tentang (Profil, Visi & Misi, dll - Satu Tabel)
+class HalamanTentang(models.Model):
+    KATEGORI_CHOICES = [
+        ('profil', 'Profil Program Studi'),
+        ('visi_misi', 'Visi & Misi'),
+        ('tujuan', 'Tujuan & Sasaran'),
+        ('sejarah', 'Sejarah Singkat'),
+        ('struktur', 'Struktur Organisasi'),
+    ]
+    kategori = models.CharField(max_length=50, choices=KATEGORI_CHOICES, unique=True)
+    judul = models.CharField(max_length=255)
+    isi = CKEditor5Field('Isi Konten', config_name='extends')
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Halaman Tentang"
+        verbose_name_plural = "Daftar Halaman Tentang"
+
+    def __str__(self):
+        return self.get_kategori_display()

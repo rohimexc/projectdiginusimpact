@@ -22,42 +22,49 @@
         <span>Ringkasan Dashboard</span>
       </a>
 
-      <!-- 2. Kelola Sambutan (CKEditor 5) -->
+      <!-- 2. Kelola Halaman Tentang (Profil, Visi & Misi, dsb) -->
+      <a href="{% url 'admin_kelola_tentang' 'profil' %}" 
+         class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'tentang' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
+        <i class="bi bi-info-circle text-base {% if 'tentang' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
+        <span>Kelola Menu Tentang</span>
+      </a>
+
+      <!-- 3. Kelola Sambutan (CKEditor 5) -->
       <a href="{% url 'admin_kelola_sambutan' %}" 
          class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if request.resolver_match.url_name == 'admin_kelola_sambutan' %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
         <i class="bi bi-chat-square-quote text-base {% if request.resolver_match.url_name == 'admin_kelola_sambutan' %}text-amber-400{% endif %}"></i>
         <span>Kelola Sambutan</span>
       </a>
 
-      <!-- 3. Kelola Berita -->
+      <!-- 4. Kelola Berita -->
       <a href="{% url 'admin_kelola_berita' %}" 
          class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'berita' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
         <i class="bi bi-newspaper text-base {% if 'berita' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
         <span>Kelola Berita</span>
       </a>
 
-      <!-- 4. Kelola Dosen -->
+      <!-- 5. Kelola Dosen -->
       <a href="{% url 'admin_kelola_dosen' %}" 
          class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'dosen' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
         <i class="bi bi-person-video3 text-base {% if 'dosen' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
         <span>Kelola Dosen</span>
       </a>
 
-      <!-- 5. Kelola Tendik -->
+      <!-- 6. Kelola Tendik -->
       <a href="{% url 'admin_kelola_tendik' %}" 
          class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'tendik' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
         <i class="bi bi-people text-base {% if 'tendik' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
         <span>Kelola Tendik</span>
       </a>
 
-      <!-- 6. Manajemen User -->
+      <!-- 7. Manajemen User -->
       <a href="{% url 'admin_kelola_user' %}" 
          class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'user' in request.resolver_match.url_name and request.resolver_match.url_name != 'user_login' and request.resolver_match.url_name != 'user_logout' %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
         <i class="bi bi-person-gear text-base {% if 'user' in request.resolver_match.url_name and request.resolver_match.url_name != 'user_login' and request.resolver_match.url_name != 'user_logout' %}text-amber-400{% endif %}"></i>
         <span>Manajemen User</span>
       </a>
 
-      <!-- 7. Lihat Website Utama -->
+      <!-- 8. Lihat Website Utama -->
       <div class="pt-3">
         <a href="{% url 'home' %}" target="_blank" 
            class="flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-slate-800/50 text-slate-400 hover:text-teal-300 transition">

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan
+from .models import HalamanTentang
 
 User = get_user_model()
 
@@ -204,4 +205,15 @@ class SambutanForm(forms.ModelForm):
                 attrs={'class': 'django_ckeditor_5'}, 
                 config_name='extends'
             )
+        }
+        
+class HalamanTentangForm(forms.ModelForm):
+    class Meta:
+        model = HalamanTentang
+        fields = ['judul', 'isi']
+        widgets = {
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
+                'placeholder': 'Masukkan judul halaman...'
+            }),
         }
