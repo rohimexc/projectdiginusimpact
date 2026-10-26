@@ -1,5 +1,16 @@
 from django.contrib import admin
-from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak
+from .models import (
+    Sambutan, Galeri, Berita, Akademik, 
+    TenagaPendidik, Dosen, Akreditasi, Kontak, TentangPage
+)
+
+
+@admin.register(TentangPage)
+class TentangPageAdmin(admin.ModelAdmin):
+    list_display = ('judul', 'slug', 'updated_at')
+    search_fields = ('judul', 'slug')
+    prepopulated_fields = {'slug': ('judul',)}
+
 
 @admin.register(Sambutan)
 class SambutanAdmin(admin.ModelAdmin):

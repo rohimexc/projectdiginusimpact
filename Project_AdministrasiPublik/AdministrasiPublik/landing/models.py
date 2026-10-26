@@ -3,6 +3,22 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 
+
+class TentangPage(models.Model):
+    judul = models.CharField(max_length=150, verbose_name="Nama Menu / Sub-Menu")
+    slug = models.SlugField(max_length=100, unique=True, help_text="Slug URL sub-menu (misal: profil, sejarah, visi, tujuan, profil-lulusan, sertifikat)")
+    konten = CKEditor5Field(blank=True, null=True, verbose_name="Isi Konten", config_name='extends')
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Konten Menu Tentang"
+        verbose_name_plural = "Konten Menu Tentang"
+        ordering = ['id']
+
+    def __str__(self):
+        return self.judul
+
+    
 class Sambutan(models.Model):
     judul = models.CharField(max_length=200, default="Sambutan Koordinator Prodi")
     nama_koor = models.CharField(max_length=150, default="Dr. Intam Kurnia, M.Si.")
@@ -22,11 +38,8 @@ class Galeri(models.Model):
 class Berita(models.Model):
     judul = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
-    gambar = models.ImageField(upload_to='berita/', blank=True, null=True) # Pastikan field ini ada
+    gambar = models.ImageField(upload_to='berita/', blank=True, null=True)
     konten = CKEditor5Field('Konten', config_name='extends')
-    post_date = models.DateTimeField(auto_now_add=True)
-    
-    # Sesuai permintaan: datetime create, update, dan post untuk pengurutan
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     post_date = models.DateTimeField(help_text="Tanggal dan waktu publikasi berita")
@@ -40,7 +53,8 @@ class Berita(models.Model):
         return self.judul
 
     class Meta:
-        ordering = ['-post_date'] # Urutkan otomatis berdasarkan post terbaru
+        ordering = ['-post_date']
+
 class Akademik(models.Model):
     judul_informasi = models.CharField(max_length=200)
     deskripsi = models.TextField()
@@ -52,9 +66,9 @@ class Akademik(models.Model):
 class TenagaPendidik(models.Model):
     nama = models.CharField(max_length=255)
     jk = models.CharField(max_length=1, choices=[('L', 'Laki-laki'), ('P', 'Perempuan')])
-    kategori = models.CharField(max_length=100, blank=True, null=True) # Bidang Ilmu / Unit Kerja
-    status = models.CharField(max_length=100, blank=True, null=True)    # Status Kepegawaian
-    pangkat = models.CharField(max_length=150, blank=True, null=True)   # Pangkat / Golongan
+    kategori = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(max_length=100, blank=True, null=True)
+    pangkat = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     nip = models.CharField(max_length=50, blank=True, null=True)
     nidn = models.CharField(max_length=50, blank=True, null=True)
@@ -123,12 +137,8 @@ class Kontak(models.Model):
 class AuditLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     aktivitas = models.TextField()
-    
-    # --- TAMBAHKAN DUA BARIS INI ---
     keterangan = models.CharField(max_length=255, default="-", blank=True, null=True)
     ip_address = models.CharField(max_length=50, default="-", blank=True, null=True)
-    # -----------------------------
-    
     waktu = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

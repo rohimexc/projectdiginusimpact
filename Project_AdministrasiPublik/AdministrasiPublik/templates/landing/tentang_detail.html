@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ konten_obj.judul|default:jenis|title }} - Administrasi Publik FISIP Universitas Tadulako
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Styling konten CKEditor 5 agar tampil rapi dan proporsional */
+    .ck-content h1, .ck-content h2, .ck-content h3, .ck-content h4 {
+        color: #0b5c5c;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .ck-content h1 { font-size: 1.5rem; }
+    .ck-content h2 { font-size: 1.25rem; }
+    .ck-content h3 { font-size: 1.1rem; }
+    .ck-content p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+        color: #334155;
+    }
+    .ck-content ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+    .ck-content ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+    .ck-content li {
+        margin-bottom: 0.35rem;
+        line-height: 1.6;
+    }
+    .ck-content blockquote {
+        border-left: 4px solid #008080;
+        padding-left: 1rem;
+        margin: 1.25rem 0;
+        font-style: italic;
+        color: #475569;
+        background-color: #f8fafc;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+    .ck-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.25rem 0;
+    }
+    .ck-content table th, .ck-content table td {
+        border: 1px solid #cbd5e1;
+        padding: 0.75rem;
+        text-align: left;
+    }
+    .ck-content table th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    .ck-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+        margin: 1rem 0;
+    }
+</style>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 py-12 min-h-[65vh]">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 space-y-6">
+
+        <!-- Judul Laman Berdasarkan Dropdown yang Dipilih -->
+        <div class="border-b border-slate-200 pb-4">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">
+                {{ konten_obj.judul|default:jenis|title }}
+            </h1>
+        </div>
+
+        {% if active_slug == 'sertifikat' and akreditasi %}
+        <div class="bg-teal-50/70 p-5 rounded-xl border border-teal-200 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
+            <div>
+                <p class="text-slate-500">Status Akreditasi:</p>
+                <p class="text-base font-bold text-tealBrand">{{ akreditasi.status_akreditasi }}</p>
+                <p class="text-slate-500 mt-1">No. SK: {{ akreditasi.nomor_sk }} | Berlaku hingga: {{ akreditasi.tanggal_kadaluarsa|date:"d M Y" }}</p>
+            </div>
+            {% if akreditasi.sertifikat %}
+            <a href="{{ akreditasi.sertifikat.url }}" target="_blank" class="px-4 py-2 bg-tealBrand hover:bg-tealDark text-white font-semibold rounded-lg transition inline-flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-download"></i> Unduh Sertifikat
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Isi Konten dari Dropdown yang Dipilih -->
+        <div class="ck-content text-slate-700 text-sm leading-relaxed">
+            {% if konten_obj and konten_obj.konten %}
+                {{ konten_obj.konten|safe }}
+            {% else %}
+                <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

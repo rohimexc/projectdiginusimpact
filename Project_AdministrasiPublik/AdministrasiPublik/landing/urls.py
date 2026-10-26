@@ -63,4 +63,8 @@ path('admin-portal/password-reset/',
              template_name='landing/user/password_reset_complete.html'
          ), 
          name='password_reset_complete'),
+    # URL untuk Manajemen Menu Tentang (Profil, Visi, Misi, dll)
+    path('admin-portal/tentang/', views.dashboard_tentang, name='dashboard_tentang'),
+    path('admin-portal/tentang/<int:pk>/edit/', views.dashboard_tentang_edit, name='dashboard_tentang_edit'),
+    path('tentang/<str:jenis>/', views.detail_tentang, name='detail_tentang'),
 ]

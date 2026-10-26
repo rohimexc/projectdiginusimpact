@@ -1,12 +1,32 @@
 from django import forms
-from .models import Sambutan, Galeri, Berita, Dosen, TenagaPendidik
+from .models import Sambutan, Galeri, Berita, Dosen, TenagaPendidik, TentangPage
 from django.core.exceptions import ValidationError
 import re
 from django_ckeditor_5.widgets import CKEditor5Widget
 from django.contrib.auth.models import User, Group
 from akun.models import UserProfile
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from django import forms
+
+
+class TentangPageForm(forms.ModelForm):
+    konten = forms.CharField(widget=CKEditor5Widget(config_name='extends'), required=False, label="Isi Konten")
+
+    class Meta:
+        model = TentangPage
+        fields = ['judul', 'slug', 'konten']
+        widgets = {
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Masukkan nama sub-menu (misal: Profil Program Studi)'
+            }),
+            'slug': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50',
+                'placeholder': 'misal: profil, sejarah, visi, dll'
+            }),
+        }
+
+
+
 
 class SambutanForm(forms.ModelForm):
     class Meta:
@@ -18,10 +38,12 @@ class SambutanForm(forms.ModelForm):
             'isi_sambutan': forms.Textarea(attrs={'class': 'w-full p-2 border rounded-lg', 'rows': 5}),
         }
 
+
 class GaleriForm(forms.ModelForm):
     class Meta:
         model = Galeri
         fields = ['judul', 'foto']
+
 
 # Form Berita (Lengkap dengan CKEditor 5 dan Peringatan Slug Bahasa Indonesia)
 class BeritaForm(forms.ModelForm):
@@ -51,10 +73,12 @@ class BeritaForm(forms.ModelForm):
             raise ValidationError("Slug hanya boleh berisi huruf, angka, garis bawah (_), atau tanda hubung (-), serta TIDAK BOLEH menggunakan spasi atau huruf besar.")
         return slug
 
+
 class TenagaPendidikForm(forms.ModelForm):
     class Meta:
         model = TenagaPendidik
         fields = ['nama', 'jk', 'kategori', 'status', 'pangkat', 'email', 'nip', 'nidn', 'telepon', 'foto']
+
 
 class DosenForm(forms.ModelForm):
     class Meta:
@@ -100,16 +124,15 @@ class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # Tambahkan styling Tailwind ke semua field form
         for field_name, field in self.fields.items():
             field.widget.attrs.update({
                 'class': 'w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800'
             })
             
-        # Ubah label ke bahasa Indonesia
         self.fields['old_password'].label = 'Password Lama'
         self.fields['new_password1'].label = 'Password Baru'
         self.fields['new_password2'].label = 'Konfirmasi Password Baru'
+
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -120,6 +143,7 @@ class CustomAuthenticationForm(AuthenticationForm):
         'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
         'placeholder': '••••••••'
     }))
+
 
 class AdminUserForm(forms.ModelForm):
     password = forms.CharField(
@@ -132,7 +156,6 @@ class AdminUserForm(forms.ModelForm):
     
     class Meta:
         model = User
-        # Tambahkan 'is_active' di sini
         fields = ['username', 'first_name', 'last_name', 'email', 'is_active', 'is_superuser', 'password']
         
     def save(self, commit=True):
@@ -145,29 +168,7 @@ class AdminUserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Isi hanya jika ingin mengganti password baru'
-        }), 
-        required=False, 
-        label="Password Baru"
-    )
-    
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'password']
-        
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        password = self.cleaned_data.get('password')
-        
-        # Hanya ubah password jika kolomnya benar-benar diketik
-        if password and password.strip():
-            user.set_password(password)
-            
-        if commit:
-            user.save()
-        return user
+
 
 # Pilihan Role
 ROLE_CHOICES = [
@@ -176,6 +177,7 @@ ROLE_CHOICES = [
     ('Editor', 'Editor'),
     ('Contributor', 'Contributor'),
 ]
+
 
 class AdminUserCreateForm(forms.ModelForm):
     is_superuser = forms.BooleanField(
@@ -195,22 +197,21 @@ class AdminUserCreateForm(forms.ModelForm):
         'class': 'w-full mt-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition',
         'placeholder': '••••••••'
     }))
-    
     is_active = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(attrs={
             'class': 'w-4 h-4 text-teal-600 bg-white border-slate-300 rounded focus:ring-teal-500 cursor-pointer'
         })
     )
+
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'groups', 'password']
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_superuser', 'groups', 'password', 'is_active']
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
         
-        # Jika is_superuser dicentang, otomatis jadikan is_staff juga
         if self.cleaned_data.get('is_superuser'):
             user.is_superuser = True
             user.is_staff = True
@@ -262,4 +263,3 @@ class AdminUserUpdateForm(forms.ModelForm):
             user.save()
             user.groups.set(self.cleaned_data['groups'])
         return user
-    

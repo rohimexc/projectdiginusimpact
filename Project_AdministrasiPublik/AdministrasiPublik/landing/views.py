@@ -10,6 +10,8 @@ from django.core.paginator import Paginator
 from akun.views import catat_riwayat_login
 from akun.models import RiwayatLogin, UserProfile
 from django.utils import timezone
+from .models import TentangPage
+from .forms import TentangPageForm
 
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
@@ -450,3 +452,64 @@ def dosen_delete(request, pk):
         messages.success(request, f"Data dosen '{nama_dosen}' berhasil dihapus!")
         return redirect('landing:dashboard_dosen')
     return redirect('landing:dashboard_dosen')
+
+@login_required(login_url='landing:login')
+def dashboard_tentang(request):
+    tentang_list = TentangPage.objects.all().order_by('id')
+    context = {
+        'tentang_list': tentang_list,
+    }
+    return render(request, 'landing/admin/dashboard_tentang.html', context)
+
+@login_required(login_url='landing:login')
+def dashboard_tentang_edit(request, pk):
+    item = get_object_or_404(TentangPage, pk=pk)
+
+    if request.method == 'POST':
+        form = TentangPageForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            catat_log(request, request.user, f"Memperbarui Konten Sub-Menu: '{item.judul}'", "Konten berhasil disimpan")
+            messages.success(request, f"Konten '{item.judul}' berhasil diperbarui!")
+            return redirect('landing:dashboard_tentang')
+        else:
+            messages.error(request, "Terjadi kesalahan saat menyimpan formulir. Silakan periksa kembali.")
+    else:
+        form = TentangPageForm(instance=item)
+
+    context = {
+        'form': form,
+        'item': item,
+    }
+    return render(request, 'landing/admin/dashboard_tentang_edit.html', context)
+
+def detail_tentang(request, jenis):
+    akreditasi = Akreditasi.objects.first()
+
+    # Normalisasi jenis slug
+    jenis_clean = jenis.strip().lower().replace('_', '-')
+    if jenis_clean in ['visimisi', 'visi-misi', 'misi']:
+        active_slug = 'visi'
+    elif jenis_clean in ['profil-lulusan', 'profillulusan']:
+        active_slug = 'profil-lulusan'
+    elif jenis_clean in ['sejarah', 'sejarah-hukum']:
+        active_slug = 'sejarah'
+    elif jenis_clean in ['sertifikat', 'akreditasi']:
+        active_slug = 'sertifikat'
+    elif jenis_clean == 'tujuan':
+        active_slug = 'tujuan'
+    else:
+        active_slug = 'profil'
+
+    konten_obj = TentangPage.objects.filter(slug=active_slug).first()
+    if not konten_obj:
+        konten_obj = TentangPage.objects.filter(slug=jenis).first()
+
+    context = {
+        'konten_obj': konten_obj,
+        'active_slug': active_slug,
+        'jenis': jenis,
+        'akreditasi': akreditasi,
+    }
+    return render(request, 'landing/tentang_detail.html', context)
+

@@ -43,12 +43,16 @@
                 
                 <!-- Dropdown Tentang (Teks utamanya bisa diklik ke #sambutan) -->
                 <div class="relative group cursor-pointer py-2">
-                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                    <a href="{% url 'landing:landing_home' %}#sambutan" class="hover:text-amber-300 flex items-center gap-1">
                         Tentang <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </a>
-                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
-                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sambutan Koorprodi</a>
-                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Visi & Misi</a>
+                    <div class="absolute top-full left-0 w-52 bg-white text-slate-800 shadow-xl rounded-xl py-2 hidden group-hover:block border border-slate-100 z-50">
+                        <a href="{% url 'landing:detail_tentang' jenis='profil' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Profil Program Studi</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='sejarah' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sejarah & Dasar Hukum</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='visi' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Visi & Misi</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='tujuan' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Tujuan</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='profil-lulusan' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Profil Lulusan</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sertifikat Akreditasi</a>
                     </div>
                 </div>
 
