@@ -1,0 +1,513 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - Admin Portal UNTAD</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { 
+              teal: '#0b7285', 
+              darkteal: '#084c5a', 
+              deepteal: '#05313a', 
+              gold: '#fab005', 
+              accent: '#ffd43b',
+              navy: '#0c3957',
+              pillbg: '#f0f7fa',
+              circlebg: '#eef5f9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- Include Sidebar Admin -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Header Admin Atas -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">{{ title }}</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="{% url 'tentang_detail' 'visi_misi' %}" target="_blank" class="text-xs font-semibold text-brand-teal hover:underline flex items-center gap-1.5 bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100 transition">
+          <i class="bi bi-box-arrow-up-right text-[11px]"></i> Lihat Halaman Publik
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      <!-- Header Khusus Visi, Misi & Tujuan -->
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-6">
+        <div class="flex items-center gap-2">
+          <span class="px-4 py-2 rounded-xl bg-teal-800 text-white text-xs font-semibold shadow-sm flex items-center gap-1.5">
+            <i class="bi bi-compass text-amber-400"></i> Kelola Visi, Misi & Tujuan
+          </span>
+        </div>
+        <a href="{% url 'admin_kelola_tentang' 'profil' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-info-circle text-[11px]"></i> Kelola Menu Tentang (Profil, Sejarah, Struktur) &rarr;
+        </a>
+      </div>
+
+      <!-- Form Utama Pengelolaan Visi, Misi, dan Tujuan -->
+      <form method="POST" id="formVisiMisi" class="space-y-8 max-w-5xl">
+        {% csrf_token %}
+
+        <!-- ================= 1. KELOLA VISI ================= -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-teal-50 text-brand-teal flex items-center justify-center font-bold text-sm">
+                1
+              </span>
+              <div>
+                <h2 class="text-base font-bold text-slate-800">Visi Program Studi</h2>
+                <p class="text-xs text-slate-400">Pernyataan visi utama Program Studi Administrasi Publik</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200/60">
+              Kartu Dark Navy + Yellow Border
+            </span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Teks Pernyataan Visi</label>
+              <textarea 
+                name="visi_teks" 
+                id="visi_teks" 
+                rows="4" 
+                required 
+                class="w-full text-xs sm:text-sm p-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition leading-relaxed"
+                placeholder="Tuliskan visi program studi di sini...">{{ visi_obj.visi_teks }}</textarea>
+            </div>
+
+            <!-- Live Preview Visi Card -->
+            <div>
+              <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Pratinjau Tampilan Visi:</p>
+              <div class="bg-[#0c3957] text-white rounded-xl p-5 sm:p-6 border-l-[6px] border-[#fab005] shadow-sm">
+                <h4 class="text-lg font-bold text-[#fab005] mb-2">Visi</h4>
+                <p id="preview_visi_teks" class="text-slate-100 text-xs sm:text-sm leading-relaxed">
+                  {{ visi_obj.visi_teks }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 2. KELOLA MISI ================= -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-teal-50 text-brand-teal flex items-center justify-center font-bold text-sm">
+                2
+              </span>
+              <div>
+                <h2 class="text-base font-bold text-slate-800">Misi Program Studi</h2>
+                <p class="text-xs text-slate-400">Daftar kartu misi bernomor urut dengan aksen kuning</p>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              onclick="tambahMisiItem()" 
+              class="px-3.5 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-brand-teal border border-teal-200/80 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+              <i class="bi bi-plus-circle"></i> Tambah Poin Misi
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Kalimat Pengantar Misi</label>
+              <input 
+                type="text" 
+                name="misi_intro" 
+                value="{{ visi_obj.misi_intro }}" 
+                required 
+                class="w-full text-xs sm:text-sm p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                placeholder="Contoh: Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:">
+            </div>
+
+            <!-- Container Daftar Poin Misi -->
+            <div id="misiContainer" class="space-y-3 pt-2">
+              {% for item in daftar_misi %}
+                <div class="misi-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 flex items-start gap-3 transition">
+                  <span class="misi-badge w-8 h-8 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-xs flex items-center justify-center shrink-0 mt-1 border border-slate-200/60">
+                    {{ forloop.counter }}
+                  </span>
+                  <div class="flex-1">
+                    <textarea 
+                      name="misi_isi[]" 
+                      rows="2" 
+                      required 
+                      class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                      placeholder="Tuliskan isi poin misi...">{{ item.isi }}</textarea>
+                  </div>
+                  <button 
+                    type="button" 
+                    onclick="hapusItem(this, 'misi')" 
+                    class="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition" 
+                    title="Hapus Poin Ini">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+              {% empty %}
+                <div class="misi-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 flex items-start gap-3 transition">
+                  <span class="misi-badge w-8 h-8 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-xs flex items-center justify-center shrink-0 mt-1 border border-slate-200/60">
+                    1
+                  </span>
+                  <div class="flex-1">
+                    <textarea 
+                      name="misi_isi[]" 
+                      rows="2" 
+                      required 
+                      class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                      placeholder="Tuliskan isi poin misi..."></textarea>
+                  </div>
+                  <button 
+                    type="button" 
+                    onclick="hapusItem(this, 'misi')" 
+                    class="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition" 
+                    title="Hapus Poin Ini">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 3. KELOLA TUJUAN ================= -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-teal-50 text-brand-teal flex items-center justify-center font-bold text-sm">
+                3
+              </span>
+              <div>
+                <h2 class="text-base font-bold text-slate-800">Tujuan Pendidikan</h2>
+                <p class="text-xs text-slate-400">Daftar kartu tujuan dengan judul, subjudul (English), dan deskripsi</p>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              onclick="tambahTujuanItem()" 
+              class="px-3.5 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-brand-teal border border-teal-200/80 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+              <i class="bi bi-plus-circle"></i> Tambah Poin Tujuan
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Kalimat Pengantar Tujuan</label>
+              <input 
+                type="text" 
+                name="tujuan_intro" 
+                value="{{ visi_obj.tujuan_intro }}" 
+                required 
+                class="w-full text-xs sm:text-sm p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                placeholder="Contoh: Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:">
+            </div>
+
+            <!-- Container Daftar Poin Tujuan -->
+            <div id="tujuanContainer" class="space-y-4 pt-2">
+              {% for item in daftar_tujuan %}
+                <div class="tujuan-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 sm:p-5 transition">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <div class="flex items-center gap-2.5">
+                      <span class="tujuan-badge w-8 h-8 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-xs flex items-center justify-center border border-slate-200/60">
+                        {{ forloop.counter }}
+                      </span>
+                      <span class="text-xs font-bold text-slate-700">Poin Tujuan {{ forloop.counter }}</span>
+                    </div>
+                    <button 
+                      type="button" 
+                      onclick="hapusItem(this, 'tujuan')" 
+                      class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition" 
+                      title="Hapus Tujuan Ini">
+                      <i class="bi bi-trash3"></i>
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Judul (Indonesia)</label>
+                      <input 
+                        type="text" 
+                        name="tujuan_judul[]" 
+                        value="{{ item.judul }}" 
+                        required 
+                        class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                        placeholder="Contoh: Employabilitas">
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Subjudul (English / Italic)</label>
+                      <input 
+                        type="text" 
+                        name="tujuan_subjudul[]" 
+                        value="{{ item.subjudul|default:'' }}" 
+                        class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                        placeholder="Contoh: Employability">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Deskripsi Tujuan</label>
+                    <textarea 
+                      name="tujuan_deskripsi[]" 
+                      rows="3" 
+                      required 
+                      class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition leading-relaxed"
+                      placeholder="Tuliskan deskripsi lengkap tujuan di sini...">{{ item.deskripsi }}</textarea>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="tujuan-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 sm:p-5 transition">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <div class="flex items-center gap-2.5">
+                      <span class="tujuan-badge w-8 h-8 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-xs flex items-center justify-center border border-slate-200/60">
+                        1
+                      </span>
+                      <span class="text-xs font-bold text-slate-700">Poin Tujuan 1</span>
+                    </div>
+                    <button 
+                      type="button" 
+                      onclick="hapusItem(this, 'tujuan')" 
+                      class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition" 
+                      title="Hapus Tujuan Ini">
+                      <i class="bi bi-trash3"></i>
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Judul (Indonesia)</label>
+                      <input 
+                        type="text" 
+                        name="tujuan_judul[]" 
+                        required 
+                        class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                        placeholder="Contoh: Employabilitas">
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Subjudul (English / Italic)</label>
+                      <input 
+                        type="text" 
+                        name="tujuan_subjudul[]" 
+                        class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                        placeholder="Contoh: Employability">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Deskripsi Tujuan</label>
+                    <textarea 
+                      name="tujuan_deskripsi[]" 
+                      rows="3" 
+                      required 
+                      class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition leading-relaxed"
+                      placeholder="Tuliskan deskripsi lengkap tujuan di sini..."></textarea>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Simpan Perubahan -->
+        <div class="sticky bottom-6 z-10 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-xl flex items-center justify-between gap-4">
+          <div class="text-xs text-slate-500 hidden sm:block">
+            <i class="bi bi-info-circle text-brand-teal mr-1"></i>
+            Perubahan yang disimpan akan langsung tampil di halaman depan dan halaman Visi Misi.
+          </div>
+          <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+            <a href="{% url 'tentang_detail' 'visi_misi' %}" target="_blank" class="px-5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-semibold transition">
+              Buka Pratinjau
+            </a>
+            <button 
+              type="submit" 
+              class="px-7 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow-md transition flex items-center gap-2">
+              <i class="bi bi-check2-circle text-base"></i> Simpan Semua Perubahan
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </main>
+  </div>
+
+  <!-- JavaScript Interaktif Tambah / Hapus Item & Live Preview -->
+  <script>
+    // Live preview teks visi
+    const inputVisi = document.getElementById('visi_teks');
+    const previewVisi = document.getElementById('preview_visi_teks');
+    if (inputVisi && previewVisi) {
+      inputVisi.addEventListener('input', function() {
+        previewVisi.textContent = this.value || 'Teks visi akan muncul di sini...';
+      });
+    }
+
+    // Fungsi update nomor urut badge Misi
+    function updateMisiBadges() {
+      const rows = document.querySelectorAll('.misi-row');
+      rows.forEach((row, index) => {
+        const badge = row.querySelector('.misi-badge');
+        if (badge) badge.textContent = index + 1;
+      });
+    }
+
+    // Fungsi update nomor urut badge Tujuan
+    function updateTujuanBadges() {
+      const rows = document.querySelectorAll('.tujuan-row');
+      rows.forEach((row, index) => {
+        const badge = row.querySelector('.tujuan-badge');
+        if (badge) badge.textContent = index + 1;
+        const label = row.querySelector('.text-slate-700');
+        if (label) label.textContent = 'Poin Tujuan ' + (index + 1);
+      });
+    }
+
+    // Tambah Poin Misi
+    function tambahMisiItem() {
+      const container = document.getElementById('misiContainer');
+      const count = container.querySelectorAll('.misi-row').length + 1;
+      const html = `
+        <div class="misi-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 flex items-start gap-3 transition">
+          <span class="misi-badge w-8 h-8 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-xs flex items-center justify-center shrink-0 mt-1 border border-slate-200/60">
+            ${count}
+          </span>
+          <div class="flex-1">
+            <textarea 
+              name="misi_isi[]" 
+              rows="2" 
+              required 
+              class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+              placeholder="Tuliskan isi poin misi..."></textarea>
+          </div>
+          <button 
+            type="button" 
+            onclick="hapusItem(this, 'misi')" 
+            class="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition" 
+            title="Hapus Poin Ini">
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', html);
+      updateMisiBadges();
+    }
+
+    // Tambah Poin Tujuan
+    function tambahTujuanItem() {
+      const container = document.getElementById('tujuanContainer');
+      const count = container.querySelectorAll('.tujuan-row').length + 1;
+      const html = `
+        <div class="tujuan-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 sm:p-5 transition">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="tujuan-badge w-8 h-8 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-xs flex items-center justify-center border border-slate-200/60">
+                ${count}
+              </span>
+              <span class="text-xs font-bold text-slate-700">Poin Tujuan ${count}</span>
+            </div>
+            <button 
+              type="button" 
+              onclick="hapusItem(this, 'tujuan')" 
+              class="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition" 
+              title="Hapus Tujuan Ini">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Judul (Indonesia)</label>
+              <input 
+                type="text" 
+                name="tujuan_judul[]" 
+                required 
+                class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                placeholder="Contoh: Employabilitas">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Subjudul (English / Italic)</label>
+              <input 
+                type="text" 
+                name="tujuan_subjudul[]" 
+                class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition"
+                placeholder="Contoh: Employability">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">Deskripsi Tujuan</label>
+            <textarea 
+              name="tujuan_deskripsi[]" 
+              rows="3" 
+              required 
+              class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal outline-none transition leading-relaxed"
+              placeholder="Tuliskan deskripsi lengkap tujuan di sini..."></textarea>
+          </div>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', html);
+      updateTujuanBadges();
+    }
+
+    // Hapus item
+    function hapusItem(btn, type) {
+      const container = type === 'misi' ? document.getElementById('misiContainer') : document.getElementById('tujuanContainer');
+      const rows = container.querySelectorAll(type === 'misi' ? '.misi-row' : '.tujuan-row');
+      
+      if (rows.length <= 1) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Tidak Bisa Dihapus',
+          text: 'Minimal harus ada 1 poin ' + type + '.',
+          confirmButtonColor: '#0b7285'
+        });
+        return;
+      }
+
+      const row = btn.closest(type === 'misi' ? '.misi-row' : '.tujuan-row');
+      row.remove();
+      if (type === 'misi') updateMisiBadges();
+      else updateTujuanBadges();
+    }
+  </script>
+
+  <!-- SweetAlert Flash Notifications -->
+  {% if messages %}
+    <script>
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'info' %}info{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    </script>
+  {% endif %}
+
+</body>
+</html>
+

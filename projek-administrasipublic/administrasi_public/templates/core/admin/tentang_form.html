@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  {{ form.media }}
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  {% include 'core/admin/sidebar.html' %}
+
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">{{ title }}</h1>
+      </div>
+      <a href="{% url 'tentang_detail' kategori_aktif %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+        <i class="bi bi-box-arrow-up-right text-[10px]"></i> Lihat Halaman Publik
+      </a>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      <!-- Tab Navigasi Kategori Halaman Tentang -->
+      <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-200 pb-3">
+        {% for kat_kode, kat_nama in daftar_kategori %}
+          <a href="{% url 'admin_kelola_tentang' kat_kode %}" 
+             class="px-4 py-2 rounded-xl text-xs font-semibold transition {% if kategori_aktif == kat_kode %}bg-teal-800 text-white shadow-sm{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-slate-50{% endif %}">
+            {{ kat_nama }}
+          </a>
+        {% endfor %}
+      </div>
+
+      <!-- Form CKEditor -->
+      <div class="max-w-4xl bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <h2 class="text-lg font-bold text-slate-800 mb-1">{{ halaman.get_kategori_display }}</h2>
+        <p class="text-xs text-slate-400 mb-6">Terakhir diperbarui: {{ halaman.updated_at|date:"d M Y, H:i" }}</p>
+
+        <form method="POST" class="space-y-5">
+          {% csrf_token %}
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Judul Halaman</label>
+            {{ form.judul }}
+            {% for err in form.judul.errors %}
+              <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+            {% endfor %}
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Isi Konten</label>
+            {{ form.isi }}
+            {% for err in form.isi.errors %}
+              <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex justify-end">
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow transition">
+              Simpan Perubahan
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .ck-editor__editable_inline {
+      min-height: 280px;
+      font-size: 0.85rem;
+    }
+  </style>
+
+  {% if messages %}
+    <script>
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    </script>
+  {% endif %}
+</body>
+</html>

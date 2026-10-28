@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Masuk - Administrasi Publik UNTAD</title>
+
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              hovergold: '#e59900',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 min-h-screen flex items-center justify-center p-0 md:p-6 antialiased selection:bg-brand-gold selection:text-slate-900">
+
+  <!-- Main Container -->
+  <div class="w-full max-w-5xl min-h-screen md:min-h-[620px] bg-white md:rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-slate-200/80">
+    
+    <!-- SISI KIRI: Branding Visual Kampus -->
+    <div class="relative hidden md:flex md:w-1/2 bg-brand-deepteal flex-col justify-between p-12 text-white overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-brand-teal/90 via-brand-darkteal/95 to-brand-deepteal z-10"></div>
+      <div class="absolute -top-24 -left-24 w-80 h-80 bg-brand-gold/20 rounded-full blur-3xl z-0"></div>
+      <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-400/20 rounded-full blur-3xl z-0"></div>
+      
+      <div class="relative z-20 flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 text-brand-gold text-xl shadow-lg">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h2 class="text-sm font-bold tracking-wide">Administrasi Publik</h2>
+          <p class="text-[11px] text-slate-300">FISIP Universitas Tadulako</p>
+        </div>
+      </div>
+
+      <div class="relative z-20 my-auto py-8">
+        <span class="inline-block px-3 py-1 bg-brand-gold/20 border border-brand-gold/40 text-brand-accent text-[11px] font-semibold rounded-full uppercase tracking-wider mb-4">
+          Integrated Portal System
+        </span>
+        <h1 class="text-3xl font-extrabold leading-tight tracking-tight text-white mb-4">
+          Kelola Tata Kelola Informasi Akademik Secara Terpadu.
+        </h1>
+        <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
+          Akses masuk khusus pengelola, staf pengajar, dan tenaga kependidikan untuk pembaruan data prodi, artikel berita, dan kepegawaian.
+        </p>
+      </div>
+
+      <div class="relative z-20 pt-6 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-300">
+        <span>&copy; 2026 FISIP UNTAD</span>
+        <span class="flex items-center gap-1.5"><i class="fas fa-shield-alt text-brand-gold"></i> Secure Area</span>
+      </div>
+    </div>
+
+    <!-- SISI KANAN: Form Login Gmail -->
+    <div class="w-full md:w-1/2 flex flex-col justify-between p-8 sm:p-12 md:p-14 bg-white">
+      
+      <div class="flex items-center justify-between">
+        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-brand-teal transition">
+          <i class="fas fa-arrow-left text-[11px]"></i>
+          <span>Kembali ke Website</span>
+        </a>
+        <span class="md:hidden text-xs font-bold text-brand-teal">FISIP UNTAD</span>
+      </div>
+
+      <div class="my-auto py-6">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Selamat Datang</h2>
+          <p class="text-xs text-slate-500 mt-1.5">Silakan masuk menggunakan akun Gmail petugas Anda.</p>
+        </div>
+
+        <!-- Alert Error Message -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class="mb-5 flex items-center gap-2.5 p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs animate-shake">
+              <i class="fas fa-circle-exclamation text-sm shrink-0"></i>
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'user_login' %}" class="space-y-4">
+          {% csrf_token %}
+
+          <!-- Field Email / Gmail -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Alamat Email / Gmail</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-4 text-slate-400 text-xs">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <input 
+                type="email" 
+                name="email" 
+                required 
+                autofocus
+                autocomplete="email"
+                placeholder="nama@gmail.com" 
+                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
+              >
+            </div>
+          </div>
+
+          <!-- Field Password -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Kata Sandi</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-4 text-slate-400 text-xs">
+                <i class="fas fa-lock"></i>
+              </span>
+              <input 
+                type="password" 
+                id="loginPassword"
+                name="password" 
+                required 
+                autocomplete="current-password"
+                placeholder="Masukkan kata sandi" 
+                class="w-full pl-11 pr-11 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
+              >
+              <button 
+                type="button" 
+                id="togglePassBtn"
+                tabindex="-1"
+                class="absolute right-4 text-slate-400 hover:text-slate-600 focus:outline-none"
+              >
+                <i class="fas fa-eye text-xs" id="eyeIcon"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Remember Me & Lupa Sandi -->
+          <div class="flex items-center justify-between text-xs pt-1">
+            <label class="flex items-center gap-2 text-slate-600 cursor-pointer select-none">
+              <input type="checkbox" class="w-3.5 h-3.5 rounded border-slate-300 text-brand-teal focus:ring-brand-teal">
+              <span>Ingat sesi saya</span>
+            </label>
+            <a href="{% url 'password_reset' %}" class="text-teal-700 hover:text-teal-900 hover:underline font-semibold transition">
+              Lupa kata sandi?
+            </a>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-2">
+            <button 
+              type="submit" 
+              class="w-full py-3.5 px-4 bg-brand-teal hover:bg-brand-darkteal active:scale-[0.99] text-white text-xs font-semibold rounded-xl shadow-lg shadow-brand-teal/25 transition duration-200 flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Masuk ke Panel Kontrol</span>
+              <i class="fas fa-arrow-right text-[11px]"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="text-center pt-4 border-t border-slate-100">
+        <p class="text-[11px] text-slate-400">
+          Program Studi Administrasi Publik &bull; FISIP UNTAD
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Toggle Show/Hide Password -->
+  <script>
+    const togglePassBtn = document.getElementById('togglePassBtn');
+    const loginPassword = document.getElementById('loginPassword');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    if (togglePassBtn && loginPassword && eyeIcon) {
+      togglePassBtn.addEventListener('click', () => {
+        const isPassword = loginPassword.getAttribute('type') === 'password';
+        loginPassword.setAttribute('type', isPassword ? 'text' : 'password');
+        eyeIcon.classList.toggle('fa-eye', !isPassword);
+        eyeIcon.classList.toggle('fa-eye-slash', isPassword);
+      });
+    }
+  </script>
+
+</body>
+</html>

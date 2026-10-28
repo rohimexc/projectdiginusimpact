@@ -1,0 +1,286 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola Dosen - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons & SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- DataTables CSS & jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN UTAMA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">Manajemen Dosen Pengajar</h1>
+      </div>
+      <!-- User Profile Kanan Atas -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-brand-gold text-slate-900 font-bold flex items-center justify-center text-xs">
+          {{ request.user.username|make_list|first|upper }}
+        </div>
+        <div class="hidden sm:block text-right">
+          <p class="text-xs font-semibold text-slate-800 leading-tight">{{ request.user.username }}</p>
+          <span class="text-[10px] text-teal-600 font-medium">{{ request.user.email }}</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 w-full">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Daftar Tenaga Pengajar (Dosen)</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Kelola data dosen prodi lengkap dengan NIDN, NIP, dan jabatan fungsional</p>
+          </div>
+          <a href="{% url 'dosen_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-sm">
+            <i class="bi bi-plus-lg"></i> Tambah Dosen Baru
+          </a>
+        </div>
+
+        <table id="tabelDosen" class="display w-full text-xs text-slate-600">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nama Lengkap</th>
+              <th>Bidang Keilmuan</th>
+              <th>Status</th>
+              <th>NIDN / NIP</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in daftar_dosen %}
+              <tr>
+                <td class="w-12">
+                  <div class="w-10 h-10 rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-200">
+                    {% if d.foto %}
+                      <img src="{{ d.foto.url }}" alt="{{ d.nama }}" class="w-full h-full object-cover">
+                    {% else %}
+                      <i class="bi bi-person-fill text-slate-300 text-lg"></i>
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="font-semibold text-slate-800">{{ d.nama }}</td>
+                <td>{{ d.bidang_ilmu }}</td>
+                <td>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-brand-teal border border-teal-200">
+                    {{ d.status }}
+                  </span>
+                </td>
+                <td>{{ d.nidn|default:d.nip|default:"-" }}</td>
+                <td class="text-center">
+                  <div class="inline-flex items-center gap-1.5">
+                    <!-- Tombol View Detail (Membuka Modal) -->
+                    <button type="button" 
+                            onclick="bukaModalDetail(
+                              '{{ d.nama|escapejs }}',
+                              '{% if d.foto %}{{ d.foto.url }}{% endif %}',
+                              '{{ d.get_jenis_kelamin_display|default:d.jenis_kelamin|escapejs }}',
+                              '{{ d.bidang_ilmu|default:"-"|escapejs }}',
+                              '{{ d.status|default:"-"|escapejs }}',
+                              '{{ d.pangkat_golongan|default:"-"|escapejs }}',
+                              '{{ d.nip|default:"-"|escapejs }}',
+                              '{{ d.nidn|default:"-"|escapejs }}',
+                              '{{ d.nuptk|default:"-"|escapejs }}',
+                              '{{ d.email|default:"-"|escapejs }}',
+                              '{{ d.no_hp|default:"-"|escapejs }}',
+                              'Dosen Pengajar'
+                            )"
+                            title="Lihat Detail Dosen" 
+                            class="p-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition border border-teal-200">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <!-- Edit Dosen -->
+                    <a href="{% url 'dosen_update' d.pk %}" title="Edit Data Dosen" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <!-- Hapus Dosen -->
+                    <a href="{% url 'dosen_delete' d.pk %}" onclick="return confirm('Apakah Anda yakin ingin menghapus data dosen ini?')" title="Hapus Data Dosen" class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- POP-UP MODAL VIEW DETAIL DOSEN -->
+  <div id="modalDetail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
+      
+      <!-- Header Modal -->
+      <div class="bg-gradient-to-r from-teal-800 to-teal-900 px-6 py-4 flex items-center justify-between text-white">
+        <div class="flex items-center gap-2.5">
+          <i class="bi bi-person-badge text-xl text-amber-300"></i>
+          <div>
+            <h3 class="text-sm font-bold leading-tight" id="modalJudul">Detail Data Dosen</h3>
+            <span class="text-[10px] text-teal-200" id="modalSubjudul">Program Studi Administrasi Publik</span>
+          </div>
+        </div>
+        <button type="button" onclick="tutupModalDetail()" class="text-teal-200 hover:text-white text-lg transition">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Isi Modal -->
+      <div class="p-6 max-h-[75vh] overflow-y-auto space-y-5">
+        <!-- Foto & Nama Utama -->
+        <div class="flex items-center gap-4 pb-4 border-b border-slate-100">
+          <div class="w-16 h-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 shadow-sm flex items-center justify-center">
+            <img id="modalFoto" src="" alt="Foto Dosen" class="w-full h-full object-cover hidden">
+            <i id="modalIconEmpty" class="bi bi-person text-3xl text-slate-300"></i>
+          </div>
+          <div>
+            <h4 id="modalNama" class="text-sm font-bold text-slate-800 leading-snug">Nama Dosen</h4>
+            <span id="modalStatus" class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200 uppercase">Status</span>
+            <p id="modalBidang" class="text-xs text-slate-500 mt-1">Bidang Ilmu</p>
+          </div>
+        </div>
+
+        <!-- Tabel Rincian Data -->
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Jenis Kelamin</span>
+            <p id="modalGender" class="font-semibold text-slate-700 mt-0.5">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Pangkat / Golongan</span>
+            <p id="modalPangkat" class="font-semibold text-slate-700 mt-0.5">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">NIDN</span>
+            <p id="modalNidn" class="font-semibold text-slate-700 mt-0.5 font-mono">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">NIP</span>
+            <p id="modalNip" class="font-semibold text-slate-700 mt-0.5 font-mono">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">NUPTK</span>
+            <p id="modalNuptk" class="font-semibold text-slate-700 mt-0.5 font-mono">-</p>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">No. WhatsApp / HP</span>
+            <p id="modalHp" class="font-semibold text-slate-700 mt-0.5 font-mono">-</p>
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+          <span class="text-[10px] font-bold text-slate-400 uppercase">Email</span>
+          <p id="modalEmail" class="font-semibold text-teal-700 mt-0.5 break-all">-</p>
+        </div>
+      </div>
+
+      <!-- Footer Modal -->
+      <div class="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end">
+        <button type="button" onclick="tutupModalDetail()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs rounded-xl transition">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#tabelDosen').DataTable({
+        lengthMenu: [
+          [5, 10, 25, -1],
+          [5, 10, 25, "All"]
+        ],
+        pageLength: 5,
+        language: {
+          search: "Cari Dosen:",
+          lengthMenu: "Tampilkan _MENU_ data",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ dosen",
+          paginate: { next: "Berikutnya", previous: "Sebelumnya" },
+          emptyTable: "Belum ada data dosen"
+        }
+      });
+    });
+
+    // Fungsi Pop-up Modal View Detail
+    function bukaModalDetail(nama, fotoUrl, gender, bidang, status, pangkat, nip, nidn, nuptk, email, hp, kategori) {
+      document.getElementById('modalNama').innerText = nama;
+      document.getElementById('modalStatus').innerText = status;
+      document.getElementById('modalBidang').innerText = bidang;
+      document.getElementById('modalGender').innerText = gender;
+      document.getElementById('modalPangkat').innerText = pangkat;
+      document.getElementById('modalNip').innerText = nip;
+      document.getElementById('modalNidn').innerText = nidn;
+      document.getElementById('modalNuptk').innerText = nuptk;
+      document.getElementById('modalEmail').innerText = email;
+      document.getElementById('modalHp').innerText = hp;
+      document.getElementById('modalJudul').innerText = "Detail " + kategori;
+
+      var imgElem = document.getElementById('modalFoto');
+      var iconElem = document.getElementById('modalIconEmpty');
+      if (fotoUrl && fotoUrl !== '') {
+        imgElem.src = fotoUrl;
+        imgElem.classList.remove('hidden');
+        iconElem.classList.add('hidden');
+      } else {
+        imgElem.classList.add('hidden');
+        iconElem.classList.remove('hidden');
+      }
+
+      document.getElementById('modalDetail').classList.remove('hidden');
+    }
+
+    function tutupModalDetail() {
+      document.getElementById('modalDetail').classList.add('hidden');
+    }
+
+    // Tutup saat klik latar belakang gelap
+    document.getElementById('modalDetail').addEventListener('click', function(e) {
+      if (e.target === this) {
+        tutupModalDetail();
+      }
+    });
+
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  </script>
+</body>
+</html>

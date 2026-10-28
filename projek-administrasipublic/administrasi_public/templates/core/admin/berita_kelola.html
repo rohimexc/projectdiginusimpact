@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola Berita - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons & SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- DataTables CSS & jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN UTAMA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">Manajemen Berita</h1>
+      </div>
+      <a href="{% url 'home' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+        <i class="bi bi-box-arrow-up-right text-[10px]"></i> Website Publik
+      </a>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden w-full p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Manajemen Berita Terbaru</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Daftar postingan berita yang tampil di website publik</p>
+          </div>
+          <a href="{% url 'berita_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-sm self-start sm:self-auto">
+            <i class="bi bi-plus-lg"></i> Tambah Berita Baru
+          </a>
+        </div>
+
+        <div class="w-full overflow-x-auto">
+          <table id="tabelBerita" class="display w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-100">
+              <tr>
+                <th class="py-3.5 px-6">Judul Berita</th>
+                <th class="py-3.5 px-6">Tanggal Post</th>
+                <th class="py-3.5 px-6 text-center w-28">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {% for b in daftar_berita %}
+                <tr class="hover:bg-slate-50/70 transition">
+                  <td class="py-4 px-6 font-semibold text-slate-800">{{ b.judul }}</td>
+                  <td class="py-4 px-6 text-slate-500">{{ b.posted_at|date:"d M Y, H:i" }}</td>
+                  <td class="py-4 px-6 text-center align-middle">
+                    <div class="inline-flex items-center justify-center gap-1.5">
+                      <!-- Tombol Preview -->
+                      <a href="{% url 'berita_detail' b.pk %}" target="_blank" title="Lihat Tampilan Publik" class="p-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition border border-teal-200">
+                        <i class="bi bi-eye"></i>
+                      </a>
+                      <!-- Tombol Edit -->
+                      <a href="{% url 'berita_update' b.pk %}" title="Edit Data Berita" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                        <i class="bi bi-pencil-square"></i>
+                      </a>
+                      <!-- Tombol Hapus (Dialog Konfirmasi) -->
+                      <button type="button" 
+                              onclick="konfirmasiHapusBerita('{% url 'berita_delete' b.pk %}', '{{ b.judul|escapejs }}')" 
+                              title="Hapus Berita" 
+                              class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3" class="py-12 text-center text-slate-400">
+                    <i class="bi bi-inbox text-3xl mb-2 text-slate-300 block"></i>
+                    Belum ada postingan berita.
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL KONFIRMASI HAPUS BERITA -->
+  <div id="modalHapusBerita" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 md:p-8 text-center animate-in fade-in zoom-in duration-200">
+      
+      <!-- Icon Trash Kotak Pink -->
+      <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600 text-2xl shadow-inner">
+        <i class="bi bi-trash3-fill"></i>
+      </div>
+
+      <!-- Judul & Keterangan -->
+      <h3 class="text-lg font-bold text-slate-800 mb-2">Hapus Berita?</h3>
+      <p class="text-xs text-slate-500 leading-relaxed mb-6">
+        Apakah Anda yakin ingin menghapus postingan <br>
+        <span id="targetJudulBerita" class="font-bold text-slate-800">"Judul Berita"</span>? <br>
+        <span class="text-[11px] text-slate-400">Tindakan ini tidak dapat dibatalkan.</span>
+      </p>
+
+      <!-- Tombol Aksi -->
+      <div class="flex items-center justify-center gap-3">
+        <button type="button" 
+                onclick="tutupModalHapusBerita()"
+                class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+          Batal
+        </button>
+        <a id="btnKonfirmasiHapusBerita" 
+           href="#" 
+           class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition shadow-sm">
+          Ya, Hapus
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#tabelBerita').DataTable({
+        lengthMenu: [
+          [5, 10, 25, -1],
+          [5, 10, 25, "All"]
+        ],
+        pageLength: 5,
+        language: {
+          search: "Cari Berita:",
+          lengthMenu: "Tampilkan _MENU_ data",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ berita",
+          paginate: { next: "Berikutnya", previous: "Sebelumnya" },
+          emptyTable: "Belum ada berita"
+        }
+      });
+    });
+
+    // Dialog Konfirmasi Hapus Berita
+    function konfirmasiHapusBerita(urlHapus, judul) {
+      document.getElementById('targetJudulBerita').innerText = '"' + judul + '"';
+      document.getElementById('btnKonfirmasiHapusBerita').setAttribute('href', urlHapus);
+      document.getElementById('modalHapusBerita').classList.remove('hidden');
+    }
+
+    function tutupModalHapusBerita() {
+      document.getElementById('modalHapusBerita').classList.add('hidden');
+    }
+
+    document.getElementById('modalHapusBerita').addEventListener('click', function(e) {
+      if (e.target === this) {
+        tutupModalHapusBerita();
+      }
+    });
+
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  </script>
+
+</body>
+</html>

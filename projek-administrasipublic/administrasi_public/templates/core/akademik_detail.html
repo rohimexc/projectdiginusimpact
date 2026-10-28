@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ halaman.judul }} - Administrasi Publik FISIP UNTAD</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              hovergold: '#e59900',
+              accent: '#ffd43b',
+              navy: '#0c3957',
+              pillbg: '#f0f7fa',
+              circlebg: '#eef5f9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- Header / Navbar Lengkap Sesuai Index -->
+  <nav class="fixed top-0 left-0 w-full h-[70px] bg-brand-teal flex justify-between items-center px-6 md:px-10 z-50 shadow-md">
+    <div class="flex items-center gap-3 text-white">
+      <i class="fas fa-graduation-cap text-3xl text-[#fcc419]"></i>
+      <div>
+        <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
+        <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      </div>
+    </div>
+
+    <ul class="hidden lg:flex list-none items-center gap-4">
+      <li><a href="{% url 'home' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Beranda</a></li>
+      
+      <!-- Dropdown Menu Tentang -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition flex items-center gap-1.5 focus:outline-none">
+          Tentang <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tentang_detail' 'profil' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-university text-brand-gold w-4"></i> Profil Program Studi
+            </a>
+            <a href="{% url 'tentang_detail' 'visi_misi' %}#visi" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-bullseye text-brand-gold w-4"></i> Visi & Misi
+            </a>
+            <a href="{% url 'tentang_detail' 'visi_misi' %}#tujuan" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-award text-brand-gold w-4"></i> Tujuan & Sasaran
+            </a>
+            <a href="{% url 'tentang_detail' 'sejarah' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-history text-brand-gold w-4"></i> Sejarah Singkat
+            </a>
+            <a href="{% url 'tentang_detail' 'struktur' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-sitemap text-brand-gold w-4"></i> Struktur Organisasi
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="{% url 'home' %}#penelitian" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Galeri</a></li>
+      <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Berita</a></li>
+      
+      <!-- Dropdown Menu Akademik Sesuai Foto -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition flex items-center gap-1.5 focus:outline-none">
+          Akademik <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition {% if halaman.kategori == 'siga8' %}bg-teal-50 text-brand-teal font-semibold{% endif %}">
+              <i class="fas fa-desktop text-brand-gold w-4"></i> SIGA-8
+            </a>
+            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition {% if halaman.kategori == 'kurikulum' %}bg-teal-50 text-brand-teal font-semibold{% endif %}">
+              <i class="fas fa-book-open text-brand-gold w-4"></i> Kurikulum
+            </a>
+            <a href="{% url 'akademik_detail' 'jadwal' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition {% if halaman.kategori == 'jadwal' %}bg-teal-50 text-brand-teal font-semibold{% endif %}">
+              <i class="fas fa-calendar-alt text-brand-gold w-4"></i> Jadwal Perkuliahan
+            </a>
+            <a href="{% url 'akademik_detail' 'rps' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition {% if halaman.kategori == 'rps' %}bg-teal-50 text-brand-teal font-semibold{% endif %}">
+              <i class="fas fa-file-signature text-brand-gold w-4"></i> RPS
+            </a>
+            <a href="{% url 'akademik_detail' 'panduan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition {% if halaman.kategori == 'panduan' %}bg-teal-50 text-brand-teal font-semibold{% endif %}">
+              <i class="fas fa-book-bookmark text-brand-gold w-4"></i> Panduan Akademik
+            </a>
+          </div>
+        </div>
+      </li>
+      
+      <!-- Dropdown Staf -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition flex items-center gap-1.5 focus:outline-none">
+          Staf <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-52 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tenaga_pendidik_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-chalkboard-teacher text-brand-gold w-4"></i> Tenaga Pengajar
+            </a>
+            <a href="{% url 'tenaga_kependidikan_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-user-gear text-brand-gold w-4"></i> Tenaga Kependidikan
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Akreditasi <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+    </ul>
+  </nav>
+
+  <!-- Konten Utama -->
+  <main class="flex-1 pt-28 pb-20 px-6">
+    <div class="max-w-5xl mx-auto">
+      
+      <!-- Breadcrumb Navigasi -->
+      <nav class="flex items-center gap-2 text-xs text-slate-400 mb-6 font-medium">
+        <a href="{% url 'home' %}" class="hover:text-brand-teal transition">Beranda</a>
+        <span>/</span>
+        <span class="text-slate-500">Akademik</span>
+        <span>/</span>
+        <span class="text-brand-teal font-semibold">{{ halaman.get_kategori_display }}</span>
+      </nav>
+
+      <!-- Pill Navigasi Cepat Antar Sub-Menu Akademik Sesuai Foto -->
+      <div class="flex flex-wrap items-center gap-2.5 mb-8">
+        {% for kat_kode, kat_nama in daftar_kategori %}
+          <a href="{% url 'akademik_detail' kat_kode %}" 
+             class="px-5 py-2 text-xs font-semibold rounded-lg border transition-all duration-200 shadow-sm inline-flex items-center gap-2 {% if kategori_aktif == kat_kode %}bg-[#0c3957] text-white border-[#0c3957]{% else %}border-sky-200/90 bg-[#f0f7fa] text-[#0f3057] hover:bg-slate-200/60{% endif %}">
+            {% if kat_kode == 'siga8' %}
+              <i class="fas fa-desktop {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+            {% elif kat_kode == 'kurikulum' %}
+              <i class="fas fa-book-open {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+            {% elif kat_kode == 'jadwal' %}
+              <i class="fas fa-calendar-alt {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+            {% elif kat_kode == 'rps' %}
+              <i class="fas fa-file-signature {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+            {% elif kat_kode == 'panduan' %}
+              <i class="fas fa-book-bookmark {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+            {% endif %}
+            <span>{{ kat_nama }}</span>
+          </a>
+        {% endfor %}
+      </div>
+
+      <!-- Wadah Konten Utama Halaman Akademik -->
+      <article class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-slate-200/80 mb-8">
+        
+        <!-- Header Halaman -->
+        <div class="border-b border-slate-100 pb-6 mb-8">
+          <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 border border-teal-100 px-3.5 py-1 rounded-full mb-3">
+            Layanan Akademik
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2 leading-tight">
+            {{ halaman.judul }}
+          </h1>
+          {% if halaman.subjudul %}
+            <p class="text-sm text-slate-500 mb-3 leading-relaxed">
+              {{ halaman.subjudul }}
+            </p>
+          {% endif %}
+          <p class="text-xs text-slate-400 flex items-center gap-1.5">
+            <i class="far fa-clock"></i> Terakhir diperbarui: {{ halaman.updated_at|date:"d F Y, H:i" }} WITA
+          </p>
+        </div>
+
+        <!-- Banner Khusus Tautan Eksternal (Misal Portal SIGA-8) -->
+        {% if halaman.link_eksternal %}
+          <div class="mb-8 p-6 bg-gradient-to-r from-teal-800 to-teal-900 rounded-2xl text-white shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-400 text-slate-900 px-2.5 py-0.5 rounded-full inline-block mb-1.5">
+                Portal Resmi
+              </span>
+              <h2 class="text-base sm:text-lg font-bold">Akses Langsung Sistem Informasi</h2>
+              <p class="text-xs text-slate-200 mt-0.5">Buka portal akademik resmi untuk pengisian KRS, KHS, dan evaluasi studi.</p>
+            </div>
+            <a href="{{ halaman.link_eksternal }}" target="_blank" rel="noopener noreferrer" 
+               class="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-bold rounded-xl shadow transition duration-200 inline-flex items-center justify-center gap-2 shrink-0">
+              <span>Buka Portal SIGA-8</span>
+              <i class="fas fa-external-link-alt text-xs"></i>
+            </a>
+          </div>
+        {% endif %}
+
+        <!-- Tombol Download Dokumen Utama jika ada -->
+        {% if halaman.file_utama %}
+          <div class="mb-8 p-4 bg-slate-50 border border-slate-200/90 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
+                <i class="fas fa-file-pdf"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-slate-800">{{ halaman.nama_file_utama|default:"Unduh Berkas Lengkap" }}</p>
+                <p class="text-[11px] text-slate-400">Dokumen resmi Program Studi Administrasi Publik</p>
+              </div>
+            </div>
+            <a href="{{ halaman.file_utama.url }}" download 
+               class="px-4 py-2 bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold rounded-xl shadow-sm transition inline-flex items-center justify-center gap-2 shrink-0">
+              <i class="fas fa-download text-xs"></i>
+              <span>Unduh Berkas</span>
+            </a>
+          </div>
+        {% endif %}
+
+        <!-- Isi Konten Rich-Text CKEditor -->
+        <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed text-sm space-y-4">
+          {{ halaman.isi|safe }}
+        </div>
+
+        <!-- Daftar Dokumen Unduhan Tambahan -->
+        {% if daftar_dokumen %}
+          <div class="mt-12 pt-8 border-t border-slate-200/90">
+            <h2 class="text-base font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <i class="fas fa-folder-open text-brand-gold"></i>
+              Berkas & Dokumen Unduhan Terkait
+            </h2>
+            <p class="text-xs text-slate-500 mb-5">Silakan unduh dokumen panduan atau jadwal resmi berikut:</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {% for doc in daftar_dokumen %}
+                <div class="p-4 bg-slate-50 hover:bg-teal-50/50 border border-slate-200/90 rounded-2xl transition duration-200 flex items-center justify-between gap-3">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg shrink-0">
+                      <i class="fas fa-file-arrow-down"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <p class="text-xs font-bold text-slate-800 truncate">{{ doc.judul }}</p>
+                      {% if doc.keterangan %}
+                        <p class="text-[10px] text-slate-400 truncate">{{ doc.keterangan }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <a href="{{ doc.file.url }}" download 
+                     class="px-3 py-1.5 bg-white hover:bg-teal-800 hover:text-white text-brand-teal text-xs font-semibold rounded-lg border border-slate-200 shadow-sm transition shrink-0 flex items-center gap-1.5"
+                     title="Unduh {{ doc.judul }}">
+                    <i class="fas fa-download text-[10px]"></i>
+                    <span>Unduh</span>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-brand-darkteal text-white py-6 text-center text-xs text-slate-300 border-t border-white/10 mt-auto">
+    &copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako.
+  </footer>
+
+</body>
+</html>
+
