@@ -1,17 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog, Dosen
+from .models import (
+    Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog, Dosen,
+    TentangPage, VisiMisiTujuan, MisiItem, TujuanItem,
+    AkademikPage, DokumenAkademik
+)
 from django.db.models import Q
-from .forms import BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, CustomAuthenticationForm, DosenForm
+from .forms import (
+    BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, 
+    CustomAuthenticationForm, DosenForm, TentangPageForm,
+    VisiMisiTujuanForm, MisiItemForm, TujuanItemForm,
+    AkademikPageForm, DokumenAkademikForm
+)
 from django.core.paginator import Paginator
 from akun.views import catat_riwayat_login
 from akun.models import RiwayatLogin, UserProfile
 from django.utils import timezone
-from .models import TentangPage
-from .forms import TentangPageForm
 
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
@@ -38,8 +46,10 @@ def tentang(request):
     return render(request, 'landing/tentang.html', {'sambutan': sambutan})
 
 def akademik(request):
-    akademik_list = Akademik.objects.all()
-    return render(request, 'landing/akademik.html', {'akademik_list': akademik_list})
+    first_page = AkademikPage.objects.filter(is_active=True).first()
+    if first_page:
+        return redirect('landing:detail_akademik', slug=first_page.slug)
+    return redirect('landing:landing_home')
 
 # 1. Halaman Daftar Berita (DENGAN SEARCH & FILTER TANGGAL)
 def berita_list_view(request):
@@ -455,61 +465,379 @@ def dosen_delete(request, pk):
 
 @login_required(login_url='landing:login')
 def dashboard_tentang(request):
-    tentang_list = TentangPage.objects.all().order_by('id')
+    tentang_list = TentangPage.objects.exclude(slug__in=['visi', 'tujuan', 'visimisi', 'visi-misi']).order_by('id')
+    
+    # Ambil sub-menu yang sedang dipilih untuk diedit (dari param ?edit=<id> atau item pertama)
+    edit_id = request.GET.get('edit')
+    selected_item = None
+    if edit_id:
+        selected_item = TentangPage.objects.filter(pk=edit_id).exclude(slug__in=['visi', 'tujuan', 'visimisi', 'visi-misi']).first()
+    if not selected_item and tentang_list.exists():
+        selected_item = tentang_list.first()
+
+    # Jika ada POST untuk update konten sub-menu
+    if request.method == 'POST' and 'update_tentang' in request.POST:
+        target_id = request.POST.get('target_id')
+        target_item = get_object_or_404(TentangPage, pk=target_id)
+        edit_form = TentangPageForm(request.POST, instance=target_item)
+        if edit_form.is_valid():
+            edit_form.save()
+            catat_log(request, request.user, f"Memperbarui Konten Sub-Menu: '{target_item.judul}'", "Konten berhasil disimpan")
+            messages.success(request, f"Konten sub-menu '{target_item.judul}' berhasil diperbarui!")
+            return redirect(f"/admin-portal/tentang/?edit={target_item.pk}#editPanel")
+        else:
+            messages.error(request, "Terjadi kesalahan saat menyimpan formulir. Silakan periksa kembali.")
+            selected_item = target_item
+    else:
+        edit_form = TentangPageForm(instance=selected_item) if selected_item else None
+
     context = {
         'tentang_list': tentang_list,
+        'selected_item': selected_item,
+        'edit_form': edit_form,
     }
     return render(request, 'landing/admin/dashboard_tentang.html', context)
+
 
 @login_required(login_url='landing:login')
 def dashboard_tentang_edit(request, pk):
     item = get_object_or_404(TentangPage, pk=pk)
+    if item.slug in ['visi', 'tujuan', 'visimisi', 'visi-misi']:
+        return redirect('landing:dashboard_visi_misi_tujuan')
+    return redirect(f"/admin-portal/tentang/?edit={pk}#editPanel")
+
+
+# --- MANAJEMEN VISI, MISI, DAN TUJUAN ---
+@login_required(login_url='landing:login')
+def dashboard_visi_misi_tujuan(request):
+    visi_misi_obj, _ = VisiMisiTujuan.objects.get_or_create(
+        id=1,
+        defaults={
+            'visi': 'Menjadi Program Studi Administrasi Publik yang unggul secara global dan bereputasi nasional dalam pengembangan ilmu administrasi publik dan tata kelola pemerintahan yang adaptif, berintegritas, dan berwawasan lingkungan.',
+            'pengantar_misi': 'Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:',
+            'pengantar_tujuan': 'Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:'
+        }
+    )
 
     if request.method == 'POST':
-        form = TentangPageForm(request.POST, instance=item)
-        if form.is_valid():
-            form.save()
-            catat_log(request, request.user, f"Memperbarui Konten Sub-Menu: '{item.judul}'", "Konten berhasil disimpan")
-            messages.success(request, f"Konten '{item.judul}' berhasil diperbarui!")
-            return redirect('landing:dashboard_tentang')
+        form_visi = VisiMisiTujuanForm(request.POST, instance=visi_misi_obj)
+        if form_visi.is_valid():
+            form_visi.save()
+            catat_log(request, request.user, "Memperbarui Rumusan Visi & Kalimat Pengantar", "Data Visi & Pengantar berhasil diperbarui")
+            messages.success(request, "Visi dan kalimat pengantar berhasil diperbarui!")
+            return redirect('landing:dashboard_visi_misi_tujuan')
         else:
-            messages.error(request, "Terjadi kesalahan saat menyimpan formulir. Silakan periksa kembali.")
+            messages.error(request, "Terjadi kesalahan saat menyimpan Visi. Periksa kembali form.")
     else:
-        form = TentangPageForm(instance=item)
+        form_visi = VisiMisiTujuanForm(instance=visi_misi_obj)
+
+    misi_list = MisiItem.objects.all().order_by('urutan', 'id')
+    tujuan_list = TujuanItem.objects.all().order_by('urutan', 'id')
 
     context = {
-        'form': form,
-        'item': item,
+        'visi_misi_obj': visi_misi_obj,
+        'form_visi': form_visi,
+        'form_misi': MisiItemForm(),
+        'form_tujuan': TujuanItemForm(),
+        'misi_list': misi_list,
+        'tujuan_list': tujuan_list,
     }
-    return render(request, 'landing/admin/dashboard_tentang_edit.html', context)
+    return render(request, 'landing/admin/dashboard_visi_misi_tujuan.html', context)
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def misi_create(request):
+    form = MisiItemForm(request.POST)
+    if form.is_valid():
+        misi = form.save(commit=False)
+        misi.visi_misi = VisiMisiTujuan.objects.first()
+        misi.save()
+        catat_log(request, request.user, f"Menambahkan Poin Misi Baru (Urutan {misi.urutan})", "Item misi berhasil ditambahkan")
+        messages.success(request, f"Item Misi urutan ke-{misi.urutan} berhasil ditambahkan!")
+    else:
+        messages.error(request, "Gagal menambahkan item misi. Pastikan data terisi dengan benar.")
+    return redirect('landing:dashboard_visi_misi_tujuan')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def misi_update(request, pk):
+    misi = get_object_or_404(MisiItem, pk=pk)
+    form = MisiItemForm(request.POST, instance=misi)
+    if form.is_valid():
+        form.save()
+        catat_log(request, request.user, f"Memperbarui Poin Misi (Urutan {misi.urutan})", "Item misi berhasil diperbarui")
+        messages.success(request, f"Item Misi urutan ke-{misi.urutan} berhasil diperbarui!")
+    else:
+        messages.error(request, "Gagal memperbarui item misi.")
+    return redirect('landing:dashboard_visi_misi_tujuan')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def misi_delete(request, pk):
+    misi = get_object_or_404(MisiItem, pk=pk)
+    urutan = misi.urutan
+    misi.delete()
+    catat_log(request, request.user, f"Menghapus Poin Misi (Urutan {urutan})", "Item misi telah dihapus")
+    messages.success(request, f"Item Misi urutan ke-{urutan} berhasil dihapus!")
+    return redirect('landing:dashboard_visi_misi_tujuan')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def tujuan_create(request):
+    form = TujuanItemForm(request.POST)
+    if form.is_valid():
+        tujuan = form.save(commit=False)
+        tujuan.visi_misi = VisiMisiTujuan.objects.first()
+        tujuan.save()
+        catat_log(request, request.user, f"Menambahkan Poin Tujuan Baru: '{tujuan.judul}'", "Item tujuan berhasil ditambahkan")
+        messages.success(request, f"Item Tujuan '{tujuan.judul}' berhasil ditambahkan!")
+    else:
+        messages.error(request, "Gagal menambahkan item tujuan. Pastikan data terisi dengan benar.")
+    return redirect('landing:dashboard_visi_misi_tujuan')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def tujuan_update(request, pk):
+    tujuan = get_object_or_404(TujuanItem, pk=pk)
+    form = TujuanItemForm(request.POST, instance=tujuan)
+    if form.is_valid():
+        form.save()
+        catat_log(request, request.user, f"Memperbarui Poin Tujuan: '{tujuan.judul}'", "Item tujuan berhasil diperbarui")
+        messages.success(request, f"Item Tujuan '{tujuan.judul}' berhasil diperbarui!")
+    else:
+        messages.error(request, "Gagal memperbarui item tujuan.")
+    return redirect('landing:dashboard_visi_misi_tujuan')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def tujuan_delete(request, pk):
+    tujuan = get_object_or_404(TujuanItem, pk=pk)
+    judul = tujuan.judul
+    tujuan.delete()
+    catat_log(request, request.user, f"Menghapus Poin Tujuan: '{judul}'", "Item tujuan telah dihapus")
+    messages.success(request, f"Item Tujuan '{judul}' berhasil dihapus!")
+    return redirect('landing:dashboard_visi_misi_tujuan')
+
 
 def detail_tentang(request, jenis):
     akreditasi = Akreditasi.objects.first()
 
+    tentang_nav_list = [
+        {
+            'slug': 'profil',
+            'title': 'Profil Program Studi',
+            'subjudul': 'Profil lengkap Program Studi Sarjana (S1) Administrasi Publik FISIP Universitas Tadulako',
+            'icon': 'fa-solid fa-university'
+        },
+        {
+            'slug': 'sejarah',
+            'title': 'Sejarah & Dasar Hukum',
+            'subjudul': 'Tonggak sejarah pendirian dan landasan hukum operasional program studi',
+            'icon': 'fa-solid fa-landmark'
+        },
+        {
+            'slug': 'visi',
+            'title': 'Visi, Misi & Tujuan',
+            'subjudul': 'Arah strategis, komitmen mutu, dan capaian tujuan pendidikan',
+            'icon': 'fa-solid fa-bullseye'
+        },
+        {
+            'slug': 'profil-lulusan',
+            'title': 'Profil Lulusan',
+            'subjudul': 'Capaian kompetensi dan prospek karir profesional lulusan',
+            'icon': 'fa-solid fa-user-graduate'
+        },
+        {
+            'slug': 'sertifikat',
+            'title': 'Sertifikat Akreditasi',
+            'subjudul': 'Status peringkat akreditasi resmi program studi oleh BAN-PT',
+            'icon': 'fa-solid fa-award'
+        },
+    ]
+
     # Normalisasi jenis slug
     jenis_clean = jenis.strip().lower().replace('_', '-')
-    if jenis_clean in ['visimisi', 'visi-misi', 'misi']:
-        active_slug = 'visi'
-    elif jenis_clean in ['profil-lulusan', 'profillulusan']:
-        active_slug = 'profil-lulusan'
-    elif jenis_clean in ['sejarah', 'sejarah-hukum']:
-        active_slug = 'sejarah'
-    elif jenis_clean in ['sertifikat', 'akreditasi']:
-        active_slug = 'sertifikat'
-    elif jenis_clean == 'tujuan':
-        active_slug = 'tujuan'
-    else:
-        active_slug = 'profil'
+    is_visi_misi_tujuan = jenis_clean in ['visimisi', 'visi-misi', 'misi', 'visi', 'tujuan']
 
-    konten_obj = TentangPage.objects.filter(slug=active_slug).first()
-    if not konten_obj:
-        konten_obj = TentangPage.objects.filter(slug=jenis).first()
+    if is_visi_misi_tujuan:
+        active_slug = 'visi'
+        visi_misi_obj, _ = VisiMisiTujuan.objects.get_or_create(
+            id=1,
+            defaults={
+                'visi': 'Menjadi Program Studi Administrasi Publik yang unggul secara global dan bereputasi nasional dalam pengembangan ilmu administrasi publik dan tata kelola pemerintahan yang adaptif, berintegritas, dan berwawasan lingkungan.',
+                'pengantar_misi': 'Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:',
+                'pengantar_tujuan': 'Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:'
+            }
+        )
+        misi_list = MisiItem.objects.all().order_by('urutan', 'id')
+        tujuan_list = TujuanItem.objects.all().order_by('urutan', 'id')
+        konten_obj = TentangPage.objects.filter(slug='visi').first()
+        target_section = 'tujuan' if jenis_clean == 'tujuan' else ('misi' if jenis_clean == 'misi' else 'visi')
+        current_nav = next((item for item in tentang_nav_list if item['slug'] == 'visi'), None)
+    else:
+        if jenis_clean in ['profil-lulusan', 'profillulusan']:
+            active_slug = 'profil-lulusan'
+        elif jenis_clean in ['sejarah', 'sejarah-hukum']:
+            active_slug = 'sejarah'
+        elif jenis_clean in ['sertifikat', 'akreditasi']:
+            active_slug = 'sertifikat'
+        else:
+            active_slug = 'profil'
+
+        konten_obj = TentangPage.objects.filter(slug=active_slug).first()
+        if not konten_obj:
+            konten_obj = TentangPage.objects.filter(slug=jenis).first()
+        visi_misi_obj = None
+        misi_list = []
+        tujuan_list = []
+        target_section = None
+        current_nav = next((item for item in tentang_nav_list if item['slug'] == active_slug), None)
+
+    current_title = konten_obj.judul if konten_obj else (current_nav['title'] if current_nav else jenis.title())
+    current_subjudul = current_nav['subjudul'] if current_nav else ''
 
     context = {
         'konten_obj': konten_obj,
         'active_slug': active_slug,
         'jenis': jenis,
         'akreditasi': akreditasi,
+        'is_visi_misi_tujuan': is_visi_misi_tujuan,
+        'visi_misi_obj': visi_misi_obj,
+        'misi_list': misi_list,
+        'tujuan_list': tujuan_list,
+        'target_section': target_section,
+        'tentang_nav_list': tentang_nav_list,
+        'current_title': current_title,
+        'current_subjudul': current_subjudul,
     }
     return render(request, 'landing/tentang_detail.html', context)
+
+
+# ==============================================================================
+# MENU AKADEMIK (PUBLIK & ADMIN PORTAL)
+# ==============================================================================
+
+def detail_akademik(request, slug):
+    akademik_list = AkademikPage.objects.filter(is_active=True).order_by('urutan', 'id')
+    current_page = get_object_or_404(AkademikPage, slug=slug, is_active=True)
+    dokumen_list = current_page.dokumen_list.all().order_by('-uploaded_at')
+
+    context = {
+        'current_page': current_page,
+        'akademik_list': akademik_list,
+        'dokumen_list': dokumen_list,
+    }
+    return render(request, 'landing/akademik_detail.html', context)
+
+
+@login_required(login_url='landing:login')
+def dashboard_akademik(request):
+    akademik_list = AkademikPage.objects.all().order_by('urutan', 'id')
+    
+    # Tentukan sub-menu yang sedang dipilih untuk diedit (dari ?edit=<id> atau item pertama)
+    edit_id = request.GET.get('edit')
+    selected_item = None
+    if edit_id:
+        selected_item = AkademikPage.objects.filter(pk=edit_id).first()
+    if not selected_item and akademik_list.exists():
+        selected_item = akademik_list.first()
+
+    # Form untuk modal tambah sub-menu baru
+    create_form = AkademikPageForm()
+
+    # Proses update sub-menu yang sedang dipilih
+    if request.method == 'POST' and 'update_akademik' in request.POST:
+        target_id = request.POST.get('target_id')
+        target_item = get_object_or_404(AkademikPage, pk=target_id)
+        edit_form = AkademikPageForm(request.POST, request.FILES, instance=target_item)
+        if edit_form.is_valid():
+            edit_form.save()
+            catat_log(request, request.user, f"Memperbarui Konten Sub-Menu Akademik: '{target_item.judul}'", "Konten akademik berhasil disimpan")
+            messages.success(request, f"Konten sub-menu '{target_item.judul}' berhasil diperbarui!")
+            return redirect(f"/admin-portal/akademik/?edit={target_item.pk}#editPanel")
+        else:
+            messages.error(request, "Terjadi kesalahan saat menyimpan formulir. Silakan periksa kembali.")
+            selected_item = target_item
+    else:
+        edit_form = AkademikPageForm(instance=selected_item) if selected_item else None
+
+    dokumen_list = selected_item.dokumen_list.all().order_by('-uploaded_at') if selected_item else []
+    dokumen_form = DokumenAkademikForm()
+
+    context = {
+        'akademik_list': akademik_list,
+        'selected_item': selected_item,
+        'edit_form': edit_form,
+        'create_form': create_form,
+        'dokumen_list': dokumen_list,
+        'dokumen_form': dokumen_form,
+    }
+    return render(request, 'landing/admin/dashboard_akademik.html', context)
+
+
+@login_required(login_url='landing:login')
+def dashboard_akademik_edit(request, pk):
+    # Pengalihan langsung ke halaman terpadu dashboard_akademik
+    return redirect(f"/admin-portal/akademik/?edit={pk}#editPanel")
+
+
+@login_required(login_url='landing:login')
+def akademik_create(request):
+    if request.method == 'POST':
+        form = AkademikPageForm(request.POST, request.FILES)
+        if form.is_valid():
+            item = form.save()
+            catat_log(request, request.user, f"Menambahkan Sub-Menu Akademik: '{item.judul}'", "Sub-menu akademik baru ditambahkan")
+            messages.success(request, f"Sub-menu '{item.judul}' berhasil ditambahkan!")
+            return redirect(f"/admin-portal/akademik/?edit={item.pk}#editPanel")
+        else:
+            messages.error(request, "Terjadi kesalahan saat menambahkan sub-menu. Pastikan data terisi dengan benar.")
+    return redirect('landing:dashboard_akademik')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def akademik_delete(request, pk):
+    item = get_object_or_404(AkademikPage, pk=pk)
+    judul = item.judul
+    item.delete()
+    catat_log(request, request.user, f"Menghapus Sub-Menu Akademik: '{judul}'", "Sub-menu akademik dihapus")
+    messages.success(request, f"Sub-menu '{judul}' berhasil dihapus!")
+    return redirect('landing:dashboard_akademik')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def akademik_dokumen_add(request, pk):
+    item = get_object_or_404(AkademikPage, pk=pk)
+    form = DokumenAkademikForm(request.POST, request.FILES)
+    if form.is_valid():
+        dokumen = form.save(commit=False)
+        dokumen.akademik = item
+        dokumen.save()
+        catat_log(request, request.user, f"Mengunggah Dokumen '{dokumen.judul}' pada sub-menu '{item.judul}'", "Dokumen lampiran berhasil diunggah")
+        messages.success(request, f"Dokumen '{dokumen.judul}' berhasil ditambahkan!")
+    else:
+        messages.error(request, "Gagal mengunggah dokumen. Pastikan file terpilih dengan benar.")
+    return redirect(f"/admin-portal/akademik/?edit={item.pk}#editPanel")
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def akademik_dokumen_delete(request, pk):
+    dokumen = get_object_or_404(DokumenAkademik, pk=pk)
+    akademik_id = dokumen.akademik.pk
+    judul = dokumen.judul
+    dokumen.delete()
+    catat_log(request, request.user, f"Menghapus Dokumen Lampiran: '{judul}'", "Dokumen lampiran dihapus")
+    messages.success(request, f"Dokumen '{judul}' berhasil dihapus!")
+    return redirect(f"/admin-portal/akademik/?edit={akademik_id}#editPanel")
+
+
 

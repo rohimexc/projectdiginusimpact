@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
-{{ konten_obj.judul|default:jenis|title }} - Administrasi Publik FISIP Universitas Tadulako
+{{ current_title }} - Tentang Administrasi Publik FISIP Untad
 {% endblock %}
 
 {% block content %}
 <style>
     /* Styling konten CKEditor 5 agar tampil rapi dan proporsional */
     .ck-content h1, .ck-content h2, .ck-content h3, .ck-content h4 {
-        color: #0b5c5c;
+        color: #0d2b45;
         font-weight: 700;
         margin-top: 1.5rem;
         margin-bottom: 0.75rem;
@@ -17,8 +18,8 @@
     .ck-content h2 { font-size: 1.25rem; }
     .ck-content h3 { font-size: 1.1rem; }
     .ck-content p {
-        margin-bottom: 1rem;
-        line-height: 1.8;
+        margin-bottom: 0.875rem;
+        line-height: 1.7;
         color: #334155;
     }
     .ck-content ul {
@@ -71,32 +72,331 @@
     }
 </style>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 py-12 min-h-[65vh]">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 space-y-6">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 min-h-[65vh] space-y-8">
 
-        <!-- Judul Laman Berdasarkan Dropdown yang Dipilih -->
-        <div class="border-b border-slate-200 pb-4">
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">
-                {{ konten_obj.judul|default:jenis|title }}
+    <!-- HEADER & NAVIGASI CEPAT ANTAR SUB-MENU TENTANG -->
+    <div class="space-y-4">
+        <div>
+            <div class="flex items-center gap-2 text-xs font-semibold text-teal-700 uppercase tracking-wider mb-1">
+                <span>Tentang</span>
+                <span>&bull;</span>
+                <span>Administrasi Publik</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0d2b45] tracking-tight">
+                {{ current_title }}
             </h1>
+            {% if current_subjudul %}
+            <p class="text-slate-500 text-sm sm:text-base mt-1">{{ current_subjudul }}</p>
+            {% endif %}
         </div>
 
-        {% if active_slug == 'sertifikat' and akreditasi %}
-        <div class="bg-teal-50/70 p-5 rounded-xl border border-teal-200 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
-            <div>
-                <p class="text-slate-500">Status Akreditasi:</p>
-                <p class="text-base font-bold text-tealBrand">{{ akreditasi.status_akreditasi }}</p>
-                <p class="text-slate-500 mt-1">No. SK: {{ akreditasi.nomor_sk }} | Berlaku hingga: {{ akreditasi.tanggal_kadaluarsa|date:"d M Y" }}</p>
+        <!-- Tombol Pil Navigasi Tentang (Sesuai 5 Sub Menu) -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-b border-slate-200/80 pb-4">
+            {% for item in tentang_nav_list %}
+            <a href="{% url 'landing:detail_tentang' jenis=item.slug %}" 
+               class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shadow-2xs flex items-center gap-1.5 {% if item.slug == active_slug %}bg-[#0d2b45] text-amber-300 shadow-sm border border-[#0d2b45]{% else %}bg-white text-slate-700 border border-slate-200 hover:border-teal-300 hover:text-teal-800 hover:bg-teal-50/50{% endif %}">
+                <i class="{{ item.icon }} text-xs"></i>
+                <span>{{ item.title }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if is_visi_misi_tujuan %}
+    <!-- TAMPILAN KHUSUS VISI, MISI, DAN TUJUAN -->
+    <div class="space-y-8">
+
+        <!-- Tombol Pil Navigasi Internal (Visi, Misi, Tujuan) -->
+        <div class="flex items-center gap-2">
+            <a href="#visi" class="px-4 py-1.5 rounded-lg border border-[#cbe1ef] bg-[#eef5fa] hover:bg-[#dfeef8] text-[#0d3b66] font-semibold text-xs sm:text-sm transition shadow-2xs">
+                Visi
+            </a>
+            <a href="#misi" class="px-4 py-1.5 rounded-lg border border-[#cbe1ef] bg-[#eef5fa] hover:bg-[#dfeef8] text-[#0d3b66] font-semibold text-xs sm:text-sm transition shadow-2xs">
+                Misi
+            </a>
+            <a href="#tujuan" class="px-4 py-1.5 rounded-lg border border-[#cbe1ef] bg-[#eef5fa] hover:bg-[#dfeef8] text-[#0d3b66] font-semibold text-xs sm:text-sm transition shadow-2xs">
+                Tujuan
+            </a>
+        </div>
+
+        <!-- KARTU VISI -->
+        <div id="visi" class="scroll-mt-24 bg-[#0c2f4d] rounded-2xl p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] shadow-md transition">
+            <h2 class="text-xl sm:text-2xl font-bold text-[#f59e0b] mb-3 tracking-wide">
+                Visi
+            </h2>
+            <p class="text-slate-100 text-sm sm:text-base leading-relaxed font-normal">
+                {{ visi_misi_obj.visi }}
+            </p>
+        </div>
+
+        <!-- SEKSI MISI -->
+        <div id="misi" class="scroll-mt-24 space-y-4 pt-2">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0d2b45]">
+                Misi
+            </h2>
+            {% if visi_misi_obj.pengantar_misi %}
+            <p class="text-slate-600 text-sm sm:text-base">
+                {{ visi_misi_obj.pengantar_misi }}
+            </p>
+            {% endif %}
+
+            <div class="space-y-3 pt-1">
+                {% for misi in misi_list %}
+                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-center sm:items-start gap-4 sm:gap-6">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#f0f4f8] text-[#0d2b45] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-slate-200/80 shadow-2xs">
+                        {{ misi.urutan|default:forloop.counter }}
+                    </div>
+                    <div class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                        {{ misi.deskripsi }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="p-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-slate-400 text-sm">
+                    Belum ada data misi yang diisi.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- SEKSI TUJUAN -->
+        <div id="tujuan" class="scroll-mt-24 space-y-4 pt-4">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0d2b45]">
+                Tujuan
+            </h2>
+            {% if visi_misi_obj.pengantar_tujuan %}
+            <p class="text-slate-600 text-sm sm:text-base">
+                {{ visi_misi_obj.pengantar_tujuan }}
+            </p>
+            {% endif %}
+
+            <div class="space-y-3 pt-1">
+                {% for tujuan in tujuan_list %}
+                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-start gap-4 sm:gap-6">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#f0f4f8] text-[#0d2b45] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-slate-200/80 shadow-2xs mt-0.5">
+                        {{ tujuan.urutan|default:forloop.counter }}
+                    </div>
+                    <div class="space-y-1">
+                        <h3 class="font-bold text-[#0d2b45] text-base sm:text-lg">
+                            {{ tujuan.judul }}
+                        </h3>
+                        {% if tujuan.subjudul %}
+                        <p class="italic text-slate-400 text-xs sm:text-sm">
+                            {{ tujuan.subjudul }}
+                        </p>
+                        {% endif %}
+                        <p class="text-slate-700 text-sm sm:text-base leading-relaxed pt-1">
+                            {{ tujuan.deskripsi }}
+                        </p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="p-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-slate-400 text-sm">
+                    Belum ada data tujuan yang diisi.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const targetSection = "{{ target_section|default:'' }}";
+            if (window.location.hash) {
+                const el = document.querySelector(window.location.hash);
+                if (el) {
+                    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                }
+            } else if (targetSection && targetSection !== 'visi') {
+                const el = document.getElementById(targetSection);
+                if (el) {
+                    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                }
+            }
+        });
+    </script>
+
+    {% elif active_slug == 'sertifikat' %}
+    <!-- TAMPILAN KHUSUS SERTIFIKAT AKREDITASI -->
+    <div class="space-y-6">
+
+        {% if akreditasi %}
+        <!-- Banner Akreditasi Resmi -->
+        <div class="bg-gradient-to-r from-[#0d2b45] via-[#0f6b6b] to-[#148383] rounded-2xl p-6 sm:p-8 text-white shadow-lg border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div class="space-y-2 max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
+                    <i class="fa-solid fa-award"></i>
+                    Status Akreditasi BAN-PT
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">
+                    Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi }}</span>
+                </h2>
+                <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
+                    Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br class="hidden sm:inline">
+                    <strong>No. SK:</strong> {{ akreditasi.nomor_sk }} &bull; <strong>Berlaku hingga:</strong> {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}
+                </p>
             </div>
             {% if akreditasi.sertifikat %}
-            <a href="{{ akreditasi.sertifikat.url }}" target="_blank" class="px-4 py-2 bg-tealBrand hover:bg-tealDark text-white font-semibold rounded-lg transition inline-flex items-center gap-1.5 shadow-sm">
-                <i class="fa-solid fa-download"></i> Unduh Sertifikat
+            <a href="{{ akreditasi.sertifikat.url }}" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-sm hover:scale-[1.02] transform">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                <span>Unduh Sertifikat Resmi (PDF)</span>
             </a>
             {% endif %}
         </div>
         {% endif %}
 
-        <!-- Isi Konten dari Dropdown yang Dipilih -->
+        <!-- Card Uraian Akreditasi (CKEditor) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                    Uraian & Riwayat Akreditasi
+                </h2>
+            </div>
+            <div class="ck-content text-slate-700 text-sm leading-relaxed">
+                {% if konten_obj and konten_obj.konten %}
+                    {{ konten_obj.konten|safe }}
+                {% else %}
+                    <p class="text-slate-500">Program Studi Sarjana Administrasi Publik Fakultas Ilmu Sosial dan Ilmu Politik Universitas Tadulako senantiasa menjaga penjaminan mutu akademik dan kurikulum sesuai dengan standar akreditasi nasional dan internasional.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% elif active_slug == 'profil' %}
+    <!-- TAMPILAN PROFIL PROGRAM STUDI -->
+    <div class="space-y-6">
+
+        <!-- Grid 4 Kartu Highlight Ringkas Profil -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-teal-700">
+                <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center text-sm font-bold">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Jenjang Studi</span>
+                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">Sarjana (S1)</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-amber-500">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-sm font-bold">
+                    <i class="fa-solid fa-certificate"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Gelar Lulusan</span>
+                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">S.A.P.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-sky-600">
+                <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center text-sm font-bold">
+                    <i class="fa-solid fa-building-columns"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Fakultas</span>
+                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">FISIP Untad</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-emerald-600">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm font-bold">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Kurikulum</span>
+                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">OBE & MBKM</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Konten CKEditor -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                    Gambaran Umum Program Studi
+                </h2>
+            </div>
+            <div class="ck-content text-slate-700 text-sm leading-relaxed">
+                {% if konten_obj and konten_obj.konten %}
+                    {{ konten_obj.konten|safe }}
+                {% else %}
+                    <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% elif active_slug == 'profil-lulusan' %}
+    <!-- TAMPILAN PROFIL LULUSAN -->
+    <div class="space-y-6">
+
+        <!-- Grid 4 Bidang Karir Lulusan -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-gradient-to-br from-teal-50 to-white p-5 rounded-2xl border border-teal-100 shadow-2xs space-y-2">
+                <span class="w-8 h-8 rounded-lg bg-teal-800 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+                    <i class="fa-solid fa-user-tie"></i>
+                </span>
+                <h3 class="font-bold text-slate-800 text-sm">Birokrat & ASN</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Aparatur pemerintahan di instansi pusat maupun daerah yang profesional dan berintegritas.</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-50 to-white p-5 rounded-2xl border border-amber-100 shadow-2xs space-y-2">
+                <span class="w-8 h-8 rounded-lg bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-bold shadow-xs">
+                    <i class="fa-solid fa-chart-line"></i>
+                </span>
+                <h3 class="font-bold text-slate-800 text-sm">Analis Kebijakan</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Perumus, evaluator, dan pengembang rekomendasi kebijakan publik berbasis bukti data.</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-sky-50 to-white p-5 rounded-2xl border border-sky-100 shadow-2xs space-y-2">
+                <span class="w-8 h-8 rounded-lg bg-sky-700 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+                    <i class="fa-solid fa-hands-holding-circle"></i>
+                </span>
+                <h3 class="font-bold text-slate-800 text-sm">Manajer Pelayanan</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Pengelola tata kelola pelayanan publik di sektor pemerintahan, BUMN, BUMD, dan NGO.</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-indigo-50 to-white p-5 rounded-2xl border border-indigo-100 shadow-2xs space-y-2">
+                <span class="w-8 h-8 rounded-lg bg-indigo-700 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+                    <i class="fa-solid fa-microscope"></i>
+                </span>
+                <h3 class="font-bold text-slate-800 text-sm">Peneliti Kebijakan</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Akademisi, peneliti think tank, dan konsultan tata kelola dan reformasi birokrasi.</p>
+            </div>
+        </div>
+
+        <!-- Card Konten CKEditor -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                    Capaian Pembelajaran & Profil Lulusan
+                </h2>
+            </div>
+            <div class="ck-content text-slate-700 text-sm leading-relaxed">
+                {% if konten_obj and konten_obj.konten %}
+                    {{ konten_obj.konten|safe }}
+                {% else %}
+                    <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% else %}
+    <!-- TAMPILAN SUB-MENU STANDAR LAINNYA (MISAL SEJARAH & DASAR HUKUM) -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                Uraian {{ current_title }}
+            </h2>
+        </div>
         <div class="ck-content text-slate-700 text-sm leading-relaxed">
             {% if konten_obj and konten_obj.konten %}
                 {{ konten_obj.konten|safe }}
@@ -104,7 +404,8 @@
                 <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
             {% endif %}
         </div>
-
     </div>
+    {% endif %}
+
 </div>
 {% endblock %}

@@ -66,5 +66,22 @@ path('admin-portal/password-reset/',
     # URL untuk Manajemen Menu Tentang (Profil, Visi, Misi, dll)
     path('admin-portal/tentang/', views.dashboard_tentang, name='dashboard_tentang'),
     path('admin-portal/tentang/<int:pk>/edit/', views.dashboard_tentang_edit, name='dashboard_tentang_edit'),
+    path('admin-portal/visi-misi-tujuan/', views.dashboard_visi_misi_tujuan, name='dashboard_visi_misi_tujuan'),
+    path('admin-portal/misi/tambah/', views.misi_create, name='misi_create'),
+    path('admin-portal/misi/<int:pk>/edit/', views.misi_update, name='misi_update'),
+    path('admin-portal/misi/<int:pk>/hapus/', views.misi_delete, name='misi_delete'),
+    path('admin-portal/tujuan/tambah/', views.tujuan_create, name='tujuan_create'),
+    path('admin-portal/tujuan/<int:pk>/edit/', views.tujuan_update, name='tujuan_update'),
+    path('admin-portal/tujuan/<int:pk>/hapus/', views.tujuan_delete, name='tujuan_delete'),
     path('tentang/<str:jenis>/', views.detail_tentang, name='detail_tentang'),
+
+    # URL untuk Menu & Manajemen Akademik (SIGA-8, Kurikulum, Jadwal, RPS, Panduan)
+    path('akademik/', views.akademik, name='akademik_index'),
+    path('akademik/<slug:slug>/', views.detail_akademik, name='detail_akademik'),
+    path('admin-portal/akademik/', views.dashboard_akademik, name='dashboard_akademik'),
+    path('admin-portal/akademik/tambah/', views.akademik_create, name='akademik_create'),
+    path('admin-portal/akademik/<int:pk>/edit/', views.dashboard_akademik_edit, name='dashboard_akademik_edit'),
+    path('admin-portal/akademik/<int:pk>/hapus/', views.akademik_delete, name='akademik_delete'),
+    path('admin-portal/akademik/<int:pk>/dokumen/tambah/', views.akademik_dokumen_add, name='akademik_dokumen_add'),
+    path('admin-portal/akademik/dokumen/<int:pk>/hapus/', views.akademik_dokumen_delete, name='akademik_dokumen_delete'),
 ]

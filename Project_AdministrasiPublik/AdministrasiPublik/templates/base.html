@@ -49,8 +49,7 @@
                     <div class="absolute top-full left-0 w-52 bg-white text-slate-800 shadow-xl rounded-xl py-2 hidden group-hover:block border border-slate-100 z-50">
                         <a href="{% url 'landing:detail_tentang' jenis='profil' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Profil Program Studi</a>
                         <a href="{% url 'landing:detail_tentang' jenis='sejarah' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sejarah & Dasar Hukum</a>
-                        <a href="{% url 'landing:detail_tentang' jenis='visi' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Visi & Misi</a>
-                        <a href="{% url 'landing:detail_tentang' jenis='tujuan' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Tujuan</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='visi' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Visi, Misi & Tujuan</a>
                         <a href="{% url 'landing:detail_tentang' jenis='profil-lulusan' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Profil Lulusan</a>
                         <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sertifikat Akreditasi</a>
                     </div>
@@ -68,11 +67,15 @@
 
                 <!-- Dropdown Akademik -->
                 <div class="relative group cursor-pointer py-2">
-                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                    <a href="{% url 'landing:akademik_index' %}" class="hover:text-amber-300 flex items-center gap-1">
                         Akademik <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </a>
-                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
-                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Kurikulum & MK</a>
+                    <div class="absolute top-full left-0 w-52 bg-white text-slate-800 shadow-xl rounded-xl py-2 hidden group-hover:block border border-slate-100 z-50">
+                        <a href="{% url 'landing:detail_akademik' slug='siga-8' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">SIGA-8</a>
+                        <a href="{% url 'landing:detail_akademik' slug='kurikulum' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Kurikulum</a>
+                        <a href="{% url 'landing:detail_akademik' slug='jadwal-perkuliahan' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Jadwal Perkuliahan</a>
+                        <a href="{% url 'landing:detail_akademik' slug='rps' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">RPS</a>
+                        <a href="{% url 'landing:detail_akademik' slug='panduan-akademik' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Panduan Akademik</a>
                     </div>
                 </div>
 
@@ -138,9 +141,9 @@
                     <li><a href="#" class="hover:underline">Website FISIP</a></li>
                     <li><a href="#" class="hover:underline">Website UNTAD</a></li>
                     <li><a href="#" class="hover:underline">Website Kepegawaian</a></li>
-                    <li><a href="#" class="hover:underline">Siga B</a></li>
+                    <li><a href="{% url 'landing:detail_akademik' slug='siga-8' %}" class="hover:underline">SIGA-8</a></li>
                     <li><a href="#" class="hover:underline">Dosen Prodi Administrasi Publik</a></li>
-                    <li><a href="#" class="hover:underline">Sertifikat Akreditasi</a></li>
+                    <li><a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="hover:underline">Sertifikat Akreditasi</a></li>
                 </ul>
             </div>
 

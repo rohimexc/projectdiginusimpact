@@ -18,7 +18,61 @@ class TentangPage(models.Model):
     def __str__(self):
         return self.judul
 
-    
+class VisiMisiTujuan(models.Model):
+    visi = models.TextField(
+        verbose_name="Teks Visi",
+        help_text="Teks visi utama program studi"
+    )
+    pengantar_misi = models.CharField(
+        max_length=255,
+        default="Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:",
+        verbose_name="Kalimat Pengantar Misi"
+    )
+    pengantar_tujuan = models.CharField(
+        max_length=255,
+        default="Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:",
+        verbose_name="Kalimat Pengantar Tujuan"
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Visi, Misi & Tujuan (Pengaturan)"
+        verbose_name_plural = "Visi, Misi & Tujuan (Pengaturan)"
+
+    def __str__(self):
+        return "Pengaturan Visi, Misi dan Tujuan"
+
+
+class MisiItem(models.Model):
+    visi_misi = models.ForeignKey(VisiMisiTujuan, on_delete=models.CASCADE, related_name='misi_items', null=True, blank=True)
+    urutan = models.PositiveIntegerField(default=1, verbose_name="Nomor Urut")
+    deskripsi = models.TextField(verbose_name="Isi Misi")
+
+    class Meta:
+        verbose_name = "Item Misi"
+        verbose_name_plural = "Daftar Item Misi"
+        ordering = ['urutan', 'id']
+
+    def __str__(self):
+        return f"Misi {self.urutan}: {self.deskripsi[:50]}..."
+
+
+class TujuanItem(models.Model):
+    visi_misi = models.ForeignKey(VisiMisiTujuan, on_delete=models.CASCADE, related_name='tujuan_items', null=True, blank=True)
+    urutan = models.PositiveIntegerField(default=1, verbose_name="Nomor Urut")
+    judul = models.CharField(max_length=200, verbose_name="Judul Tujuan", help_text="Contoh: Employabilitas, Reputasi Akademik, dll.")
+    subjudul = models.CharField(max_length=200, blank=True, null=True, verbose_name="Subjudul / Terjemahan (Opsional)", help_text="Contoh: Employability, Academic Reputation (opsional)")
+    deskripsi = models.TextField(verbose_name="Deskripsi Tujuan")
+
+    class Meta:
+        verbose_name = "Item Tujuan"
+        verbose_name_plural = "Daftar Item Tujuan"
+        ordering = ['urutan', 'id']
+
+    def __str__(self):
+        return f"Tujuan {self.urutan}: {self.judul}"
+
+
 class Sambutan(models.Model):
     judul = models.CharField(max_length=200, default="Sambutan Koordinator Prodi")
     nama_koor = models.CharField(max_length=150, default="Dr. Intam Kurnia, M.Si.")
@@ -62,6 +116,42 @@ class Akademik(models.Model):
 
     def __str__(self):
         return self.judul_informasi
+
+
+class AkademikPage(models.Model):
+    judul = models.CharField(max_length=150, verbose_name="Nama Sub-Menu Akademik")
+    slug = models.SlugField(max_length=100, unique=True, help_text="Slug URL sub-menu (misal: siga-8, kurikulum, jadwal-perkuliahan, rps, panduan-akademik)")
+    subjudul = models.CharField(max_length=255, blank=True, null=True, verbose_name="Subjudul / Keterangan Singkat")
+    link_eksternal = models.URLField(max_length=500, blank=True, null=True, verbose_name="Tautan Eksternal / Portal (Opsional)", help_text="Misal: https://siga.untad.ac.id")
+    file_utama = models.FileField(upload_to='documents/akademik/', blank=True, null=True, verbose_name="File Dokumen Utama (PDF/Doc)")
+    konten = CKEditor5Field(blank=True, null=True, verbose_name="Isi Konten", config_name='extends')
+    urutan = models.PositiveIntegerField(default=1, verbose_name="Nomor Urutan Tampil")
+    is_active = models.BooleanField(default=True, verbose_name="Status Aktif")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Sub-Menu Akademik"
+        verbose_name_plural = "Sub-Menu Akademik"
+        ordering = ['urutan', 'id']
+
+    def __str__(self):
+        return self.judul
+
+
+class DokumenAkademik(models.Model):
+    akademik = models.ForeignKey(AkademikPage, on_delete=models.CASCADE, related_name='dokumen_list', verbose_name="Sub-Menu Akademik")
+    judul = models.CharField(max_length=200, verbose_name="Nama Dokumen / Berkas")
+    file = models.FileField(upload_to='documents/akademik/lampiran/', verbose_name="File Berkas")
+    keterangan = models.CharField(max_length=255, blank=True, null=True, verbose_name="Keterangan")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Dokumen Pendukung Akademik"
+        verbose_name_plural = "Daftar Dokumen Pendukung Akademik"
+        ordering = ['-uploaded_at']
+
+    def __str__(self):
+        return f"{self.akademik.judul} - {self.judul}"
 
 class TenagaPendidik(models.Model):
     nama = models.CharField(max_length=255)

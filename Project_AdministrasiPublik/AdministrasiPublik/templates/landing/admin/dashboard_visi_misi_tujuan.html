@@ -1,0 +1,439 @@
+{% extends 'landing/admin/template/base.html' %}
+
+{% block title %}Kelola Visi, Misi & Tujuan - Admin Portal{% endblock %}
+
+{% block header_title %}Manajemen Visi, Misi, dan Tujuan{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="space-y-8 max-w-6xl mx-auto pb-12">
+
+    <!-- Top Navigation Bar & Action -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+        <div>
+            <div class="flex items-center gap-2">
+                <a href="{% url 'landing:dashboard_tentang' %}" class="text-xs font-semibold text-slate-500 hover:text-slate-700 transition">
+                    &larr; Menu Tentang
+                </a>
+                <span class="text-slate-300">/</span>
+                <span class="text-xs font-bold text-teal-700">Visi, Misi & Tujuan</span>
+            </div>
+            <h1 class="text-xl font-extrabold text-slate-800 mt-1">Kelola Visi, Misi, dan Tujuan</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Kelola teks visi, kalimat pengantar, serta butir-butir misi dan tujuan secara terstruktur.</p>
+        </div>
+        <div class="flex items-center gap-2.5 self-start sm:self-auto">
+            <a href="{% url 'landing:detail_tentang' jenis='visi' %}" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-teal-800 bg-teal-50 hover:bg-teal-100 rounded-xl transition border border-teal-200 shadow-2xs">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+                Lihat di Web
+            </a>
+        </div>
+    </div>
+
+    <!-- BAGIAN 1: PENGATURAN TEKS VISI & PENGANTAR UMUM -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                    Rumusan Visi & Kalimat Pengantar
+                </h2>
+                <p class="text-xs text-slate-500 mt-0.5">Teks visi utama akan tampil dalam kotak khusus berwarna navy dengan aksen kuning emas.</p>
+            </div>
+        </div>
+
+        <form method="POST" action="{% url 'landing:dashboard_visi_misi_tujuan' %}" class="p-6 space-y-5 text-xs">
+            {% csrf_token %}
+
+            <div class="space-y-1.5">
+                <label class="font-bold text-slate-700 block flex items-center justify-between">
+                    <span>Teks Rumusan Visi:</span>
+                    <span class="text-[11px] text-slate-400 font-normal">Tampil di kartu utama Visi</span>
+                </label>
+                {{ form_visi.visi }}
+                {% if form_visi.visi.errors %}
+                <p class="text-red-600 text-[11px]">{{ form_visi.visi.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div class="space-y-1.5">
+                    <label class="font-bold text-slate-700 block">
+                        Kalimat Pengantar Misi:
+                    </label>
+                    {{ form_visi.pengantar_misi }}
+                    {% if form_visi.pengantar_misi.errors %}
+                    <p class="text-red-600 text-[11px]">{{ form_visi.pengantar_misi.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="font-bold text-slate-700 block">
+                        Kalimat Pengantar Tujuan:
+                    </label>
+                    {{ form_visi.pengantar_tujuan }}
+                    {% if form_visi.pengantar_tujuan.errors %}
+                    <p class="text-red-600 text-[11px]">{{ form_visi.pengantar_tujuan.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="pt-4 flex justify-end border-t border-slate-100">
+                <button type="submit" class="px-5 py-2.5 bg-teal-800 hover:bg-teal-900 text-white font-semibold rounded-xl transition shadow-sm inline-flex items-center gap-2 text-xs">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Simpan Visi & Pengantar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- BAGIAN 2: DAFTAR BUTIR MISI -->
+    <div id="misi" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <h2 class="text-base font-bold text-slate-800">Daftar Poin Misi</h2>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                        {{ misi_list|length }} Butir
+                    </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Setiap poin misi akan tampil dalam kartu putih bergaris kuning dengan nomor urut melingkar.</p>
+            </div>
+            <button type="button" onclick="openModal('modalTambahMisi')" class="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold rounded-xl transition shadow-sm self-start sm:self-auto">
+                <i class="fa-solid fa-plus"></i>
+                Tambah Poin Misi
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                    <tr class="bg-slate-50/75 border-b border-slate-200 text-slate-600 uppercase tracking-wider">
+                        <th class="py-3.5 px-4 font-semibold text-center w-20">Urutan</th>
+                        <th class="py-3.5 px-4 font-semibold">Isi Teks Misi</th>
+                        <th class="py-3.5 px-4 font-semibold text-center w-32">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700">
+                    {% for item in misi_list %}
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="py-3.5 px-4 text-center font-bold">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-800 font-extrabold text-xs border border-slate-200">
+                                {{ item.urutan }}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 leading-relaxed font-normal text-slate-700">
+                            {{ item.deskripsi }}
+                        </td>
+                        <td class="py-3.5 px-4 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <button type="button" onclick="openEditMisiModal('{{ item.id }}', '{{ item.urutan }}', '{{ item.deskripsi|escapejs }}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg font-semibold text-[11px] transition">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    Edit
+                                </button>
+                                <button type="button" onclick="confirmDeleteMisi('{{ item.id }}', '{{ item.urutan }}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-lg font-semibold text-[11px] transition">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    Hapus
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="p-8 text-center text-slate-400">
+                            Belum ada poin misi yang ditambahkan. Silakan klik tombol "Tambah Poin Misi" di atas.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- BAGIAN 3: DAFTAR BUTIR TUJUAN -->
+    <div id="tujuan" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <h2 class="text-base font-bold text-slate-800">Daftar Poin Tujuan</h2>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                        {{ tujuan_list|length }} Butir
+                    </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Poin tujuan mencakup Judul (misal: Employabilitas), Subjudul bahasa Inggris opsional, dan deskripsi.</p>
+            </div>
+            <button type="button" onclick="openModal('modalTambahTujuan')" class="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold rounded-xl transition shadow-sm self-start sm:self-auto">
+                <i class="fa-solid fa-plus"></i>
+                Tambah Poin Tujuan
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                    <tr class="bg-slate-50/75 border-b border-slate-200 text-slate-600 uppercase tracking-wider">
+                        <th class="py-3.5 px-4 font-semibold text-center w-20">Urutan</th>
+                        <th class="py-3.5 px-4 font-semibold w-48">Judul Tujuan</th>
+                        <th class="py-3.5 px-4 font-semibold">Deskripsi Tujuan</th>
+                        <th class="py-3.5 px-4 font-semibold text-center w-32">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700">
+                    {% for item in tujuan_list %}
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="py-3.5 px-4 text-center font-bold">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-800 font-extrabold text-xs border border-slate-200">
+                                {{ item.urutan }}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 align-top">
+                            <p class="font-bold text-slate-800 text-xs">{{ item.judul }}</p>
+                            {% if item.subjudul %}
+                            <p class="text-slate-400 italic text-[11px] mt-0.5">{{ item.subjudul }}</p>
+                            {% endif %}
+                        </td>
+                        <td class="py-3.5 px-4 leading-relaxed font-normal text-slate-700 align-top">
+                            {{ item.deskripsi }}
+                        </td>
+                        <td class="py-3.5 px-4 text-center align-top">
+                            <div class="flex items-center justify-center gap-2">
+                                <button type="button" 
+                                    data-id="{{ item.id }}" 
+                                    data-urutan="{{ item.urutan }}" 
+                                    data-judul="{{ item.judul }}" 
+                                    data-subjudul="{{ item.subjudul|default:'' }}" 
+                                    data-deskripsi="{{ item.deskripsi }}" 
+                                    onclick="openEditTujuanModal(this)" 
+                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg font-semibold text-[11px] transition">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    Edit
+                                </button>
+                                <button type="button" onclick="confirmDeleteTujuan('{{ item.id }}', '{{ item.judul|escapejs }}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-lg font-semibold text-[11px] transition">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    Hapus
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="p-8 text-center text-slate-400">
+                            Belum ada poin tujuan yang ditambahkan. Silakan klik tombol "Tambah Poin Tujuan" di atas.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL TAMBAH MISI -->
+<div id="modalTambahMisi" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-slate-800 text-sm">Tambah Item Poin Misi</h3>
+            <button type="button" onclick="closeModal('modalTambahMisi')" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+        </div>
+        <form method="POST" action="{% url 'landing:misi_create' %}" class="space-y-4 text-xs">
+            {% csrf_token %}
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Nomor Urut:</label>
+                <input type="number" name="urutan" value="{{ misi_list|length|add:'1' }}" min="1" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
+            </div>
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Isi Teks Misi:</label>
+                <textarea name="deskripsi" rows="4" required placeholder="Tuliskan rumusan butir misi..." class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modalTambahMisi')" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-semibold hover:bg-slate-200 transition">Batal</button>
+                <button type="submit" class="px-5 py-2 bg-teal-800 text-white rounded-xl font-semibold hover:bg-teal-900 transition">Simpan Item Misi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EDIT MISI -->
+<div id="modalEditMisi" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-slate-800 text-sm">Edit Item Poin Misi</h3>
+            <button type="button" onclick="closeModal('modalEditMisi')" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+        </div>
+        <form id="formEditMisi" method="POST" action="" class="space-y-4 text-xs">
+            {% csrf_token %}
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Nomor Urut:</label>
+                <input type="number" id="editMisiUrutan" name="urutan" min="1" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
+            </div>
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Isi Teks Misi:</label>
+                <textarea id="editMisiDeskripsi" name="deskripsi" rows="4" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modalEditMisi')" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-semibold hover:bg-slate-200 transition">Batal</button>
+                <button type="submit" class="px-5 py-2 bg-teal-800 text-white rounded-xl font-semibold hover:bg-teal-900 transition">Perbarui Item Misi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL TAMBAH TUJUAN -->
+<div id="modalTambahTujuan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-slate-800 text-sm">Tambah Item Poin Tujuan</h3>
+            <button type="button" onclick="closeModal('modalTambahTujuan')" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+        </div>
+        <form method="POST" action="{% url 'landing:tujuan_create' %}" class="space-y-4 text-xs">
+            {% csrf_token %}
+            <div class="grid grid-cols-3 gap-3">
+                <div class="space-y-1 col-span-1">
+                    <label class="font-bold text-slate-700 block">No. Urut:</label>
+                    <input type="number" name="urutan" value="{{ tujuan_list|length|add:'1' }}" min="1" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div class="space-y-1 col-span-2">
+                    <label class="font-bold text-slate-700 block">Judul Tujuan:</label>
+                    <input type="text" name="judul" required placeholder="Contoh: Employabilitas" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Subjudul / Istilah Inggris (Opsional):</label>
+                <input type="text" name="subjudul" placeholder="Contoh: Employability (opsional)" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none italic">
+            </div>
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Deskripsi Tujuan:</label>
+                <textarea name="deskripsi" rows="4" required placeholder="Tuliskan uraian lengkap tujuan program studi..." class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modalTambahTujuan')" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-semibold hover:bg-slate-200 transition">Batal</button>
+                <button type="submit" class="px-5 py-2 bg-teal-800 text-white rounded-xl font-semibold hover:bg-teal-900 transition">Simpan Item Tujuan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EDIT TUJUAN -->
+<div id="modalEditTujuan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-slate-800 text-sm">Edit Item Poin Tujuan</h3>
+            <button type="button" onclick="closeModal('modalEditTujuan')" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+        </div>
+        <form id="formEditTujuan" method="POST" action="" class="space-y-4 text-xs">
+            {% csrf_token %}
+            <div class="grid grid-cols-3 gap-3">
+                <div class="space-y-1 col-span-1">
+                    <label class="font-bold text-slate-700 block">No. Urut:</label>
+                    <input type="number" id="editTujuanUrutan" name="urutan" min="1" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+                <div class="space-y-1 col-span-2">
+                    <label class="font-bold text-slate-700 block">Judul Tujuan:</label>
+                    <input type="text" id="editTujuanJudul" name="judul" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Subjudul / Istilah Inggris (Opsional):</label>
+                <input type="text" id="editTujuanSubjudul" name="subjudul" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none italic">
+            </div>
+            <div class="space-y-1">
+                <label class="font-bold text-slate-700 block">Deskripsi Tujuan:</label>
+                <textarea id="editTujuanDeskripsi" name="deskripsi" rows="4" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modalEditTujuan')" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-semibold hover:bg-slate-200 transition">Batal</button>
+                <button type="submit" class="px-5 py-2 bg-teal-800 text-white rounded-xl font-semibold hover:bg-teal-900 transition">Perbarui Item Tujuan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- FORM TERSEMBUNYI UNTUK HAPUS MISI -->
+<form id="formDeleteMisi" method="POST" action="" class="hidden">
+    {% csrf_token %}
+</form>
+
+<!-- FORM TERSEMBUNYI UNTUK HAPUS TUJUAN -->
+<form id="formDeleteTujuan" method="POST" action="" class="hidden">
+    {% csrf_token %}
+</form>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+
+    function openEditMisiModal(id, urutan, deskripsi) {
+        document.getElementById('editMisiUrutan').value = urutan;
+        document.getElementById('editMisiDeskripsi').value = deskripsi;
+        document.getElementById('formEditMisi').action = `/admin-portal/misi/${id}/edit/`;
+        openModal('modalEditMisi');
+    }
+
+    function openEditTujuanModal(btnOrId, urutan, judul, subjudul, deskripsi) {
+        let id = btnOrId;
+        if (btnOrId && btnOrId.dataset) {
+            id = btnOrId.dataset.id;
+            urutan = btnOrId.dataset.urutan;
+            judul = btnOrId.dataset.judul;
+            subjudul = btnOrId.dataset.subjudul;
+            deskripsi = btnOrId.dataset.deskripsi;
+        }
+        document.getElementById('editTujuanUrutan').value = urutan;
+        document.getElementById('editTujuanJudul').value = judul;
+        document.getElementById('editTujuanSubjudul').value = subjudul || '';
+        document.getElementById('editTujuanDeskripsi').value = deskripsi;
+        document.getElementById('formEditTujuan').action = `/admin-portal/tujuan/${id}/edit/`;
+        openModal('modalEditTujuan');
+    }
+
+    function confirmDeleteMisi(id, urutan) {
+        Swal.fire({
+            title: 'Hapus Item Misi?',
+            text: `Apakah Anda yakin ingin menghapus poin misi urutan ke-${urutan}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('formDeleteMisi');
+                form.action = `/admin-portal/misi/${id}/hapus/`;
+                form.submit();
+            }
+        });
+    }
+
+    function confirmDeleteTujuan(id, judul) {
+        Swal.fire({
+            title: 'Hapus Item Tujuan?',
+            text: `Apakah Anda yakin ingin menghapus tujuan "${judul}"?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('formDeleteTujuan');
+                form.action = `/admin-portal/tujuan/${id}/hapus/`;
+                form.submit();
+            }
+        });
+    }
+</script>
+{% endblock %}

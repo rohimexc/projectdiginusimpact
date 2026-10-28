@@ -1,5 +1,9 @@
 from django import forms
-from .models import Sambutan, Galeri, Berita, Dosen, TenagaPendidik, TentangPage
+from .models import (
+    Sambutan, Galeri, Berita, Dosen, TenagaPendidik, TentangPage,
+    VisiMisiTujuan, MisiItem, TujuanItem,
+    AkademikPage, DokumenAkademik
+)
 from django.core.exceptions import ValidationError
 import re
 from django_ckeditor_5.widgets import CKEditor5Widget
@@ -22,6 +26,124 @@ class TentangPageForm(forms.ModelForm):
             'slug': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50',
                 'placeholder': 'misal: profil, sejarah, visi, dll'
+            }),
+        }
+
+
+class AkademikPageForm(forms.ModelForm):
+    konten = forms.CharField(widget=CKEditor5Widget(config_name='extends'), required=False, label="Isi Konten")
+
+    class Meta:
+        model = AkademikPage
+        fields = ['judul', 'slug', 'subjudul', 'urutan', 'link_eksternal', 'file_utama', 'konten', 'is_active']
+        widgets = {
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Contoh: SIGA-8, Kurikulum, Jadwal Perkuliahan, dll.'
+            }),
+            'slug': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50',
+                'placeholder': 'misal: siga-8, kurikulum, dll.'
+            }),
+            'subjudul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Keterangan singkat / subjudul'
+            }),
+            'urutan': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'min': 1
+            }),
+            'link_eksternal': forms.URLInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'https://siga.untad.ac.id (opsional)'
+            }),
+            'file_utama': forms.FileInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500'
+            }),
+        }
+
+
+class DokumenAkademikForm(forms.ModelForm):
+    class Meta:
+        model = DokumenAkademik
+        fields = ['judul', 'file', 'keterangan']
+        widgets = {
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Nama dokumen / lampiran berkas'
+            }),
+            'file': forms.FileInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white'
+            }),
+            'keterangan': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Keterangan berkas (opsional)'
+            }),
+        }
+
+
+class VisiMisiTujuanForm(forms.ModelForm):
+    class Meta:
+        model = VisiMisiTujuan
+        fields = ['visi', 'pengantar_misi', 'pengantar_tujuan']
+        widgets = {
+            'visi': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed',
+                'rows': 4,
+                'placeholder': 'Masukkan rumusan teks visi program studi...'
+            }),
+            'pengantar_misi': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Contoh: Program Studi Administrasi Publik memiliki misi sebagai berikut:'
+            }),
+            'pengantar_tujuan': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Contoh: Program Studi Administrasi Publik memiliki tujuan Pendidikan berupa:'
+            }),
+        }
+
+
+class MisiItemForm(forms.ModelForm):
+    class Meta:
+        model = MisiItem
+        fields = ['urutan', 'deskripsi']
+        widgets = {
+            'urutan': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'min': 1
+            }),
+            'deskripsi': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed',
+                'rows': 3,
+                'placeholder': 'Tuliskan poin misi program studi...'
+            }),
+        }
+
+
+class TujuanItemForm(forms.ModelForm):
+    class Meta:
+        model = TujuanItem
+        fields = ['urutan', 'judul', 'subjudul', 'deskripsi']
+        widgets = {
+            'urutan': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'min': 1
+            }),
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Contoh: Employabilitas, Reputasi Akademik, dll.'
+            }),
+            'subjudul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none italic',
+                'placeholder': 'Contoh: Employability (opsional)'
+            }),
+            'deskripsi': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none leading-relaxed',
+                'rows': 3,
+                'placeholder': 'Tuliskan deskripsi lengkap dari tujuan program studi...'
             }),
         }
 
