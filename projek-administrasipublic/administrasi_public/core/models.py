@@ -142,12 +142,10 @@ class AuditLog(models.Model):
         return f"[{self.timestamp.strftime('%d/%m/%Y %H:%M')}] {self.action} oleh {self.user}"
 
 
-# 7. Model Halaman Tentang (Profil, Visi & Misi, dll - Satu Tabel)
+# 7. Model Halaman Tentang (Profil, Sejarah, Struktur)
 class HalamanTentang(models.Model):
     KATEGORI_CHOICES = [
         ('profil', 'Profil Program Studi'),
-        ('visi_misi', 'Visi & Misi'),
-        ('tujuan', 'Tujuan & Sasaran'),
         ('sejarah', 'Sejarah Singkat'),
         ('struktur', 'Struktur Organisasi'),
     ]
@@ -162,3 +160,125 @@ class HalamanTentang(models.Model):
 
     def __str__(self):
         return self.get_kategori_display()
+
+
+# 8. Model Visi, Misi, dan Tujuan (Terstruktur)
+class VisiMisiTujuan(models.Model):
+    visi_teks = models.TextField(
+        verbose_name="Teks Visi",
+        default="Menjadi program studi yang unggul secara global dalam bidang ilmu administrasi publik sebagai mitra strategis untuk kehidupan yang lebih baik bagi Rakyat Indonesia dan Umat Manusia melalui pendidikan, penelitian, dan pelayanan tata kelola publik yang berwawasan lingkungan dan berkelanjutan."
+    )
+    misi_intro = models.CharField(
+        max_length=255,
+        default="Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:",
+        verbose_name="Kalimat Pengantar Misi"
+    )
+    tujuan_intro = models.CharField(
+        max_length=255,
+        default="Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:",
+        verbose_name="Kalimat Pengantar Tujuan"
+    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Terakhir Diperbarui")
+
+    class Meta:
+        verbose_name = "Visi, Misi & Tujuan"
+        verbose_name_plural = "Visi, Misi & Tujuan"
+
+    def __str__(self):
+        return "Pengaturan Visi, Misi & Tujuan"
+
+
+class MisiItem(models.Model):
+    visi_misi = models.ForeignKey(
+        VisiMisiTujuan,
+        on_delete=models.CASCADE,
+        related_name='misi_items',
+        null=True,
+        blank=True
+    )
+    urutan = models.PositiveIntegerField(default=1, verbose_name="Nomor Urut")
+    isi = models.TextField(verbose_name="Isi Poin Misi")
+
+    class Meta:
+        verbose_name = "Poin Misi"
+        verbose_name_plural = "Daftar Poin Misi"
+        ordering = ['urutan', 'id']
+
+    def __str__(self):
+        return f"{self.urutan}. {self.isi[:60]}..."
+
+
+class TujuanItem(models.Model):
+    visi_misi = models.ForeignKey(
+        VisiMisiTujuan,
+        on_delete=models.CASCADE,
+        related_name='tujuan_items',
+        null=True,
+        blank=True
+    )
+    urutan = models.PositiveIntegerField(default=1, verbose_name="Nomor Urut")
+    judul = models.CharField(
+        max_length=200,
+        verbose_name="Judul Tujuan",
+        help_text="Contoh: Employabilitas"
+    )
+    subjudul = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name="Subjudul (English / Keterangan)",
+        help_text="Contoh: Employability"
+    )
+    deskripsi = models.TextField(verbose_name="Deskripsi Tujuan")
+
+    class Meta:
+        verbose_name = "Poin Tujuan"
+        verbose_name_plural = "Daftar Poin Tujuan"
+        ordering = ['urutan', 'id']
+
+    def __str__(self):
+        return f"{self.urutan}. {self.judul}"
+
+
+# 9. Model Halaman Akademik (SIGA-8, Kurikulum, Jadwal, RPS, Panduan)
+class HalamanAkademik(models.Model):
+    KATEGORI_CHOICES = [
+        ('siga8', 'SIGA-8'),
+        ('kurikulum', 'Kurikulum'),
+        ('jadwal', 'Jadwal Perkuliahan'),
+        ('rps', 'RPS'),
+        ('panduan', 'Panduan Akademik'),
+    ]
+    kategori = models.CharField(max_length=50, choices=KATEGORI_CHOICES, unique=True, verbose_name="Kategori Menu")
+    judul = models.CharField(max_length=255, verbose_name="Judul Halaman")
+    subjudul = models.CharField(max_length=255, blank=True, null=True, verbose_name="Subjudul / Ringkasan")
+    isi = CKEditor5Field('Isi Konten Akademik', config_name='extends')
+    link_eksternal = models.URLField(blank=True, null=True, verbose_name="Tautan Eksternal / Portal")
+    file_utama = models.FileField(upload_to='akademik/dokumen/', blank=True, null=True, verbose_name="Dokumen Utama (PDF/Excel)")
+    nama_file_utama = models.CharField(max_length=150, blank=True, null=True, verbose_name="Label Tombol Unduh", help_text="Contoh: Unduh Kurikulum Lengkap (PDF)")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Terakhir Diperbarui")
+
+    class Meta:
+        verbose_name = "Halaman Akademik"
+        verbose_name_plural = "Daftar Halaman Akademik"
+        ordering = ['id']
+
+    def __str__(self):
+        return self.get_kategori_display()
+
+
+# 10. Model Berkas / Lampiran Tambahan untuk Halaman Akademik
+class DokumenAkademik(models.Model):
+    halaman = models.ForeignKey(HalamanAkademik, on_delete=models.CASCADE, related_name='dokumen_list', verbose_name="Halaman Terkait")
+    judul = models.CharField(max_length=255, verbose_name="Nama Dokumen / Berkas")
+    file = models.FileField(upload_to='akademik/berkas/', verbose_name="Upload File (PDF/Doc/Xls)")
+    keterangan = models.CharField(max_length=255, blank=True, null=True, verbose_name="Keterangan Singkat")
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Unggah")
+
+    class Meta:
+        verbose_name = "Dokumen / Berkas Akademik"
+        verbose_name_plural = "Daftar Dokumen Akademik"
+        ordering = ['-uploaded_at']
+
+    def __str__(self):
+        return f"{self.judul} ({self.halaman.get_kategori_display()})"

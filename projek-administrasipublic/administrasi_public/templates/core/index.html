@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,11 +65,11 @@
               <i class="fas fa-university text-brand-gold w-4"></i>
               Profil Program Studi
             </a>
-            <a href="{% url 'tentang_detail' 'visi_misi' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+            <a href="{% url 'tentang_detail' 'visi_misi' %}#visi" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
               <i class="fas fa-bullseye text-brand-gold w-4"></i>
               Visi & Misi
             </a>
-            <a href="{% url 'tentang_detail' 'tujuan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+            <a href="{% url 'tentang_detail' 'visi_misi' %}#tujuan" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
               <i class="fas fa-award text-brand-gold w-4"></i>
               Tujuan & Sasaran
             </a>
@@ -87,7 +87,31 @@
 
       <li><a href="#penelitian" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Galeri</a></li>
       <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Berita</a></li>
-      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Akademik <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <!-- Dropdown Menu Akademik Sesuai Foto -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition flex items-center gap-1.5 focus:outline-none">
+          Akademik <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-desktop text-brand-gold w-4"></i> SIGA-8
+            </a>
+            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-book-open text-brand-gold w-4"></i> Kurikulum
+            </a>
+            <a href="{% url 'akademik_detail' 'jadwal' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-calendar-alt text-brand-gold w-4"></i> Jadwal Perkuliahan
+            </a>
+            <a href="{% url 'akademik_detail' 'rps' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-file-signature text-brand-gold w-4"></i> RPS
+            </a>
+            <a href="{% url 'akademik_detail' 'panduan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <i class="fas fa-book-bookmark text-brand-gold w-4"></i> Panduan Akademik
+            </a>
+          </div>
+        </div>
+      </li>
       
       <!-- Dropdown Staf -->
       <li class="relative group">
@@ -158,6 +182,117 @@
       <div class="text-sm font-semibold italic text-slate-700 border-l-4 border-brand-gold pl-3">
         {% if sambutan %}{{ sambutan.nama_author }}{% else %}Dr. Intam Kurnia, M.Si.{% endif %}
       </div>
+    </div>
+  </section>
+
+  <!-- ================= VISI, MISI, DAN TUJUAN ================= -->
+  <section class="py-20 px-6 bg-slate-50/70 border-t border-slate-200/60" id="visi-misi-section">
+    <div class="max-w-5xl mx-auto">
+      
+      <!-- Header Judul Utama -->
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#0f2b46] tracking-tight mb-5">
+        Visi, Misi, dan Tujuan
+      </h2>
+
+      <!-- Tombol Navigasi / Tab Pills -->
+      <div class="flex items-center gap-3 mb-8">
+        <a href="#visi" class="px-5 py-2 text-sm font-semibold rounded-lg border border-sky-200/90 bg-[#f0f7fa] text-[#0f3057] hover:bg-[#0c3957] hover:text-white transition duration-200 shadow-sm inline-flex items-center justify-center">
+          Visi
+        </a>
+        <a href="#misi" class="px-5 py-2 text-sm font-semibold rounded-lg border border-sky-200/90 bg-[#f0f7fa] text-[#0f3057] hover:bg-[#0c3957] hover:text-white transition duration-200 shadow-sm inline-flex items-center justify-center">
+          Misi
+        </a>
+        <a href="#tujuan" class="px-5 py-2 text-sm font-semibold rounded-lg border border-sky-200/90 bg-[#f0f7fa] text-[#0f3057] hover:bg-[#0c3957] hover:text-white transition duration-200 shadow-sm inline-flex items-center justify-center">
+          Tujuan
+        </a>
+      </div>
+
+      <!-- 1. Bagian Visi -->
+      <div id="visi" class="scroll-mt-24 mb-10">
+        <div class="bg-[#0c3957] text-white rounded-2xl p-6 sm:p-8 md:p-10 border-l-[6px] border-[#fab005] shadow-sm">
+          <h3 class="text-xl sm:text-2xl font-bold text-[#fab005] mb-3 tracking-wide">
+            Visi
+          </h3>
+          <p class="text-slate-100 text-sm sm:text-[15px] leading-relaxed">
+            {{ visi_obj.visi_teks|default:"Menjadi program studi yang unggul secara global dalam bidang ilmu administrasi publik sebagai mitra strategis untuk kehidupan yang lebih baik bagi Rakyat Indonesia dan Umat Manusia melalui pendidikan, penelitian, dan pelayanan tata kelola publik yang berwawasan lingkungan dan berkelanjutan." }}
+          </p>
+        </div>
+      </div>
+
+      <!-- 2. Bagian Misi -->
+      <div id="misi" class="scroll-mt-24 mb-12">
+        <h3 class="text-2xl sm:text-3xl font-bold text-[#0f3057] mb-2">
+          Misi
+        </h3>
+        <p class="text-slate-600 text-sm sm:text-base mb-6">
+          {{ visi_obj.misi_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:" }}
+        </p>
+
+        <div class="space-y-4">
+          {% for item in daftar_misi %}
+            <div class="bg-white rounded-xl border border-slate-200/90 border-l-4 border-l-[#fab005] p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-4 sm:gap-6">
+              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-base sm:text-lg flex items-center justify-center shrink-0">
+                {{ item.urutan|default:forloop.counter }}
+              </div>
+              <p class="text-slate-700 text-sm sm:text-[15px] leading-relaxed flex-1">
+                {{ item.isi }}
+              </p>
+            </div>
+          {% empty %}
+            <div class="bg-white rounded-xl border border-slate-200/90 border-l-4 border-l-[#fab005] p-5 sm:p-6 shadow-sm flex items-center gap-4 sm:gap-6">
+              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-base sm:text-lg flex items-center justify-center shrink-0">
+                1
+              </div>
+              <p class="text-slate-700 text-sm sm:text-[15px] leading-relaxed flex-1">
+                Menyelenggarakan pembelajaran, penelitian, dan inovasi administrasi publik secara terpadu, berkelanjutan, dan berdampak lingkungan.
+              </p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- 3. Bagian Tujuan -->
+      <div id="tujuan" class="scroll-mt-24">
+        <h3 class="text-2xl sm:text-3xl font-bold text-[#0f3057] mb-2">
+          Tujuan
+        </h3>
+        <p class="text-slate-600 text-sm sm:text-base mb-6">
+          {{ visi_obj.tujuan_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:" }}
+        </p>
+
+        <div class="space-y-4">
+          {% for item in daftar_tujuan %}
+            <div class="bg-white rounded-xl border border-slate-200/90 border-l-4 border-l-[#fab005] p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4 sm:gap-6">
+              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-base sm:text-lg flex items-center justify-center shrink-0 mt-0.5">
+                {{ item.urutan|default:forloop.counter }}
+              </div>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-bold text-[#0f3057] leading-snug">{{ item.judul }}</h4>
+                {% if item.subjudul %}
+                  <p class="text-xs sm:text-sm italic text-slate-500 mb-2.5 font-normal">{{ item.subjudul }}</p>
+                {% endif %}
+                <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed">
+                  {{ item.deskripsi }}
+                </p>
+              </div>
+            </div>
+          {% empty %}
+            <div class="bg-white rounded-xl border border-slate-200/90 border-l-4 border-l-[#fab005] p-5 sm:p-6 shadow-sm flex items-start gap-4 sm:gap-6">
+              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#eef5f9] text-[#0f3057] font-bold text-base sm:text-lg flex items-center justify-center shrink-0 mt-0.5">
+                1
+              </div>
+              <div class="flex-1">
+                <h4 class="text-base sm:text-lg font-bold text-[#0f3057] leading-snug">Employabilitas</h4>
+                <p class="text-xs sm:text-sm italic text-slate-500 mb-2.5 font-normal">Employability</p>
+                <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed">
+                  Menghasilkan lulusan yang menguasai ilmu pengetahuan dan teknologi terdepan di bidang administrasi dan kebijakan publik.
+                </p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
     </div>
   </section>
 

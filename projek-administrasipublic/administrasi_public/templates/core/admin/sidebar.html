@@ -22,11 +22,18 @@
         <span>Ringkasan Dashboard</span>
       </a>
 
-      <!-- 2. Kelola Halaman Tentang (Profil, Visi & Misi, dsb) -->
+      <!-- 2. Kelola Halaman Tentang (Profil, Sejarah, dsb) -->
       <a href="{% url 'admin_kelola_tentang' 'profil' %}" 
          class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'tentang' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
         <i class="bi bi-info-circle text-base {% if 'tentang' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
         <span>Kelola Menu Tentang</span>
+      </a>
+
+      <!-- 2b. Kelola Visi, Misi & Tujuan (Terstruktur Sesuai Foto) -->
+      <a href="{% url 'admin_kelola_visi_misi' %}" 
+         class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'visi_misi' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
+        <i class="bi bi-compass text-base {% if 'visi_misi' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
+        <span>Visi, Misi & Tujuan</span>
       </a>
 
       <!-- 3. Kelola Sambutan (CKEditor 5) -->
@@ -41,6 +48,13 @@
          class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'berita' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
         <i class="bi bi-newspaper text-base {% if 'berita' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
         <span>Kelola Berita</span>
+      </a>
+
+      <!-- 4b. Kelola Akademik (SIGA-8, Kurikulum, Jadwal, RPS, Panduan) -->
+      <a href="{% url 'admin_kelola_akademik' %}" 
+         class="flex items-center gap-3 px-4 py-3 rounded-xl transition duration-200 {% if 'akademik' in request.resolver_match.url_name %}bg-teal-900/60 text-white font-semibold shadow-sm border-l-4 border-amber-400{% else %}hover:bg-slate-800/70 hover:text-white text-slate-400{% endif %}">
+        <i class="bi bi-mortarboard text-base {% if 'akademik' in request.resolver_match.url_name %}text-amber-400{% endif %}"></i>
+        <span>Kelola Akademik</span>
       </a>
 
       <!-- 5. Kelola Dosen -->

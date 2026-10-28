@@ -44,6 +44,11 @@ from core.views import (
     # View Kelola Halaman Tentang
     admin_kelola_tentang,
     tentang_detail,
+    admin_kelola_visi_misi,
+    # View Modul Akademik
+    akademik_detail,
+    admin_kelola_akademik,
+    admin_hapus_dokumen_akademik,
 )
 
 urlpatterns = [
@@ -89,7 +94,14 @@ urlpatterns = [
     path('dashboard/sambutan/', admin_kelola_sambutan, name='admin_kelola_sambutan'),
     path('dashboard/berita/', admin_kelola_berita, name='admin_kelola_berita'),
     
+    # Rute Modul Akademik (SIGA-8, Kurikulum, Jadwal, RPS, Panduan)
+    path('akademik/<str:kategori>/', akademik_detail, name='akademik_detail'),
+    path('dashboard/akademik/', admin_kelola_akademik, name='admin_kelola_akademik'),
+    path('dashboard/akademik/<str:kategori>/', admin_kelola_akademik, name='admin_kelola_akademik_kategori'),
+    path('dashboard/akademik/dokumen/<int:pk>/hapus/', admin_hapus_dokumen_akademik, name='admin_hapus_dokumen_akademik'),
+
     # Rute Kelola Halaman Tentang (Profil, Visi Misi, Tujuan, dll)
+    path('dashboard/visi-misi/', admin_kelola_visi_misi, name='admin_kelola_visi_misi'),
     path('dashboard/tentang/<str:kategori>/', admin_kelola_tentang, name='admin_kelola_tentang'),
     path('tentang/<str:kategori>/', tentang_detail, name='tentang_detail'),
     

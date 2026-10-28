@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - Admin Portal UNTAD</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  {{ form.media }}
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { 
+              teal: '#0b7285', 
+              darkteal: '#084c5a', 
+              deepteal: '#05313a', 
+              gold: '#fab005', 
+              accent: '#ffd43b',
+              navy: '#0c3957',
+              pillbg: '#f0f7fa',
+              circlebg: '#eef5f9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .ck-editor__editable_inline {
+      min-height: 280px;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- Include Sidebar Admin -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Header Admin Atas -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">{{ title }}</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="{% url 'akademik_detail' kategori_aktif %}" target="_blank" class="text-xs font-semibold text-brand-teal hover:underline flex items-center gap-1.5 bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-100 transition">
+          <i class="bi bi-box-arrow-up-right text-[11px]"></i> Lihat Halaman Publik
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8 space-y-6 max-w-5xl">
+      <!-- Tab Navigasi Sub-Menu Akademik Sesuai Foto -->
+      <div>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Sub-Menu Akademik:</p>
+        <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+          {% for kat_kode, kat_nama in daftar_kategori %}
+            <a href="{% url 'admin_kelola_akademik_kategori' kat_kode %}" 
+               class="px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2 {% if kategori_aktif == kat_kode %}bg-teal-800 text-white shadow-sm{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-slate-50{% endif %}">
+              {% if kat_kode == 'siga8' %}
+                <i class="bi bi-laptop {% if kategori_aktif == kat_kode %}text-amber-400{% endif %}"></i>
+              {% elif kat_kode == 'kurikulum' %}
+                <i class="bi bi-book {% if kategori_aktif == kat_kode %}text-amber-400{% endif %}"></i>
+              {% elif kat_kode == 'jadwal' %}
+                <i class="bi bi-calendar3 {% if kategori_aktif == kat_kode %}text-amber-400{% endif %}"></i>
+              {% elif kat_kode == 'rps' %}
+                <i class="bi bi-file-earmark-ruled {% if kategori_aktif == kat_kode %}text-amber-400{% endif %}"></i>
+              {% elif kat_kode == 'panduan' %}
+                <i class="bi bi-journal-bookmark {% if kategori_aktif == kat_kode %}text-amber-400{% endif %}"></i>
+              {% endif %}
+              <span>{{ kat_nama }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Form Pengelolaan Konten Utama -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">{{ halaman.get_kategori_display }}</h2>
+            <p class="text-xs text-slate-400">Terakhir diperbarui: {{ halaman.updated_at|date:"d M Y, H:i" }} WITA</p>
+          </div>
+          <span class="text-[11px] font-semibold text-teal-800 bg-teal-50 px-3 py-1 rounded-full border border-teal-100 uppercase tracking-wider">
+            Menu Akademik
+          </span>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-5">
+          {% csrf_token %}
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Judul Halaman</label>
+              {{ form.judul }}
+              {% for err in form.judul.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+              {% endfor %}
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Subjudul / Ringkasan Singkat</label>
+              {{ form.subjudul }}
+              {% for err in form.subjudul.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Tautan Eksternal / Portal <span class="text-slate-400 font-normal">(opsional)</span>
+              </label>
+              {{ form.link_eksternal }}
+              <p class="text-[10px] text-slate-400 mt-1">Misal tautan portal SIGA-8: <code>https://siaga.untad.ac.id/</code></p>
+              {% for err in form.link_eksternal.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+              {% endfor %}
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                Label Tombol Unduh Utama <span class="text-slate-400 font-normal">(opsional)</span>
+              </label>
+              {{ form.nama_file_utama }}
+              {% for err in form.nama_file_utama.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+              Unggah Dokumen Utama <span class="text-slate-400 font-normal">(PDF / Excel / Word)</span>
+            </label>
+            {{ form.file_utama }}
+            {% if halaman.file_utama %}
+              <div class="mt-2 text-xs text-teal-800 bg-teal-50 p-2.5 rounded-lg border border-teal-100 flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                  <i class="bi bi-file-earmark-pdf text-base text-rose-600"></i>
+                  File saat ini: <a href="{{ halaman.file_utama.url }}" target="_blank" class="font-bold underline">{{ halaman.file_utama.name }}</a>
+                </span>
+                <span class="text-[10px] text-slate-500">Unggah file baru untuk mengganti</span>
+              </div>
+            {% endif %}
+            {% for err in form.file_utama.errors %}
+              <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="pt-2">
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Isi Konten Akademik Lengkap</label>
+            {{ form.isi }}
+            {% for err in form.isi.errors %}
+              <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex justify-end">
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow transition flex items-center gap-2">
+              <i class="bi bi-check2-circle text-base"></i> Simpan Perubahan Konten
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Bagian Kelola Berkas / Dokumen Lampiran Tambahan -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Berkas Unduhan Tambahan ({{ halaman.get_kategori_display }})</h3>
+            <p class="text-xs text-slate-400">Daftar file PDF/dokumen yang dapat diunduh mahasiswa pada laman ini</p>
+          </div>
+        </div>
+
+        <!-- Form Tambah Dokumen Cepat -->
+        <form method="POST" enctype="multipart/form-data" class="bg-slate-50 rounded-xl p-4 border border-slate-200/80 mb-6">
+          {% csrf_token %}
+          <input type="hidden" name="tambah_dokumen" value="1">
+          <p class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+            <i class="bi bi-cloud-arrow-up text-brand-teal"></i> Unggah Berkas Baru:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama Dokumen</label>
+              <input type="text" name="judul_dokumen" required placeholder="Contoh: Jadwal Kuliah Ganjil 2026" class="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Pilih File (PDF/Doc/Xls)</label>
+              <input type="file" name="file_dokumen" required class="w-full text-xs p-1.5 bg-white border border-slate-300 rounded-lg file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal cursor-pointer">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Keterangan Singkat</label>
+              <input type="text" name="keterangan_dokumen" placeholder="Contoh: Revisi 28 Oktober 2026" class="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-brand-teal">
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button type="submit" class="px-4 py-2 bg-brand-teal hover:bg-brand-darkteal text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+              <i class="bi bi-upload"></i> Unggah Berkas
+            </button>
+          </div>
+        </form>
+
+        <!-- Tabel Daftar Dokumen yang Tersedia -->
+        <div class="overflow-x-auto">
+          {% if daftar_dokumen %}
+            <table class="w-full text-xs text-left text-slate-600">
+              <thead class="bg-slate-50 text-slate-700 uppercase font-semibold text-[11px] border-b border-slate-200">
+                <tr>
+                  <th class="py-2.5 px-3">No</th>
+                  <th class="py-2.5 px-3">Nama Dokumen</th>
+                  <th class="py-2.5 px-3">Keterangan</th>
+                  <th class="py-2.5 px-3">Tanggal Unggah</th>
+                  <th class="py-2.5 px-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                {% for doc in daftar_dokumen %}
+                  <tr class="hover:bg-slate-50/60 transition">
+                    <td class="py-2.5 px-3 font-semibold">{{ forloop.counter }}</td>
+                    <td class="py-2.5 px-3 font-bold text-slate-800 flex items-center gap-2">
+                      <i class="bi bi-file-earmark-arrow-down text-base text-rose-600"></i>
+                      <a href="{{ doc.file.url }}" target="_blank" class="hover:text-brand-teal hover:underline">{{ doc.judul }}</a>
+                    </td>
+                    <td class="py-2.5 px-3 text-slate-500">{{ doc.keterangan|default:"-" }}</td>
+                    <td class="py-2.5 px-3 text-slate-400">{{ doc.uploaded_at|date:"d M Y, H:i" }}</td>
+                    <td class="py-2.5 px-3 text-center">
+                      <a href="{% url 'admin_hapus_dokumen_akademik' doc.pk %}" 
+                         onclick="return confirm('Apakah Anda yakin ingin menghapus berkas ini?');"
+                         class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition" title="Hapus Berkas">
+                        <i class="bi bi-trash3"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <div class="text-center py-6 text-slate-400 text-xs">
+              <i class="bi bi-folder2-open text-3xl mb-1 text-slate-300 block"></i>
+              Belum ada berkas lampiran tambahan yang diunggah untuk kategori ini.
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- SweetAlert Flash Notifications -->
+  {% if messages %}
+    <script>
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'info' %}info{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    </script>
+  {% endif %}
+
+</body>
+</html>
+

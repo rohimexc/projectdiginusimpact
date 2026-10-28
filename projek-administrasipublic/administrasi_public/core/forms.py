@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan
-from .models import HalamanTentang
+from .models import HalamanTentang, HalamanAkademik, DokumenAkademik
 
 User = get_user_model()
 
@@ -216,4 +216,34 @@ class HalamanTentangForm(forms.ModelForm):
                 'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
                 'placeholder': 'Masukkan judul halaman...'
             }),
+        }
+
+class HalamanAkademikForm(forms.ModelForm):
+    class Meta:
+        model = HalamanAkademik
+        fields = ['judul', 'subjudul', 'link_eksternal', 'nama_file_utama', 'file_utama', 'isi']
+        widgets = {
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
+                'placeholder': 'Masukkan judul halaman akademik...'
+            }),
+            'subjudul': forms.TextInput(attrs={
+                'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
+                'placeholder': 'Masukkan subjudul / deskripsi singkat...'
+            }),
+            'link_eksternal': forms.URLInput(attrs={
+                'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
+                'placeholder': 'https://siaga.untad.ac.id/ (opsional)'
+            }),
+            'nama_file_utama': forms.TextInput(attrs={
+                'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
+                'placeholder': 'Contoh: Unduh Kurikulum Lengkap (PDF)'
+            }),
+            'file_utama': forms.FileInput(attrs={
+                'class': 'w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+            }),
+            'isi': CKEditor5Widget(
+                attrs={'class': 'django_ckeditor_5'}, 
+                config_name='extends'
+            )
         }

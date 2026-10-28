@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Sambutan, Galeri, Berita, TenagaPendidik, AuditLog, HalamanTentang
-from .forms import BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, HalamanTentangForm
+from .models import Sambutan, Galeri, Berita, TenagaPendidik, AuditLog, HalamanTentang, VisiMisiTujuan, MisiItem, TujuanItem, HalamanAkademik, DokumenAkademik
+from .forms import BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, HalamanTentangForm, HalamanAkademikForm
 
 User = get_user_model()
 
@@ -29,11 +29,18 @@ def home(request):
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
     daftar_tenaga_kependidikan = TenagaPendidik.objects.filter(jenis='TENDIK')[:4]
 
+    visi_obj = VisiMisiTujuan.objects.first()
+    daftar_misi = visi_obj.misi_items.all() if visi_obj else []
+    daftar_tujuan = visi_obj.tujuan_items.all() if visi_obj else []
+
     context = {
         'sambutan': sambutan,
         'daftar_galeri': daftar_galeri,
         'daftar_berita': daftar_berita,
         'daftar_tenaga_kependidikan': daftar_tenaga_kependidikan,
+        'visi_obj': visi_obj,
+        'daftar_misi': daftar_misi,
+        'daftar_tujuan': daftar_tujuan,
     }
     return render(request, 'core/index.html', context)
 
@@ -541,7 +548,14 @@ def admin_kelola_tentang(request, kategori='profil'):
         logout(request)
         return redirect('user_login')
 
-    default_judul = dict(HalamanTentang.KATEGORI_CHOICES).get(kategori, 'Halaman Tentang')
+    if kategori in ['visi_misi', 'tujuan']:
+        return redirect('admin_kelola_visi_misi')
+
+    valid_dict = dict(HalamanTentang.KATEGORI_CHOICES)
+    if kategori not in valid_dict:
+        return redirect('admin_kelola_tentang', kategori='profil')
+
+    default_judul = valid_dict.get(kategori, 'Halaman Tentang')
     halaman, created = HalamanTentang.objects.get_or_create(
         kategori=kategori,
         defaults={'judul': default_judul, 'isi': '<p>Konten belum diisi.</p>'}
@@ -566,5 +580,187 @@ def admin_kelola_tentang(request, kategori='profil'):
     })
 
 def tentang_detail(request, kategori):
+    if kategori in ['visi_misi', 'tujuan']:
+        visi_obj = VisiMisiTujuan.objects.first()
+        context = {
+            'halaman': {
+                'kategori': kategori,
+                'judul': 'Visi, Misi, dan Tujuan',
+                'get_kategori_display': 'Visi, Misi, dan Tujuan',
+                'updated_at': visi_obj.updated_at if visi_obj else None,
+            },
+            'kategori': kategori,
+            'kategori_aktif': kategori,
+            'visi_obj': visi_obj,
+            'daftar_misi': visi_obj.misi_items.all() if visi_obj else [],
+            'daftar_tujuan': visi_obj.tujuan_items.all() if visi_obj else [],
+        }
+        return render(request, 'core/admin/tentang_detail.html', context)
+
     halaman = get_object_or_404(HalamanTentang, kategori=kategori)
-    return render(request, 'core/admin/tentang_detail.html', {'halaman': halaman})
+    context = {
+        'halaman': halaman,
+        'kategori': kategori,
+    }
+    return render(request, 'core/admin/tentang_detail.html', context)
+
+@login_required(login_url='user_login')
+def admin_kelola_visi_misi(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    visi_obj, created = VisiMisiTujuan.objects.get_or_create(id=1)
+
+    if request.method == 'POST':
+        visi_teks = request.POST.get('visi_teks', '').strip()
+        misi_intro = request.POST.get('misi_intro', '').strip()
+        tujuan_intro = request.POST.get('tujuan_intro', '').strip()
+
+        if visi_teks:
+            visi_obj.visi_teks = visi_teks
+        if misi_intro:
+            visi_obj.misi_intro = misi_intro
+        if tujuan_intro:
+            visi_obj.tujuan_intro = tujuan_intro
+        visi_obj.save()
+
+        # Update Misi items
+        misi_isi_list = request.POST.getlist('misi_isi[]')
+        visi_obj.misi_items.all().delete()
+        for idx, isi in enumerate(misi_isi_list, start=1):
+            isi_clean = isi.strip()
+            if isi_clean:
+                MisiItem.objects.create(visi_misi=visi_obj, urutan=idx, isi=isi_clean)
+
+        # Update Tujuan items
+        tujuan_judul_list = request.POST.getlist('tujuan_judul[]')
+        tujuan_subjudul_list = request.POST.getlist('tujuan_subjudul[]')
+        tujuan_deskripsi_list = request.POST.getlist('tujuan_deskripsi[]')
+
+        visi_obj.tujuan_items.all().delete()
+        for idx in range(len(tujuan_judul_list)):
+            judul = tujuan_judul_list[idx].strip()
+            subjudul = tujuan_subjudul_list[idx].strip() if idx < len(tujuan_subjudul_list) else ''
+            deskripsi = tujuan_deskripsi_list[idx].strip() if idx < len(tujuan_deskripsi_list) else ''
+            if judul:
+                TujuanItem.objects.create(
+                    visi_misi=visi_obj,
+                    urutan=idx + 1,
+                    judul=judul,
+                    subjudul=subjudul,
+                    deskripsi=deskripsi
+                )
+
+        catat_audit(request, 'Edit Visi Misi Tujuan', 'Memperbarui Visi, Misi, dan Tujuan Program Studi')
+        messages.success(request, 'Visi, Misi, dan Tujuan berhasil diperbarui!')
+        return redirect('admin_kelola_visi_misi')
+
+    daftar_misi = visi_obj.misi_items.all()
+    daftar_tujuan = visi_obj.tujuan_items.all()
+
+    daftar_kategori = [
+        ('profil', 'Profil Program Studi'),
+        ('visi_misi', 'Visi, Misi & Tujuan'),
+        ('sejarah', 'Sejarah Singkat'),
+        ('struktur', 'Struktur Organisasi'),
+    ]
+
+    context = {
+        'visi_obj': visi_obj,
+        'daftar_misi': daftar_misi,
+        'daftar_tujuan': daftar_tujuan,
+        'title': 'Kelola Visi, Misi & Tujuan',
+        'kategori_aktif': 'visi_misi',
+        'daftar_kategori': daftar_kategori,
+    }
+    return render(request, 'core/admin/visi_misi_form.html', context)
+
+
+# ==========================================
+# 11. MODUL AKADEMIK PUBLIK & ADMIN
+# (SIGA-8, Kurikulum, Jadwal, RPS, Panduan)
+# ==========================================
+
+def akademik_detail(request, kategori):
+    halaman = get_object_or_404(HalamanAkademik, kategori=kategori)
+    daftar_dokumen = halaman.dokumen_list.all()
+    context = {
+        'halaman': halaman,
+        'kategori_aktif': kategori,
+        'daftar_kategori': HalamanAkademik.KATEGORI_CHOICES,
+        'daftar_dokumen': daftar_dokumen,
+    }
+    return render(request, 'core/akademik_detail.html', context)
+
+
+@login_required(login_url='user_login')
+def admin_kelola_akademik(request, kategori='siga8'):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    default_judul = dict(HalamanAkademik.KATEGORI_CHOICES).get(kategori, 'Halaman Akademik')
+    halaman, created = HalamanAkademik.objects.get_or_create(
+        kategori=kategori,
+        defaults={'judul': default_judul, 'isi': '<p>Konten akademik belum diisi.</p>'}
+    )
+
+    if request.method == 'POST':
+        # Cek apakah ini aksi tambah dokumen lampiran baru
+        if 'tambah_dokumen' in request.POST:
+            judul_doc = request.POST.get('judul_dokumen', '').strip()
+            file_doc = request.FILES.get('file_dokumen')
+            ket_doc = request.POST.get('keterangan_dokumen', '').strip()
+            if judul_doc and file_doc:
+                DokumenAkademik.objects.create(
+                    halaman=halaman,
+                    judul=judul_doc,
+                    file=file_doc,
+                    keterangan=ket_doc
+                )
+                catat_audit(request, 'Tambah Dokumen Akademik', f"Menambahkan berkas {judul_doc} ke {halaman.get_kategori_display()}")
+                messages.success(request, f"Berkas '{judul_doc}' berhasil diunggah!")
+            else:
+                messages.error(request, 'Judul dokumen dan file wajib diisi!')
+            return redirect('admin_kelola_akademik_kategori', kategori=kategori)
+
+        # Update form utama HalamanAkademik
+        form = HalamanAkademikForm(request.POST, request.FILES, instance=halaman)
+        if form.is_valid():
+            form.save()
+            catat_audit(request, 'Edit Halaman Akademik', f"Memperbarui konten {halaman.get_kategori_display()}")
+            messages.success(request, f"{halaman.get_kategori_display()} berhasil diperbarui!")
+            return redirect('admin_kelola_akademik_kategori', kategori=kategori)
+    else:
+        form = HalamanAkademikForm(instance=halaman)
+
+    daftar_dokumen = halaman.dokumen_list.all()
+
+    context = {
+        'form': form,
+        'halaman': halaman,
+        'kategori_aktif': kategori,
+        'daftar_kategori': HalamanAkademik.KATEGORI_CHOICES,
+        'daftar_dokumen': daftar_dokumen,
+        'title': f"Kelola {halaman.get_kategori_display()}",
+    }
+    return render(request, 'core/admin/akademik_form.html', context)
+
+
+@login_required(login_url='user_login')
+def admin_hapus_dokumen_akademik(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    dokumen = get_object_or_404(DokumenAkademik, pk=pk)
+    kategori = dokumen.halaman.kategori
+    nama_doc = dokumen.judul
+    dokumen.delete()
+    catat_audit(request, 'Hapus Dokumen Akademik', f"Menghapus berkas: {nama_doc}")
+    messages.success(request, f"Berkas '{nama_doc}' berhasil dihapus!")
+    return redirect('admin_kelola_akademik_kategori', kategori=kategori)
