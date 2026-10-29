@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ pendidik.nama }} - Detail Tenaga Pendidik{% endblock %}
+
+{% block content %}
+<div class="bg-slate-50 min-h-screen pb-16">
+    <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 space-y-6">
+        
+        <!-- Tombol Kembali -->
+        <div>
+            <a href="{% url 'landing:tenaga_pendidik' %}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 px-3.5 py-2 rounded-lg transition">
+                &larr; Kembali ke Daftar Tenaga Pendidik
+            </a>
+        </div>
+
+        <!-- Kartu Utama Detail Dosen -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 sm:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                
+                <!-- Kolom Foto -->
+                <div class="md:col-span-1">
+                    {% if pendidik.foto %}
+                        <img src="{{ pendidik.foto.url }}" alt="{{ pendidik.nama }}" class="w-full aspect-square object-cover rounded-2xl shadow-sm border border-slate-100">
+                    {% else %}
+                        <div class="w-full aspect-square bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 text-xs">Tidak ada foto</div>
+                    {% endif %}
+                    
+                    <div class="mt-4 text-center">
+                        {% if pendidik.jabatan %}
+                            <span class="inline-block bg-teal-50 text-tealBrand text-xs font-semibold px-4 py-1.5 rounded-full border border-teal-200">
+                                {{ pendidik.jabatan }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Kolom Informasi Lengkap -->
+                <div class="md:col-span-2 space-y-4">
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ pendidik.nama }}</h1>
+                        <p class="text-teal-600 font-medium text-sm sm:text-base mt-1">{{ pendidik.bidang_ilmu }}</p>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-4 space-y-3 text-xs sm:text-sm text-slate-700">
+                        {% if pendidik.email %}
+                            <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="text-teal-600 text-base">✉</span>
+                                <div>
+                                    <p class="text-[11px] text-slate-400 font-medium">Email</p>
+                                    <p class="font-semibold break-all">{{ pendidik.email }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if pendidik.nip %}
+                            <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="text-teal-600 text-base">⭐</span>
+                                <div>
+                                    <p class="text-[11px] text-slate-400 font-medium">NIDN / NIP</p>
+                                    <p class="font-semibold">{{ pendidik.nip }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if pendidik.pangkat_gol %}
+                            <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="text-teal-600 text-base">🎖️</span>
+                                <div>
+                                    <p class="text-[11px] text-slate-400 font-medium">Pangkat / Golongan</p>
+                                    <p class="font-semibold">{{ pendidik.pangkat_gol }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if pendidik.no_hp %}
+                            <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="text-teal-600 text-base">📞</span>
+                                <div>
+                                    <p class="text-[11px] text-slate-400 font-medium">Nomor Telepon / HP</p>
+                                    <p class="font-semibold">{{ pendidik.no_hp }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

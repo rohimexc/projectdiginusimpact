@@ -1,0 +1,82 @@
+<!-- SIDEBAR ADMIN -->
+<aside class="w-64 bg-[#0f6b6b] text-white hidden md:flex flex-col justify-between p-6 shadow-xl shrink-0 h-screen border-r border-[#0d5959]/50 overflow-y-auto">
+    <div class="space-y-6">
+        <!-- Header Logo & Portal -->
+        <div class="flex items-center gap-3 pb-5 border-b border-white/15">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow shrink-0">
+                <span class="text-xs font-bold text-red-600">🏛️</span>
+            </div>
+            <div>
+                <h2 class="text-sm font-bold text-white tracking-wide leading-tight">Admin Portal</h2>
+                <p class="text-amber-300 text-[10px] font-semibold tracking-wider uppercase">Administrasi Publik</p>
+            </div>
+        </div>
+
+        <!-- Menu Navigation -->
+        <nav class="space-y-1.5 text-xs font-medium">
+            <a href="{% url 'landing:dashboard_admin' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_admin' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-gauge text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_admin' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Dashboard Utama</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_berita' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_berita' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-newspaper text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_berita' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Berita</span>
+            </a>
+
+            <a href="{% url 'landing:tenaga_pendidik' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'tenaga_pendidik' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-user-tie text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'tenaga_pendidik' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Tendik</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_dosen' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_dosen' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-chalkboard-user text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_dosen' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Dosen</span>
+            </a>
+
+            <a href="{% url 'landing:manajemen_user' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'manajemen_user' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-users-gear text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'manajemen_user' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Manajemen User</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_tentang' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_tentang' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-circle-info text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_tentang' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Tentang</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_visi_misi_tujuan' %}"
+                class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_visi_misi_tujuan' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-bullseye text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_visi_misi_tujuan' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                    <span>Visi, Misi & Tujuan</span>
+                </div>
+            </a>
+
+            <a href="{% url 'landing:dashboard_akademik' %}"
+                class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_akademik' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-graduation-cap text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_akademik' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                    <span>Kelola Akademik</span>
+                </div>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Tombol Logout -->
+    <div class="pt-4 border-t border-white/15">
+        <form action="{% url 'landing:login' %}" method="post">
+            {% csrf_token %}
+            <button type="submit"
+                class="w-full flex items-center gap-3 px-3.5 py-2.5 text-xs text-red-200 hover:text-amber-300 hover:bg-white/10 rounded-xl transition duration-200 font-semibold group">
+                <i class="fa-solid fa-arrow-right-from-bracket text-xs group-hover:text-amber-300"></i>
+                <span>Keluar / Logout</span>
+            </button>
+        </form>
+    </div>
+</aside>
