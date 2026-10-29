@@ -7,6 +7,7 @@ from django.utils.text import slugify
 class TentangPage(models.Model):
     judul = models.CharField(max_length=150, verbose_name="Nama Menu / Sub-Menu")
     slug = models.SlugField(max_length=100, unique=True, help_text="Slug URL sub-menu (misal: profil, sejarah, visi, tujuan, profil-lulusan, sertifikat)")
+    file_dokumen = models.FileField(upload_to='documents/tentang/', blank=True, null=True, verbose_name="File Berkas / Sertifikat (PDF/Gambar)")
     konten = CKEditor5Field(blank=True, null=True, verbose_name="Isi Konten", config_name='extends')
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -209,8 +210,8 @@ class Dosen(models.Model):
 
 class Akreditasi(models.Model):
     status_akreditasi = models.CharField(max_length=50, default="Unggul (A)")
-    nomor_sk = models.CharField(max_length=100)
-    tanggal_kadaluarsa = models.DateField()
+    nomor_sk = models.CharField(max_length=100, blank=True, null=True, default="-")
+    tanggal_kadaluarsa = models.DateField(blank=True, null=True)
     sertifikat = models.FileField(upload_to='documents/akreditasi/', blank=True, null=True)
 
     def __str__(self):

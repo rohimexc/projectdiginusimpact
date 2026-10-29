@@ -6,10 +6,19 @@
     <title>{% block title %}Admin Portal - Administrasi Publik{% endblock %}</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script>
         tailwind.config = {
-            theme: { extend: { colors: { tealBrand: '#0b7a75' } } }
+            theme: {
+                extend: {
+                    colors: {
+                        tealBrand: '#0f6b6b',
+                        tealDark: '#005f5f',
+                        tealHeader: '#0b6666'
+                    }
+                }
+            }
         }
     </script>
     {% block extra_head %}{% endblock %}
@@ -33,14 +42,14 @@
                 <div class="flex items-center gap-3 border-r border-slate-200 pr-4">
                     <div class="text-right">
                         <p class="text-xs font-bold text-slate-800">{{ request.user.get_full_name|default:request.user.username }}</p>
-                        <p class="text-[10px] text-teal-600 font-medium">{% if request.user.is_superuser %}Super Admin{% else %}Staff Admin{% endif %}</p>
+                        <p class="text-[10px] text-[#0f6b6b] font-medium">{% if request.user.is_superuser %}Super Admin{% else %}Staff Admin{% endif %}</p>
                     </div>
-                    <div class="w-9 h-9 bg-teal-600 text-white font-bold rounded-full flex items-center justify-center text-xs shadow-inner">
+                    <div class="w-9 h-9 bg-[#0f6b6b] text-white font-bold rounded-full flex items-center justify-center text-xs shadow-inner">
                         {{ request.user.username|slice:":2"|upper }}
                     </div>
                 </div>
 
-                <a href="{% url 'landing:landing_home' %}" class="text-xs font-semibold text-teal-600 hover:underline">Lihat Website &rarr;</a>
+                <a href="{% url 'landing:landing_home' %}" class="text-xs font-semibold text-[#0f6b6b] hover:text-amber-500 hover:underline transition">Lihat Website &rarr;</a>
             </div>
         </header>
 

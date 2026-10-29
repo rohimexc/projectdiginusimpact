@@ -475,13 +475,50 @@ def dashboard_tentang(request):
     if not selected_item and tentang_list.exists():
         selected_item = tentang_list.first()
 
+    akreditasi_obj = Akreditasi.objects.first()
+
     # Jika ada POST untuk update konten sub-menu
     if request.method == 'POST' and 'update_tentang' in request.POST:
         target_id = request.POST.get('target_id')
         target_item = get_object_or_404(TentangPage, pk=target_id)
-        edit_form = TentangPageForm(request.POST, instance=target_item)
+
+        # Opsi hapus berkas jika diminta
+        if request.POST.get('hapus_berkas'):
+            if target_item.file_dokumen:
+                target_item.file_dokumen.delete(save=False)
+                target_item.file_dokumen = None
+            if target_item.slug in ['sertifikat', 'akreditasi'] and akreditasi_obj and akreditasi_obj.sertifikat:
+                akreditasi_obj.sertifikat.delete(save=False)
+                akreditasi_obj.sertifikat = None
+                akreditasi_obj.save()
+
+        edit_form = TentangPageForm(request.POST, request.FILES, instance=target_item)
         if edit_form.is_valid():
-            edit_form.save()
+            saved_item = edit_form.save()
+
+            # Jika sub-menu adalah Sertifikat Akreditasi, sinkronkan ke model Akreditasi
+            if target_item.slug in ['sertifikat', 'akreditasi']:
+                status_akred = request.POST.get('status_akreditasi', '').strip() or 'Unggul (A)'
+                nomor_sk = request.POST.get('nomor_sk', '').strip()
+                tgl_kadaluarsa = request.POST.get('tanggal_kadaluarsa', '').strip() or None
+
+                if not akreditasi_obj:
+                    akreditasi_obj = Akreditasi()
+
+                akreditasi_obj.status_akreditasi = status_akred
+                if nomor_sk:
+                    akreditasi_obj.nomor_sk = nomor_sk
+                if tgl_kadaluarsa:
+                    akreditasi_obj.tanggal_kadaluarsa = tgl_kadaluarsa
+
+                # Jika ada file baru diunggah
+                if 'file_dokumen' in request.FILES:
+                    akreditasi_obj.sertifikat = request.FILES['file_dokumen']
+                elif saved_item.file_dokumen and not akreditasi_obj.sertifikat:
+                    akreditasi_obj.sertifikat = saved_item.file_dokumen
+
+                akreditasi_obj.save()
+
             catat_log(request, request.user, f"Memperbarui Konten Sub-Menu: '{target_item.judul}'", "Konten berhasil disimpan")
             messages.success(request, f"Konten sub-menu '{target_item.judul}' berhasil diperbarui!")
             return redirect(f"/admin-portal/tentang/?edit={target_item.pk}#editPanel")
@@ -495,6 +532,7 @@ def dashboard_tentang(request):
         'tentang_list': tentang_list,
         'selected_item': selected_item,
         'edit_form': edit_form,
+        'akreditasi_obj': akreditasi_obj,
     }
     return render(request, 'landing/admin/dashboard_tentang.html', context)
 

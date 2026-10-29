@@ -17,7 +17,7 @@ class TentangPageForm(forms.ModelForm):
 
     class Meta:
         model = TentangPage
-        fields = ['judul', 'slug', 'konten']
+        fields = ['judul', 'slug', 'file_dokumen', 'konten']
         widgets = {
             'judul': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
@@ -26,6 +26,9 @@ class TentangPageForm(forms.ModelForm):
             'slug': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50',
                 'placeholder': 'misal: profil, sejarah, visi, dll'
+            }),
+            'file_dokumen': forms.FileInput(attrs={
+                'class': 'w-full px-4 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none bg-white'
             }),
         }
 

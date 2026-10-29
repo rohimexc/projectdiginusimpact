@@ -145,7 +145,7 @@
     <div id="editPanel" class="scroll-mt-6 space-y-6">
 
         <!-- Navigasi Cepat Penggantian Sub-Menu yang Sedang Diedit -->
-        <div class="bg-gradient-to-r from-teal-900 to-[#0d2b45] p-5 rounded-2xl text-white shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="bg-gradient-to-r from-[#005f5f] to-[#0f6b6b] p-5 rounded-2xl text-white shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-l-4 border-amber-400">
             <div>
                 <span class="text-[10px] font-bold tracking-widest uppercase text-amber-300">Editor Sub-Menu Terpilih</span>
                 <h3 class="text-lg font-bold text-white flex items-center gap-2 mt-0.5">
@@ -159,7 +159,7 @@
                 <span class="text-[11px] text-teal-200 mr-1 hidden sm:inline">Pilih Sub-Menu:</span>
                 {% for item in akademik_list %}
                 <a href="?edit={{ item.pk }}#editPanel" 
-                   class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {% if item.pk == selected_item.pk %}bg-amber-400 text-slate-950 font-bold shadow-sm{% else %}bg-white/10 text-white hover:bg-white/20{% endif %}">
+                   class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {% if item.pk == selected_item.pk %}bg-amber-400 text-slate-950 font-bold shadow-sm{% else %}bg-white/10 text-white hover:bg-white/20 hover:text-amber-300{% endif %}">
                     {{ item.judul }}
                 </a>
                 {% endfor %}

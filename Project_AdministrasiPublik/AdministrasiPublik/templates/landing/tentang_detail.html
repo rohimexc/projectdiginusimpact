@@ -9,7 +9,7 @@
 <style>
     /* Styling konten CKEditor 5 agar tampil rapi dan proporsional */
     .ck-content h1, .ck-content h2, .ck-content h3, .ck-content h4 {
-        color: #0d2b45;
+        color: #0f6b6b;
         font-weight: 700;
         margin-top: 1.5rem;
         margin-bottom: 0.75rem;
@@ -82,7 +82,7 @@
                 <span>&bull;</span>
                 <span>Administrasi Publik</span>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0d2b45] tracking-tight">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f6b6b] tracking-tight">
                 {{ current_title }}
             </h1>
             {% if current_subjudul %}
@@ -94,7 +94,7 @@
         <div class="flex flex-wrap items-center gap-2 pt-2 border-b border-slate-200/80 pb-4">
             {% for item in tentang_nav_list %}
             <a href="{% url 'landing:detail_tentang' jenis=item.slug %}" 
-               class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shadow-2xs flex items-center gap-1.5 {% if item.slug == active_slug %}bg-[#0d2b45] text-amber-300 shadow-sm border border-[#0d2b45]{% else %}bg-white text-slate-700 border border-slate-200 hover:border-teal-300 hover:text-teal-800 hover:bg-teal-50/50{% endif %}">
+               class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition duration-150 shadow-2xs flex items-center gap-1.5 {% if item.slug == active_slug %}bg-[#0f6b6b] text-amber-300 shadow-sm border border-[#0f6b6b]{% else %}bg-white text-slate-700 border border-slate-200 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b]{% endif %}">
                 <i class="{{ item.icon }} text-xs"></i>
                 <span>{{ item.title }}</span>
             </a>
@@ -108,19 +108,19 @@
 
         <!-- Tombol Pil Navigasi Internal (Visi, Misi, Tujuan) -->
         <div class="flex items-center gap-2">
-            <a href="#visi" class="px-4 py-1.5 rounded-lg border border-[#cbe1ef] bg-[#eef5fa] hover:bg-[#dfeef8] text-[#0d3b66] font-semibold text-xs sm:text-sm transition shadow-2xs">
+            <a href="#visi" class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
                 Visi
             </a>
-            <a href="#misi" class="px-4 py-1.5 rounded-lg border border-[#cbe1ef] bg-[#eef5fa] hover:bg-[#dfeef8] text-[#0d3b66] font-semibold text-xs sm:text-sm transition shadow-2xs">
+            <a href="#misi" class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
                 Misi
             </a>
-            <a href="#tujuan" class="px-4 py-1.5 rounded-lg border border-[#cbe1ef] bg-[#eef5fa] hover:bg-[#dfeef8] text-[#0d3b66] font-semibold text-xs sm:text-sm transition shadow-2xs">
+            <a href="#tujuan" class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
                 Tujuan
             </a>
         </div>
 
         <!-- KARTU VISI -->
-        <div id="visi" class="scroll-mt-24 bg-[#0c2f4d] rounded-2xl p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] shadow-md transition">
+        <div id="visi" class="scroll-mt-24 bg-[#0b5454] rounded-2xl p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] shadow-md transition">
             <h2 class="text-xl sm:text-2xl font-bold text-[#f59e0b] mb-3 tracking-wide">
                 Visi
             </h2>
@@ -131,7 +131,7 @@
 
         <!-- SEKSI MISI -->
         <div id="misi" class="scroll-mt-24 space-y-4 pt-2">
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0d2b45]">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0f6b6b]">
                 Misi
             </h2>
             {% if visi_misi_obj.pengantar_misi %}
@@ -143,7 +143,7 @@
             <div class="space-y-3 pt-1">
                 {% for misi in misi_list %}
                 <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-center sm:items-start gap-4 sm:gap-6">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#f0f4f8] text-[#0d2b45] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-slate-200/80 shadow-2xs">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs">
                         {{ misi.urutan|default:forloop.counter }}
                     </div>
                     <div class="text-slate-700 text-sm sm:text-base leading-relaxed">
@@ -160,7 +160,7 @@
 
         <!-- SEKSI TUJUAN -->
         <div id="tujuan" class="scroll-mt-24 space-y-4 pt-4">
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0d2b45]">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0f6b6b]">
                 Tujuan
             </h2>
             {% if visi_misi_obj.pengantar_tujuan %}
@@ -172,11 +172,11 @@
             <div class="space-y-3 pt-1">
                 {% for tujuan in tujuan_list %}
                 <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-start gap-4 sm:gap-6">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#f0f4f8] text-[#0d2b45] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-slate-200/80 shadow-2xs mt-0.5">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs mt-0.5">
                         {{ tujuan.urutan|default:forloop.counter }}
                     </div>
                     <div class="space-y-1">
-                        <h3 class="font-bold text-[#0d2b45] text-base sm:text-lg">
+                        <h3 class="font-bold text-[#0f6b6b] text-base sm:text-lg">
                             {{ tujuan.judul }}
                         </h3>
                         {% if tujuan.subjudul %}
@@ -220,24 +220,25 @@
     <!-- TAMPILAN KHUSUS SERTIFIKAT AKREDITASI -->
     <div class="space-y-6">
 
-        {% if akreditasi %}
+        {% if akreditasi or konten_obj.file_dokumen %}
         <!-- Banner Akreditasi Resmi -->
-        <div class="bg-gradient-to-r from-[#0d2b45] via-[#0f6b6b] to-[#148383] rounded-2xl p-6 sm:p-8 text-white shadow-lg border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] rounded-2xl p-6 sm:p-8 text-white shadow-lg border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div class="space-y-2 max-w-2xl">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
                     <i class="fa-solid fa-award"></i>
                     Status Akreditasi BAN-PT
                 </div>
                 <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">
-                    Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi }}</span>
+                    Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi|default:"Unggul (A)" }}</span>
                 </h2>
                 <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
                     Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br class="hidden sm:inline">
-                    <strong>No. SK:</strong> {{ akreditasi.nomor_sk }} &bull; <strong>Berlaku hingga:</strong> {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}
+                    {% if akreditasi.nomor_sk and akreditasi.nomor_sk != '-' %}<strong>No. SK:</strong> {{ akreditasi.nomor_sk }} &bull;{% endif %}
+                    {% if akreditasi.tanggal_kadaluarsa %}<strong>Berlaku hingga:</strong> {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Program Studi Sarjana Administrasi Publik FISIP Universitas Tadulako{% endif %}
                 </p>
             </div>
-            {% if akreditasi.sertifikat %}
-            <a href="{{ akreditasi.sertifikat.url }}" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-sm hover:scale-[1.02] transform">
+            {% if akreditasi.sertifikat or konten_obj.file_dokumen %}
+            <a href="{% if akreditasi.sertifikat %}{{ akreditasi.sertifikat.url }}{% else %}{{ konten_obj.file_dokumen.url }}{% endif %}" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-sm hover:scale-[1.02] transform">
                 <i class="fa-solid fa-file-arrow-down"></i>
                 <span>Unduh Sertifikat Resmi (PDF)</span>
             </a>
@@ -404,6 +405,18 @@
                 <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
             {% endif %}
         </div>
+        {% if konten_obj and konten_obj.file_dokumen %}
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+                <i class="fa-solid fa-paperclip text-[#0f6b6b]"></i>
+                <span>Dokumen Lampiran Tersedia</span>
+            </div>
+            <a href="{{ konten_obj.file_dokumen.url }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-[#0f6b6b] hover:bg-[#0f6b6b] hover:text-white rounded-xl text-xs font-semibold transition border border-teal-200">
+                <i class="fa-solid fa-download"></i>
+                Unduh Berkas Lampiran
+            </a>
+        </div>
+        {% endif %}
     </div>
     {% endif %}
 
