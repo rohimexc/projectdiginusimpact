@@ -23,9 +23,7 @@
               gold: '#fab005',
               hovergold: '#e59900',
               accent: '#ffd43b',
-              navy: '#0c3957',
-              pillbg: '#f0f7fa',
-              circlebg: '#eef5f9',
+
             }
           }
         }
@@ -138,21 +136,21 @@
         <span class="text-brand-teal font-semibold">{{ halaman.get_kategori_display }}</span>
       </nav>
 
-      <!-- Pill Navigasi Cepat Antar Sub-Menu Akademik Sesuai Foto -->
+      <!-- Pill Navigasi Cepat Antar Sub-Menu Akademik: Normal Hijau, Hover Emas -->
       <div class="flex flex-wrap items-center gap-2.5 mb-8">
         {% for kat_kode, kat_nama in daftar_kategori %}
           <a href="{% url 'akademik_detail' kat_kode %}" 
-             class="px-5 py-2 text-xs font-semibold rounded-lg border transition-all duration-200 shadow-sm inline-flex items-center gap-2 {% if kategori_aktif == kat_kode %}bg-[#0c3957] text-white border-[#0c3957]{% else %}border-sky-200/90 bg-[#f0f7fa] text-[#0f3057] hover:bg-slate-200/60{% endif %}">
+             class="px-5 py-2.5 text-xs font-semibold rounded-xl border transition-all duration-200 shadow-sm inline-flex items-center gap-2 {% if kategori_aktif == kat_kode %}bg-brand-teal text-white border-brand-teal shadow-md{% else %}border-teal-200 bg-teal-50 text-brand-darkteal hover:bg-brand-gold hover:text-slate-900 hover:border-brand-gold hover:-translate-y-0.5 hover:shadow-md{% endif %}">
             {% if kat_kode == 'siga8' %}
-              <i class="fas fa-desktop {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+              <i class="fas fa-desktop {% if kategori_aktif == kat_kode %}text-brand-accent{% else %}text-brand-gold{% endif %}"></i>
             {% elif kat_kode == 'kurikulum' %}
-              <i class="fas fa-book-open {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+              <i class="fas fa-book-open {% if kategori_aktif == kat_kode %}text-brand-accent{% else %}text-brand-gold{% endif %}"></i>
             {% elif kat_kode == 'jadwal' %}
-              <i class="fas fa-calendar-alt {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+              <i class="fas fa-calendar-alt {% if kategori_aktif == kat_kode %}text-brand-accent{% else %}text-brand-gold{% endif %}"></i>
             {% elif kat_kode == 'rps' %}
-              <i class="fas fa-file-signature {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+              <i class="fas fa-file-signature {% if kategori_aktif == kat_kode %}text-brand-accent{% else %}text-brand-gold{% endif %}"></i>
             {% elif kat_kode == 'panduan' %}
-              <i class="fas fa-book-bookmark {% if kategori_aktif == kat_kode %}text-amber-400{% else %}text-slate-500{% endif %}"></i>
+              <i class="fas fa-book-bookmark {% if kategori_aktif == kat_kode %}text-brand-accent{% else %}text-brand-gold{% endif %}"></i>
             {% endif %}
             <span>{{ kat_nama }}</span>
           </a>
@@ -211,7 +209,7 @@
               </div>
             </div>
             <a href="{{ halaman.file_utama.url }}" download 
-               class="px-4 py-2 bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold rounded-xl shadow-sm transition inline-flex items-center justify-center gap-2 shrink-0">
+               class="px-4 py-2.5 bg-brand-teal hover:bg-brand-gold hover:text-slate-900 border border-brand-teal hover:border-brand-gold text-white text-xs font-semibold rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition duration-200 inline-flex items-center justify-center gap-2 shrink-0">
               <i class="fas fa-download text-xs"></i>
               <span>Unduh Berkas</span>
             </a>

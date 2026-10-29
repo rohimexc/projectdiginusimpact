@@ -151,7 +151,14 @@ class HalamanTentang(models.Model):
     ]
     kategori = models.CharField(max_length=50, choices=KATEGORI_CHOICES, unique=True)
     judul = models.CharField(max_length=255)
-    isi = CKEditor5Field('Isi Konten', config_name='extends')
+    gambar = models.ImageField(
+        upload_to='tentang/',
+        blank=True,
+        null=True,
+        verbose_name="Bagan / Gambar",
+        help_text="Upload gambar/bagan (misal bagan struktur organisasi dalam format JPG, PNG, atau WEBP)"
+    )
+    isi = CKEditor5Field('Isi Konten / Keterangan', config_name='extends', blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

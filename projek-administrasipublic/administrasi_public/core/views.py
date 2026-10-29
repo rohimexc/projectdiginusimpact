@@ -562,7 +562,12 @@ def admin_kelola_tentang(request, kategori='profil'):
     )
 
     if request.method == 'POST':
-        form = HalamanTentangForm(request.POST, instance=halaman)
+        if request.POST.get('hapus_gambar') == '1' and halaman.gambar:
+            halaman.gambar.delete(save=False)
+            halaman.gambar = None
+            halaman.save()
+
+        form = HalamanTentangForm(request.POST, request.FILES, instance=halaman)
         if form.is_valid():
             form.save()
             catat_audit(request, 'Edit Halaman Tentang', f"Memperbarui konten {halaman.get_kategori_display()}")

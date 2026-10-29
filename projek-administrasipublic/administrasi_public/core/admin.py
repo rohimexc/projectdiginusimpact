@@ -46,7 +46,7 @@ class TenagaPendidikAdmin(admin.ModelAdmin):
     
 @admin.register(HalamanTentang)
 class HalamanTentangAdmin(admin.ModelAdmin):
-    list_display = ('judul', 'kategori', 'updated_at')
+    list_display = ('judul', 'kategori', 'gambar', 'updated_at')
     list_filter = ('kategori',)
     search_fields = ('judul', 'isi')
 

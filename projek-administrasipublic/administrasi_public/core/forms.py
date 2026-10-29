@@ -210,12 +210,20 @@ class SambutanForm(forms.ModelForm):
 class HalamanTentangForm(forms.ModelForm):
     class Meta:
         model = HalamanTentang
-        fields = ['judul', 'isi']
+        fields = ['judul', 'gambar', 'isi']
         widgets = {
             'judul': forms.TextInput(attrs={
                 'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
                 'placeholder': 'Masukkan judul halaman...'
             }),
+            'gambar': forms.FileInput(attrs={
+                'class': 'w-full p-2 border rounded-xl border-slate-200 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': 'image/*'
+            }),
+            'isi': CKEditor5Widget(
+                attrs={'class': 'django_ckeditor_5'}, 
+                config_name='extends'
+            )
         }
 
 class HalamanAkademikForm(forms.ModelForm):

@@ -18,7 +18,7 @@
         extend: {
           fontFamily: { poppins: ['Poppins', 'sans-serif'] },
           colors: {
-            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
+            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', hovergold: '#e59900', accent: '#ffd43b' }
           }
         }
       }
@@ -32,13 +32,13 @@
   <div class="flex-1 flex flex-col min-w-0">
     <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
       <div class="flex items-center gap-3">
-        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:text-brand-gold hover:underline flex items-center gap-1 font-medium transition duration-200">
           <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
         </a>
         <span class="text-slate-300">/</span>
         <h1 class="text-base font-bold text-slate-800">{{ title }}</h1>
       </div>
-      <a href="{% url 'tentang_detail' kategori_aktif %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+      <a href="{% url 'tentang_detail' kategori_aktif %}" target="_blank" class="text-xs font-semibold text-brand-darkteal hover:text-slate-900 bg-teal-50 hover:bg-brand-gold px-3.5 py-2 rounded-xl border border-teal-200 transition duration-200 flex items-center gap-1.5 shadow-sm">
         <i class="bi bi-box-arrow-up-right text-[10px]"></i> Lihat Halaman Publik
       </a>
     </header>
@@ -48,19 +48,30 @@
       <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-200 pb-3">
         {% for kat_kode, kat_nama in daftar_kategori %}
           <a href="{% url 'admin_kelola_tentang' kat_kode %}" 
-             class="px-4 py-2 rounded-xl text-xs font-semibold transition {% if kategori_aktif == kat_kode %}bg-teal-800 text-white shadow-sm{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-slate-50{% endif %}">
+             class="px-4 py-2 rounded-xl text-xs font-semibold transition duration-200 {% if kategori_aktif == kat_kode %}bg-brand-teal text-white shadow-sm border border-brand-teal{% else %}bg-white border border-slate-200 text-slate-600 hover:bg-teal-50 hover:text-brand-teal hover:border-teal-300{% endif %}">
             {{ kat_nama }}
           </a>
         {% endfor %}
       </div>
 
-      <!-- Form CKEditor -->
+      <!-- Form Pengelolaan -->
       <div class="max-w-4xl bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-        <h2 class="text-lg font-bold text-slate-800 mb-1">{{ halaman.get_kategori_display }}</h2>
-        <p class="text-xs text-slate-400 mb-6">Terakhir diperbarui: {{ halaman.updated_at|date:"d M Y, H:i" }}</p>
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">{{ halaman.get_kategori_display }}</h2>
+            <p class="text-xs text-slate-400">Terakhir diperbarui: {{ halaman.updated_at|date:"d M Y, H:i" }} WITA</p>
+          </div>
+          {% if kategori_aktif == 'struktur' %}
+            <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1.5">
+              <i class="bi bi-diagram-3"></i> Tipe: Bagan Organigram (Gambar)
+            </span>
+          {% endif %}
+        </div>
 
-        <form method="POST" class="space-y-5">
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
           {% csrf_token %}
+          
+          <!-- 1. Judul Halaman -->
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1.5">Judul Halaman</label>
             {{ form.judul }}
@@ -69,17 +80,90 @@
             {% endfor %}
           </div>
 
+          <!-- 2. Unggah Gambar / Bagan Struktur Organisasi -->
+          <div class="p-5 rounded-2xl {% if kategori_aktif == 'struktur' %}bg-amber-50/50 border border-amber-200/80{% else %}bg-slate-50 border border-slate-200{% endif %}">
+            <div class="flex items-start justify-between gap-4 mb-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <i class="bi bi-image text-brand-teal"></i>
+                  {% if kategori_aktif == 'struktur' %}
+                    Bagan Struktur Organisasi (Gambar)
+                    <span class="text-[10px] bg-brand-gold text-slate-900 font-bold px-2 py-0.5 rounded-md">Utama</span>
+                  {% else %}
+                    Gambar Sampul / Ilustrasi (Opsional)
+                  {% endif %}
+                </label>
+                <p class="text-[11px] text-slate-500 mt-0.5">
+                  {% if kategori_aktif == 'struktur' %}
+                    Unggah bagan struktur organisasi dalam format <strong>PNG, JPG, JPEG, atau WEBP</strong>. Disarankan resolusi tinggi agar bagan dan nama terbaca jelas saat di-zoom.
+                  {% else %}
+                    Unggah gambar pendukung untuk halaman ini (format JPG, PNG, WEBP).
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+
+            <!-- Tampilan Gambar yang Sedang Tersimpan -->
+            {% if halaman.gambar %}
+              <div class="mb-4 bg-white p-3 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <img src="{{ halaman.gambar.url }}" alt="Bagan Struktur Saat Ini" class="w-20 h-14 object-cover rounded-lg border border-slate-200 shadow-sm">
+                  <div>
+                    <p class="text-xs font-semibold text-slate-700">Gambar saat ini:</p>
+                    <a href="{{ halaman.gambar.url }}" target="_blank" class="text-[11px] text-brand-teal font-medium hover:text-brand-gold hover:underline flex items-center gap-1 transition duration-200">
+                      <i class="bi bi-box-arrow-up-right text-[10px]"></i> Buka ukuran penuh
+                    </a>
+                  </div>
+                </div>
+
+                <label class="inline-flex items-center gap-2 text-xs text-rose-600 font-semibold cursor-pointer px-3 py-1.5 rounded-lg hover:bg-rose-50 border border-rose-200 transition">
+                  <input type="checkbox" name="hapus_gambar" value="1" class="w-4 h-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500">
+                  <span>Hapus gambar ini</span>
+                </label>
+              </div>
+            {% endif %}
+
+            <!-- Input File Gambar -->
+            <div>
+              {{ form.gambar }}
+              {% for err in form.gambar.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Preview Baru via JavaScript -->
+            <div id="newImagePreviewContainer" class="hidden mt-3 p-3 bg-white rounded-xl border border-teal-200 flex items-center gap-3">
+              <img id="newImagePreview" src="" alt="Pratinjau Gambar Baru" class="w-24 h-16 object-contain rounded-lg border border-slate-200">
+              <div>
+                <p class="text-xs font-bold text-brand-teal">Pratinjau File yang Dipilih:</p>
+                <p id="newImageFileName" class="text-[11px] text-slate-500 truncate max-w-xs"></p>
+                <span class="text-[10px] text-teal-600 font-medium">Akan disimpan setelah menekan tombol Simpan di bawah.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. CKEditor (Keterangan / Isi) -->
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Isi Konten</label>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+              {% if kategori_aktif == 'struktur' %}
+                Keterangan Bagan / Susunan Pengurus (Opsional)
+              {% else %}
+                Isi Konten
+              {% endif %}
+            </label>
+            {% if kategori_aktif == 'struktur' %}
+              <p class="text-[11px] text-slate-400 mb-2">Teks keterangan atau daftar nama pengurus yang akan ditampilkan di bawah bagan gambar.</p>
+            {% endif %}
             {{ form.isi }}
             {% for err in form.isi.errors %}
               <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
             {% endfor %}
           </div>
 
+          <!-- Tombol Simpan dengan Hover Emas Beranda -->
           <div class="pt-4 border-t border-slate-100 flex justify-end">
-            <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow transition">
-              Simpan Perubahan
+            <button type="submit" class="px-7 py-2.5 rounded-xl bg-brand-teal hover:bg-brand-gold hover:text-slate-900 text-white text-xs font-bold shadow transition duration-200 flex items-center gap-2">
+              <i class="bi bi-check2-circle text-base"></i> Simpan Perubahan
             </button>
           </div>
         </form>
@@ -89,10 +173,31 @@
 
   <style>
     .ck-editor__editable_inline {
-      min-height: 280px;
+      min-height: 240px;
       font-size: 0.85rem;
     }
   </style>
+
+  <script>
+    // Preview Gambar Baru ketika file dipilih
+    const fileInput = document.querySelector('input[type="file"][name="gambar"]');
+    if (fileInput) {
+      fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            document.getElementById('newImagePreview').src = evt.target.result;
+            document.getElementById('newImageFileName').textContent = file.name;
+            document.getElementById('newImagePreviewContainer').classList.remove('hidden');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          document.getElementById('newImagePreviewContainer').classList.add('hidden');
+        }
+      });
+    }
+  </script>
 
   {% if messages %}
     <script>
