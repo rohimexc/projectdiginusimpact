@@ -89,8 +89,12 @@
                         </td>
                         <td class="p-3 text-center">
                             <div class="flex items-center justify-center gap-1.5">
-                                <a href="{% url 'landing:user_update' u.id %}" class="p-1.5 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg transition" title="Edit Akun">✏️</a>
-                                <a href="{% url 'landing:user_delete' u.id %}" class="p-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition" title="Nonaktifkan / Hapus">🗑️</a>
+                                <a href="{% url 'landing:user_update' u.id %}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition shadow-2xs" title="Edit Akun">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </a>
+                                <a href="{% url 'landing:user_delete' u.id %}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition shadow-2xs" title="Nonaktifkan / Hapus">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>

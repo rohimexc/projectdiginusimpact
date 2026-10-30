@@ -65,18 +65,18 @@
                         <td class="p-3 font-semibold text-slate-800">{{ b.judul }}</td>
                         <td class="p-3 text-slate-600">{{ b.post_date|date:"d M Y, H:i" }}</td>
                         <td class="py-3.5 px-4 text-center">
-                            <div class="inline-flex items-center justify-center space-x-1.5">
+                            <div class="inline-flex items-center justify-center gap-1.5">
                                 <!-- Tombol Preview -->
-                                <a href="{% url 'landing:berita_detail' b.slug %}" target="_blank" class="inline-flex items-center justify-center w-8 h-8 text-teal-700 bg-teal-50 hover:bg-teal-100 rounded-lg transition" title="Preview">
-                                    <i class="bi bi-eye-fill text-xs"></i>
+                                <a href="{% url 'landing:berita_detail' b.slug %}" target="_blank" class="inline-flex items-center justify-center w-8 h-8 text-teal-700 bg-teal-50 hover:bg-teal-100 rounded-lg transition shadow-2xs" title="Lihat di Web">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                                 </a>
                                 <!-- Tombol Edit -->
-                                <a href="{% url 'landing:berita_update' b.slug %}" class="inline-flex items-center justify-center w-8 h-8 text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition" title="Edit">
-                                    <i class="bi bi-pencil-fill text-xs"></i>
+                                <a href="{% url 'landing:berita_update' b.slug %}" class="inline-flex items-center justify-center w-8 h-8 text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition shadow-2xs" title="Edit Berita">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </a>
                                 <!-- Tombol Hapus -->
-                                <a href="?hapus={{ b.slug }}" class="inline-flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition" title="Hapus">
-                                    <i class="bi bi-trash-fill text-xs"></i>
+                                <a href="?hapus={{ b.slug }}" class="inline-flex items-center justify-center w-8 h-8 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition shadow-2xs" title="Hapus Berita">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
                                 </a>
                             </div>
                         </td>

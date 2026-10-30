@@ -129,14 +129,12 @@
                             {{ item.deskripsi }}
                         </td>
                         <td class="py-3.5 px-4 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <button type="button" onclick="openEditMisiModal('{{ item.id }}', '{{ item.urutan }}', '{{ item.deskripsi|escapejs }}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg font-semibold text-[11px] transition">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    Edit
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button type="button" onclick="openEditMisiModal('{{ item.id }}', '{{ item.urutan }}', '{{ item.deskripsi|escapejs }}')" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition shadow-2xs" title="Edit Poin Misi">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
-                                <button type="button" onclick="confirmDeleteMisi('{{ item.id }}', '{{ item.urutan }}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-lg font-semibold text-[11px] transition">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                    Hapus
+                                <button type="button" onclick="confirmDeleteMisi('{{ item.id }}', '{{ item.urutan }}')" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition shadow-2xs" title="Hapus Poin Misi">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
                         </td>
@@ -199,7 +197,7 @@
                             {{ item.deskripsi }}
                         </td>
                         <td class="py-3.5 px-4 text-center align-top">
-                            <div class="flex items-center justify-center gap-2">
+                            <div class="flex items-center justify-center gap-1.5">
                                 <button type="button" 
                                     data-id="{{ item.id }}" 
                                     data-urutan="{{ item.urutan }}" 
@@ -207,13 +205,11 @@
                                     data-subjudul="{{ item.subjudul|default:'' }}" 
                                     data-deskripsi="{{ item.deskripsi }}" 
                                     onclick="openEditTujuanModal(this)" 
-                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg font-semibold text-[11px] transition">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    Edit
+                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition shadow-2xs" title="Edit Poin Tujuan">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
-                                <button type="button" onclick="confirmDeleteTujuan('{{ item.id }}', '{{ item.judul|escapejs }}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-lg font-semibold text-[11px] transition">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                    Hapus
+                                <button type="button" onclick="confirmDeleteTujuan('{{ item.id }}', '{{ item.judul|escapejs }}')" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition shadow-2xs" title="Hapus Poin Tujuan">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
                         </td>

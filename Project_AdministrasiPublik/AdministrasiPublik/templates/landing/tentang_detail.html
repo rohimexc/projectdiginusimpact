@@ -221,29 +221,56 @@
     <div class="space-y-6">
 
         {% if akreditasi or konten_obj.file_dokumen %}
-        <!-- Banner Akreditasi Resmi -->
-        <div class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] rounded-2xl p-6 sm:p-8 text-white shadow-lg border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div class="space-y-2 max-w-2xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
-                    <i class="fa-solid fa-award"></i>
-                    Status Akreditasi BAN-PT
+        {% with cert_url=akreditasi.sertifikat.url|default:konten_obj.file_dokumen.url %}
+        <!-- Banner & Pratinjau Sertifikat Akreditasi Resmi (Satu Kesatuan Rapi, Tidak Double) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+            <!-- Header Status Akreditasi BAN-PT -->
+            <div class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
+                        <i class="fa-solid fa-award"></i>
+                        Status Akreditasi BAN-PT
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">
+                        Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi|default:"Unggul (A)" }}</span>
+                    </h2>
+                    <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
+                        Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br class="hidden sm:inline">
+                        {% if akreditasi.nomor_sk and akreditasi.nomor_sk != '-' %}<strong>No. SK:</strong> {{ akreditasi.nomor_sk }} &bull;{% endif %}
+                        {% if akreditasi.tanggal_kadaluarsa %}<strong>Berlaku hingga:</strong> {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Program Studi Sarjana Administrasi Publik FISIP Universitas Tadulako{% endif %}
+                    </p>
                 </div>
-                <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">
-                    Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi|default:"Unggul (A)" }}</span>
-                </h2>
-                <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
-                    Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br class="hidden sm:inline">
-                    {% if akreditasi.nomor_sk and akreditasi.nomor_sk != '-' %}<strong>No. SK:</strong> {{ akreditasi.nomor_sk }} &bull;{% endif %}
-                    {% if akreditasi.tanggal_kadaluarsa %}<strong>Berlaku hingga:</strong> {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Program Studi Sarjana Administrasi Publik FISIP Universitas Tadulako{% endif %}
-                </p>
+                {% if cert_url %}
+                <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
+                    <a href="{{ cert_url }}" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition border border-white/20 shadow-xs">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <span>Buka Tab Baru</span>
+                    </a>
+                    <a href="{{ cert_url }}" download class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-xs hover:scale-[1.02] transform">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>Unduh Sertifikat (PDF)</span>
+                    </a>
+                </div>
+                {% endif %}
             </div>
-            {% if akreditasi.sertifikat or konten_obj.file_dokumen %}
-            <a href="{% if akreditasi.sertifikat %}{{ akreditasi.sertifikat.url }}{% else %}{{ konten_obj.file_dokumen.url }}{% endif %}" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-sm hover:scale-[1.02] transform">
-                <i class="fa-solid fa-file-arrow-down"></i>
-                <span>Unduh Sertifikat Resmi (PDF)</span>
-            </a>
+
+            <!-- Viewer PDF Langsung Pas Sesuai Lebar Halaman (Fit to Width) -->
+            {% if cert_url %}
+            <div class="w-full bg-slate-100 p-2 sm:p-4 border-t border-teal-900/10">
+                <div class="w-full h-[750px] sm:h-[950px] bg-white rounded-xl overflow-hidden border border-slate-300/80 shadow-inner">
+                    <iframe src="{{ cert_url }}#view=FitH&toolbar=1" class="w-full h-full border-0" title="Sertifikat Akreditasi Program Studi">
+                        <object data="{{ cert_url }}#view=FitH" type="application/pdf" class="w-full h-full">
+                            <p class="p-6 text-center text-slate-500 text-sm">
+                                Peramban Anda tidak mendukung pratinjau dokumen interaktif. 
+                                <a href="{{ cert_url }}" target="_blank" class="text-[#0f6b6b] font-bold underline">Klik di sini untuk melihat sertifikat langsung.</a>
+                            </p>
+                        </object>
+                    </iframe>
+                </div>
+            </div>
             {% endif %}
         </div>
+        {% endwith %}
         {% endif %}
 
         <!-- Card Uraian Akreditasi (CKEditor) -->
@@ -269,49 +296,6 @@
     <!-- TAMPILAN PROFIL PROGRAM STUDI -->
     <div class="space-y-6">
 
-        <!-- Grid 4 Kartu Highlight Ringkas Profil -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-teal-700">
-                <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center text-sm font-bold">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div>
-                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Jenjang Studi</span>
-                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">Sarjana (S1)</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-amber-500">
-                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-sm font-bold">
-                    <i class="fa-solid fa-certificate"></i>
-                </div>
-                <div>
-                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Gelar Lulusan</span>
-                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">S.A.P.</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-sky-600">
-                <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center text-sm font-bold">
-                    <i class="fa-solid fa-building-columns"></i>
-                </div>
-                <div>
-                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Fakultas</span>
-                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">FISIP Untad</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2 border-t-4 border-t-emerald-600">
-                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm font-bold">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </div>
-                <div>
-                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Kurikulum</span>
-                    <p class="font-extrabold text-slate-800 text-sm sm:text-base">OBE & MBKM</p>
-                </div>
-            </div>
-        </div>
-
         <!-- Card Konten CKEditor -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
             <div class="border-b border-slate-100 pb-4">
@@ -334,41 +318,6 @@
     {% elif active_slug == 'profil-lulusan' %}
     <!-- TAMPILAN PROFIL LULUSAN -->
     <div class="space-y-6">
-
-        <!-- Grid 4 Bidang Karir Lulusan -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            <div class="bg-gradient-to-br from-teal-50 to-white p-5 rounded-2xl border border-teal-100 shadow-2xs space-y-2">
-                <span class="w-8 h-8 rounded-lg bg-teal-800 text-white flex items-center justify-center text-xs font-bold shadow-xs">
-                    <i class="fa-solid fa-user-tie"></i>
-                </span>
-                <h3 class="font-bold text-slate-800 text-sm">Birokrat & ASN</h3>
-                <p class="text-slate-500 text-xs leading-relaxed">Aparatur pemerintahan di instansi pusat maupun daerah yang profesional dan berintegritas.</p>
-            </div>
-
-            <div class="bg-gradient-to-br from-amber-50 to-white p-5 rounded-2xl border border-amber-100 shadow-2xs space-y-2">
-                <span class="w-8 h-8 rounded-lg bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-bold shadow-xs">
-                    <i class="fa-solid fa-chart-line"></i>
-                </span>
-                <h3 class="font-bold text-slate-800 text-sm">Analis Kebijakan</h3>
-                <p class="text-slate-500 text-xs leading-relaxed">Perumus, evaluator, dan pengembang rekomendasi kebijakan publik berbasis bukti data.</p>
-            </div>
-
-            <div class="bg-gradient-to-br from-sky-50 to-white p-5 rounded-2xl border border-sky-100 shadow-2xs space-y-2">
-                <span class="w-8 h-8 rounded-lg bg-sky-700 text-white flex items-center justify-center text-xs font-bold shadow-xs">
-                    <i class="fa-solid fa-hands-holding-circle"></i>
-                </span>
-                <h3 class="font-bold text-slate-800 text-sm">Manajer Pelayanan</h3>
-                <p class="text-slate-500 text-xs leading-relaxed">Pengelola tata kelola pelayanan publik di sektor pemerintahan, BUMN, BUMD, dan NGO.</p>
-            </div>
-
-            <div class="bg-gradient-to-br from-indigo-50 to-white p-5 rounded-2xl border border-indigo-100 shadow-2xs space-y-2">
-                <span class="w-8 h-8 rounded-lg bg-indigo-700 text-white flex items-center justify-center text-xs font-bold shadow-xs">
-                    <i class="fa-solid fa-microscope"></i>
-                </span>
-                <h3 class="font-bold text-slate-800 text-sm">Peneliti Kebijakan</h3>
-                <p class="text-slate-500 text-xs leading-relaxed">Akademisi, peneliti think tank, dan konsultan tata kelola dan reformasi birokrasi.</p>
-            </div>
-        </div>
 
         <!-- Card Konten CKEditor -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">

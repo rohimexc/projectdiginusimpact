@@ -54,6 +54,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Izinkan tampilan iframe / PDF preview dari domain yang sama
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 ROOT_URLCONF = 'admin_publik.urls'
 
 TEMPLATES = [

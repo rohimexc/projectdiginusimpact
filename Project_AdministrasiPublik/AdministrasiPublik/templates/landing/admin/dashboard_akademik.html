@@ -114,16 +114,14 @@
                         </td>
                         <td class="py-3.5 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
-                                <a href="?edit={{ item.pk }}#editPanel" class="inline-flex items-center gap-1 px-2.5 py-1.5 {% if selected_item and selected_item.pk == item.pk %}bg-teal-800 text-white{% else %}bg-amber-50 text-amber-700 hover:bg-amber-100{% endif %} rounded-lg font-semibold text-[11px] transition shadow-2xs" title="Edit Konten Sub-Menu Ini">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    Edit
+                                <a href="?edit={{ item.pk }}#editPanel" class="inline-flex items-center justify-center w-8 h-8 {% if selected_item and selected_item.pk == item.pk %}bg-teal-800 text-white{% else %}bg-amber-50 text-amber-600 hover:bg-amber-100{% endif %} rounded-lg transition shadow-2xs" title="Edit Konten Sub-Menu Ini">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </a>
-                                <a href="{% url 'landing:detail_akademik' item.slug %}" target="_blank" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-lg font-semibold text-[11px] transition" title="Lihat di Web">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                    Lihat
+                                <a href="{% url 'landing:detail_akademik' item.slug %}" target="_blank" class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-lg transition shadow-2xs" title="Lihat di Web">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                                 </a>
-                                <button type="button" onclick="confirmDeleteAkademik('{{ item.pk }}', '{{ item.judul|escapejs }}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-lg font-semibold text-[11px] transition" title="Hapus Sub-Menu">
-                                    <i class="fa-solid fa-trash-can"></i>
+                                <button type="button" onclick="confirmDeleteAkademik('{{ item.pk }}', '{{ item.judul|escapejs }}')" class="inline-flex items-center justify-center w-8 h-8 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition shadow-2xs" title="Hapus Sub-Menu">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
                         </td>
@@ -305,12 +303,12 @@
                                 {{ dok.uploaded_at|date:"d M Y, H:i" }}
                             </td>
                             <td class="py-3 px-4 text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ dok.file.url }}" target="_blank" class="px-2 py-1 bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-md text-[11px] font-semibold transition" title="Unduh">
-                                        <i class="fa-solid fa-download"></i>
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <a href="{{ dok.file.url }}" target="_blank" class="inline-flex items-center justify-center w-8 h-8 bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-lg transition shadow-2xs" title="Lihat / Unduh Berkas">
+                                        <i class="fa-solid fa-download text-xs"></i>
                                     </a>
-                                    <button type="button" onclick="confirmDeleteDokumen('{{ dok.pk }}', '{{ dok.judul|escapejs }}')" class="px-2 py-1 bg-red-50 text-red-700 hover:bg-red-100 rounded-md text-[11px] font-semibold transition" title="Hapus Berkas">
-                                        <i class="fa-solid fa-trash-can"></i>
+                                    <button type="button" onclick="confirmDeleteDokumen('{{ dok.pk }}', '{{ dok.judul|escapejs }}')" class="inline-flex items-center justify-center w-8 h-8 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition shadow-2xs" title="Hapus Berkas">
+                                        <i class="fa-solid fa-trash-can text-xs"></i>
                                     </button>
                                 </div>
                             </td>

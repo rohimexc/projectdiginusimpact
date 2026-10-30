@@ -725,12 +725,32 @@ def detail_tentang(request, jenis):
             active_slug = 'sejarah'
         elif jenis_clean in ['sertifikat', 'akreditasi']:
             active_slug = 'sertifikat'
+            # Deteksi otomatis berkas yang diletakkan langsung di media/documents/akreditasi/
+            import os
+            from django.conf import settings
+            akred_dir = os.path.join(settings.MEDIA_ROOT, 'documents', 'akreditasi')
+            if os.path.exists(akred_dir):
+                pdf_files = [f for f in os.listdir(akred_dir) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg')) and os.path.isfile(os.path.join(akred_dir, f))]
+                if pdf_files:
+                    latest_file = f"documents/akreditasi/{pdf_files[0]}"
+                    if akreditasi and (not akreditasi.sertifikat or not os.path.exists(os.path.join(settings.MEDIA_ROOT, str(akreditasi.sertifikat)))):
+                        akreditasi.sertifikat = latest_file
+                        akreditasi.save()
         else:
             active_slug = 'profil'
 
         konten_obj = TentangPage.objects.filter(slug=active_slug).first()
         if not konten_obj:
             konten_obj = TentangPage.objects.filter(slug=jenis).first()
+        if active_slug == 'sertifikat' and konten_obj:
+            import os
+            from django.conf import settings
+            akred_dir = os.path.join(settings.MEDIA_ROOT, 'documents', 'akreditasi')
+            if os.path.exists(akred_dir):
+                pdf_files = [f for f in os.listdir(akred_dir) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg')) and os.path.isfile(os.path.join(akred_dir, f))]
+                if pdf_files and (not konten_obj.file_dokumen or not os.path.exists(os.path.join(settings.MEDIA_ROOT, str(konten_obj.file_dokumen)))):
+                    konten_obj.file_dokumen = f"documents/akreditasi/{pdf_files[0]}"
+                    konten_obj.save()
         visi_misi_obj = None
         misi_list = []
         tujuan_list = []
@@ -764,6 +784,19 @@ def detail_tentang(request, jenis):
 def detail_akademik(request, slug):
     akademik_list = AkademikPage.objects.filter(is_active=True).order_by('urutan', 'id')
     current_page = get_object_or_404(AkademikPage, slug=slug, is_active=True)
+
+    # Deteksi otomatis berkas panduan jika diletakkan langsung di media/documents/akademik/
+    if current_page.slug == 'panduan-akademik':
+        import os
+        from django.conf import settings
+        akademik_dir = os.path.join(settings.MEDIA_ROOT, 'documents', 'akademik')
+        if os.path.exists(akademik_dir):
+            if not current_page.file_utama or not os.path.exists(os.path.join(settings.MEDIA_ROOT, str(current_page.file_utama))):
+                pdf_files = [f for f in os.listdir(akademik_dir) if f.lower().endswith(('.pdf', '.png', '.jpg', '.jpeg')) and os.path.isfile(os.path.join(akademik_dir, f))]
+                if pdf_files:
+                    current_page.file_utama = f"documents/akademik/{pdf_files[0]}"
+                    current_page.save()
+
     dokumen_list = current_page.dokumen_list.all().order_by('-uploaded_at')
 
     context = {

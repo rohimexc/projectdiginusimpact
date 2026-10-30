@@ -102,11 +102,11 @@
 
                 <!-- Dropdown Akreditasi -->
                 <div class="relative group cursor-pointer py-2">
-                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                    <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="hover:text-amber-300 flex items-center gap-1">
                         Akreditasi <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </a>
                     <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
-                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sertifikat BAN-PT</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sertifikat BAN-PT</a>
                     </div>
                 </div>
             </div>
