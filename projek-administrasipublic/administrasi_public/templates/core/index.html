@@ -87,7 +87,7 @@
 
       <li><a href="#penelitian" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Galeri</a></li>
       <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Berita</a></li>
-      <!-- Dropdown Menu Akademik Sesuai Foto -->
+      <!-- Dropdown Menu Akademik -->
       <li class="relative group">
         <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition flex items-center gap-1.5 focus:outline-none">
           Akademik <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
@@ -190,39 +190,39 @@
     <div class="max-w-5xl mx-auto">
       
       <!-- Header Judul Utama -->
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-darkteal tracking-tight mb-5">
+      <h2 style="color: #0b7285 !important;" class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-5">
         Visi, Misi, dan Tujuan
       </h2>
 
-      <!-- Tombol Navigasi: Normal Hijau Teal, Hover Emas -->
+      <!-- Tombol Navigasi: Sesuai Teal Navbar #0b7285 -->
       <div class="flex items-center gap-3 mb-8">
-        <a href="#visi" class="px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl border border-teal-200 bg-teal-50 text-brand-darkteal hover:bg-brand-gold hover:text-slate-900 hover:border-brand-gold hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 shadow-sm inline-flex items-center justify-center">
+        <a href="#visi" style="color: #0b7285 !important; border: 1.5px solid #0b7285 !important; background-color: rgba(11, 114, 133, 0.08) !important;" class="px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl hover:bg-[#fab005] hover:text-slate-900 hover:border-[#fab005] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 shadow-sm inline-flex items-center justify-center">
           Visi
         </a>
-        <a href="#misi" class="px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl border border-teal-200 bg-teal-50 text-brand-darkteal hover:bg-brand-gold hover:text-slate-900 hover:border-brand-gold hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 shadow-sm inline-flex items-center justify-center">
+        <a href="#misi" style="color: #0b7285 !important; border: 1.5px solid #0b7285 !important; background-color: rgba(11, 114, 133, 0.08) !important;" class="px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl hover:bg-[#fab005] hover:text-slate-900 hover:border-[#fab005] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 shadow-sm inline-flex items-center justify-center">
           Misi
         </a>
-        <a href="#tujuan" class="px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl border border-teal-200 bg-teal-50 text-brand-darkteal hover:bg-brand-gold hover:text-slate-900 hover:border-brand-gold hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 shadow-sm inline-flex items-center justify-center">
+        <a href="#tujuan" style="color: #0b7285 !important; border: 1.5px solid #0b7285 !important; background-color: rgba(11, 114, 133, 0.08) !important;" class="px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl hover:bg-[#fab005] hover:text-slate-900 hover:border-[#fab005] hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 shadow-sm inline-flex items-center justify-center">
           Tujuan
         </a>
       </div>
 
-      <!-- 1. Bagian Visi -->
+      <!-- 1. Bagian Visi: Latar Teal #0b7285 & Border Kiri Emas #fab005 -->
       <div id="visi" class="scroll-mt-24 mb-10">
-        <div class="bg-brand-darkteal text-white rounded-2xl p-6 sm:p-8 md:p-10 border-l-[6px] border-brand-gold shadow-lg">
-          <h3 class="text-xl sm:text-2xl font-bold text-brand-gold mb-3 tracking-wide flex items-center gap-2.5">
-            <i class="fas fa-eye text-brand-gold"></i> Visi
+        <div style="background-color: #0b7285 !important; border-left: 6px solid #fab005 !important;" class="text-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-lg">
+          <h3 style="color: #fab005 !important;" class="text-xl sm:text-2xl font-bold mb-3 tracking-wide flex items-center gap-2.5">
+            <i class="fas fa-eye" style="color: #fab005 !important;"></i> Visi
           </h3>
-          <p class="text-slate-100 text-sm sm:text-[15px] leading-relaxed">
+          <p class="text-white text-sm sm:text-[15px] leading-relaxed" style="color: #ffffff !important; opacity: 0.95;">
             {{ visi_obj.visi_teks|default:"Menjadi program studi yang unggul secara global dalam bidang ilmu administrasi publik sebagai mitra strategis untuk kehidupan yang lebih baik bagi Rakyat Indonesia dan Umat Manusia melalui pendidikan, penelitian, dan pelayanan tata kelola publik yang berwawasan lingkungan dan berkelanjutan." }}
           </p>
         </div>
       </div>
 
-      <!-- 2. Bagian Misi -->
+      <!-- 2. Bagian Misi: Border Kiri & Lingkaran Nomor Warna Teal #0b7285 -->
       <div id="misi" class="scroll-mt-24 mb-12">
-        <h3 class="text-2xl sm:text-3xl font-bold text-brand-darkteal mb-2 flex items-center gap-2.5">
-          <i class="fas fa-bullseye text-brand-gold"></i> Misi
+        <h3 style="color: #0b7285 !important;" class="text-2xl sm:text-3xl font-bold mb-2 flex items-center gap-2.5">
+          <i class="fas fa-bullseye" style="color: #fab005 !important;"></i> Misi
         </h3>
         <p class="text-slate-600 text-sm sm:text-base mb-6">
           {{ visi_obj.misi_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:" }}
@@ -230,8 +230,8 @@
 
         <div class="space-y-4">
           {% for item in daftar_misi %}
-            <div class="bg-white rounded-2xl border border-slate-200 border-l-4 border-l-brand-teal hover:border-l-brand-gold p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-4 sm:gap-6">
-              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-base sm:text-lg flex items-center justify-center shrink-0">
+            <div style="border: 1px solid #e2e8f0 !important; border-left: 5px solid #0b7285 !important;" class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-4 sm:gap-6">
+              <div style="background-color: rgba(11, 114, 133, 0.1) !important; color: #0b7285 !important; border: 2px solid #0b7285 !important;" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full font-bold text-base sm:text-lg flex items-center justify-center shrink-0">
                 {{ item.urutan|default:forloop.counter }}
               </div>
               <p class="text-slate-700 text-sm sm:text-[15px] leading-relaxed flex-1">
@@ -239,8 +239,8 @@
               </p>
             </div>
           {% empty %}
-            <div class="bg-white rounded-2xl border border-slate-200 border-l-4 border-l-brand-teal hover:border-l-brand-gold p-5 sm:p-6 shadow-sm flex items-center gap-4 sm:gap-6">
-              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-base sm:text-lg flex items-center justify-center shrink-0">
+            <div style="border: 1px solid #e2e8f0 !important; border-left: 5px solid #0b7285 !important;" class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm flex items-center gap-4 sm:gap-6">
+              <div style="background-color: rgba(11, 114, 133, 0.1) !important; color: #0b7285 !important; border: 2px solid #0b7285 !important;" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full font-bold text-base sm:text-lg flex items-center justify-center shrink-0">
                 1
               </div>
               <p class="text-slate-700 text-sm sm:text-[15px] leading-relaxed flex-1">
@@ -251,10 +251,10 @@
         </div>
       </div>
 
-      <!-- 3. Bagian Tujuan -->
+      <!-- 3. Bagian Tujuan: Border Kiri & Lingkaran Nomor Warna Teal #0b7285 -->
       <div id="tujuan" class="scroll-mt-24">
-        <h3 class="text-2xl sm:text-3xl font-bold text-brand-darkteal mb-2 flex items-center gap-2.5">
-          <i class="fas fa-award text-brand-gold"></i> Tujuan
+        <h3 style="color: #0b7285 !important;" class="text-2xl sm:text-3xl font-bold mb-2 flex items-center gap-2.5">
+          <i class="fas fa-award" style="color: #fab005 !important;"></i> Tujuan
         </h3>
         <p class="text-slate-600 text-sm sm:text-base mb-6">
           {{ visi_obj.tujuan_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:" }}
@@ -262,14 +262,14 @@
 
         <div class="space-y-4">
           {% for item in daftar_tujuan %}
-            <div class="bg-white rounded-2xl border border-slate-200 border-l-4 border-l-brand-teal hover:border-l-brand-gold p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4 sm:gap-6">
-              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-base sm:text-lg flex items-center justify-center shrink-0 mt-0.5">
+            <div style="border: 1px solid #e2e8f0 !important; border-left: 5px solid #0b7285 !important;" class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4 sm:gap-6">
+              <div style="background-color: rgba(11, 114, 133, 0.1) !important; color: #0b7285 !important; border: 2px solid #0b7285 !important;" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full font-bold text-base sm:text-lg flex items-center justify-center shrink-0 mt-0.5">
                 {{ item.urutan|default:forloop.counter }}
               </div>
               <div class="flex-1">
-                <h4 class="text-base sm:text-lg font-bold text-brand-darkteal leading-snug">{{ item.judul }}</h4>
+                <h4 style="color: #0b7285 !important;" class="text-base sm:text-lg font-bold leading-snug">{{ item.judul }}</h4>
                 {% if item.subjudul %}
-                  <p class="text-xs sm:text-sm italic text-brand-teal mb-2 font-medium">{{ item.subjudul }}</p>
+                  <p style="color: #0b7285 !important;" class="text-xs sm:text-sm italic mb-2 font-medium">{{ item.subjudul }}</p>
                 {% endif %}
                 <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed">
                   {{ item.deskripsi }}
@@ -277,13 +277,13 @@
               </div>
             </div>
           {% empty %}
-            <div class="bg-white rounded-2xl border border-slate-200 border-l-4 border-l-brand-teal hover:border-l-brand-gold p-5 sm:p-6 shadow-sm flex items-start gap-4 sm:gap-6">
-              <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-base sm:text-lg flex items-center justify-center shrink-0 mt-0.5">
+            <div style="border: 1px solid #e2e8f0 !important; border-left: 5px solid #0b7285 !important;" class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm flex items-start gap-4 sm:gap-6">
+              <div style="background-color: rgba(11, 114, 133, 0.1) !important; color: #0b7285 !important; border: 2px solid #0b7285 !important;" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full font-bold text-base sm:text-lg flex items-center justify-center shrink-0 mt-0.5">
                 1
               </div>
               <div class="flex-1">
-                <h4 class="text-base sm:text-lg font-bold text-brand-darkteal leading-snug">Employabilitas</h4>
-                <p class="text-xs sm:text-sm italic text-brand-teal mb-2 font-medium">Employability</p>
+                <h4 style="color: #0b7285 !important;" class="text-base sm:text-lg font-bold leading-snug">Employabilitas</h4>
+                <p style="color: #0b7285 !important;" class="text-xs sm:text-sm italic mb-2 font-medium">Employability</p>
                 <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed">
                   Menghasilkan lulusan yang menguasai ilmu pengetahuan dan teknologi terdepan di bidang administrasi dan kebijakan publik.
                 </p>
@@ -424,7 +424,6 @@
       {% endif %}
     </div>
   </section>
-  <!-- ======================================================= -->
 
   <!-- Event Terdekat -->
   <section class="py-16 px-6 text-center bg-slate-50" id="kemahasiswaan">

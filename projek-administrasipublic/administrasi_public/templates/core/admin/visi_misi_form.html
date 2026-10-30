@@ -23,7 +23,6 @@
               deepteal: '#05313a', 
               gold: '#fab005', 
               accent: '#ffd43b',
-
             }
           }
         }
@@ -31,12 +30,15 @@
     }
   </script>
 </head>
-<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex h-screen overflow-hidden">
 
-  <!-- Include Sidebar Admin -->
-  {% include 'core/admin/sidebar.html' %}
+  <!-- Sidebar Terkunci Satu Layar Penuh -->
+  <aside class="w-64 h-screen flex-shrink-0 sticky top-0 z-30">
+    {% include 'core/admin/sidebar.html' %}
+  </aside>
 
-  <div class="flex-1 flex flex-col min-w-0">
+  <!-- Area Konten Utama Scroll Independen -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
     <!-- Header Admin Atas -->
     <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
       <div class="flex items-center gap-3">
@@ -54,15 +56,15 @@
     </header>
 
     <main class="flex-1 p-6 md:p-8">
-      <!-- Header Khusus Visi, Misi & Tujuan -->
+      <!-- Header Navigasi Menu Tentang -->
       <div class="flex items-center justify-between border-b border-slate-200 pb-3 mb-6">
         <div class="flex items-center gap-2">
-          <span class="px-4 py-2 rounded-xl bg-teal-800 text-white text-xs font-semibold shadow-sm flex items-center gap-1.5">
+          <span class="px-4 py-2 rounded-xl bg-brand-teal text-white text-xs font-semibold shadow-sm flex items-center gap-1.5">
             <i class="bi bi-compass text-amber-400"></i> Kelola Visi, Misi & Tujuan
           </span>
         </div>
-        <a href="{% url 'admin_kelola_tentang' 'profil' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
-          <i class="bi bi-info-circle text-[11px]"></i> Kelola Menu Tentang (Profil, Sejarah, Struktur) &rarr;
+        <a href="{% url 'admin_kelola_tentang' 'sejarah_hukum' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-info-circle text-[11px]"></i> Kelola Menu Tentang Lainnya &rarr;
         </a>
       </div>
 
@@ -82,8 +84,8 @@
                 <p class="text-xs text-slate-400">Pernyataan visi utama Program Studi Administrasi Publik</p>
               </div>
             </div>
-            <span class="text-[11px] font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200/60">
-              Kartu Dark Navy + Yellow Border
+            <span class="text-[11px] font-semibold text-brand-teal bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200">
+              Kartu Teal + Border Emas
             </span>
           </div>
 
@@ -99,13 +101,15 @@
                 placeholder="Tuliskan visi program studi di sini...">{{ visi_obj.visi_teks }}</textarea>
             </div>
 
-            <!-- Live Preview Visi Card -->
+            <!-- Live Preview Visi Card (Warna Teal Navbar #0b7285) -->
             <div>
               <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Pratinjau Tampilan Visi:</p>
-              <div class="bg-brand-darkteal text-white rounded-xl p-5 sm:p-6 border-l-[6px] border-brand-gold shadow-sm">
-                <h4 class="text-lg font-bold text-[#fab005] mb-2">Visi</h4>
-                <p id="preview_visi_teks" class="text-slate-100 text-xs sm:text-sm leading-relaxed">
-                  {{ visi_obj.visi_teks }}
+              <div style="background-color: #0b7285 !important; border-left: 6px solid #fab005 !important;" class="text-white rounded-xl p-5 sm:p-6 shadow-sm">
+                <h4 style="color: #fab005 !important;" class="text-lg font-bold mb-2 flex items-center gap-2">
+                  <i class="bi bi-eye-fill"></i> Visi
+                </h4>
+                <p id="preview_visi_teks" class="text-white text-xs sm:text-sm leading-relaxed" style="opacity: 0.95;">
+                  {{ visi_obj.visi_teks|default:"Teks visi akan muncul di sini..." }}
                 </p>
               </div>
             </div>
@@ -148,7 +152,7 @@
             <div id="misiContainer" class="space-y-3 pt-2">
               {% for item in daftar_misi %}
                 <div class="misi-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 flex items-start gap-3 transition">
-                  <span class="misi-badge w-8 h-8 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-xs flex items-center justify-center shrink-0 mt-1 border border-slate-200/60">
+                  <span class="misi-badge w-8 h-8 rounded-full bg-teal-50 text-brand-teal border border-teal-200 font-bold text-xs flex items-center justify-center shrink-0 mt-1">
                     {{ forloop.counter }}
                   </span>
                   <div class="flex-1">
@@ -169,7 +173,7 @@
                 </div>
               {% empty %}
                 <div class="misi-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 flex items-start gap-3 transition">
-                  <span class="misi-badge w-8 h-8 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-xs flex items-center justify-center shrink-0 mt-1 border border-slate-200/60">
+                  <span class="misi-badge w-8 h-8 rounded-full bg-teal-50 text-brand-teal border border-teal-200 font-bold text-xs flex items-center justify-center shrink-0 mt-1">
                     1
                   </span>
                   <div class="flex-1">
@@ -231,7 +235,7 @@
                 <div class="tujuan-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 sm:p-5 transition">
                   <div class="flex items-start justify-between gap-3 mb-3">
                     <div class="flex items-center gap-2.5">
-                      <span class="tujuan-badge w-8 h-8 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-xs flex items-center justify-center border border-slate-200/60">
+                      <span class="tujuan-badge w-8 h-8 rounded-full bg-teal-50 text-brand-teal border border-teal-200 font-bold text-xs flex items-center justify-center">
                         {{ forloop.counter }}
                       </span>
                       <span class="text-xs font-bold text-slate-700">Poin Tujuan {{ forloop.counter }}</span>
@@ -281,7 +285,7 @@
                 <div class="tujuan-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 sm:p-5 transition">
                   <div class="flex items-start justify-between gap-3 mb-3">
                     <div class="flex items-center gap-2.5">
-                      <span class="tujuan-badge w-8 h-8 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-xs flex items-center justify-center border border-slate-200/60">
+                      <span class="tujuan-badge w-8 h-8 rounded-full bg-teal-50 text-brand-teal border border-teal-200 font-bold text-xs flex items-center justify-center">
                         1
                       </span>
                       <span class="text-xs font-bold text-slate-700">Poin Tujuan 1</span>
@@ -334,7 +338,7 @@
         <div class="sticky bottom-6 z-10 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-xl flex items-center justify-between gap-4">
           <div class="text-xs text-slate-500 hidden sm:block">
             <i class="bi bi-info-circle text-brand-teal mr-1"></i>
-            Perubahan yang disimpan akan langsung tampil di halaman depan dan halaman Visi Misi.
+            Perubahan yang disimpan akan langsung tampil di halaman publik.
           </div>
           <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
             <a href="{% url 'tentang_detail' 'visi_misi' %}" target="_blank" class="px-5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-semibold transition">
@@ -354,7 +358,6 @@
 
   <!-- JavaScript Interaktif Tambah / Hapus Item & Live Preview -->
   <script>
-    // Live preview teks visi
     const inputVisi = document.getElementById('visi_teks');
     const previewVisi = document.getElementById('preview_visi_teks');
     if (inputVisi && previewVisi) {
@@ -363,7 +366,6 @@
       });
     }
 
-    // Fungsi update nomor urut badge Misi
     function updateMisiBadges() {
       const rows = document.querySelectorAll('.misi-row');
       rows.forEach((row, index) => {
@@ -372,7 +374,6 @@
       });
     }
 
-    // Fungsi update nomor urut badge Tujuan
     function updateTujuanBadges() {
       const rows = document.querySelectorAll('.tujuan-row');
       rows.forEach((row, index) => {
@@ -383,13 +384,12 @@
       });
     }
 
-    // Tambah Poin Misi
     function tambahMisiItem() {
       const container = document.getElementById('misiContainer');
       const count = container.querySelectorAll('.misi-row').length + 1;
       const html = `
         <div class="misi-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 flex items-start gap-3 transition">
-          <span class="misi-badge w-8 h-8 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-xs flex items-center justify-center shrink-0 mt-1 border border-slate-200/60">
+          <span class="misi-badge w-8 h-8 rounded-full bg-teal-50 text-brand-teal border border-teal-200 font-bold text-xs flex items-center justify-center shrink-0 mt-1">
             ${count}
           </span>
           <div class="flex-1">
@@ -413,7 +413,6 @@
       updateMisiBadges();
     }
 
-    // Tambah Poin Tujuan
     function tambahTujuanItem() {
       const container = document.getElementById('tujuanContainer');
       const count = container.querySelectorAll('.tujuan-row').length + 1;
@@ -421,7 +420,7 @@
         <div class="tujuan-row bg-slate-50 border border-slate-200/90 rounded-xl p-4 sm:p-5 transition">
           <div class="flex items-start justify-between gap-3 mb-3">
             <div class="flex items-center gap-2.5">
-              <span class="tujuan-badge w-8 h-8 rounded-full bg-teal-50 text-brand-darkteal border border-teal-200 font-bold text-xs flex items-center justify-center border border-slate-200/60">
+              <span class="tujuan-badge w-8 h-8 rounded-full bg-teal-50 text-brand-teal border border-teal-200 font-bold text-xs flex items-center justify-center">
                 ${count}
               </span>
               <span class="text-xs font-bold text-slate-700">Poin Tujuan ${count}</span>
@@ -470,25 +469,71 @@
       updateTujuanBadges();
     }
 
-    // Hapus item
+    // Modal Konfirmasi Hapus SweetAlert2
     function hapusItem(btn, type) {
       const container = type === 'misi' ? document.getElementById('misiContainer') : document.getElementById('tujuanContainer');
       const rows = container.querySelectorAll(type === 'misi' ? '.misi-row' : '.tujuan-row');
-      
+      const namaTipe = type === 'misi' ? 'Misi' : 'Tujuan';
+
       if (rows.length <= 1) {
         Swal.fire({
           icon: 'warning',
           title: 'Tidak Bisa Dihapus',
-          text: 'Minimal harus ada 1 poin ' + type + '.',
-          confirmButtonColor: '#0b7285'
+          text: `Minimal harus ada 1 poin ${namaTipe}.`,
+          confirmButtonColor: '#0b7285',
+          customClass: {
+            popup: 'rounded-3xl',
+            confirmButton: 'rounded-xl px-5 py-2.5 text-xs font-semibold'
+          }
         });
         return;
       }
 
-      const row = btn.closest(type === 'misi' ? '.misi-row' : '.tujuan-row');
-      row.remove();
-      if (type === 'misi') updateMisiBadges();
-      else updateTujuanBadges();
+      Swal.fire({
+        html: `
+          <div class="flex flex-col items-center pt-2">
+            <div class="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center mb-4">
+              <i class="bi bi-trash3 text-3xl text-rose-500"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Hapus Poin ${namaTipe}?</h3>
+            <p class="text-xs text-slate-500 text-center leading-relaxed max-w-xs">
+              Apakah Anda yakin ingin menghapus poin ${namaTipe.toLowerCase()} ini? Tindakan ini tidak dapat dibatalkan.
+            </p>
+          </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        reverseButtons: true,
+        buttonsStyling: false,
+        customClass: {
+          popup: 'rounded-3xl p-6 sm:p-8 max-w-md shadow-2xl',
+          actions: 'flex gap-3 justify-center w-full mt-6',
+          confirmButton: 'flex-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs py-3 px-6 rounded-xl transition duration-200',
+          cancelButton: 'flex-1 bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 font-semibold text-xs py-3 px-6 rounded-xl transition duration-200'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const row = btn.closest(type === 'misi' ? '.misi-row' : '.tujuan-row');
+          row.remove();
+          
+          if (type === 'misi') {
+            updateMisiBadges();
+          } else {
+            updateTujuanBadges();
+          }
+
+          Swal.fire({
+            icon: 'success',
+            title: `Poin ${namaTipe} berhasil dihapus`,
+            timer: 1500,
+            showConfirmButton: false,
+            customClass: {
+              popup: 'rounded-2xl'
+            }
+          });
+        }
+      });
     }
   </script>
 
@@ -508,4 +553,3 @@
 
 </body>
 </html>
-
