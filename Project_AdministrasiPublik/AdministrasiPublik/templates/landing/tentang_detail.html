@@ -75,7 +75,7 @@
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 min-h-[65vh] space-y-8">
 
     <!-- HEADER & NAVIGASI CEPAT ANTAR SUB-MENU TENTANG -->
-    <div class="space-y-4">
+    <div class="space-y-4" data-aos="fade-down" data-aos-duration="700">
         <div>
             <div class="flex items-center gap-2 text-xs font-semibold text-teal-700 uppercase tracking-wider mb-1">
                 <span>Tentang</span>
@@ -107,7 +107,7 @@
     <div class="space-y-8">
 
         <!-- Tombol Pil Navigasi Internal (Visi, Misi, Tujuan) -->
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2" data-aos="fade-up">
             <a href="#visi" class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
                 Visi
             </a>
@@ -120,7 +120,7 @@
         </div>
 
         <!-- KARTU VISI -->
-        <div id="visi" class="scroll-mt-24 bg-[#0b5454] rounded-2xl p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] shadow-md transition">
+        <div id="visi" class="scroll-mt-24 bg-[#0b5454] rounded-2xl p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] shadow-md transition" data-aos="fade-up">
             <h2 class="text-xl sm:text-2xl font-bold text-[#f59e0b] mb-3 tracking-wide">
                 Visi
             </h2>
@@ -130,7 +130,7 @@
         </div>
 
         <!-- SEKSI MISI -->
-        <div id="misi" class="scroll-mt-24 space-y-4 pt-2">
+        <div id="misi" class="scroll-mt-24 space-y-4 pt-2" data-aos="fade-up">
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0f6b6b]">
                 Misi
             </h2>
@@ -142,7 +142,7 @@
 
             <div class="space-y-3 pt-1">
                 {% for misi in misi_list %}
-                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-center sm:items-start gap-4 sm:gap-6">
+                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-center sm:items-start gap-4 sm:gap-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
                     <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs">
                         {{ misi.urutan|default:forloop.counter }}
                     </div>
@@ -159,7 +159,7 @@
         </div>
 
         <!-- SEKSI TUJUAN -->
-        <div id="tujuan" class="scroll-mt-24 space-y-4 pt-4">
+        <div id="tujuan" class="scroll-mt-24 space-y-4 pt-4" data-aos="fade-up">
             <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0f6b6b]">
                 Tujuan
             </h2>
@@ -171,7 +171,7 @@
 
             <div class="space-y-3 pt-1">
                 {% for tujuan in tujuan_list %}
-                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-start gap-4 sm:gap-6">
+                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-start gap-4 sm:gap-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
                     <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs mt-0.5">
                         {{ tujuan.urutan|default:forloop.counter }}
                     </div>
@@ -223,7 +223,7 @@
         {% if akreditasi or konten_obj.file_dokumen %}
         {% with cert_url=akreditasi.sertifikat.url|default:konten_obj.file_dokumen.url %}
         <!-- Banner & Pratinjau Sertifikat Akreditasi Resmi (Satu Kesatuan Rapi, Tidak Double) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden" data-aos="fade-up">
             <!-- Header Status Akreditasi BAN-PT -->
             <div class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div class="space-y-2 max-w-2xl">
@@ -274,7 +274,7 @@
         {% endif %}
 
         <!-- Card Uraian Akreditasi (CKEditor) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6" data-aos="fade-up">
             <div class="border-b border-slate-100 pb-4">
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
                     <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
@@ -294,7 +294,7 @@
 
     {% elif active_slug == 'profil' %}
     <!-- TAMPILAN PROFIL PROGRAM STUDI -->
-    <div class="space-y-6">
+    <div class="space-y-6" data-aos="fade-up">
 
         <!-- Card Konten CKEditor -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
@@ -317,7 +317,7 @@
 
     {% elif active_slug == 'profil-lulusan' %}
     <!-- TAMPILAN PROFIL LULUSAN -->
-    <div class="space-y-6">
+    <div class="space-y-6" data-aos="fade-up">
 
         <!-- Card Konten CKEditor -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
@@ -340,7 +340,7 @@
 
     {% else %}
     <!-- TAMPILAN SUB-MENU STANDAR LAINNYA (MISAL SEJARAH & DASAR HUKUM) -->
-    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6" data-aos="fade-up">
         <div class="border-b border-slate-100 pb-4">
             <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
                 <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>

@@ -12,12 +12,12 @@
     </video>
     <div class="absolute inset-0 bg-black/60 z-10"></div>
     <div class="relative z-20 max-w-4xl mx-auto space-y-4 px-2">
-        <h3 class="text-sm sm:text-xl font-medium tracking-wide text-slate-200">Welcome to</h3>
-        <h1 class="text-2xl sm:text-5xl font-extrabold tracking-tight text-amber-400 drop-shadow-md leading-tight">
+        <h3 class="text-sm sm:text-xl font-medium tracking-wide text-slate-200" data-aos="fade-down" data-aos-duration="700">Welcome to</h3>
+        <h1 class="text-2xl sm:text-5xl font-extrabold tracking-tight text-amber-400 drop-shadow-md leading-tight" data-aos="zoom-in" data-aos-delay="150" data-aos-duration="800">
             {{ title|default:"Administrasi Publik" }}</h1>
-        <p class="text-slate-200 text-sm sm:text-lg font-medium leading-relaxed">
+        <p class="text-slate-200 text-sm sm:text-lg font-medium leading-relaxed" data-aos="fade-up" data-aos-delay="250" data-aos-duration="800">
             {{ faculty|default:"Fakultas IlmuSosial dan Ilmu Politik" }}<br>Universitas Tadulako</p>
-        <div class="pt-4">
+        <div class="pt-4" data-aos="fade-up" data-aos-delay="350" data-aos-duration="800">
             <a href="#sambutan"
                 class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-6 py-3 rounded-full shadow-lg transition text-xs sm:text-sm inline-block">Jelajahi
                 Lebih Lanjut</a>
@@ -28,15 +28,15 @@
 <!-- Sambutan Koorprodi -->
 <section id="sambutan" class="max-w-6xl mx-auto py-12 sm:py-20 px-4 sm:px-6">
     <div
-        class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-12 grid md:grid-cols-12 gap-8 sm:gap-10 items-center">
-        <div class="md:col-span-4 flex justify-center">
+        class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-12 grid md:grid-cols-12 gap-8 sm:gap-10 items-center" data-aos="fade-up" data-aos-duration="800">
+        <div class="md:col-span-4 flex justify-center" data-aos="fade-right" data-aos-delay="150">
             <div
                 class="w-56 h-64 sm:w-64 sm:h-72 bg-slate-200 rounded-2xl overflow-hidden shadow-inner border border-slate-300">
                 <img src="{% static 'images/Dosen/dosen1.jpg' %}" alt="Koordinator Prodi"
                     class="w-full h-full object-cover">
             </div>
         </div>
-        <div class="md:col-span-8 space-y-4 text-center md:text-left">
+        <div class="md:col-span-8 space-y-4 text-center md:text-left" data-aos="fade-left" data-aos-delay="150">
             <h2 class="text-xl sm:text-3xl font-bold text-tealBrand">{{ sambutan.judul|default:"Sambutan KoordinatorProgram Studi" }}</h2>
             <p class="text-slate-600 text-xs sm:text-sm leading-relaxed text-justify">
                 {{ sambutan.isi_sambutan|default:"Selamat datang di website resmi Program Studi Administrasi PublikFISIP Universitas Tadulako..." }}
@@ -51,14 +51,14 @@
 
 <!-- Galeri Kegiatan -->
 <section id="galeri" class="max-w-6xl mx-auto py-12 sm:py-16 px-4 sm:px-6 border-t border-slate-200">
-    <div class="text-center mb-8 sm:mb-10">
+    <div class="text-center mb-8 sm:mb-10" data-aos="fade-up">
         <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Galeri Kegiatan</h2>
     </div>
-    <div class="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
+    <div class="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm" data-aos="fade-up" data-aos-delay="100">
         {% if galeri_list %}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {% for g in galeri_list %}
-            <div class="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100">
+            <div class="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100 hover:shadow-md transition" data-aos="zoom-in" data-aos-delay="{{ forloop.counter|default:1 }}00">
                 <img src="{{ g.foto.url }}" alt="{{ g.judul }}" class="w-full h-44 sm:h-48 object-cover rounded-lg">
                 <p class="text-xs font-semibold text-slate-700 text-center truncate">{{ g.judul }}</p>
             </div>
@@ -72,7 +72,7 @@
 
 <!-- Berita Terbaru -->
 <section id="berita" class="max-w-6xl mx-auto py-12 sm:py-16 px-4 sm:px-6">
-    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10 text-center sm:text-left gap-4">
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10 text-center sm:text-left gap-4" data-aos="fade-up">
         <div>
             <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Berita Terbaru</h2>
             <p class="text-slate-500 text-xs mt-1">Informasi dan kegiatan seputar Administrasi Publik</p>
@@ -86,7 +86,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {% for b in berita_list|slice:":3" %}
         <div
-            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-3 flex flex-col justify-between">
+            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-3 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
             <div>
                 {% if b.gambar %}
                 <!-- Menggunakan aspect-[4/5] agar rasionya selalu konsisten portrait 4:5 -->
@@ -108,7 +108,7 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center">
+    <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center" data-aos="fade-up">
         <p class="text-slate-400 text-sm italic">Belum ada berita terbaru.</p>
     </div>
     {% endif %}
@@ -116,15 +116,15 @@
 
 <!-- Akademik / Kurikulum -->
 <section id="akademik" class="max-w-6xl mx-auto py-12 sm:py-16 px-4 sm:px-6">
-    <div class="text-center mb-8 sm:mb-10">
+    <div class="text-center mb-8 sm:mb-10" data-aos="fade-up">
         <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Kurikulum & Akademik</h2>
         <p class="text-slate-500 text-xs mt-1">Informasi mata kuliah dan panduan studi</p>
     </div>
-    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
+    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm" data-aos="fade-up" data-aos-delay="100">
         {% if akademik_list %}
         <div class="space-y-4">
             {% for a in akademik_list %}
-            <div class="border-b border-slate-100 pb-4 last:border-none last:pb-0">
+            <div class="border-b border-slate-100 pb-4 last:border-none last:pb-0" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
                 <h3 class="font-bold text-teal-800 text-sm sm:text-base">{{ a.judul_informasi }}</h3>
                 <p class="text-slate-600 text-xs mt-1 leading-relaxed">{{ a.deskripsi }}</p>
             </div>
@@ -138,11 +138,11 @@
 
 <!-- Hubungi Kami -->
 <section id="kontak" class="max-w-6xl mx-auto py-12 sm:py-20 px-4 sm:px-6">
-    <div class="text-center mb-10 sm:mb-12">
+    <div class="text-center mb-10 sm:mb-12" data-aos="fade-up">
         <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Hubungi Kami</h2>
     </div>
-    <div class="bg-tealBrand text-white rounded-3xl p-6 sm:p-12 grid md:grid-cols-2 gap-8 shadow-xl">
-        <div class="space-y-6">
+    <div class="bg-tealBrand text-white rounded-3xl p-6 sm:p-12 grid md:grid-cols-2 gap-8 shadow-xl" data-aos="fade-up" data-aos-delay="100">
+        <div class="space-y-6" data-aos="fade-right" data-aos-delay="200">
             <h3 class="text-lg sm:text-xl font-bold border-b border-teal-600 pb-3">Informasi Kontak</h3>
             <div class="space-y-4 text-xs sm:text-sm leading-relaxed">
                 <p class="flex items-start gap-3">
@@ -159,7 +159,7 @@
                 </p>
             </div>
         </div>
-        <div class="space-y-4">
+        <div class="space-y-4" data-aos="fade-left" data-aos-delay="200">
             <h3 class="text-lg sm:text-xl font-bold border-b border-teal-600 pb-3">Lokasi Kami</h3>
             <div class="w-full h-52 sm:h-56 bg-slate-200 rounded-xl overflow-hidden border border-teal-600">
                 <iframe

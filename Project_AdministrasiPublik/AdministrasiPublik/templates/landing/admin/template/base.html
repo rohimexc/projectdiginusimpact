@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- AOS Animate CSS CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <script>
         tailwind.config = {
             theme: {
@@ -70,6 +72,24 @@
         </div>
     </main>
 
+    <!-- AOS Animate JS CDN & Inisialisasi -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            AOS.init({
+                duration: 700,
+                once: true,
+                offset: 30,
+                easing: 'ease-out-cubic',
+            });
+            const mainContainer = document.querySelector('main');
+            if (mainContainer) {
+                mainContainer.addEventListener('scroll', function() {
+                    AOS.refresh();
+                });
+            }
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
