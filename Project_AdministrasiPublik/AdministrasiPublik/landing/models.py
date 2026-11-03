@@ -98,17 +98,59 @@ class Berita(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     post_date = models.DateTimeField(help_text="Tanggal dan waktu publikasi berita")
+    views_count = models.PositiveIntegerField(default=0, verbose_name="Jumlah Dilihat")
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.judul)
         super().save(*args, **kwargs)
 
+    @property
+    def total_likes(self):
+        return self.likes.count()
+
+    @property
+    def total_komentar(self):
+        return self.komentar_list.filter(is_active=True).count()
+
     def __str__(self):
         return self.judul
 
     class Meta:
         ordering = ['-post_date']
+
+class LikeBerita(models.Model):
+    berita = models.ForeignKey(Berita, on_delete=models.CASCADE, related_name='likes', verbose_name="Berita")
+    session_key = models.CharField(max_length=100, db_index=True, verbose_name="Kunci Sesi Pengunjung")
+    ip_address = models.GenericIPAddressField(blank=True, null=True, verbose_name="Alamat IP")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Disukai")
+
+    class Meta:
+        verbose_name = "Like Berita"
+        verbose_name_plural = "Daftar Like Berita"
+        unique_together = ('berita', 'session_key')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Like oleh {self.session_key} pada {self.berita.judul}"
+
+
+class KomentarBerita(models.Model):
+    berita = models.ForeignKey(Berita, on_delete=models.CASCADE, related_name='komentar_list', verbose_name="Berita")
+    nama = models.CharField(max_length=100, verbose_name="Nama Pengunjung")
+    email = models.EmailField(blank=True, null=True, verbose_name="Email (Opsional)")
+    isi = models.TextField(verbose_name="Isi Komentar")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Komentar")
+    is_active = models.BooleanField(default=True, verbose_name="Status Tampil")
+
+    class Meta:
+        verbose_name = "Komentar Berita"
+        verbose_name_plural = "Daftar Komentar Berita"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.nama} pada {self.berita.judul}"
+
 
 class Akademik(models.Model):
     judul_informasi = models.CharField(max_length=200)

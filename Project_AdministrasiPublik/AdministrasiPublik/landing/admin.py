@@ -3,7 +3,7 @@ from .models import (
     Sambutan, Galeri, Berita, Akademik, 
     TenagaPendidik, Dosen, Akreditasi, Kontak, TentangPage,
     VisiMisiTujuan, MisiItem, TujuanItem,
-    AkademikPage, DokumenAkademik
+    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita
 )
 
 
@@ -58,10 +58,33 @@ class GaleriAdmin(admin.ModelAdmin):
 
 @admin.register(Berita)
 class BeritaAdmin(admin.ModelAdmin):
-    list_display = ('judul', 'post_date')  # 'tanggal' diganti 'post_date'
+    list_display = ('judul', 'post_date', 'views_count', 'total_likes_display', 'total_komentar_display')
+
+    def total_likes_display(self, obj):
+        return obj.total_likes
+    total_likes_display.short_description = "Likes"
+
+    def total_komentar_display(self, obj):
+        return obj.total_komentar
+    total_komentar_display.short_description = "Komentar"
     list_filter = ('post_date',)           # 'tanggal' diganti 'post_date'
     search_fields = ('judul', 'konten')
     ordering = ('-post_date',)             # 'tanggal' diganti 'post_date'
+
+@admin.register(KomentarBerita)
+class KomentarBeritaAdmin(admin.ModelAdmin):
+    list_display = ('nama', 'berita', 'email', 'created_at', 'is_active')
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('nama', 'email', 'isi', 'berita__judul')
+    list_editable = ('is_active',)
+
+
+@admin.register(LikeBerita)
+class LikeBeritaAdmin(admin.ModelAdmin):
+    list_display = ('berita', 'session_key', 'ip_address', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('berita__judul', 'session_key', 'ip_address')
+
 
 @admin.register(Akademik)
 class AkademikAdmin(admin.ModelAdmin):

@@ -40,10 +40,24 @@
                 <img src="{{ b.gambar.url }}" alt="{{ b.judul }}"
                     class="w-full aspect-[4/5] object-cover rounded-lg mb-3">
                 {% endif %}
-                <span class="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
-                    {{b.post_date|date:"d M Y" }}</span>
+                <div class="flex items-center justify-between gap-2 flex-wrap mb-2">
+                    <span class="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
+                        {{ b.post_date|date:"d M Y" }}
+                    </span>
+                    <div class="flex items-center gap-2.5 text-[11px] text-slate-500 font-medium">
+                        <span class="flex items-center gap-1" title="Dilihat {{ b.views_count }} kali">
+                            <i class="fa-regular fa-eye text-teal-600"></i>{{ b.views_count }}
+                        </span>
+                        <span class="flex items-center gap-1" title="{{ b.total_likes }} Suka">
+                            <i class="fa-regular fa-heart text-rose-500"></i>{{ b.total_likes }}
+                        </span>
+                        <span class="flex items-center gap-1" title="{{ b.total_komentar }} Komentar">
+                            <i class="fa-regular fa-comment text-sky-500"></i>{{ b.total_komentar }}
+                        </span>
+                    </div>
+                </div>
                 <h3 class="font-bold text-slate-800 text-sm mt-2 line-clamp-2">{{ b.judul }}</h3>
-                <p class="text-slate-600 text-xs mt-1 line-clamp-2"><div>{{ b.konten|safe }}</div></p>
+                <div class="text-slate-600 text-xs mt-1 line-clamp-2">{{ b.konten|safe }}</div>
             </div>
                     <div class="pt-3 border-t border-slate-100 flex justify-between items-center">
                         <a href="{% url 'landing:berita_detail' b.slug %}" class="text-teal-600 font-semibold text-xs hover:underline flex items-center gap-1">

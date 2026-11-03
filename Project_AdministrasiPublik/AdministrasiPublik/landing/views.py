@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_POST
@@ -7,9 +9,9 @@ from django.contrib.auth.models import User
 from .models import (
     Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog, Dosen,
     TentangPage, VisiMisiTujuan, MisiItem, TujuanItem,
-    AkademikPage, DokumenAkademik
+    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita
 )
-from django.db.models import Q
+from django.db.models import Q, F
 from .forms import (
     BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, 
     CustomAuthenticationForm, DosenForm, TentangPageForm,
@@ -80,7 +82,158 @@ def berita_list_view(request):
 # 2. Halaman Detail (Single Berita saat "Baca Selengkapnya" diklik)
 def berita_detail_view(request, slug):
     berita = get_object_or_404(Berita, slug=slug)
-    return render(request, 'landing/berita/berita_detail.html', {'berita': berita})
+
+    # Pastikan session aktif untuk pengunjung
+    if not request.session.session_key:
+        request.session.save()
+    session_key = request.session.session_key
+
+    # 1. Fitur View Otomatis bertambah saat membuka berita
+    view_session_key = f'viewed_berita_{berita.id}'
+    if not request.session.get(view_session_key, False):
+        Berita.objects.filter(pk=berita.pk).update(views_count=F('views_count') + 1)
+        berita.refresh_from_db(fields=['views_count'])
+        request.session[view_session_key] = True
+
+    # 2. Cek status like pengunjung saat ini
+    user_has_liked = LikeBerita.objects.filter(berita=berita, session_key=session_key).exists()
+
+    # 3. Fallback form kirim komentar (POST standar)
+    if request.method == 'POST' and 'kirim_komentar' in request.POST:
+        nama = request.POST.get('nama', '').strip()
+        email = request.POST.get('email', '').strip()
+        isi = request.POST.get('isi', '').strip()
+
+        if nama and isi:
+            KomentarBerita.objects.create(
+                berita=berita,
+                nama=nama,
+                email=email if email else None,
+                isi=isi
+            )
+            messages.success(request, "Terima kasih! Komentar Anda berhasil dikirim.")
+            return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
+        else:
+            messages.error(request, "Nama dan isi komentar wajib diisi!")
+
+    komentar_list = berita.komentar_list.filter(is_active=True).order_by('-created_at')
+    berita_lainnya = Berita.objects.exclude(pk=berita.pk).order_by('-post_date')[:3]
+
+    context = {
+        'berita': berita,
+        'user_has_liked': user_has_liked,
+        'komentar_list': komentar_list,
+        'berita_lainnya': berita_lainnya,
+    }
+    return render(request, 'landing/berita/berita_detail.html', context)
+
+
+# Fitur Like Berita (User Friendly via AJAX atau Form POST)
+def berita_like_view(request, slug):
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Metode request tidak diizinkan")
+
+    berita = get_object_or_404(Berita, slug=slug)
+
+    if not request.session.session_key:
+        request.session.save()
+    session_key = request.session.session_key
+
+    like_obj = LikeBerita.objects.filter(berita=berita, session_key=session_key).first()
+    if like_obj:
+        like_obj.delete()
+        liked = False
+        msg = "Batal menyukai berita."
+    else:
+        ip = get_client_ip(request)
+        LikeBerita.objects.create(berita=berita, session_key=session_key, ip_address=ip)
+        liked = True
+        msg = "Terima kasih telah menyukai berita ini!"
+
+    total_likes = berita.likes.count()
+
+    is_ajax = (
+        request.headers.get('x-requested-with') == 'XMLHttpRequest' or
+        request.POST.get('ajax') == '1' or
+        request.content_type == 'application/json' or
+        'application/json' in request.headers.get('Accept', '')
+    )
+
+    if is_ajax:
+        return JsonResponse({
+            'status': 'success',
+            'liked': liked,
+            'total_likes': total_likes,
+            'message': msg
+        })
+
+    messages.success(request, msg)
+    return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#like-section")
+
+
+# Fitur Kirim Komentar Berita (User Friendly via AJAX atau Form POST)
+def berita_komentar_view(request, slug):
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Metode request tidak diizinkan")
+
+    berita = get_object_or_404(Berita, slug=slug)
+    nama = request.POST.get('nama', '').strip()
+    email = request.POST.get('email', '').strip()
+    isi = request.POST.get('isi', '').strip()
+
+    is_ajax = (
+        request.headers.get('x-requested-with') == 'XMLHttpRequest' or
+        request.POST.get('ajax') == '1' or
+        'application/json' in request.headers.get('Accept', '')
+    )
+
+    if not nama or not isi:
+        if is_ajax:
+            return JsonResponse({'status': 'error', 'message': 'Nama dan komentar wajib diisi!'}, status=400)
+        messages.error(request, "Nama dan komentar wajib diisi!")
+        return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
+
+    komentar = KomentarBerita.objects.create(
+        berita=berita,
+        nama=nama,
+        email=email if email else None,
+        isi=isi
+    )
+
+    if is_ajax:
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Komentar Anda berhasil dikirim!',
+            'komentar': {
+                'id': komentar.id,
+                'nama': komentar.nama,
+                'isi': komentar.isi,
+                'created_at': komentar.created_at.strftime('%d %b %Y, %H:%M'),
+                'initial': komentar.nama[0].upper() if komentar.nama else 'P',
+            },
+            'total_komentar': berita.komentar_list.filter(is_active=True).count()
+        })
+
+    messages.success(request, "Terima kasih! Komentar Anda berhasil dikirim.")
+    return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
+
+
+# Hapus Komentar (Khusus Administrator / Staff)
+@login_required(login_url='landing:login')
+def komentar_delete_view(request, pk):
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Akses ditolak!")
+        return redirect('landing:login')
+
+    komentar = get_object_or_404(KomentarBerita, pk=pk)
+    berita_slug = komentar.berita.slug
+    nama_pengirim = komentar.nama
+    komentar.delete()
+    messages.success(request, f"Komentar dari '{nama_pengirim}' berhasil dihapus.")
+    catat_log(request, request.user, f"Menghapus komentar dari '{nama_pengirim}' pada berita '{komentar.berita.judul}'", "Komentar dihapus oleh admin")
+    return redirect(f"{reverse('landing:berita_detail', args=[berita_slug])}#komentar-section")
+
+
 
 @login_required(login_url='landing:login')
 def berita_create_view(request):
@@ -105,6 +258,7 @@ def berita_create_view(request):
 @login_required(login_url='landing:login')
 def berita_update_view(request, slug):
     berita = get_object_or_404(Berita, slug=slug)
+
     if request.method == 'POST':
         form = BeritaForm(request.POST, request.FILES, instance=berita)
         if form.is_valid():
@@ -139,6 +293,7 @@ def dashboard_berita_view(request):
 @login_required(login_url='landing:login')
 def berita_delete_view(request, slug):
     berita = get_object_or_404(Berita, slug=slug)
+
     if request.method == 'POST':
         judul_berita = berita.judul
         berita.delete()

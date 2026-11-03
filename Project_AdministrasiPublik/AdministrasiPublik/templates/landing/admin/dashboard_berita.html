@@ -55,7 +55,8 @@
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200 text-slate-500">
                         <th class="p-3">Judul Berita</th>
-                        <th class="p-3 w-40">Tanggal Post</th>
+                        <th class="p-3 w-36">Tanggal Post</th>
+                        <th class="p-3 w-48 text-center">Interaksi</th>
                         <th class="p-3" style="text-align: center !important;">Aksi</th>
                     </tr>
                 </thead>
@@ -64,6 +65,21 @@
                     <tr class="hover:bg-slate-50">
                         <td class="p-3 font-semibold text-slate-800">{{ b.judul }}</td>
                         <td class="p-3 text-slate-600">{{ b.post_date|date:"d M Y, H:i" }}</td>
+                        <td class="p-3 text-center">
+                            <div class="inline-flex items-center gap-2 text-[11px] font-medium text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200">
+                                <span title="Dilihat {{ b.views_count }} kali" class="flex items-center gap-1 text-teal-600">
+                                    <i class="fa-regular fa-eye"></i> {{ b.views_count }}
+                                </span>
+                                <span class="text-slate-300">|</span>
+                                <span title="{{ b.total_likes }} Disukai" class="flex items-center gap-1 text-rose-500">
+                                    <i class="fa-regular fa-heart"></i> {{ b.total_likes }}
+                                </span>
+                                <span class="text-slate-300">|</span>
+                                <span title="{{ b.total_komentar }} Komentar" class="flex items-center gap-1 text-sky-500">
+                                    <i class="fa-regular fa-comment"></i> {{ b.total_komentar }}
+                                </span>
+                            </div>
+                        </td>
                         <td class="py-3.5 px-4 text-center">
                             <div class="inline-flex items-center justify-center gap-1.5">
                                 <!-- Tombol Preview -->
@@ -83,7 +99,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="3" class="p-6 text-center text-slate-400 italic">Belum ada data berita yang diunggah.</td>
+                        <td colspan="4" class="p-6 text-center text-slate-400 italic">Belum ada data berita yang diunggah.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -122,8 +138,8 @@ $(document).ready(function() {
         "columnDefs": [
             { 
                 "orderable": false, 
-                "targets": 2,
-                "className": "text-center" // Ini memaksa isi dan header kolom ke-3 jadi rata tengah via DataTables
+                "targets": [2, 3],
+                "className": "text-center"
             }
         ],
         "language": {
