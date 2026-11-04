@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import (
@@ -80,6 +81,7 @@ def berita_list_view(request):
     return render(request, 'landing/berita/berita_list.html', context)
 
 # 2. Halaman Detail (Single Berita saat "Baca Selengkapnya" diklik)
+@ensure_csrf_cookie
 def berita_detail_view(request, slug):
     berita = get_object_or_404(Berita, slug=slug)
 
