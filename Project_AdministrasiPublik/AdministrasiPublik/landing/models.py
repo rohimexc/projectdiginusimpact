@@ -99,6 +99,7 @@ class Berita(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     post_date = models.DateTimeField(help_text="Tanggal dan waktu publikasi berita")
     views_count = models.PositiveIntegerField(default=0, verbose_name="Jumlah Dilihat")
+    shares_count = models.PositiveIntegerField(default=0, verbose_name="Jumlah Dibagikan")
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -137,6 +138,7 @@ class LikeBerita(models.Model):
 
 class KomentarBerita(models.Model):
     berita = models.ForeignKey(Berita, on_delete=models.CASCADE, related_name='komentar_list', verbose_name="Berita")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='komentar_berita', verbose_name="Pengguna")
     nama = models.CharField(max_length=100, verbose_name="Nama Pengunjung")
     email = models.EmailField(blank=True, null=True, verbose_name="Email (Opsional)")
     isi = models.TextField(verbose_name="Isi Komentar")

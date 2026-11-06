@@ -173,15 +173,71 @@ def berita_like_view(request, slug):
     return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#like-section")
 
 
-# Fitur Kirim Komentar Berita (User Friendly via AJAX atau Form POST)
+# Fitur Kirim Komentar Berita (Harus Login terlebih dahulu)
 def berita_komentar_view(request, slug):
     if request.method != 'POST':
         return HttpResponseBadRequest("Metode request tidak diizinkan")
 
     berita = get_object_or_404(Berita, slug=slug)
-    nama = request.POST.get('nama', '').strip()
-    email = request.POST.get('email', '').strip()
+    is_ajax = (
+        request.headers.get('x-requested-with') == 'XMLHttpRequest' or
+        request.POST.get('ajax') == '1' or
+        'application/json' in request.headers.get('Accept', '')
+    )
+
+    if not request.user.is_authenticated:
+        if is_ajax:
+            return JsonResponse({
+                'status': 'error',
+                'require_login': True,
+                'message': 'Silakan masuk atau buat akun terlebih dahulu untuk berkomentar!'
+            }, status=401)
+        messages.error(request, "Silakan masuk atau buat akun terlebih dahulu untuk berkomentar!")
+        return redirect(f"{reverse('landing:login')}?next={reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
+
     isi = request.POST.get('isi', '').strip()
+    if not isi:
+        if is_ajax:
+            return JsonResponse({'status': 'error', 'message': 'Komentar tidak boleh kosong!'}, status=400)
+        messages.error(request, "Komentar tidak boleh kosong!")
+        return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
+
+    nama_user = request.user.get_full_name() or request.user.username
+    komentar = KomentarBerita.objects.create(
+        berita=berita,
+        user=request.user,
+        nama=nama_user,
+        email=request.user.email if request.user.email else None,
+        isi=isi
+    )
+
+    if is_ajax:
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Komentar Anda berhasil dipublikasikan!',
+            'komentar': {
+                'id': komentar.id,
+                'nama': komentar.nama,
+                'username': request.user.username,
+                'isi': komentar.isi,
+                'created_at': komentar.created_at.strftime('%d %b %Y, %H:%M'),
+                'initial': komentar.nama[0].upper() if komentar.nama else 'U',
+            },
+            'total_komentar': berita.komentar_list.filter(is_active=True).count()
+        })
+
+    messages.success(request, "Terima kasih! Komentar Anda berhasil dikirim.")
+    return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
+
+
+# Fitur Share Berita (Menambah jumlah share di database via AJAX/POST)
+def berita_share_view(request, slug):
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Metode request tidak diizinkan")
+
+    berita = get_object_or_404(Berita, slug=slug)
+    Berita.objects.filter(pk=berita.pk).update(shares_count=F('shares_count') + 1)
+    berita.refresh_from_db(fields=['shares_count'])
 
     is_ajax = (
         request.headers.get('x-requested-with') == 'XMLHttpRequest' or
@@ -189,35 +245,14 @@ def berita_komentar_view(request, slug):
         'application/json' in request.headers.get('Accept', '')
     )
 
-    if not nama or not isi:
-        if is_ajax:
-            return JsonResponse({'status': 'error', 'message': 'Nama dan komentar wajib diisi!'}, status=400)
-        messages.error(request, "Nama dan komentar wajib diisi!")
-        return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
-
-    komentar = KomentarBerita.objects.create(
-        berita=berita,
-        nama=nama,
-        email=email if email else None,
-        isi=isi
-    )
-
     if is_ajax:
         return JsonResponse({
             'status': 'success',
-            'message': 'Komentar Anda berhasil dikirim!',
-            'komentar': {
-                'id': komentar.id,
-                'nama': komentar.nama,
-                'isi': komentar.isi,
-                'created_at': komentar.created_at.strftime('%d %b %Y, %H:%M'),
-                'initial': komentar.nama[0].upper() if komentar.nama else 'P',
-            },
-            'total_komentar': berita.komentar_list.filter(is_active=True).count()
+            'shares_count': berita.shares_count,
+            'message': 'Tautan berita berhasil disalin dan dibagikan!'
         })
 
-    messages.success(request, "Terima kasih! Komentar Anda berhasil dikirim.")
-    return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}#komentar-section")
+    return redirect(f"{reverse('landing:berita_detail', args=[berita.slug])}")
 
 
 # Hapus Komentar (Khusus Administrator / Staff)
@@ -386,6 +421,14 @@ def akreditasi_page(request):
     return render(request, 'landing/akreditasi.html', {'akreditasi': akreditasi})
 
 def login_view(request):
+    next_url = request.POST.get('next') or request.GET.get('next', '')
+    if request.user.is_authenticated:
+        if next_url:
+            return redirect(next_url)
+        if request.user.is_superuser or request.user.is_staff:
+            return redirect('landing:dashboard_admin')
+        return redirect('landing:landing_home')
+
     if request.method == 'POST':
         email_input = request.POST.get('username') 
         password_input = request.POST.get('password')
@@ -404,16 +447,70 @@ def login_view(request):
             messages.success(request, f"Selamat datang, {user.get_full_name() or user.username}!")
             
             if user.is_superuser or user.is_staff:
+                if next_url:
+                    return redirect(next_url)
                 return redirect('landing:dashboard_admin') 
             else:
-                messages.error(request, "Akun Anda bukan Admin! Tidak memiliki hak akses.")
-                logout(request)
-                return redirect('landing:login')
+                if next_url:
+                    return redirect(next_url)
+                return redirect('landing:landing_home')
         else:
-            messages.error(request, "Email atau password salah.")
+            messages.error(request, "Email/Username atau password salah.")
             
     form = CustomAuthenticationForm()
-    return render(request, 'landing/Login/login.html', {'form': form})
+    return render(request, 'landing/Login/login.html', {'form': form, 'next': next_url})
+
+
+def register_view(request):
+    next_url = request.POST.get('next') or request.GET.get('next', '')
+    if request.user.is_authenticated:
+        if next_url:
+            return redirect(next_url)
+        return redirect('landing:landing_home')
+
+    if request.method == 'POST':
+        nama_lengkap = request.POST.get('nama_lengkap', '').strip()
+        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '')
+        password_confirm = request.POST.get('password_confirm', '')
+
+        if not nama_lengkap or not username or not password:
+            messages.error(request, "Nama lengkap, username, dan password wajib diisi!")
+        elif password != password_confirm:
+            messages.error(request, "Konfirmasi password tidak cocok!")
+        elif len(password) < 6:
+            messages.error(request, "Password minimal 6 karakter!")
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, f"Username '{username}' sudah digunakan, silakan pilih yang lain.")
+        elif email and User.objects.filter(email=email).exists():
+            messages.error(request, f"Email '{email}' sudah terdaftar, silakan gunakan email lain atau login.")
+        else:
+            user = User.objects.create_user(
+                username=username,
+                email=email if email else '',
+                password=password,
+                first_name=nama_lengkap
+            )
+            UserProfile.objects.create(
+                user=user,
+                role='USER'
+            )
+            login(request, user)
+            catat_riwayat_login(user, request)
+            messages.success(request, f"Akun Anda berhasil dibuat! Selamat datang, {nama_lengkap}.")
+            if next_url:
+                return redirect(next_url)
+            return redirect('landing:landing_home')
+
+    return render(request, 'landing/Login/register.html', {'next': next_url})
+
+
+def logout_view(request):
+    next_url = request.GET.get('next', '/')
+    logout(request)
+    messages.info(request, "Anda telah berhasil keluar.")
+    return redirect(next_url)
 
 @login_required(login_url='landing:login')
 def dashboard_admin_khusus(request):
@@ -1068,4 +1165,4 @@ def akademik_dokumen_delete(request, pk):
     return redirect(f"/admin-portal/akademik/?edit={akademik_id}#editPanel")
 
 
-
+

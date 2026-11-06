@@ -12,6 +12,7 @@ urlpatterns = [
     path('berita/<slug:slug>/', views.berita_detail_view, name='berita_detail'),
     path('berita/<slug:slug>/like/', views.berita_like_view, name='berita_like'),
     path('berita/<slug:slug>/komentar/', views.berita_komentar_view, name='berita_komentar'),
+    path('berita/<slug:slug>/share/', views.berita_share_view, name='berita_share'),
     path('dashboard/berita/komentar/<int:pk>/hapus/', views.komentar_delete_view, name='komentar_delete'),
     path('berita/<slug:slug>/edit/', views.berita_update_view, name='berita_update'),
     path('berita/<slug:slug>/hapus/', views.berita_delete_view, name='berita_delete'),
@@ -24,6 +25,8 @@ urlpatterns = [
     
     # --- URL HALAMAN LOGIN & ADMIN ---
     path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('logout/', views.logout_view, name='logout'),
     path('dashboard-admin/', views.dashboard_admin_khusus, name='dashboard_admin'),
     path('dashboard/berita/', views.dashboard_berita_view, name='dashboard_berita'),
     
