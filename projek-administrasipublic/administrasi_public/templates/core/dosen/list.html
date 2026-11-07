@@ -1,0 +1,368 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenaga Pengajar - Administrasi Publik UNTAD</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              hovergold: '#e59900',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- Floating WhatsApp -->
+  <a href="#" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Header / Navbar -->
+  <nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-6 md:px-10 z-50 shadow-md">
+    <div class="flex items-center gap-3 text-white">
+      <i class="fas fa-graduation-cap text-3xl text-[#ffd43b]"></i>
+      <div>
+        <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
+        <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      </div>
+    </div>
+
+    <ul class="hidden lg:flex list-none items-center gap-4">
+      <li><a href="{% url 'home' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Beranda</a></li>
+      
+      <!-- Dropdown Menu Tentang -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Tentang <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-64 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tentang_detail' 'profil' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-university text-[#fab005] w-4"></i> Profil Program Studi
+            </a>
+            <a href="{% url 'tentang_detail' 'sejarah' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-scale-balanced text-[#fab005] w-4"></i> Sejarah & Dasar Hukum
+            </a>
+            <a href="{% url 'tentang_detail' 'visi_misi' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-bullseye text-[#fab005] w-4"></i> Visi, Misi & Tujuan
+            </a>
+            <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-user-graduate text-[#fab005] w-4"></i> Profil Lulusan
+            </a>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-award text-[#fab005] w-4"></i> Sertifikat Akreditasi
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="{% url 'home' %}#penelitian" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a></li>
+      <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a></li>
+      
+      <!-- Dropdown Menu Akademik -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Akademik <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8
+            </a>
+            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-book-open text-[#fab005] w-4"></i> Kurikulum
+            </a>
+            <a href="{% url 'akademik_detail' 'jadwal' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-calendar-alt text-[#fab005] w-4"></i> Jadwal Perkuliahan
+            </a>
+            <a href="{% url 'akademik_detail' 'rps' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-file-signature text-[#fab005] w-4"></i> RPS
+            </a>
+            <a href="{% url 'akademik_detail' 'panduan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-book-bookmark text-[#fab005] w-4"></i> Panduan Akademik
+            </a>
+          </div>
+        </div>
+      </li>
+      
+      <!-- Dropdown Staf -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-semibold py-2 px-3 rounded-md bg-white/15 text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Staf <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-52 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tenaga_pendidik_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition bg-teal-50 text-[#0b7285] font-semibold">
+              <i class="fas fa-chalkboard-teacher text-[#fab005] w-4"></i> Tenaga Pengajar
+            </a>
+            <a href="{% url 'tenaga_kependidikan_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-user-gear text-[#fab005] w-4"></i> Tenaga Kependidikan
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+
+      <!-- Status Pengguna / Admin -->
+      {% if request.user.is_authenticated %}
+        <li class="flex items-center gap-2 pl-3 border-l border-white/20">
+          <div class="w-7 h-7 rounded-full bg-[#fcc419] text-slate-900 flex items-center justify-center text-xs font-bold shadow-xs">
+            {{ request.user.first_name|default:request.user.username|slice:":2"|upper }}
+          </div>
+          <span class="text-white text-xs font-semibold">{{ request.user.first_name|default:request.user.username }}</span>
+          <a href="{% url 'user_logout' %}?next={{ request.path }}" title="Keluar dari akun" class="text-xs text-rose-300 hover:text-white ml-1 p-1">
+            <i class="fas fa-arrow-right-from-bracket"></i>
+          </a>
+        </li>
+      {% else %}
+        <li class="pl-2 flex items-center gap-2">
+          <a href="{% url 'user_login' %}?next={{ request.path }}" class="bg-[#fcc419] hover:bg-[#fab005] text-slate-900 text-xs font-bold py-1.5 px-3.5 rounded-full transition shadow-sm">
+            Masuk
+          </a>
+          <a href="{% url 'user_register' %}?next={{ request.path }}" class="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold py-1.5 px-3.5 rounded-full transition border border-white/20">
+            Daftar
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <!-- Konten Utama -->
+  <main class="flex-1 pt-28 pb-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- BLOK 1 AOS: Header Halaman -->
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-10 text-center sm:text-left">
+        <p class="text-xs font-bold uppercase tracking-widest text-[#0b7285] mb-1.5 flex items-center justify-center sm:justify-start gap-2">
+          <span>STAF & DOSEN</span>
+          <span class="text-[8px] opacity-60">•</span>
+          <span>ADMINISTRASI PUBLIK</span>
+        </p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+          Tenaga Pengajar (Dosen)
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-normal">
+          Daftar staf pengajar dan dosen Program Studi Administrasi Publik FISIP Universitas Tadulako
+        </p>
+      </header>
+
+      <!-- BLOK 2 AOS: Grid Kartu Dosen -->
+      <section data-aos="fade-up" data-aos-duration="700">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {% for dosen in daftar_dosen %}
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+              <div>
+                <!-- Wadah Foto Rasio 4:5 -->
+                <div class="w-full overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 5;">
+                  {% if dosen.foto %}
+                    <img src="{{ dosen.foto.url }}" alt="{{ dosen.nama }}" class="w-full h-full object-cover">
+                  {% else %}
+                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                      <i class="fas fa-chalkboard-user text-5xl mb-2"></i>
+                      <span class="text-xs text-slate-400">Tidak ada foto</span>
+                    </div>
+                  {% endif %}
+                </div>
+
+                <div class="p-4">
+                  <span class="text-[10px] font-semibold text-[#0b7285] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full inline-block mb-2">
+                    {{ dosen.jabatan|default:"Dosen Tetap" }}
+                  </span>
+                  <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1">
+                    {{ dosen.nama }}
+                  </h3>
+                  <p class="text-xs text-slate-500 line-clamp-2">
+                    {{ dosen.bidang_keahlian|default:dosen.bidang_ilmu|default:"Ilmu Administrasi Publik" }}
+                  </p>
+                </div>
+              </div>
+
+              {% if dosen.pk %}
+              <div class="p-4 pt-0">
+                <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}" class="text-xs font-semibold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
+                  Lihat Profil &rarr;
+                </a>
+              </div>
+              {% endif %}
+            </div>
+          {% empty %}
+            <div class="col-span-full text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200">
+              <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+              <p class="text-sm font-medium">Belum ada data tenaga pengajar yang dimasukkan.</p>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-brand-darkteal text-white pt-12 mt-20" data-aos="fade-up" data-aos-duration="600">
+    <div class="max-w-6xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-white/10 text-xs">
+      
+      <!-- Kolom 1 -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2.5">
+          <i class="fas fa-graduation-cap text-2xl text-brand-gold"></i>
+          <div>
+            <h4 class="text-sm font-bold text-brand-gold leading-tight">Administrasi Publik</h4>
+            <p class="text-[10px] text-teal-200">FISIP Universitas Tadulako</p>
+          </div>
+        </div>
+        <p class="text-slate-300 text-[11px] leading-relaxed">
+          Mencetak sarjana yang unggul, berintegritas, serta berwawasan lingkungan dalam perumusan kebijakan dan pelayanan publik.
+        </p>
+        <p class="text-[11px] text-teal-200 flex items-center gap-2 pt-1">
+          <i class="fa-solid fa-building-columns text-brand-gold"></i> Kampus Bumi Tadulako, Palu
+        </p>
+      </div>
+
+      <!-- Kolom 2 -->
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold uppercase tracking-wider mb-4 border-l-2 border-brand-gold pl-2">
+          Tentang Prodi
+        </h4>
+        <ul class="space-y-2.5 text-slate-300">
+          <li>
+            <a href="{% url 'tentang_detail' 'profil' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Profil Program Studi
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'sejarah' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Sejarah & Dasar Hukum
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'visi_misi' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Visi, Misi & Tujuan
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Profil Lulusan
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Sertifikat Akreditasi
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 3 -->
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold uppercase tracking-wider mb-4 border-l-2 border-brand-gold pl-2">
+          Tautan Cepat
+        </h4>
+        <ul class="space-y-2.5 text-slate-300">
+          <li>
+            <a href="https://untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Website UNTAD
+            </a>
+          </li>
+          <li>
+            <a href="https://fisip.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Website FISIP
+            </a>
+          </li>
+          <li>
+            <a href="https://kepegawaian.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Website Kepegawaian
+            </a>
+          </li>
+          <li>
+            <a href="https://siaga.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal Siaga 8
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf text-[10px] text-brand-gold"></i> Unduh Akreditasi
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 4 -->
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold uppercase tracking-wider mb-4 border-l-2 border-brand-gold pl-2">
+          Follow Us
+        </h4>
+        <div class="flex gap-2.5 mb-4">
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition">
+            <i class="fab fa-instagram text-xs"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition">
+            <i class="fab fa-facebook-f text-xs"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition">
+            <i class="fab fa-youtube text-xs"></i>
+          </a>
+        </div>
+
+        <div class="bg-black/25 border border-white/10 p-3.5 rounded-xl text-xs space-y-1.5 shadow-inner">
+          <div class="flex items-center justify-between pb-1.5 border-b border-white/10 text-teal-200 font-medium text-[11px]">
+            <span><i class="fa-solid fa-chart-simple text-brand-gold mr-1"></i> Pengunjung</span>
+            <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-bold">Online</span>
+          </div>
+          <div class="flex justify-between items-center text-[11px] pt-1 text-slate-300">
+            <span>Hari ini:</span>
+            <span class="font-mono font-bold text-white bg-slate-900/60 px-2 py-0.5 rounded">0024</span>
+          </div>
+          <div class="flex justify-between items-center text-[11px] text-slate-300">
+            <span>Total:</span>
+            <span class="font-mono font-bold text-brand-gold bg-slate-900/60 px-2 py-0.5 rounded">006320</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Baris Copyright -->
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <p>&copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako. All rights reserved.</p>
+      <p>Crafted by <span class="text-brand-gold font-medium">Diginus</span></p>
+    </div>
+  </footer>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 700,
+      once: true,
+      easing: 'ease-out'
+    });
+  </script>
+</body>
+</html>

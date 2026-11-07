@@ -1,0 +1,166 @@
+<footer class="bg-[#05313a] text-slate-300 text-xs mt-auto pt-14 pb-8 border-t border-teal-900/60">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-teal-900/40">
+      
+      <!-- Kolom 1: Profil Prodi & Alamat Lengkap Kampus -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#fab005] to-[#ffd43b] flex items-center justify-center text-slate-900 font-black shadow-md">
+            <i class="bi bi-mortarboard-fill text-lg"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm text-white tracking-wide leading-tight">Administrasi Publik</h3>
+            <p class="text-[11px] text-teal-300 font-medium">FISIP Universitas Tadulako</p>
+          </div>
+        </div>
+        <p class="text-slate-300 text-[11px] leading-relaxed">
+          Mencetak sarjana yang unggul, berintegritas, dan inovatif dalam perumusan kebijakan publik serta tata kelola pemerintahan yang berwawasan lingkungan.
+        </p>
+        <div class="space-y-2 pt-1 text-[11px] text-slate-300">
+          <p class="flex items-start gap-2.5">
+            <i class="bi bi-geo-alt-fill text-amber-400 mt-0.5 text-sm flex-shrink-0"></i>
+            <span>Gedung FISIP UNTAD, Kampus Bumi Tadulako Tondo, Jl. Soekarno-Hatta Km. 9, Kota Palu, Sulawesi Tengah 94118</span>
+          </p>
+          <p class="flex items-center gap-2.5">
+            <i class="bi bi-envelope-fill text-amber-400 text-xs flex-shrink-0"></i>
+            <span>admpublik@untad.ac.id</span>
+          </p>
+          <p class="flex items-center gap-2.5">
+            <i class="bi bi-telephone-fill text-amber-400 text-xs flex-shrink-0"></i>
+            <span>(0451) 422611 / +62 811-450-000</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Kolom 2: Tentang Program Studi -->
+      <div>
+        <h4 class="font-bold text-sm text-amber-400 uppercase tracking-wider mb-4 border-l-2 border-amber-400 pl-2">
+          Tentang Prodi
+        </h4>
+        <ul class="space-y-2.5 text-[11px]">
+          <li>
+            <a href="{% url 'tentang_detail' 'profil' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Profil Program Studi
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'sejarah' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Sejarah & Dasar Hukum
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'visi_misi' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Visi, Misi & Tujuan
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'struktur' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Struktur Organisasi
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Profil Lulusan & Prospek Kerja
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Status & Sertifikat Akreditasi
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 3: Tautan Akademik & Portal Kampus -->
+      <div>
+        <h4 class="font-bold text-sm text-amber-400 uppercase tracking-wider mb-4 border-l-2 border-amber-400 pl-2">
+          Layanan & Portal
+        </h4>
+        <ul class="space-y-2.5 text-[11px]">
+          <li>
+            <a href="https://siaga.untad.ac.id" target="_blank" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Portal SIGA-8 UNTAD
+            </a>
+          </li>
+          <li>
+            <a href="https://untad.ac.id" target="_blank" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Website Resmi UNTAD
+            </a>
+          </li>
+          <li>
+            <a href="https://fisip.untad.ac.id" target="_blank" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Website Resmi FISIP
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Kurikulum & RPS
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'akademik_detail' 'jadwal' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Jadwal Perkuliahan
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'akademik_detail' 'panduan' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Panduan Skripsi & Magang
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 4: Media Sosial & Statistik Pengunjung -->
+      <div class="space-y-4">
+        <h4 class="font-bold text-sm text-amber-400 uppercase tracking-wider mb-4 border-l-2 border-amber-400 pl-2">
+          Ikuti Kami
+        </h4>
+        <p class="text-[11px] text-slate-300">Dapatkan informasi terkini seputar kegiatan prodi dan akademik:</p>
+        
+        <div class="flex items-center gap-3">
+          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
+            <i class="bi bi-youtube"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
+            <i class="bi bi-linkedin"></i>
+          </a>
+        </div>
+
+        <!-- Box Statistik Pengunjung -->
+        <div class="bg-[#032228] border border-teal-800/50 rounded-xl p-3.5 shadow-inner mt-4">
+          <div class="flex items-center justify-between border-b border-teal-900/60 pb-2 mb-2">
+            <span class="text-[11px] font-semibold text-teal-300 flex items-center gap-1.5">
+              <i class="bi bi-bar-chart-line-fill text-amber-400"></i> Statistik Pengunjung
+            </span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              Live
+            </span>
+          </div>
+          <div class="flex justify-between items-center text-[11px] text-slate-300 py-0.5">
+            <span>Hari ini:</span>
+            <span class="font-mono font-bold text-white bg-teal-950 px-2 py-0.5 rounded border border-teal-900">0024</span>
+          </div>
+          <div class="flex justify-between items-center text-[11px] text-slate-300 py-0.5">
+            <span>Total Kunjungan:</span>
+            <span class="font-mono font-bold text-amber-300 bg-teal-950 px-2 py-0.5 rounded border border-teal-900">006320</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Baris Hak Cipta Bawah -->
+    <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-slate-400 text-[11px]">
+      <p>&copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako. All rights reserved.</p>
+      <p class="flex items-center gap-1">
+        Developed & Maintained with <i class="bi bi-heart-fill text-rose-500 text-[10px]"></i> by <span class="text-amber-400 font-semibold">Diginus</span>
+      </p>
+    </div>
+  </div>
+</footer>

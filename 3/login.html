@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <!-- agar tampilan website bisa di gunakan berbagai macam divice -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Diginus</title>
+
+  <!-- guna preconnect mempercepat loding font, font berjalan dulu baru web terbuka  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Memanggil koleksi ikon Bootstrap (ikon topi toga, laptop, mata, dan panah) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Memanggil stylesheet AOS untuk efek animasi muncul perlahan saat halaman dibuka -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  
+  <!-- Memanggil library Tailwind CSS online secara instan tanpa perlu instalasi -->
+  <script rel="preconnect" src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Memanggil file CSS eksternal buatan kita (berisi font Plus Jakarta Sans dan animasi blob) -->
+  <link rel="stylesheet" href="login.css">
+</head>
+
+<!-- Body: Menggunakan Flexbox agar seluruh kotak login otomatis berada tepat di tengah layar -->
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-10">
+  
+  <!-- KARTU UTAMA: Kotak putih pembungkus besar dengan sudut melengkung, bayangan, dan animasi AOS -->
+  <div data-aos="fade-up" data-aos-duration="800" class="w-full max-w-4xl bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden flex flex-col md:flex-row">
+    
+    <!-- SISI KIRI (BANNER BIRU):
+         Disembunyikan di HP ('hidden') dan baru muncul di layar tablet/laptop ('md:flex') -->
+    <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-600 via-indigo-700 to-slate-900 p-10 flex-col justify-between text-white relative overflow-hidden">
+      
+      <!-- Dua bulatan cahaya blur yang mengambang lembut menggunakan animasi dari login.css -->
+      <div class="absolute -right-16 -top-16 w-60 h-60 bg-/10 rounded-full blur-2xl animate-blob"></div>
+      <div class="absolute -left-16 -bottom-16 w-60 h-60 bg-blue-400/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+
+      <!-- Bagian Atas Banner: Ikon Topi Toga & Nama Brand DIGINUS -->
+      <div class="z-10 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl font-bold">
+          <i class="bi bi-mortarboard-fill"></i>
+        </div>
+        <span class="text-xl font-bold tracking-wide">DIGINUS</span>
+      </div>
+
+      <!-- Bagian Tengah Banner: Ikon Laptop Emas dan Teks Promosi Belajar -->
+      <div class="z-10 my-auto py-8">
+        <div class="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-inner text-amber-300">
+          <i class="bi bi-laptop"></i>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-bold leading-snug">Wujudkan Skill Digital Masa Depan</h2>
+        <p class="text-blue-100 text-sm mt-3 leading-relaxed">
+          Akses modul belajar interaktif, sertifikasi terverifikasi, dan bimbingan mentor terbaik di platform Diginus.
+        </p>
+      </div>
+
+      <!-- Bagian Bawah Banner: Teks Hak Cipta -->
+      <div class="z-10 text-xs text-yellow-200/80">
+        &copy; 2026 Diginus Platform. All rights reserved.
+      </div>
+    </div>
+
+    <!-- pembungkusan from login sebelah kanan -->
+    <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
+      
+      <!-- Teks Sambutan Form -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-800">Selamat Datang Kembali!</h2>
+        <p class="text-slate-500 text-sm mt-1">Masuk untuk melanjutkan pembelajaran</p>
+      </div>
+
+      <!-- Tag Form Utama -->
+      <form id="loginForm" class="space-y-5">
+        
+        <!-- KOLOM 1: Input Alamat Email dengan Fitur Floating Placeholder
+             (Teks label ada di dalam kotak dan otomatis melompat ke atas saat diklik/terisi) -->
+        <div class="relative">
+          <input 
+            type="email" 
+            id="email" 
+            placeholder=" " 
+            required 
+            class="peer w-full px-4 pt-5 pb-2 text-sm text-slate-900 bg-transparent rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition" 
+          />
+          <label 
+            for="email" 
+            class="absolute text-sm text-slate-500 duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5 peer-focus:text-blue-600 pointer-events-none">
+            Alamat Email
+          </label>
+        </div>
+
+        <!-- KOLOM 2: Input Kata Sandi dengan Floating Placeholder + Tombol Mata Intip Sandi -->
+        <div class="relative">
+          <input 
+            type="password" 
+            id="password" 
+            placeholder=" " 
+            required 
+            class="peer w-full px-4 pt-5 pb-2 pr-11 text-sm text-slate-900 bg-transparent rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition" 
+          />
+          <label 
+            for="password" 
+            class="absolute text-sm text-slate-500 duration-200 transform -translate-y-2.5 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-2.5 peer-focus:text-blue-600 pointer-events-none">
+            Kata Sandi
+          </label>
+          
+          <!-- Tombol ikon mata untuk menyembunyikan/menampilkan teks sandi via login.js -->
+          <button 
+            type="button" 
+            id="togglePassword" 
+            class="absolute right-3.5 top-3.5 text-slate-400 hover:text-blue-600 transition" 
+            aria-label="Tampilkan kata sandi">
+            <i class="bi bi-eye text-lg" id="eyeIcon"></i>
+          </button>
+        </div>
+
+        <!-- OPSI: Kotak Centang 'Ingat Saya' & Link 'Lupa Password?' -->
+        <div class="flex items-center justify-between text-xs pt-1">
+          <label class="flex items-center gap-2 cursor-pointer text-slate-600 select-none">
+            <input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer" />
+            <span>Ingat Saya</span>
+          </label>
+          <a href="#" class="text-blue-600 hover:underline font-semibold">Lupa Password?</a>
+        </div>
+
+        <!-- TOMBOL AKSI UTAMA: Tombol Masuk Berwarna Biru dengan Efek Sedikit Menciut Saat Ditekan -->
+        <button 
+          type="submit" 
+          class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition duration-200">
+          <span>Masuk Sekarang</span>
+          <i class="bi bi-arrow-right text-sm"></i>
+        </button>
+      </form>
+
+      <!-- GARIS PEMISAH: Garis horizontal abu-abu tipis dengan tulisan 'ATAU' di tengahnya -->
+      <div class="flex items-center my-6">
+        <div class="flex-grow border-t border-slate-200"></div>
+        <span class="px-3 text-xs font-semibold text-yellow-400">ATAU</span>
+        <div class="flex-grow border-t border-slate-200"></div>
+      </div>
+
+      <!-- FOOTER FORM: Link navigasi bagi pengguna baru yang ingin mendaftar ke Register -->
+      <p class="text-center text-xs text-slate-500">
+        Belum punya akun? 
+        <a href="register.html" class="font-semibold text-blue-600 hover:underline ml-1">Daftar Sekarang</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Memuat skrip AOS untuk menjalankan animasi geser ke atas saat halaman dimuat -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- Memuat file JavaScript kustom untuk aksi tombol mata dan submit form -->
+  <script src="login.js"></script>
+</body>
+</html>
