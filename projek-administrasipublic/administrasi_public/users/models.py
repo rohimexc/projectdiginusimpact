@@ -8,11 +8,12 @@ class User(AbstractUser):
         ADMIN = 'ADMIN', 'Admin Prodi'
         DOSEN = 'DOSEN', 'Dosen'
         MAHASISWA = 'MAHASISWA', 'Mahasiswa'
+        USER = 'USER', 'User'
 
     role = models.CharField(
         max_length=20,
         choices=Role.choices,
-        default=Role.MAHASISWA,
+        default=Role.USER,
         verbose_name="Peran / Role"
     )
     nomor_telepon = models.CharField(max_length=15, blank=True, null=True)

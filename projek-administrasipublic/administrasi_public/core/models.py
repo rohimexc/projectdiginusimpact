@@ -34,12 +34,15 @@ class Galeri(models.Model):
         return self.judul
 
 
-# 3. Model Berita (Konten menggunakan CKEditor 5)
+# 3. Model Berita (Dilengkapi Views & Likes)
 class Berita(models.Model):
     judul = models.CharField(max_length=255)
     ringkasan = models.TextField(blank=True, null=True)
     konten = CKEditor5Field('Konten Berita', config_name='extends')
     gambar = models.ImageField(upload_to='berita/', blank=True, null=True, help_text="Upload foto/gambar berita")
+    views = models.PositiveIntegerField(default=0, verbose_name="Jumlah Dilihat")
+    likes = models.PositiveIntegerField(default=0, verbose_name="Jumlah Suka")
+    shares = models.PositiveIntegerField(default=0, verbose_name="Jumlah Dibagikan")
     posted_at = models.DateTimeField(default=timezone.now, verbose_name="Waktu Tayang / Post")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Dibuat")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Waktu Diperbarui")
@@ -51,6 +54,24 @@ class Berita(models.Model):
 
     def __str__(self):
         return self.judul
+
+
+# 3.1 Model Komentar Berita Pengunjung
+class KomentarBerita(models.Model):
+    berita = models.ForeignKey(Berita, on_delete=models.CASCADE, related_name='komentar_list', verbose_name="Berita")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='komentar_list', verbose_name="Pengguna")
+    nama = models.CharField(max_length=100, verbose_name="Nama Lengkap")
+    email = models.EmailField(blank=True, null=True, verbose_name="Email (Opsional)")
+    isi = models.TextField(verbose_name="Isi Komentar")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Dikirim")
+
+    class Meta:
+        verbose_name = "Komentar Berita"
+        verbose_name_plural = "Daftar Komentar Berita"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.nama} pada {self.berita.judul}"
 
 
 # 4. Tabel Khusus Pangkat & Golongan (PNS & PPPK)
@@ -105,7 +126,6 @@ class TenagaPendidik(models.Model):
     nuptk = models.CharField(max_length=50, blank=True, null=True, verbose_name="NUPTK")
     no_hp = models.CharField(max_length=30, blank=True, null=True, verbose_name="No. HP / WhatsApp")
 
-    # Relasi ForeignKey ke tabel PangkatGolongan
     pangkat_golongan = models.ForeignKey(
         PangkatGolongan,
         on_delete=models.SET_NULL,
@@ -142,12 +162,14 @@ class AuditLog(models.Model):
         return f"[{self.timestamp.strftime('%d/%m/%Y %H:%M')}] {self.action} oleh {self.user}"
 
 
-# 7. Model Halaman Tentang (Profil, Sejarah, Struktur)
+# 7. Model Halaman Tentang (LENGKAP: Profil, Sejarah, Struktur, Profil Lulusan, Akreditasi)
 class HalamanTentang(models.Model):
     KATEGORI_CHOICES = [
         ('profil', 'Profil Program Studi'),
         ('sejarah', 'Sejarah Singkat'),
         ('struktur', 'Struktur Organisasi'),
+        ('profil_lulusan', 'Profil Lulusan'),
+        ('akreditasi', 'Sertifikat Akreditasi'),
     ]
     kategori = models.CharField(max_length=50, choices=KATEGORI_CHOICES, unique=True)
     judul = models.CharField(max_length=255)
@@ -156,7 +178,14 @@ class HalamanTentang(models.Model):
         blank=True,
         null=True,
         verbose_name="Bagan / Gambar",
-        help_text="Upload gambar/bagan (misal bagan struktur organisasi dalam format JPG, PNG, atau WEBP)"
+        help_text="Upload gambar/bagan (JPG, PNG, atau WEBP)"
+    )
+    file_utama = models.FileField(
+        upload_to='tentang/berkas/',
+        blank=True,
+        null=True,
+        verbose_name="Berkas / Dokumen PDF",
+        help_text="Upload dokumen PDF resmi (misal: Sertifikat Akreditasi)"
     )
     isi = CKEditor5Field('Isi Konten / Keterangan', config_name='extends', blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)

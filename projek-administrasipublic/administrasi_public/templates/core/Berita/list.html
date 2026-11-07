@@ -5,9 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Warta & Berita Terkini - Administrasi Publik UNTAD</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -28,98 +37,129 @@
 </head>
 <body class="font-poppins bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- Navigasi Kembali ke Beranda -->
-  <header class="max-w-7xl mx-auto w-full px-6 pt-8 pb-4 flex justify-between items-center">
+  <!-- Navigasi Kembali ke Beranda & Akun Pengguna -->
+  <header class="max-w-7xl mx-auto w-full px-6 pt-8 pb-4 flex justify-between items-center" data-aos="fade-down" data-aos-duration="500">
     <a href="{% url 'home' %}" class="inline-flex items-center gap-2 text-xs font-semibold text-teal-800 hover:text-teal-950 transition">
       &larr; Kembali ke Beranda
     </a>
+
+    <!-- Status Pengguna / Tombol Masuk & Daftar -->
+    <div class="flex items-center gap-3">
+      {% if request.user.is_authenticated %}
+        <div class="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm">
+          <div class="w-7 h-7 rounded-full bg-[#0b7285] text-white flex items-center justify-center text-xs font-bold shrink-0">
+            {{ request.user.first_name|default:request.user.username|slice:":2"|upper }}
+          </div>
+          <div class="hidden sm:block text-left">
+            <span class="block text-xs font-bold text-slate-800 leading-tight">
+              {{ request.user.first_name|default:request.user.username }}
+            </span>
+            <span class="text-[10px] text-slate-400">@{{ request.user.username }}</span>
+          </div>
+          <a href="{% url 'user_logout' %}?next={{ request.path }}" title="Keluar dari akun" class="text-xs text-rose-500 hover:text-rose-700 ml-1 p-1">
+            <i class="fas fa-arrow-right-from-bracket"></i>
+          </a>
+        </div>
+      {% else %}
+        <div class="flex items-center gap-2">
+          <a href="{% url 'user_login' %}?next={{ request.path }}" class="px-3.5 py-1.5 text-xs font-semibold text-[#0b7285] hover:text-[#084c5a] transition">
+            Masuk
+          </a>
+          <a href="{% url 'user_register' %}?next={{ request.path }}" class="px-4 py-1.5 rounded-full bg-[#0b7285] hover:bg-[#084c5a] text-white text-xs font-semibold shadow-xs transition">
+            Daftar Akun
+          </a>
+        </div>
+      {% endif %}
+    </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-6 pb-20 w-full flex-1">
     
-    <!-- Judul Header -->
-    <div class="text-center mb-10">
-      <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Warta & Berita Terkini</h1>
-      <p class="text-xs text-slate-500">Informasi dan dokumentasi kegiatan seputar Program Studi Administrasi Publik.</p>
-    </div>
+    <!-- Bagian Header & Form Filter (Meluncur Halus dari Atas) -->
+    <div data-aos="fade-down" data-aos-duration="600">
+      <!-- Judul Header -->
+      <div class="text-center mb-10">
+        <h1 class="text-3xl font-extrabold text-[#0b7285] mb-2">Warta & Berita Terkini</h1>
+        <p class="text-xs text-slate-500">Informasi dan dokumentasi kegiatan seputar Program Studi Administrasi Publik.</p>
+      </div>
 
-    <!-- Filter & Pencarian -->
-    <form method="GET" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 mb-12 max-w-4xl mx-auto flex flex-wrap gap-2.5 items-center justify-between">
-      <input 
-        type="text" 
-        name="q" 
-        value="{{ query }}" 
-        placeholder="Cari judul atau isi..." 
-        class="flex-1 min-w-[200px] text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition"
-      >
-      <input 
-        type="date" 
-        name="tanggal" 
-        value="{{ selected_tanggal }}" 
-        class="text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition text-slate-600"
-      >
-      <select 
-        name="bulan" 
-        class="text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition text-slate-600"
-      >
-        <option value="">-- Semua Bulan --</option>
-        <option value="1" {% if selected_bulan == '1' %}selected{% endif %}>Januari</option>
-        <option value="2" {% if selected_bulan == '2' %}selected{% endif %}>Februari</option>
-        <option value="3" {% if selected_bulan == '3' %}selected{% endif %}>Maret</option>
-        <option value="4" {% if selected_bulan == '4' %}selected{% endif %}>April</option>
-        <option value="5" {% if selected_bulan == '5' %}selected{% endif %}>Mei</option>
-        <option value="6" {% if selected_bulan == '6' %}selected{% endif %}>Juni</option>
-        <option value="7" {% if selected_bulan == '7' %}selected{% endif %}>Juli</option>
-        <option value="8" {% if selected_bulan == '8' %}selected{% endif %}>Agustus</option>
-        <option value="9" {% if selected_bulan == '9' %}selected{% endif %}>September</option>
-        <option value="10" {% if selected_bulan == '10' %}selected{% endif %}>Oktober</option>
-        <option value="11" {% if selected_bulan == '11' %}selected{% endif %}>November</option>
-        <option value="12" {% if selected_bulan == '12' %}selected{% endif %}>Desember</option>
-      </select>
-      <input 
-        type="number" 
-        name="tahun" 
-        value="{{ selected_tahun }}" 
-        placeholder="Tahun (cth: 2026)" 
-        class="w-32 text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition"
-      >
-      <button 
-        type="submit" 
-        class="bg-teal-800 hover:bg-teal-900 text-white text-xs px-4 py-2.5 rounded-xl font-medium transition flex items-center justify-center"
-      >
-        <i class="fas fa-magnifying-glass"></i>
-      </button>
-    </form>
+      <!-- Filter & Pencarian -->
+      <form method="GET" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 mb-12 max-w-4xl mx-auto flex flex-wrap gap-2.5 items-center justify-between">
+        <input 
+          type="text" 
+          name="q" 
+          value="{{ query }}" 
+          placeholder="Cari judul atau isi..." 
+          class="flex-1 min-w-[200px] text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition"
+        >
+        <input 
+          type="date" 
+          name="tanggal" 
+          value="{{ selected_tanggal }}" 
+          class="text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition text-slate-600"
+        >
+        <select 
+          name="bulan" 
+          class="text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition text-slate-600"
+        >
+          <option value="">-- Semua Bulan --</option>
+          <option value="1" {% if selected_bulan == '1' %}selected{% endif %}>Januari</option>
+          <option value="2" {% if selected_bulan == '2' %}selected{% endif %}>Februari</option>
+          <option value="3" {% if selected_bulan == '3' %}selected{% endif %}>Maret</option>
+          <option value="4" {% if selected_bulan == '4' %}selected{% endif %}>April</option>
+          <option value="5" {% if selected_bulan == '5' %}selected{% endif %}>Mei</option>
+          <option value="6" {% if selected_bulan == '6' %}selected{% endif %}>Juni</option>
+          <option value="7" {% if selected_bulan == '7' %}selected{% endif %}>Juli</option>
+          <option value="8" {% if selected_bulan == '8' %}selected{% endif %}>Agustus</option>
+          <option value="9" {% if selected_bulan == '9' %}selected{% endif %}>September</option>
+          <option value="10" {% if selected_bulan == '10' %}selected{% endif %}>Oktober</option>
+          <option value="11" {% if selected_bulan == '11' %}selected{% endif %}>November</option>
+          <option value="12" {% if selected_bulan == '12' %}selected{% endif %}>Desember</option>
+        </select>
+        <input 
+          type="number" 
+          name="tahun" 
+          value="{{ selected_tahun }}" 
+          placeholder="Tahun (cth: 2026)" 
+          class="w-32 text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition"
+        >
+        <button 
+          type="submit" 
+          class="bg-[#0b7285] hover:bg-[#084c5a] text-white text-xs px-4 py-2.5 rounded-xl font-medium transition flex items-center justify-center shadow-sm"
+        >
+          <i class="fas fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
 
     <!-- Grid Kartu Berita -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
       {% for berita in page_obj %}
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+        <div data-aos="fade-up" data-aos-duration="600" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
           <div>
             <!-- FRAME GAMBAR RASIO 4:5 VERTIKAL -->
-            <!-- Wadah Gambar Berita Rasio 4:5 -->
-<div class="w-full overflow-hidden bg-slate-100 rounded-t-2xl" style="aspect-ratio: 4 / 5;">
-  {% if berita.gambar %}
-    {% if berita.gambar.url %}
-      <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
-    {% else %}
-      <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
-    {% endif %}
-  {% else %}
-    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
-      <i class="fas fa-newspaper text-5xl mb-2"></i>
-      <span class="text-xs text-slate-400">Tidak ada gambar</span>
-    </div>
-  {% endif %}
-</div>
+            <div class="w-full overflow-hidden bg-slate-100 rounded-t-2xl" style="aspect-ratio: 4 / 5;">
+              {% if berita.gambar %}
+                {% if berita.gambar.url %}
+                  <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+                {% else %}
+                  <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+                {% endif %}
+              {% else %}
+                <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                  <i class="fas fa-newspaper text-5xl mb-2"></i>
+                  <span class="text-xs text-slate-400">Tidak ada gambar</span>
+                </div>
+              {% endif %}
+            </div>
 
             <div class="p-5">
-              <span class="text-[11px] font-semibold text-teal-800 flex items-center gap-1.5 mb-2">
+              <span class="text-[11px] font-semibold text-[#0b7285] flex items-center gap-1.5 mb-2">
                 <i class="far fa-clock text-[10px]"></i>
                 {{ berita.posted_at|date:"d M Y, H:i" }}
               </span>
-              <h2 class="text-sm font-bold text-slate-800 leading-snug mb-2 line-clamp-2">
-                {{ berita.judul }}
+              <h2 class="text-sm font-bold text-slate-800 leading-snug mb-2 line-clamp-2 hover:text-[#0b7285] transition">
+                <a href="{% url 'berita_detail' berita.pk %}">{{ berita.judul }}</a>
               </h2>
               {% if berita.ringkasan %}
                 <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">
@@ -129,14 +169,43 @@
             </div>
           </div>
 
-          <div class="p-5 pt-0">
-            <a href="{% url 'berita_detail' berita.pk %}" class="text-xs font-semibold text-teal-800 hover:text-teal-950 inline-flex items-center gap-1">
-              Baca selengkapnya &rarr;
+          <!-- Bar Interaksi Bawah Sesuai Sketsa: View, Like, Comment, Share -->
+          <div class="px-5 py-3.5 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-4 sm:gap-5">
+              
+              <!-- 1. View -->
+              <span class="flex items-center gap-1.5 text-slate-600" title="{{ berita.views }} pembaca">
+                <i class="far fa-eye text-sm text-[#0b7285]"></i>
+                <span class="font-bold text-slate-700 font-mono">{{ berita.views }}</span>
+              </span>
+
+              <!-- 2. Like (Bisa diklik langsung jadi merah) -->
+              <button type="button" class="btn-card-like group flex items-center gap-1.5 text-slate-600 focus:outline-none cursor-pointer" data-id="{{ berita.pk }}" title="Sukai berita">
+                <i class="far fa-heart text-sm text-slate-400 group-hover:text-rose-500 group-hover:scale-110 transition-transform duration-150"></i>
+                <span class="font-bold text-slate-700 font-mono like-count">{{ berita.likes }}</span>
+              </button>
+
+              <!-- 3. Komentar (Menuju Card Komentar) -->
+              <a href="{% url 'berita_detail' berita.pk %}#komentar-section" class="group flex items-center gap-1.5 text-slate-600 hover:text-[#0b7285] transition" title="{{ berita.komentar_list.count }} Komentar">
+                <i class="far fa-comment-dots text-sm text-slate-400 group-hover:text-[#0b7285] group-hover:scale-110 transition-transform duration-150"></i>
+                <span class="font-bold text-slate-700 font-mono">{{ berita.komentar_list.count }}</span>
+              </a>
+
+              <!-- 4. Share -->
+              <button type="button" class="btn-card-share group flex items-center gap-1.5 text-slate-600 hover:text-[#0b7285] focus:outline-none cursor-pointer" data-id="{{ berita.pk }}" data-url="{% url 'berita_detail' berita.pk %}" title="Bagikan & salin link">
+                <i class="fas fa-share-nodes text-xs text-slate-400 group-hover:text-[#0b7285] group-hover:scale-110 transition-transform duration-150"></i>
+                <span class="font-bold text-slate-700 font-mono share-count">{{ berita.shares }}</span>
+              </button>
+
+            </div>
+
+            <a href="{% url 'berita_detail' berita.pk %}" class="text-[11px] font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1 shrink-0">
+              Baca &rarr;
             </a>
           </div>
         </div>
       {% empty %}
-        <div class="col-span-full text-center py-20 text-slate-400">
+        <div class="col-span-full text-center py-20 text-slate-400" data-aos="fade-in">
           <i class="far fa-newspaper text-5xl mb-4 text-slate-300"></i>
           <p class="text-sm font-medium">Belum ada warta atau berita yang ditemukan.</p>
         </div>
@@ -145,5 +214,112 @@
 
   </main>
 
+  <!-- Toast Notifikasi Global -->
+  <div id="toast-notify" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2.5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs">
+    <i class="fas fa-check-circle text-teal-400 text-sm"></i>
+    <span id="toast-message">Tautan berita berhasil disalin!</span>
+  </div>
+
+  <form id="csrf-holder" class="hidden">{% csrf_token %}</form>
+
+  <!-- AOS Script & Inisialisasi Ringkas -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 700,
+      once: true,
+      easing: 'ease-out'
+    });
+
+    // Helper CSRF
+    function getCsrfToken() {
+      const input = document.querySelector('#csrf-holder input[name=csrfmiddlewaretoken]');
+      if (input) return input.value;
+      const match = document.cookie.match(/csrftoken=([^;]+)/);
+      return match ? match[1] : '';
+    }
+
+    // Helper Toast
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notify');
+      const text = document.getElementById('toast-message');
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    // Interaksi Like pada Kartu
+    document.querySelectorAll('.btn-card-like').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const beritaId = this.dataset.id;
+        const heartIcon = this.querySelector('i');
+        const countSpan = this.querySelector('.like-count');
+
+        fetch(`/Berita/${beritaId}/like/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            countSpan.textContent = data.likes;
+            if (data.liked) {
+              heartIcon.classList.remove('far', 'text-slate-400');
+              heartIcon.classList.add('fas', 'text-rose-600');
+            } else {
+              heartIcon.classList.remove('fas', 'text-rose-600');
+              heartIcon.classList.add('far', 'text-slate-400');
+            }
+          }
+        })
+        .catch(err => console.error('Error like:', err));
+      });
+    });
+
+    // Interaksi Share pada Kartu
+    document.querySelectorAll('.btn-card-share').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const beritaId = this.dataset.id;
+        const countSpan = this.querySelector('.share-count');
+        const relativeUrl = this.dataset.url;
+        const fullUrl = window.location.origin + relativeUrl;
+
+        // Salin ke Clipboard
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(fullUrl).then(() => {
+            showToast('Tautan berita berhasil disalin ke clipboard!');
+          });
+        } else {
+          showToast('Tautan berita: ' + fullUrl);
+        }
+
+        // Simpan jumlah share ke database
+        fetch(`/Berita/${beritaId}/share/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            countSpan.textContent = data.shares;
+          }
+        })
+        .catch(err => console.error('Error share:', err));
+      });
+    });
+  </script>
 </body>
 </html>

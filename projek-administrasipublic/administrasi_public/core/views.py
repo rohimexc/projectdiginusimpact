@@ -3,9 +3,20 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from django.db.models import Q
-from .models import Sambutan, Galeri, Berita, TenagaPendidik, AuditLog, HalamanTentang, VisiMisiTujuan, MisiItem, TujuanItem, HalamanAkademik, DokumenAkademik
-from .forms import BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, HalamanTentangForm, HalamanAkademikForm
+from django.db.models import Q, F
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.urls import reverse
+
+from .models import (
+    Sambutan, Galeri, Berita, TenagaPendidik, AuditLog, 
+    HalamanTentang, VisiMisiTujuan, MisiItem, TujuanItem, 
+    HalamanAkademik, DokumenAkademik, KomentarBerita
+)
+from .forms import (
+    BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, 
+    HalamanTentangForm, HalamanAkademikForm
+)
 
 User = get_user_model()
 
@@ -81,8 +92,152 @@ def berita_list(request):
 
 def berita_detail(request, pk):
     berita = get_object_or_404(Berita, pk=pk)
+
+    # 1. Hitung Views Otomatis (1x per session per berita)
+    session_key_view = f'viewed_berita_{pk}'
+    if not request.session.get(session_key_view, False):
+        Berita.objects.filter(pk=pk).update(views=F('views') + 1)
+        request.session[session_key_view] = True
+        berita.refresh_from_db()
+
+    # 2. Cek Status Like (warna merah tetap saat refresh)
+    session_key_like = f'liked_berita_{pk}'
+    is_liked = request.session.get(session_key_like, False)
+
+    # 3. Tangani Pengiriman Komentar (Hanya User Login yang Berhak Komentar)
+    if request.method == 'POST':
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', '')
+
+        if not request.user.is_authenticated:
+            if is_ajax:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Anda harus masuk (login) terlebih dahulu untuk dapat berkomentar.'
+                }, status=401)
+            messages.error(request, 'Anda harus masuk (login) terlebih dahulu untuk dapat berkomentar.')
+            return redirect(f"{reverse('user_login')}?next={request.path}#komentar-section")
+
+        isi = request.POST.get('isi', '').strip()
+
+        if isi:
+            nama = request.user.first_name or request.user.username
+            email = request.user.email
+            komentar = KomentarBerita.objects.create(
+                berita=berita,
+                user=request.user,
+                nama=nama,
+                email=email,
+                isi=isi
+            )
+            if is_ajax:
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Komentar Anda berhasil dikirim.',
+                    'komentar': {
+                        'id': komentar.id,
+                        'nama': komentar.nama,
+                        'username': request.user.username,
+                        'inisial': komentar.nama[:2].upper(),
+                        'isi': komentar.isi,
+                        'tanggal': komentar.created_at.strftime('%d %b %Y, %H:%M'),
+                        'can_manage': True
+                    },
+                    'total_komentar': berita.komentar_list.count()
+                })
+            messages.success(request, 'Komentar Anda berhasil dikirim.')
+            return redirect('berita_detail', pk=pk)
+        else:
+            if is_ajax:
+                return JsonResponse({'status': 'error', 'message': 'Komentar tidak boleh kosong!'}, status=400)
+            messages.error(request, 'Komentar tidak boleh kosong!')
+
     berita_terkait = Berita.objects.exclude(pk=pk).order_by('-posted_at')[:3]
-    return render(request, 'core/Berita/detail.html', {'berita': berita, 'berita_terkait': berita_terkait})
+    komentar_list = berita.komentar_list.all().order_by('-created_at')
+
+    context = {
+        'berita': berita,
+        'berita_terkait': berita_terkait,
+        'komentar_list': komentar_list,
+        'is_liked': is_liked,
+    }
+    return render(request, 'core/Berita/detail.html', context)
+
+
+@require_POST
+def berita_like(request, pk):
+    berita = get_object_or_404(Berita, pk=pk)
+    session_key_like = f'liked_berita_{pk}'
+    is_liked = request.session.get(session_key_like, False)
+
+    if is_liked:
+        if berita.likes > 0:
+            Berita.objects.filter(pk=pk).update(likes=F('likes') - 1)
+        request.session[session_key_like] = False
+        liked = False
+    else:
+        Berita.objects.filter(pk=pk).update(likes=F('likes') + 1)
+        request.session[session_key_like] = True
+        liked = True
+
+    berita.refresh_from_db()
+    return JsonResponse({
+        'status': 'success',
+        'liked': liked,
+        'likes': berita.likes
+    })
+
+
+@require_POST
+def berita_share(request, pk):
+    berita = get_object_or_404(Berita, pk=pk)
+    Berita.objects.filter(pk=pk).update(shares=F('shares') + 1)
+    berita.refresh_from_db()
+    return JsonResponse({
+        'status': 'success',
+        'shares': berita.shares
+    })
+
+
+@require_POST
+def komentar_edit(request, pk):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Silakan login terlebih dahulu!'}, status=401)
+    komentar = get_object_or_404(KomentarBerita, pk=pk)
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    is_admin = 'admin' in user_role or request.user.is_staff or request.user.is_superuser
+    if komentar.user and komentar.user != request.user and not is_admin:
+        return JsonResponse({'status': 'error', 'message': 'Anda tidak berhak mengedit komentar ini!'}, status=403)
+
+    isi_baru = request.POST.get('isi', '').strip()
+    if not isi_baru:
+        return JsonResponse({'status': 'error', 'message': 'Komentar tidak boleh kosong!'}, status=400)
+
+    komentar.isi = isi_baru
+    komentar.save()
+    return JsonResponse({
+        'status': 'success',
+        'message': 'Komentar berhasil diperbarui!',
+        'isi': komentar.isi
+    })
+
+
+@require_POST
+def komentar_hapus(request, pk):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Silakan login terlebih dahulu!'}, status=401)
+    komentar = get_object_or_404(KomentarBerita, pk=pk)
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    is_admin = 'admin' in user_role or request.user.is_staff or request.user.is_superuser
+    if komentar.user and komentar.user != request.user and not is_admin:
+        return JsonResponse({'status': 'error', 'message': 'Anda tidak berhak menghapus komentar ini!'}, status=403)
+
+    berita = komentar.berita
+    komentar.delete()
+    return JsonResponse({
+        'status': 'success',
+        'message': 'Komentar berhasil dihapus!',
+        'total_komentar': berita.komentar_list.count()
+    })
 
 
 def tenaga_pendidik_list(request):
@@ -123,50 +278,117 @@ def tenaga_kependidikan_detail(request, pk):
 
 
 # ==========================================
-# 2. AUTENTIKASI (EMAIL / GMAIL)
+# 2. AUTENTIKASI (EMAIL / USERNAME / REGISTER)
 # ==========================================
 
-def user_login(request):
+def user_register(request):
+    next_url = request.GET.get('next') or request.POST.get('next') or reverse('home')
     if request.user.is_authenticated:
-        user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-        if 'admin' in user_role or request.user.is_staff or request.user.is_superuser:
-            return redirect('admin_dashboard')
-        logout(request)
-        messages.error(request, 'Akses ditolak! Akun Anda bukan Administrator.')
-        return redirect('user_login')
+        return redirect(next_url)
 
     if request.method == 'POST':
+        nama_lengkap = request.POST.get('nama_lengkap', '').strip()
+        username = request.POST.get('username', '').strip()
         email = request.POST.get('email', '').strip()
         password = request.POST.get('password', '')
+        password_confirm = request.POST.get('password_confirm', '')
 
-        if not email or not password:
-            messages.error(request, 'Email dan kata sandi wajib diisi.')
-            return render(request, 'core/login.html')
+        context = {
+            'next': next_url,
+            'nama_lengkap': nama_lengkap,
+            'username': username,
+            'email': email
+        }
 
-        user_obj = User.objects.filter(email__iexact=email).first()
-        user = authenticate(request, username=user_obj.get_username() if user_obj else email, password=password)
+        if not username or not email or not password:
+            messages.error(request, 'Semua kolom yang bertanda bintang (*) wajib diisi.')
+            return render(request, 'core/register.html', context)
+
+        if password != password_confirm:
+            messages.error(request, 'Konfirmasi kata sandi tidak cocok.')
+            return render(request, 'core/register.html', context)
+
+        if len(password) < 6:
+            messages.error(request, 'Kata sandi minimal 6 karakter.')
+            return render(request, 'core/register.html', context)
+
+        if User.objects.filter(username__iexact=username).exists():
+            messages.error(request, 'Username sudah digunakan. Silakan gunakan username lain.')
+            return render(request, 'core/register.html', context)
+
+        if User.objects.filter(email__iexact=email).exists():
+            messages.error(request, 'Email sudah terdaftar. Silakan gunakan akun Anda untuk masuk.')
+            return render(request, 'core/register.html', context)
+
+        # Buat akun baru secara otomatis dengan role USER
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=nama_lengkap,
+            role=User.Role.USER
+        )
+
+        login(request, user)
+        catat_audit(request, 'Registrasi Berhasil', f"User {user.username} ({user.email}) mendaftar dengan role USER.")
+        messages.success(request, f"Pendaftaran berhasil! Selamat datang, {user.first_name or user.username}.")
+        return redirect(next_url)
+
+    return render(request, 'core/register.html', {'next': next_url})
+
+
+def user_login(request):
+    next_url = request.GET.get('next') or request.POST.get('next') or ''
+
+    if request.user.is_authenticated:
+        user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+        if next_url:
+            return redirect(next_url)
+        if 'admin' in user_role or request.user.is_staff or request.user.is_superuser:
+            return redirect('admin_dashboard')
+        return redirect('home')
+
+    if request.method == 'POST':
+        email_or_user = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '')
+
+        if not email_or_user or not password:
+            messages.error(request, 'Email/Username dan kata sandi wajib diisi.')
+            return render(request, 'core/login.html', {'next': next_url})
+
+        user_obj = User.objects.filter(Q(email__iexact=email_or_user) | Q(username__iexact=email_or_user)).first()
+        auth_username = user_obj.username if user_obj else email_or_user
+        user = authenticate(request, username=auth_username, password=password)
 
         if user is not None:
-            user_role = getattr(user, 'role', '').lower() if hasattr(user, 'role') and user.role else ''
-            if 'admin' in user_role or user.is_staff or user.is_superuser:
-                login(request, user)
-                catat_audit(request, 'Login Berhasil', f"User {user.email} masuk ke sistem.")
-                messages.success(request, f"Selamat datang, {user.username}!")
-                return redirect('admin_dashboard')
-            else:
-                messages.error(request, 'Akses ditolak! Hanya akun dengan role Admin yang diizinkan masuk ke Dashboard.')
-                return redirect('user_login')
-        else:
-            messages.error(request, 'Email atau kata sandi yang dimasukkan salah.')
+            if not user.is_active:
+                messages.error(request, 'Akun Anda dinonaktifkan. Silakan hubungi admin.')
+                return render(request, 'core/login.html', {'next': next_url})
 
-    return render(request, 'core/login.html')
+            login(request, user)
+            catat_audit(request, 'Login Berhasil', f"User {user.username} ({user.email}) masuk ke sistem.")
+            messages.success(request, f"Selamat datang kembali, {user.first_name or user.username}!")
+
+            user_role = getattr(user, 'role', '').lower() if hasattr(user, 'role') and user.role else ''
+            if next_url:
+                return redirect(next_url)
+            if 'admin' in user_role or user.is_staff or user.is_superuser:
+                return redirect('admin_dashboard')
+            return redirect('home')
+        else:
+            messages.error(request, 'Email/Username atau kata sandi yang dimasukkan salah.')
+
+    return render(request, 'core/login.html', {'next': next_url})
 
 
 def user_logout(request):
+    next_url = request.GET.get('next') or ''
     if request.user.is_authenticated:
         catat_audit(request, 'Logout', f"User {request.user.email} keluar.")
     logout(request)
     messages.success(request, 'Anda telah berhasil keluar (logout).')
+    if next_url:
+        return redirect(next_url)
     return redirect('user_login')
 
 
@@ -584,6 +806,7 @@ def admin_kelola_tentang(request, kategori='profil'):
         'title': f"Kelola {halaman.get_kategori_display()}"
     })
 
+
 def tentang_detail(request, kategori):
     if kategori in ['visi_misi', 'tujuan']:
         visi_obj = VisiMisiTujuan.objects.first()
@@ -608,6 +831,7 @@ def tentang_detail(request, kategori):
         'kategori': kategori,
     }
     return render(request, 'core/admin/tentang_detail.html', context)
+
 
 @login_required(login_url='user_login')
 def admin_kelola_visi_misi(request):
@@ -646,7 +870,7 @@ def admin_kelola_visi_misi(request):
 
         visi_obj.tujuan_items.all().delete()
         for idx in range(len(tujuan_judul_list)):
-            judul = tujuan_judul_list[idx].strip()
+            judul = source_judul = tujuan_judul_list[idx].strip()
             subjudul = tujuan_subjudul_list[idx].strip() if idx < len(tujuan_subjudul_list) else ''
             deskripsi = tujuan_deskripsi_list[idx].strip() if idx < len(tujuan_deskripsi_list) else ''
             if judul:
@@ -714,7 +938,7 @@ def admin_kelola_akademik(request, kategori='siga8'):
     )
 
     if request.method == 'POST':
-        # Cek apakah ini aksi tambah dokumen lampiran baru
+        # Cek penambahan dokumen lampiran
         if 'tambah_dokumen' in request.POST:
             judul_doc = request.POST.get('judul_dokumen', '').strip()
             file_doc = request.FILES.get('file_dokumen')
