@@ -274,57 +274,8 @@
         <!-- Wadah Alert Feedback AJAX -->
         <div id="comment-alert" class="hidden mb-6 p-4 rounded-xl text-xs font-medium border"></div>
 
-        {% if request.user.is_authenticated %}
-          <!-- Form Tambah Komentar Interaktif (Jika Sudah Login) -->
-          <form id="comment-form" method="POST" class="mb-10 space-y-4">
-            {% csrf_token %}
-            <div class="flex items-center gap-3 p-3.5 bg-teal-50/70 border border-teal-100 rounded-2xl">
-              <div class="w-10 h-10 rounded-full bg-[#0b7285] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
-                {{ request.user.first_name|default:request.user.username|slice:":2"|upper }}
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-xs font-bold text-slate-800 truncate">
-                  {{ request.user.first_name|default:request.user.username }}
-                  <span class="text-[10px] font-semibold text-[#0b7285] bg-teal-100/70 px-2 py-0.5 rounded-full ml-1">@{{ request.user.username }}</span>
-                </p>
-                <p class="text-[11px] text-slate-500">Berkomentar sebagai pengguna terdaftar</p>
-              </div>
-              <a href="{% url 'user_logout' %}?next={{ request.path }}#komentar-section" class="text-[11px] text-rose-600 hover:underline shrink-0">
-                <i class="fas fa-arrow-right-from-bracket mr-1"></i>Keluar
-              </a>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Tulis Komentar Anda *</label>
-              <textarea id="comment-isi" name="isi" rows="3" required placeholder="Tuliskan komentar atau tanggapan Anda di sini..." class="w-full text-xs px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-[#0b7285] transition resize-none"></textarea>
-            </div>
-            <button type="submit" id="btn-submit-comment" class="bg-[#0b7285] hover:bg-[#084c5a] text-white text-xs font-semibold px-6 py-2.5 rounded-xl shadow-sm transition duration-200 inline-flex items-center gap-2 cursor-pointer">
-              <i class="far fa-paper-plane"></i> <span id="btn-comment-text">Kirim Komentar</span>
-            </button>
-          </form>
-        {% else %}
-          <!-- Box Peringatan Harus Login untuk Berkomentar -->
-          <div class="mb-10 p-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/80 text-center">
-            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xl mx-auto mb-3 shadow-inner">
-              <i class="fas fa-lock"></i>
-            </div>
-            <h3 class="text-sm font-bold text-slate-800 mb-1">Ingin Berpartisipasi dalam Diskusi?</h3>
-            <p class="text-xs text-slate-600 max-w-md mx-auto mb-4 leading-relaxed">
-              Anda harus masuk (login) terlebih dahulu untuk dapat menulis komentar. Belum punya akun? Buat akun sekarang dengan role pengguna terdaftar.
-            </p>
-            <div class="flex flex-wrap items-center justify-center gap-3">
-              <a href="{% url 'user_login' %}?next={{ request.path }}#komentar-section" class="px-5 py-2.5 rounded-xl bg-[#0b7285] hover:bg-[#084c5a] text-white text-xs font-semibold shadow-sm transition duration-200 inline-flex items-center gap-2">
-                <i class="fas fa-arrow-right-to-bracket"></i> Masuk (Login)
-              </a>
-              <a href="{% url 'user_register' %}?next={{ request.path }}#komentar-section" class="px-5 py-2.5 rounded-xl bg-white border border-slate-300 hover:border-[#0b7285] text-slate-700 hover:text-[#0b7285] text-xs font-semibold shadow-sm transition duration-200 inline-flex items-center gap-2">
-                <i class="fas fa-user-plus"></i> Buat Akun Baru
-              </a>
-            </div>
-          </div>
-        {% endif %}
-
         <!-- Daftar Komentar Pengunjung Sesuai Sketsa -->
-        <div id="komentar-container" class="space-y-4">
+        <div id="komentar-container" class="space-y-4 mb-6">
           {% for kom in komentar_list %}
             <div id="comment-card-{{ kom.id }}" class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3.5 relative group">
               <!-- Avatar Inisial / Icon -->
@@ -383,10 +334,60 @@
           {% empty %}
             <div id="no-comment-placeholder" class="text-center py-8 text-slate-400">
               <i class="far fa-comments text-4xl mb-2 text-slate-300"></i>
-              <p class="text-xs font-medium">Belum ada komentar. Jadilah yang pertama memberikan komentar!</p>
+              <p class="text-xs font-medium">Belum ada komentar. Tuliskan komentar pertama Anda di bawah!</p>
             </div>
           {% endfor %}
         </div>
+
+        <!-- Form Tambah Komentar Sesuai Sketsa: Input Komentar + Tombol Icon Kirim Saja -->
+        <form id="comment-form" method="POST" action="{% url 'berita_detail' berita.pk %}" class="pt-4 border-t border-slate-100">
+          {% csrf_token %}
+
+          {% if request.user.is_authenticated %}
+            <!-- Indikator Pengguna Aktif -->
+            <div class="flex items-center justify-between mb-2.5 px-1 text-xs text-slate-500">
+              <span class="flex items-center gap-1.5 text-[11px] font-medium text-slate-700">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                Berkomentar sebagai <strong class="text-[#0b7285]">{{ request.user.first_name|default:request.user.username }}</strong>
+                <span class="text-[10px] text-slate-400">(@{{ request.user.username }})</span>
+              </span>
+              <a href="{% url 'user_logout' %}?next={{ request.path }}#komentar-section" class="text-rose-500 hover:underline text-[11px] flex items-center gap-1">
+                <i class="fas fa-arrow-right-from-bracket text-[10px]"></i> Keluar
+              </a>
+            </div>
+          {% endif %}
+
+          <div class="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-2xl p-2 focus-within:bg-white focus-within:border-[#0b7285] focus-within:ring-2 focus-within:ring-[#0b7285]/20 transition-all duration-200 shadow-xs">
+            <!-- Avatar Inisial / Icon Pengguna -->
+            <div class="w-9 h-9 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+              {% if request.user.is_authenticated %}
+                <span class="text-[#0b7285]">{{ request.user.first_name|default:request.user.username|slice:":2"|upper }}</span>
+              {% else %}
+                <i class="far fa-user text-slate-400"></i>
+              {% endif %}
+            </div>
+
+            <!-- Input Komentar -->
+            <input 
+              type="text" 
+              id="comment-isi" 
+              name="isi" 
+              required 
+              placeholder="{% if request.user.is_authenticated %}Tulis komentar Anda di sini...{% else %}Tulis komentar... (login terlebih dahulu untuk mengirim){% endif %}" 
+              class="flex-1 bg-transparent text-xs text-slate-800 placeholder-slate-400 outline-none px-2 py-1.5"
+            >
+
+            <!-- Tombol Kirim: HANYA ICON KIRIM SAJA -->
+            <button 
+              type="submit" 
+              id="btn-submit-comment" 
+              class="w-10 h-10 rounded-xl bg-[#0b7285] hover:bg-[#084c5a] active:scale-95 text-white flex items-center justify-center shadow-md shadow-[#0b7285]/25 transition duration-150 cursor-pointer shrink-0" 
+              title="Kirim Komentar"
+            >
+              <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
+            </button>
+          </div>
+        </form>
 
       </section>
 
@@ -458,21 +459,31 @@
       });
     }
 
-    // 2. AJAX Kirim Komentar Instan (Tanpa Refresh)
+    // 2. AJAX Kirim Komentar Instan (Hanya Icon Kirim & Auto Redirect jika Belum Login)
     const commentForm = document.getElementById('comment-form');
     const commentAlert = document.getElementById('comment-alert');
     const komentarContainer = document.getElementById('komentar-container');
     const noCommentPlaceholder = document.getElementById('no-comment-placeholder');
     const totalKomentarHeader = document.getElementById('total-komentar-header');
     const btnSubmit = document.getElementById('btn-submit-comment');
-    const btnCommentText = document.getElementById('btn-comment-text');
+    const isAuthenticated = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
 
     if (commentForm) {
       commentForm.addEventListener('submit', function(e) {
+        // Jika belum login atau belum punya akun -> langsung redirect ke laman login
+        if (!isAuthenticated) {
+          e.preventDefault();
+          window.location.href = "{% url 'user_login' %}?next={{ request.path }}#komentar-section";
+          return;
+        }
+
         e.preventDefault();
 
         btnSubmit.disabled = true;
-        btnCommentText.innerText = 'Mengirim...';
+        const submitIcon = btnSubmit.querySelector('i');
+        if (submitIcon) {
+          submitIcon.className = 'fas fa-spinner fa-spin text-xs pointer-events-none';
+        }
 
         const formData = new FormData(commentForm);
 
@@ -487,7 +498,14 @@
         .then(res => res.json())
         .then(data => {
           btnSubmit.disabled = false;
-          btnCommentText.innerText = 'Kirim Komentar';
+          if (submitIcon) {
+            submitIcon.className = 'fas fa-paper-plane text-xs pointer-events-none';
+          }
+
+          if (data.status === 'redirect') {
+            window.location.href = data.url;
+            return;
+          }
 
           if (data.status === 'success') {
             commentAlert.className = 'mb-6 p-4 rounded-xl text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 block';

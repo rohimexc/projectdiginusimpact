@@ -9,13 +9,13 @@ from django.views.decorators.http import require_POST
 from django.urls import reverse
 
 from .models import (
-    Sambutan, Galeri, Berita, TenagaPendidik, AuditLog, 
+    Sambutan, Galeri, Hero, Berita, TenagaPendidik, AuditLog, 
     HalamanTentang, VisiMisiTujuan, MisiItem, TujuanItem, 
     HalamanAkademik, DokumenAkademik, KomentarBerita
 )
 from .forms import (
     BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, 
-    HalamanTentangForm, HalamanAkademikForm
+    HalamanTentangForm, HalamanAkademikForm, GaleriForm, HeroForm
 )
 
 User = get_user_model()
@@ -35,8 +35,9 @@ def catat_audit(request, action, description):
 # ==========================================
 
 def home(request):
+    hero = Hero.objects.filter(is_active=True).first()
     sambutan = Sambutan.objects.first()
-    daftar_galeri = Galeri.objects.all()[:6]
+    daftar_galeri = Galeri.objects.all().order_by('urutan', '-created_at')[:8]
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
     daftar_tenaga_kependidikan = TenagaPendidik.objects.filter(jenis='TENDIK')[:4]
 
@@ -45,6 +46,7 @@ def home(request):
     daftar_tujuan = visi_obj.tujuan_items.all() if visi_obj else []
 
     context = {
+        'hero': hero,
         'sambutan': sambutan,
         'daftar_galeri': daftar_galeri,
         'daftar_berita': daftar_berita,
@@ -104,21 +106,24 @@ def berita_detail(request, pk):
     session_key_like = f'liked_berita_{pk}'
     is_liked = request.session.get(session_key_like, False)
 
-    # 3. Tangani Pengiriman Komentar (Hanya User Login yang Berhak Komentar)
+    # 3. Tangani Pengiriman Komentar
     if request.method == 'POST':
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', '')
 
+        # Jika belum login / belum punya akun -> redirect ke laman login
         if not request.user.is_authenticated:
+            messages.info(request, 'Silakan masuk (login) terlebih dahulu untuk mengirim komentar. Jika belum punya akun, Anda dapat mendaftar.')
+            login_url = f"{reverse('user_login')}?next={request.path}#komentar-section"
             if is_ajax:
                 return JsonResponse({
-                    'status': 'error',
-                    'message': 'Anda harus masuk (login) terlebih dahulu untuk dapat berkomentar.'
-                }, status=401)
-            messages.error(request, 'Anda harus masuk (login) terlebih dahulu untuk dapat berkomentar.')
-            return redirect(f"{reverse('user_login')}?next={request.path}#komentar-section")
+                    'status': 'redirect',
+                    'url': login_url,
+                    'message': 'Silakan login terlebih dahulu untuk berkomentar.'
+                })
+            return redirect(login_url)
 
+        # Jika sudah punya akun & login -> komentar terkirim
         isi = request.POST.get('isi', '').strip()
-
         if isi:
             nama = request.user.first_name or request.user.username
             email = request.user.email
@@ -145,7 +150,7 @@ def berita_detail(request, pk):
                     'total_komentar': berita.komentar_list.count()
                 })
             messages.success(request, 'Komentar Anda berhasil dikirim.')
-            return redirect('berita_detail', pk=pk)
+            return redirect(f"{reverse('berita_detail', kwargs={'pk': pk})}#komentar-section")
         else:
             if is_ajax:
                 return JsonResponse({'status': 'error', 'message': 'Komentar tidak boleh kosong!'}, status=400)
@@ -329,10 +334,13 @@ def user_register(request):
             role=User.Role.USER
         )
 
-        login(request, user)
         catat_audit(request, 'Registrasi Berhasil', f"User {user.username} ({user.email}) mendaftar dengan role USER.")
-        messages.success(request, f"Pendaftaran berhasil! Selamat datang, {user.first_name or user.username}.")
-        return redirect(next_url)
+        messages.success(request, f"Pendaftaran akun berhasil! Silakan masuk (login) dengan akun Anda terlebih dahulu untuk mulai berkomentar.")
+
+        login_url = reverse('user_login')
+        if next_url:
+            login_url = f"{login_url}?next={next_url}"
+        return redirect(login_url)
 
     return render(request, 'core/register.html', {'next': next_url})
 
@@ -371,6 +379,8 @@ def user_login(request):
 
             user_role = getattr(user, 'role', '').lower() if hasattr(user, 'role') and user.role else ''
             if next_url:
+                if '/Berita/' in next_url and '#komentar-section' not in next_url:
+                    next_url = f"{next_url.rstrip('/')}/#komentar-section"
                 return redirect(next_url)
             if 'admin' in user_role or user.is_staff or user.is_superuser:
                 return redirect('admin_dashboard')
@@ -417,6 +427,8 @@ def admin_dashboard(request):
     tendik_p = tendik_qs.filter(jenis_kelamin='P').count()
 
     total_user = User.objects.count()
+    total_galeri = Galeri.objects.count()
+    total_hero = Hero.objects.count()
     logs = AuditLog.objects.all().order_by('-timestamp')
 
     context = {
@@ -428,6 +440,8 @@ def admin_dashboard(request):
         'tendik_l': tendik_l,
         'tendik_p': tendik_p,
         'total_user': total_user,
+        'total_galeri': total_galeri,
+        'total_hero': total_hero,
         'logs': logs,
     }
     return render(request, 'core/admin/dashboard.html', context)
@@ -993,3 +1007,187 @@ def admin_hapus_dokumen_akademik(request, pk):
     catat_audit(request, 'Hapus Dokumen Akademik', f"Menghapus berkas: {nama_doc}")
     messages.success(request, f"Berkas '{nama_doc}' berhasil dihapus!")
     return redirect('admin_kelola_akademik_kategori', kategori=kategori)
+
+
+# ==========================================
+# 11. MANAJEMEN GALERI FOTO
+# ==========================================
+
+@login_required(login_url='user_login')
+def admin_kelola_galeri(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+    daftar_galeri = Galeri.objects.all().order_by('urutan', '-created_at')
+    return render(request, 'core/admin/galeri_kelola.html', {'daftar_galeri': daftar_galeri})
+
+
+@login_required(login_url='user_login')
+def galeri_create(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    if request.method == 'POST':
+        form = GaleriForm(request.POST, request.FILES)
+        if form.is_valid():
+            galeri = form.save()
+            catat_audit(request, 'Tambah Galeri', f"Menambahkan Foto Galeri: {galeri.judul or 'Foto Galeri'}")
+            messages.success(request, 'Foto kegiatan berhasil ditambahkan ke galeri!')
+            return redirect('admin_kelola_galeri')
+    else:
+        last_item = Galeri.objects.order_by('-urutan').first()
+        next_urutan = (last_item.urutan + 1) if last_item else 1
+        form = GaleriForm(initial={'urutan': next_urutan})
+
+    return render(request, 'core/admin/galeri_form.html', {
+        'form': form,
+        'title': 'Tambah Foto Galeri Baru'
+    })
+
+
+@login_required(login_url='user_login')
+def galeri_update(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    galeri = get_object_or_404(Galeri, pk=pk)
+    if request.method == 'POST':
+        form = GaleriForm(request.POST, request.FILES, instance=galeri)
+        if form.is_valid():
+            form.save()
+            catat_audit(request, 'Edit Galeri', f"Memperbarui Foto Galeri #{galeri.id}")
+            messages.success(request, 'Data galeri foto berhasil diperbarui!')
+            return redirect('admin_kelola_galeri')
+    else:
+        form = GaleriForm(instance=galeri)
+
+    return render(request, 'core/admin/galeri_form.html', {
+        'form': form,
+        'galeri': galeri,
+        'title': f'Edit Foto Galeri #{galeri.id}'
+    })
+
+
+@login_required(login_url='user_login')
+def galeri_delete(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    galeri = get_object_or_404(Galeri, pk=pk)
+    nama = galeri.judul or f"Foto Galeri #{galeri.id}"
+    galeri.delete()
+    catat_audit(request, 'Hapus Galeri', f"Menghapus: {nama}")
+    messages.success(request, 'Foto galeri berhasil dihapus!')
+    return redirect('admin_kelola_galeri')
+
+
+# ==========================================
+# 12. MANAJEMEN HERO (VIDEO & FOTO)
+# ==========================================
+
+@login_required(login_url='user_login')
+def admin_kelola_hero(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+    daftar_hero = Hero.objects.all().order_by('-is_active', '-created_at')
+    return render(request, 'core/admin/hero_kelola.html', {'daftar_hero': daftar_hero})
+
+
+@login_required(login_url='user_login')
+def hero_create(request):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    if request.method == 'POST':
+        form = HeroForm(request.POST, request.FILES)
+        if form.is_valid():
+            hero = form.save(commit=False)
+            if hero.is_active:
+                Hero.objects.filter(is_active=True).update(is_active=False)
+            hero.save()
+            catat_audit(request, 'Tambah Hero', f"Menambahkan Hero Banner: {hero.judul}")
+            messages.success(request, 'Data Hero berhasil ditambahkan!')
+            return redirect('admin_kelola_hero')
+    else:
+        form = HeroForm(initial={'is_active': True})
+
+    return render(request, 'core/admin/hero_form.html', {
+        'form': form,
+        'title': 'Tambah Hero Banner Baru'
+    })
+
+
+@login_required(login_url='user_login')
+def hero_update(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    hero = get_object_or_404(Hero, pk=pk)
+    if request.method == 'POST':
+        form = HeroForm(request.POST, request.FILES, instance=hero)
+        if form.is_valid():
+            is_act = form.cleaned_data.get('is_active')
+            if is_act:
+                Hero.objects.filter(is_active=True).exclude(pk=hero.pk).update(is_active=False)
+            form.save()
+            catat_audit(request, 'Edit Hero', f"Memperbarui Hero: {hero.judul}")
+            messages.success(request, 'Data Hero berhasil diperbarui!')
+            return redirect('admin_kelola_hero')
+    else:
+        form = HeroForm(instance=hero)
+
+    return render(request, 'core/admin/hero_form.html', {
+        'form': form,
+        'hero': hero,
+        'title': f'Edit Hero Banner: {hero.judul or "Hero"}'
+    })
+
+
+@login_required(login_url='user_login')
+def hero_delete(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    hero = get_object_or_404(Hero, pk=pk)
+    judul = hero.judul or f"Hero #{hero.id}"
+    hero.delete()
+    catat_audit(request, 'Hapus Hero', f"Menghapus Hero: {judul}")
+    messages.success(request, 'Data Hero berhasil dihapus!')
+    return redirect('admin_kelola_hero')
+
+
+@login_required(login_url='user_login')
+def hero_toggle_status(request, pk):
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    hero = get_object_or_404(Hero, pk=pk)
+    if not hero.is_active:
+        Hero.objects.filter(is_active=True).update(is_active=False)
+        hero.is_active = True
+        hero.save()
+        messages.success(request, f'Hero "{hero.judul}" diaktifkan sebagai background beranda!')
+    else:
+        hero.is_active = False
+        hero.save()
+        messages.info(request, f'Hero "{hero.judul}" dinonaktifkan. Beranda akan menggunakan video default.')
+
+    catat_audit(request, 'Toggle Status Hero', f"Mengubah status Hero #{hero.id} menjadi {'Aktif' if hero.is_active else 'Nonaktif'}")
+    return redirect('admin_kelola_hero')

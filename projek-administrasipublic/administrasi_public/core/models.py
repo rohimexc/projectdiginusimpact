@@ -22,16 +22,51 @@ class Sambutan(models.Model):
 
 # 2. Model Galeri Kegiatan
 class Galeri(models.Model):
-    judul = models.CharField(max_length=200)
-    gambar = models.ImageField(upload_to='galeri/', blank=True, null=True, help_text="Upload gambar dokumentasi kegiatan")
+    judul = models.CharField(max_length=200, blank=True, default="Dokumentasi Kegiatan", help_text="Keterangan / Judul foto kegiatan")
+    gambar = models.ImageField(upload_to='galeri/', blank=True, null=True, help_text="Upload foto dokumentasi kegiatan")
+    urutan = models.PositiveIntegerField(default=1, help_text="Urutan posisi foto di galeri beranda (contoh: 1, 2, 3...)")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Galeri Kegiatan"
         verbose_name_plural = "Galeri Kegiatan"
+        ordering = ['urutan', '-created_at']
 
     def __str__(self):
-        return self.judul
+        return f"[{self.urutan}] {self.judul or 'Foto Galeri'}"
+
+
+# 2.1 Model Hero Beranda (Video & Foto Background)
+class Hero(models.Model):
+    judul = models.CharField(max_length=255, blank=True, default="Program Studi Administrasi Publik", help_text="Judul utama hero")
+    subjudul = models.CharField(max_length=255, blank=True, default="Welcome to", help_text="Subjudul kecil di atas judul utama")
+    deskripsi = models.TextField(blank=True, default="Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako", help_text="Deskripsi singkat hero")
+    link_video = models.CharField(max_length=500, blank=True, null=True, help_text="Link video YouTube atau URL file MP4")
+    video_file = models.FileField(upload_to='hero/video/', blank=True, null=True, help_text="Upload file video MP4 dari komputer (opsional)")
+    foto = models.ImageField(upload_to='hero/foto/', blank=True, null=True, help_text="Foto latar belakang Hero jika tanpa video atau poster")
+    is_active = models.BooleanField(default=True, help_text="Aktifkan sebagai tampilan hero utama di Beranda")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Hero Beranda"
+        verbose_name_plural = "Manajemen Hero"
+        ordering = ['-is_active', '-created_at']
+
+    def __str__(self):
+        return self.judul or f"Hero #{self.id}"
+
+    @property
+    def youtube_embed_url(self):
+        """Mengonversi link YouTube biasa ke URL embed yang kompatibel autoplay background"""
+        if not self.link_video:
+            return ""
+        url = self.link_video.strip()
+        import re
+        match = re.search(r'(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})', url)
+        if match:
+            video_id = match.group(1)
+            return f"https://www.youtube.com/embed/{video_id}?autoplay=1&mute=1&loop=1&playlist={video_id}&controls=0&showinfo=0&rel=0&iv_load_policy=3"
+        return ""
 
 
 # 3. Model Berita (Dilengkapi Views & Likes)

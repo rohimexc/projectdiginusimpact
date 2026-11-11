@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django_ckeditor_5.widgets import CKEditor5Widget
-from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan
+from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan, Galeri, Hero
 from .models import HalamanTentang, HalamanAkademik, DokumenAkademik
 
 User = get_user_model()
@@ -206,7 +206,8 @@ class SambutanForm(forms.ModelForm):
                 config_name='extends'
             )
         }
-        
+
+
 class HalamanTentangForm(forms.ModelForm):
     class Meta:
         model = HalamanTentang
@@ -225,6 +226,7 @@ class HalamanTentangForm(forms.ModelForm):
                 config_name='extends'
             )
         }
+
 
 class HalamanAkademikForm(forms.ModelForm):
     class Meta:
@@ -254,4 +256,77 @@ class HalamanAkademikForm(forms.ModelForm):
                 attrs={'class': 'django_ckeditor_5'}, 
                 config_name='extends'
             )
+        }
+
+
+# Form Manajemen Galeri Foto
+class GaleriForm(forms.ModelForm):
+    class Meta:
+        model = Galeri
+        fields = ['gambar', 'urutan', 'judul']
+        labels = {
+            'gambar': 'Foto Galeri Kegiatan',
+            'urutan': 'Urutan Tampilan',
+            'judul': 'Judul / Keterangan Foto',
+        }
+        widgets = {
+            'gambar': forms.FileInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': 'image/*'
+            }),
+            'urutan': forms.NumberInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: 1, 2, 3...',
+                'min': '1',
+            }),
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Masukkan judul atau keterangan kegiatan (opsional)'
+            }),
+        }
+
+
+# Form Manajemen Hero (Video & Foto)
+class HeroForm(forms.ModelForm):
+    class Meta:
+        model = Hero
+        fields = ['link_video', 'video_file', 'foto', 'judul', 'subjudul', 'deskripsi', 'is_active']
+        labels = {
+            'link_video': 'Link Video (YouTube atau URL MP4)',
+            'video_file': 'Atau Upload File Video MP4 (Opsional)',
+            'foto': 'Foto Hero Background (Opsional / Pengganti Video)',
+            'judul': 'Judul Utama Hero',
+            'subjudul': 'Subjudul Hero',
+            'deskripsi': 'Deskripsi Hero',
+            'is_active': 'Status Aktif di Beranda',
+        }
+        widgets = {
+            'link_video': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: https://www.youtube.com/watch?v=... atau https://domain.com/video.mp4'
+            }),
+            'video_file': forms.FileInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': 'video/mp4,video/webm'
+            }),
+            'foto': forms.FileInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': 'image/*'
+            }),
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Program Studi Administrasi Publik'
+            }),
+            'subjudul': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Welcome to'
+            }),
+            'deskripsi': forms.Textarea(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'rows': 3,
+                'placeholder': 'Contoh: Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-brand-teal rounded border-slate-300 focus:ring-teal-500 cursor-pointer'
+            }),
         }

@@ -133,13 +133,6 @@
                     </div>
                   </td>
                 </tr>
-              {% empty %}
-                <tr>
-                  <td colspan="6" class="py-12 text-center text-slate-400">
-                    <i class="bi bi-inbox text-3xl mb-2 text-slate-300 block"></i>
-                    Belum ada data tenaga kependidikan.
-                  </td>
-                </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -238,6 +231,8 @@
   </div>
 
   <script>
+    $.fn.dataTable.ext.errMode = 'none';
+
     $(document).ready(function() {
       $('#tabelTendik').DataTable({
         lengthMenu: [

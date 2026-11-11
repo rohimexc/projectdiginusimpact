@@ -161,20 +161,46 @@
     </ul>
   </nav>
 
-  <!-- Hero Section dengan Background Video -->
+  <!-- Hero Section dengan Background Video & Foto Dinamis -->
   <section class="relative w-full h-screen overflow-hidden flex items-center justify-center text-center pt-[70px]" id="hero">
-    <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
-      <source src="{% static 'vidio/vidio1.mp4' %}" type="video/mp4">
-      Browser kamu tidak mendukung tag video.
-    </video>
+    {% if hero %}
+      {% if hero.video_file %}
+        <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
+          <source src="{{ hero.video_file.url }}" type="video/mp4">
+        </video>
+      {% elif hero.youtube_embed_url %}
+        <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+          <iframe class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vw] h-[140vh] min-w-full min-h-full object-cover scale-125"
+                  src="{{ hero.youtube_embed_url }}" 
+                  frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+          </iframe>
+        </div>
+      {% elif hero.link_video %}
+        <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
+          <source src="{{ hero.link_video }}" type="video/mp4">
+        </video>
+      {% elif hero.foto %}
+        <img src="{{ hero.foto.url }}" alt="{{ hero.judul }}" class="absolute inset-0 w-full h-full object-cover z-0">
+      {% else %}
+        <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
+          <source src="{% static 'vidio/vidio1.mp4' %}" type="video/mp4">
+        </video>
+      {% endif %}
+    {% else %}
+      <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
+        <source src="{% static 'vidio/vidio1.mp4' %}" type="video/mp4">
+      </video>
+    {% endif %}
 
     <!-- Overlay Gelap -->
-    <div class="absolute inset-0 bg-black/60 z-10"></div>
+    <div class="absolute inset-0 bg-black/60 z-10 pointer-events-none"></div>
 
     <div class="relative z-20 max-w-3xl px-5 text-white" data-aos="fade-up" data-aos-duration="1000">
-      <h3 class="text-2xl md:text-3xl font-semibold mb-2 tracking-wide" data-aos="fade-up" data-aos-delay="100">Welcome to</h3>
-      <h1 class="text-3xl md:text-5xl font-bold text-brand-gold mb-3 leading-tight" data-aos="fade-up" data-aos-delay="200">Program Studi Administrasi Publik</h1>
-      <p class="text-base md:text-lg font-light text-slate-200 mb-7" data-aos="fade-up" data-aos-delay="300">Fakultas Ilmu Sosial dan Ilmu Politik<br>Universitas Tadulako</p>
+      <h3 class="text-2xl md:text-3xl font-semibold mb-2 tracking-wide" data-aos="fade-up" data-aos-delay="100">{{ hero.subjudul|default:"Welcome to" }}</h3>
+      <h1 class="text-3xl md:text-5xl font-bold text-brand-gold mb-3 leading-tight" data-aos="fade-up" data-aos-delay="200">{{ hero.judul|default:"Program Studi Administrasi Publik" }}</h1>
+      <p class="text-base md:text-lg font-light text-slate-200 mb-7" data-aos="fade-up" data-aos-delay="300">{% if hero and hero.deskripsi %}{{ hero.deskripsi|linebreaksbr }}{% else %}Fakultas Ilmu Sosial dan Ilmu Politik<br>Universitas Tadulako{% endif %}</p>
       <a href="#sambutan" data-aos="zoom-in" data-aos-delay="400" class="inline-block bg-brand-gold text-slate-900 text-sm font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-brand-hovergold hover:-translate-y-0.5 hover:scale-105 transition duration-200">Jelajahi Lebih Lanjut</a>
     </div>
   </section>
@@ -327,16 +353,36 @@
       {% if daftar_galeri %}
         <div class="flex flex-wrap justify-center gap-6">
           {% for galeri in daftar_galeri %}
-            <div data-aos="zoom-in" data-aos-delay="{{ forloop.counter }}00" class="w-72 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200">
-              <img src="{% static 'images/' %}{{ galeri.gambar }}" alt="{{ galeri.judul }}" class="w-full h-44 object-cover bg-slate-100">
-              <div class="p-4 text-left">
-                <h3 class="text-sm font-semibold text-brand-teal line-clamp-2">{{ galeri.judul }}</h3>
+            <div data-aos="zoom-in" data-aos-delay="{{ forloop.counter }}00" class="w-72 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 group text-left flex flex-col justify-between">
+              <div>
+                <div class="w-full h-44 overflow-hidden bg-slate-100 relative cursor-pointer"
+                     onclick="bukaLightboxGaleri('{% if galeri.gambar %}{{ galeri.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ galeri.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ galeri.urutan }}')">
+                  {% if galeri.gambar %}
+                    <img src="{{ galeri.gambar.url }}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                  {% else %}
+                    <img src="{% static 'images/foto1.jpg' %}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                  {% endif %}
+                  <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition duration-200">
+                    <span class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-base">
+                      <i class="fas fa-search-plus"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-4">
+                  <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-brand-teal border border-teal-100">
+                      Foto #{{ galeri.urutan }}
+                    </span>
+                  </div>
+                  <h3 class="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug">{{ galeri.judul|default:"Dokumentasi Kegiatan" }}</h3>
+                </div>
               </div>
             </div>
           {% endfor %}
         </div>
       {% else %}
-        <div class="text-sm text-slate-500 py-10" data-aos="fade-in">Belum ada galeri.</div>
+        <div class="text-sm text-slate-500 py-10" data-aos="fade-in">Belum ada galeri kegiatan.</div>
       {% endif %}
     </div>
   </section>
@@ -657,6 +703,52 @@
       once: true,
       offset: 80,
       easing: 'ease-out-cubic'
+    });
+  </script>
+
+  <!-- MODAL LIGHTBOX FOTO GALERI BERANDA -->
+  <div id="lightboxGaleri" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span id="lbUrutan" class="px-2 py-0.5 rounded-md bg-teal-100 text-teal-800 text-[10px] font-bold">Foto #1</span>
+          <h3 id="lbJudul" class="text-xs font-bold text-slate-800 truncate max-w-md">Dokumentasi Kegiatan</h3>
+        </div>
+        <button type="button" onclick="tutupLightboxGaleri()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i class="fas fa-times text-base"></i>
+        </button>
+      </div>
+
+      <div class="p-3 bg-slate-950 flex items-center justify-center min-h-[300px] max-h-[75vh]">
+        <img id="lbImg" src="" alt="Dokumentasi Kegiatan" class="max-w-full max-h-[70vh] object-contain rounded-xl shadow-lg">
+      </div>
+
+      <div class="px-6 py-3 bg-white border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">Dokumentasi Program Studi Administrasi Publik FISIP UNTAD</span>
+        <button type="button" onclick="tutupLightboxGaleri()" class="px-4 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function bukaLightboxGaleri(url, judul, urutan) {
+      document.getElementById('lbImg').src = url;
+      document.getElementById('lbJudul').innerText = judul || 'Dokumentasi Kegiatan';
+      document.getElementById('lbUrutan').innerText = 'Foto #' + urutan;
+      document.getElementById('lightboxGaleri').classList.remove('hidden');
+    }
+
+    function tutupLightboxGaleri() {
+      document.getElementById('lightboxGaleri').classList.add('hidden');
+      document.getElementById('lbImg').src = '';
+    }
+
+    document.getElementById('lightboxGaleri').addEventListener('click', function(e) {
+      if (e.target === this) {
+        tutupLightboxGaleri();
+      }
     });
   </script>
 </body>

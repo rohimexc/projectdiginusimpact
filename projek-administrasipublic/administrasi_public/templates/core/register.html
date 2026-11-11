@@ -100,8 +100,13 @@
           {% endfor %}
         {% endif %}
 
-        <form method="POST" action="{% url 'user_register' %}" class="space-y-3.5">
+        <form method="POST" action="{% url 'user_register' %}" autocomplete="off" class="space-y-3.5">
           {% csrf_token %}
+          
+          <!-- Dummy input tersembunyi agar browser tidak auto-fill akun lama -->
+          <input type="text" style="display:none" aria-hidden="true" tabindex="-1">
+          <input type="password" style="display:none" aria-hidden="true" tabindex="-1">
+
           {% if next %}
             <input type="hidden" name="next" value="{{ next }}">
           {% elif request.GET.next %}
@@ -121,6 +126,7 @@
                 value="{{ nama_lengkap|default:'' }}"
                 required 
                 autofocus
+                autocomplete="off"
                 placeholder="Masukkan nama lengkap Anda" 
                 class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
               >
@@ -139,6 +145,7 @@
                 name="username" 
                 value="{{ username|default:'' }}"
                 required 
+                autocomplete="off"
                 placeholder="Pilih username unik (tanpa spasi)" 
                 class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
               >
@@ -157,6 +164,7 @@
                 name="email" 
                 value="{{ email|default:'' }}"
                 required 
+                autocomplete="off"
                 placeholder="nama@email.com" 
                 class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
               >
@@ -172,11 +180,22 @@
               </span>
               <input 
                 type="password" 
+                id="registerPassword"
                 name="password" 
                 required 
+                autocomplete="new-password"
                 placeholder="Buat kata sandi aman" 
-                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
+                class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
               >
+              <button 
+                type="button" 
+                id="toggleRegPassBtn"
+                tabindex="-1"
+                class="absolute right-3.5 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                title="Lihat / Sembunyikan Kata Sandi"
+              >
+                <i class="fas fa-eye text-xs" id="regEyeIcon"></i>
+              </button>
             </div>
           </div>
 
@@ -189,11 +208,22 @@
               </span>
               <input 
                 type="password" 
+                id="registerPasswordConfirm"
                 name="password_confirm" 
                 required 
+                autocomplete="new-password"
                 placeholder="Ketik ulang kata sandi" 
-                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
+                class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 transition duration-200"
               >
+              <button 
+                type="button" 
+                id="toggleRegPassConfirmBtn"
+                tabindex="-1"
+                class="absolute right-3.5 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
+                title="Lihat / Sembunyikan Konfirmasi Kata Sandi"
+              >
+                <i class="fas fa-eye text-xs" id="regConfirmEyeIcon"></i>
+              </button>
             </div>
           </div>
 
@@ -229,6 +259,42 @@
     </div>
 
   </div>
+
+  <!-- Toggle Show/Hide Password -->
+  <script>
+    function setupPasswordToggle(btnId, inputId, iconId) {
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+
+      if (btn && input && icon) {
+        btn.addEventListener('click', () => {
+          const isPassword = input.getAttribute('type') === 'password';
+          input.setAttribute('type', isPassword ? 'text' : 'password');
+          icon.classList.toggle('fa-eye', !isPassword);
+          icon.classList.toggle('fa-eye-slash', isPassword);
+        });
+      }
+    }
+
+    setupPasswordToggle('toggleRegPassBtn', 'registerPassword', 'regEyeIcon');
+    setupPasswordToggle('toggleRegPassConfirmBtn', 'registerPasswordConfirm', 'regConfirmEyeIcon');
+
+    // Cegah browser meng-autofill username/password akun lama pada formulir pendaftaran akun baru
+    function clearBrowserAutofill() {
+      {% if not messages and not username and not email %}
+        const userInp = document.querySelector('input[name="username"]');
+        const passInp = document.getElementById('registerPassword');
+        const passConfInp = document.getElementById('registerPasswordConfirm');
+        if (userInp) userInp.value = '';
+        if (passInp) passInp.value = '';
+        if (passConfInp) passConfInp.value = '';
+      {% endif %}
+    }
+
+    window.addEventListener('DOMContentLoaded', () => setTimeout(clearBrowserAutofill, 50));
+    window.addEventListener('pageshow', clearBrowserAutofill);
+  </script>
 
 </body>
 </html>

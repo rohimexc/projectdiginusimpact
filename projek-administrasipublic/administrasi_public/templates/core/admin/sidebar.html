@@ -22,6 +22,13 @@
         <span>Ringkasan Dashboard</span>
       </a>
 
+      <!-- 1b. Manajemen Hero (Link Video & Foto) -->
+      <a href="{% url 'admin_kelola_hero' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'hero' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-camera-reels text-base transition-colors duration-200 {% if 'hero' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Manajemen Hero</span>
+      </a>
+
       <!-- 2. Kelola Halaman Tentang (Profil, Sejarah, dsb) -->
       <a href="{% url 'admin_kelola_tentang' 'profil' %}" 
          class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'tentang' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
@@ -48,6 +55,13 @@
          class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'berita' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
         <i class="bi bi-newspaper text-base transition-colors duration-200 {% if 'berita' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
         <span>Kelola Berita</span>
+      </a>
+
+      <!-- 4b. Manajemen Galeri Foto -->
+      <a href="{% url 'admin_kelola_galeri' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'galeri' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-images text-base transition-colors duration-200 {% if 'galeri' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Manajemen Galeri</span>
       </a>
 
       <!-- 4b. Kelola Akademik (SIGA-8, Kurikulum, Jadwal, RPS, Panduan) -->

@@ -117,28 +117,28 @@
 
     <main class="flex-1 p-6 md:p-8 space-y-8">
       
-      <!-- 3 KARTU STATISTIK SESUAI SKETSA BUKU CATATAN -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <!-- 5 KARTU STATISTIK RINGKASAN PORTAL -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
 
         <!-- 1. TOTAL DOSEN DENGAN RINCIAN L & P -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div class="flex items-center justify-between mb-3">
             <div>
               <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Dosen</p>
-              <h3 class="text-3xl font-extrabold text-slate-800 mt-1">{{ total_dosen }}</h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_dosen }}</h3>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+            <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-lg">
               <i class="bi bi-person-video3"></i>
             </div>
           </div>
           <!-- Rincian L & P sesuai sketsa -->
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <div class="flex items-center gap-2 text-xs font-semibold">
-              <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">L: {{ dosen_l }}</span>
-              <span class="px-2 py-0.5 rounded-md bg-pink-50 text-pink-700 border border-pink-200">P: {{ dosen_p }}</span>
+            <div class="flex items-center gap-1.5 text-xs font-semibold">
+              <span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] border border-blue-200">L: {{ dosen_l }}</span>
+              <span class="px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 text-[10px] border border-pink-200">P: {{ dosen_p }}</span>
             </div>
-            <a href="{% url 'admin_kelola_dosen' %}" class="text-[11px] text-teal-700 font-semibold hover:underline inline-flex items-center gap-1">
-              Buka Dosen &rarr;
+            <a href="{% url 'admin_kelola_dosen' %}" class="text-[10px] text-teal-700 font-semibold hover:underline">
+              Buka &rarr;
             </a>
           </div>
         </div>
@@ -148,20 +148,20 @@
           <div class="flex items-center justify-between mb-3">
             <div>
               <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Tendik</p>
-              <h3 class="text-3xl font-extrabold text-slate-800 mt-1">{{ total_tendik }}</h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_tendik }}</h3>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-lg">
               <i class="bi bi-people-fill"></i>
             </div>
           </div>
           <!-- Rincian L & P sesuai sketsa -->
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <div class="flex items-center gap-2 text-xs font-semibold">
-              <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">L: {{ tendik_l }}</span>
-              <span class="px-2 py-0.5 rounded-md bg-pink-50 text-pink-700 border border-pink-200">P: {{ tendik_p }}</span>
+            <div class="flex items-center gap-1.5 text-xs font-semibold">
+              <span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] border border-blue-200">L: {{ tendik_l }}</span>
+              <span class="px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 text-[10px] border border-pink-200">P: {{ tendik_p }}</span>
             </div>
-            <a href="{% url 'admin_kelola_tendik' %}" class="text-[11px] text-teal-700 font-semibold hover:underline inline-flex items-center gap-1">
-              Buka Tendik &rarr;
+            <a href="{% url 'admin_kelola_tendik' %}" class="text-[10px] text-teal-700 font-semibold hover:underline">
+              Buka &rarr;
             </a>
           </div>
         </div>
@@ -171,16 +171,54 @@
           <div class="flex items-center justify-between mb-3">
             <div>
               <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Berita</p>
-              <h3 class="text-3xl font-extrabold text-slate-800 mt-1">{{ total_berita }}</h3>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_berita }}</h3>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center text-xl">
+            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center text-lg">
               <i class="bi bi-newspaper"></i>
             </div>
           </div>
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span class="text-[11px] text-slate-400">Publikasi Portal</span>
-            <a href="{% url 'admin_kelola_berita' %}" class="text-[11px] text-teal-700 font-semibold hover:underline inline-flex items-center gap-1">
-              Buka Berita &rarr;
+            <span class="text-[10px] text-slate-400">Publikasi</span>
+            <a href="{% url 'admin_kelola_berita' %}" class="text-[10px] text-teal-700 font-semibold hover:underline">
+              Buka &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- 4. TOTAL HERO BANNER -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Hero Banner</p>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_hero }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg">
+              <i class="bi bi-camera-reels"></i>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400">Video & Foto</span>
+            <a href="{% url 'admin_kelola_hero' %}" class="text-[10px] text-teal-700 font-semibold hover:underline">
+              Kelola &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- 5. TOTAL GALERI FOTO -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Foto Galeri</p>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_galeri }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+              <i class="bi bi-images"></i>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400">Dokumentasi</span>
+            <a href="{% url 'admin_kelola_galeri' %}" class="text-[10px] text-teal-700 font-semibold hover:underline">
+              Kelola &rarr;
             </a>
           </div>
         </div>

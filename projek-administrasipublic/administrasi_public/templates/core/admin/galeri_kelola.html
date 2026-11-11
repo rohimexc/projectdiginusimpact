@@ -1,0 +1,282 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Galeri - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons & SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- DataTables CSS & jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN UTAMA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">Manajemen Galeri Kegiatan</h1>
+      </div>
+      <a href="{% url 'home' %}#penelitian" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+        <i class="bi bi-box-arrow-up-right text-[10px]"></i> Lihat di Beranda
+      </a>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden w-full p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Daftar Foto Galeri</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Kelola foto kegiatan dokumentasi beserta nomor urut tampilannya di beranda</p>
+          </div>
+          <a href="{% url 'galeri_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-sm self-start sm:self-auto">
+            <i class="bi bi-plus-lg"></i> Tambah Foto Galeri
+          </a>
+        </div>
+
+        <div class="w-full overflow-x-auto">
+          <table id="tabelGaleri" class="display w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-100">
+              <tr>
+                <th class="py-3.5 px-6 w-24">Urutan</th>
+                <th class="py-3.5 px-6 w-36">Foto</th>
+                <th class="py-3.5 px-6">Keterangan / Judul</th>
+                <th class="py-3.5 px-6 text-center w-36">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {% for g in daftar_galeri %}
+                <tr class="hover:bg-slate-50/70 transition">
+                  <!-- Urutan -->
+                  <td class="py-4 px-6 align-middle">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-teal-50 border border-teal-200 text-brand-teal font-bold text-xs shadow-xs">
+                      {{ g.urutan }}
+                    </span>
+                  </td>
+
+                  <!-- Foto -->
+                  <td class="py-4 px-6 align-middle">
+                    <div class="w-24 h-16 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-xs relative group cursor-pointer"
+                         onclick="bukaPreviewFoto('{% if g.gambar %}{{ g.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ g.judul|default:'Foto Galeri'|escapejs }}', '{{ g.urutan }}')">
+                      {% if g.gambar %}
+                        <img src="{{ g.gambar.url }}" alt="{{ g.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-200">
+                      {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                          <i class="bi bi-image text-xl"></i>
+                        </div>
+                      {% endif %}
+                      <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition duration-150">
+                        <i class="bi bi-zoom-in text-base"></i>
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- Judul -->
+                  <td class="py-4 px-6 align-middle">
+                    <p class="font-semibold text-slate-800 text-xs">{{ g.judul|default:"Tanpa judul" }}</p>
+                    <span class="text-[10px] text-slate-400">Dibuat {{ g.created_at|date:"d M Y, H:i" }}</span>
+                  </td>
+
+                  <!-- Aksi: Preview, Edit, Hapus -->
+                  <td class="py-4 px-6 text-center align-middle">
+                    <div class="inline-flex items-center justify-center gap-1.5">
+                      <!-- Tombol Preview Modal -->
+                      <button type="button" 
+                              onclick="bukaPreviewFoto('{% if g.gambar %}{{ g.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ g.judul|default:'Foto Galeri'|escapejs }}', '{{ g.urutan }}')"
+                              title="Preview Foto" 
+                              class="p-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition border border-teal-200">
+                        <i class="bi bi-eye"></i>
+                      </button>
+
+                      <!-- Tombol Edit -->
+                      <a href="{% url 'galeri_update' g.pk %}" title="Edit Data Galeri" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                        <i class="bi bi-pencil-square"></i>
+                      </a>
+
+                      <!-- Tombol Hapus (Dialog Konfirmasi) -->
+                      <button type="button" 
+                              onclick="konfirmasiHapusGaleri('{% url 'galeri_delete' g.pk %}', '{{ g.judul|default:'Foto Galeri'|escapejs }}')" 
+                              title="Hapus Foto" 
+                              class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL PREVIEW FOTO GALERI -->
+  <div id="modalPreviewFoto" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      
+      <!-- Header Modal -->
+      <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span id="previewModalUrutan" class="px-2 py-0.5 rounded-md bg-teal-100 text-teal-800 text-[10px] font-bold">Urutan #1</span>
+          <h3 id="previewModalJudul" class="text-xs font-bold text-slate-800 truncate max-w-md">Preview Foto</h3>
+        </div>
+        <button type="button" onclick="tutupPreviewFoto()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i class="bi bi-x-lg text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Konten Foto -->
+      <div class="p-4 bg-slate-900 flex items-center justify-center min-h-[300px] max-h-[70vh]">
+        <img id="previewModalImg" src="" alt="Preview Foto Galeri" class="max-w-full max-h-[65vh] object-contain rounded-xl shadow-lg">
+      </div>
+
+      <!-- Footer Modal -->
+      <div class="px-6 py-3 bg-white border-t border-slate-100 flex items-center justify-between">
+        <span class="text-[11px] text-slate-400">Tampilan foto resolusi penuh</span>
+        <button type="button" onclick="tutupPreviewFoto()" class="px-4 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI HAPUS GALERI -->
+  <div id="modalHapusGaleri" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 md:p-8 text-center animate-in fade-in zoom-in duration-200">
+      
+      <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600 text-2xl shadow-inner">
+        <i class="bi bi-trash3-fill"></i>
+      </div>
+
+      <h3 class="text-lg font-bold text-slate-800 mb-2">Hapus Foto Galeri?</h3>
+      <p class="text-xs text-slate-500 leading-relaxed mb-6">
+        Apakah Anda yakin ingin menghapus foto <br>
+        <span id="targetJudulGaleri" class="font-bold text-slate-800">"Judul Foto"</span>? <br>
+        <span class="text-[11px] text-slate-400">Tindakan ini tidak dapat dibatalkan.</span>
+      </p>
+
+      <div class="flex items-center justify-center gap-3">
+        <button type="button" 
+                onclick="tutupModalHapusGaleri()"
+                class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+          Batal
+        </button>
+        <a id="btnKonfirmasiHapusGaleri" 
+           href="#" 
+           class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition shadow-sm">
+          Ya, Hapus
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    $.fn.dataTable.ext.errMode = 'none';
+
+    $(document).ready(function() {
+      $('#tabelGaleri').DataTable({
+        lengthMenu: [
+          [5, 10, 25, -1],
+          [5, 10, 25, "All"]
+        ],
+        pageLength: 10,
+        order: [[0, 'asc']],
+        language: {
+          search: "Cari Foto:",
+          lengthMenu: "Tampilkan _MENU_ data",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ foto",
+          infoEmpty: "Menampilkan 0 foto",
+          paginate: { next: "Berikutnya", previous: "Sebelumnya" },
+          emptyTable: "Belum ada foto kegiatan di galeri. Klik tombol 'Tambah Foto Galeri' untuk mengunggah."
+        }
+      });
+    });
+
+    // Preview Foto Modal
+    function bukaPreviewFoto(url, judul, urutan) {
+      document.getElementById('previewModalImg').src = url;
+      document.getElementById('previewModalJudul').innerText = judul || 'Foto Galeri Kegiatan';
+      document.getElementById('previewModalUrutan').innerText = 'Urutan #' + urutan;
+      document.getElementById('modalPreviewFoto').classList.remove('hidden');
+    }
+
+    function tutupPreviewFoto() {
+      document.getElementById('modalPreviewFoto').classList.add('hidden');
+      document.getElementById('previewModalImg').src = '';
+    }
+
+    document.getElementById('modalPreviewFoto').addEventListener('click', function(e) {
+      if (e.target === this) {
+        tutupPreviewFoto();
+      }
+    });
+
+    // Dialog Konfirmasi Hapus Galeri
+    function konfirmasiHapusGaleri(urlHapus, judul) {
+      document.getElementById('targetJudulGaleri').innerText = '"' + judul + '"';
+      document.getElementById('btnKonfirmasiHapusGaleri').setAttribute('href', urlHapus);
+      document.getElementById('modalHapusGaleri').classList.remove('hidden');
+    }
+
+    function tutupModalHapusGaleri() {
+      document.getElementById('modalHapusGaleri').classList.add('hidden');
+    }
+
+    document.getElementById('modalHapusGaleri').addEventListener('click', function(e) {
+      if (e.target === this) {
+        tutupModalHapusGaleri();
+      }
+    });
+
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'error' %}error{% else %}success{% endif %}",
+          title: "{{ message }}",
+          timer: 2500,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  </script>
+
+</body>
+</html>
+

@@ -90,11 +90,11 @@
           <p class="text-xs text-slate-500 mt-1.5">Silakan masuk menggunakan email / username dan kata sandi Anda.</p>
         </div>
 
-        <!-- Alert Error Message -->
+        <!-- Alert Message (Success / Info / Error) -->
         {% if messages %}
           {% for message in messages %}
-            <div class="mb-5 flex items-center gap-2.5 p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs animate-shake">
-              <i class="fas fa-circle-exclamation text-sm shrink-0"></i>
+            <div class="mb-5 flex items-center gap-2.5 p-3.5 {% if 'success' in message.tags %}bg-emerald-50 border-emerald-200 text-emerald-800{% elif 'info' in message.tags %}bg-teal-50 border-teal-200 text-teal-800{% else %}bg-rose-50 border-rose-200 text-rose-700 animate-shake{% endif %} border rounded-2xl text-xs">
+              <i class="fas {% if 'success' in message.tags %}fa-circle-check text-emerald-600{% elif 'info' in message.tags %}fa-circle-info text-teal-600{% else %}fa-circle-exclamation text-rose-500{% endif %} text-sm shrink-0"></i>
               <span>{{ message }}</span>
             </div>
           {% endfor %}

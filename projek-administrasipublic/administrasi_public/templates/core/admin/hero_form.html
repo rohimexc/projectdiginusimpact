@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN FORM DI DALAM DASHBOARD -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'admin_kelola_hero' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Manajemen Hero
+        </a>
+        <span class="text-slate-300">/</span>
+        <h1 class="text-base font-bold text-slate-800">{{ title }}</h1>
+      </div>
+      <a href="{% url 'home' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+        <i class="bi bi-box-arrow-up-right text-[10px]"></i> Website Publik
+      </a>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      <div class="max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">{{ title }}</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Atur link video YouTube/MP4 atau foto latar belakang bagian atas beranda</p>
+          </div>
+          <a href="{% url 'admin_kelola_hero' %}" class="text-slate-400 hover:text-slate-600 transition text-lg">
+            <i class="bi bi-x-lg"></i>
+          </a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-5 text-xs font-medium text-slate-700">
+          {% csrf_token %}
+
+          <!-- Field Status Aktif -->
+          <div class="p-4 bg-teal-50/60 border border-teal-100 rounded-xl flex items-center justify-between">
+            <div>
+              <span class="font-bold text-teal-900 block">Jadikan Hero Aktif di Beranda</span>
+              <p class="text-[11px] text-teal-700 mt-0.5">Jika dicentang, hero ini akan langsung tampil sebagai background utama beranda publik.</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              {{ form.is_active }}
+            </label>
+          </div>
+
+          <!-- Section Video Background -->
+          <div class="pt-2 border-t border-slate-100">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <i class="bi bi-play-circle text-brand-teal"></i> Pengaturan Video Background
+            </h3>
+
+            <!-- Link Video -->
+            <div class="mb-4">
+              <label class="block mb-1.5 font-semibold text-slate-700">
+                Link Video (YouTube atau URL MP4)
+              </label>
+              {{ form.link_video }}
+              <p class="text-[11px] text-slate-400 mt-1">
+                Contoh YouTube: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-teal-800 font-mono">https://www.youtube.com/watch?v=XXXXXX</code> atau link video langsung (.mp4).
+              </p>
+              {% for error in form.link_video.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Atau Upload File Video MP4 -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">
+                Atau Upload Berkas Video MP4 Langsung
+              </label>
+              {% if hero and hero.video_file %}
+                <div class="mb-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center gap-2 text-xs text-slate-600">
+                  <i class="bi bi-file-earmark-play-fill text-teal-600"></i>
+                  <span class="truncate">Berkas saat ini: {{ hero.video_file.name }}</span>
+                </div>
+              {% endif %}
+              {{ form.video_file }}
+              <p class="text-[11px] text-slate-400 mt-1">Opsional jika ingin mengunggah file video dari komputer (format MP4/WebM).</p>
+              {% for error in form.video_file.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Section Foto Background -->
+          <div class="pt-4 border-t border-slate-100">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <i class="bi bi-image text-brand-teal"></i> Pengaturan Foto Hero (Alternatif / Poster)
+            </h3>
+
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">
+                Foto Hero Background
+              </label>
+              {% if hero and hero.foto %}
+                <div class="mb-3 p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3">
+                  <img src="{{ hero.foto.url }}" alt="Preview Foto Hero" class="w-20 h-12 object-cover rounded-lg border border-slate-200">
+                  <div class="text-[11px] text-slate-500">
+                    <p class="font-semibold text-slate-700">Foto saat ini terpasang</p>
+                    <p class="text-[10px] text-slate-400">Pilih berkas baru jika ingin mengganti</p>
+                  </div>
+                </div>
+              {% endif %}
+              {{ form.foto }}
+              <p class="text-[11px] text-slate-400 mt-1">Digunakan sebagai gambar latar belakang jika video tidak diisi atau gagal diputar.</p>
+              {% for error in form.foto.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Section Teks Hero -->
+          <div class="pt-4 border-t border-slate-100">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <i class="bi bi-fonts text-brand-teal"></i> Teks & Keterangan Banner
+            </h3>
+
+            <!-- Subjudul -->
+            <div class="mb-4">
+              <label class="block mb-1.5 font-semibold text-slate-700">
+                Subjudul Hero
+              </label>
+              {{ form.subjudul }}
+              <p class="text-[11px] text-slate-400 mt-1">Teks kecil di atas judul utama (default: Welcome to).</p>
+              {% for error in form.subjudul.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Judul Utama -->
+            <div class="mb-4">
+              <label class="block mb-1.5 font-semibold text-slate-700">
+                Judul Utama Hero
+              </label>
+              {{ form.judul }}
+              <p class="text-[11px] text-slate-400 mt-1">Teks besar berwarna emas (default: Program Studi Administrasi Publik).</p>
+              {% for error in form.judul.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Deskripsi -->
+            <div>
+              <label class="block mb-1.5 font-semibold text-slate-700">
+                Deskripsi Singkat
+              </label>
+              {{ form.deskripsi }}
+              <p class="text-[11px] text-slate-400 mt-1">Teks pendukung di bawah judul utama hero.</p>
+              {% for error in form.deskripsi.errors %}
+                <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-5 border-t border-slate-100 mt-6">
+            <a href="{% url 'admin_kelola_hero' %}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              Batal
+            </a>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow transition">
+              Simpan Hero Banner
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+  </div>
+
+</body>
+</html>
+

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 # Import view dari core.views
 from core.views import (
@@ -46,6 +47,15 @@ from core.views import (
     akademik_detail,
     admin_kelola_akademik,
     admin_hapus_dokumen_akademik,
+    admin_kelola_galeri,
+    galeri_create,
+    galeri_update,
+    galeri_delete,
+    admin_kelola_hero,
+    hero_create,
+    hero_update,
+    hero_delete,
+    hero_toggle_status,
 )
 
 urlpatterns = [
@@ -73,6 +83,24 @@ urlpatterns = [
     path('register/', user_register, name='user_register'),
     path('login/', user_login, name='user_login'),
     path('logout/', user_logout, name='user_logout'),
+
+    # Password Reset
+    path('password-reset/', auth_views.PasswordResetView.as_view(
+        template_name='core/auth/password_reset.html',
+        email_template_name='core/auth/password_reset_email.html',
+        subject_template_name='core/auth/password_reset_subject.txt',
+        success_url='/password-reset/done/'
+    ), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='core/auth/password_reset_done.html'
+    ), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='core/auth/password_reset_confirm.html',
+        success_url='/password-reset-complete/'
+    ), name='password_reset_confirm'),
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='core/auth/password_reset_complete.html'
+    ), name='password_reset_complete'),
 
     # 5. Dashboard Admin
     path('dashboard/', admin_dashboard, name='admin_dashboard'),
@@ -104,6 +132,19 @@ urlpatterns = [
     path('dashboard/user/edit/<int:pk>/', user_update, name='user_update'),
     path('dashboard/user/hapus/<int:pk>/', user_delete, name='user_delete'),
     path('dashboard/user/toggle/<int:pk>/', user_toggle_status, name='user_toggle_status'),
+
+    # 7. Admin Kelola Hero (Video & Foto)
+    path('dashboard/hero/', admin_kelola_hero, name='admin_kelola_hero'),
+    path('dashboard/hero/tambah/', hero_create, name='hero_create'),
+    path('dashboard/hero/edit/<int:pk>/', hero_update, name='hero_update'),
+    path('dashboard/hero/hapus/<int:pk>/', hero_delete, name='hero_delete'),
+    path('dashboard/hero/toggle/<int:pk>/', hero_toggle_status, name='hero_toggle_status'),
+
+    # 8. Admin Kelola Galeri (Foto & Urutan)
+    path('dashboard/galeri/', admin_kelola_galeri, name='admin_kelola_galeri'),
+    path('dashboard/galeri/tambah/', galeri_create, name='galeri_create'),
+    path('dashboard/galeri/edit/<int:pk>/', galeri_update, name='galeri_update'),
+    path('dashboard/galeri/hapus/<int:pk>/', galeri_delete, name='galeri_delete'),
 ]
 
 # Static & Media URL
