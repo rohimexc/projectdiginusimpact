@@ -7,16 +7,32 @@
 <!-- Hero Section -->
 <header id="beranda"
     class="relative text-white py-24 sm:py-32 px-4 sm:px-6 text-center overflow-hidden min-h-[450px] sm:min-h-[500px] flex items-center justify-center">
-    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-        <source src="{% static 'video/banner.mp4' %}" type="video/mp4">
-    </video>
+    {% if hero and hero.video_url %}
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0" {% if hero.foto %}poster="{{ hero.foto.url }}"{% endif %}>
+            <source src="{{ hero.video_url }}" type="video/mp4">
+        </video>
+    {% elif hero and hero.foto %}
+        <img src="{{ hero.foto.url }}" alt="{{ hero.judul }}" class="absolute inset-0 w-full h-full object-cover z-0">
+    {% else %}
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="{% static 'video/banner.mp4' %}" type="video/mp4">
+        </video>
+    {% endif %}
     <div class="absolute inset-0 bg-black/60 z-10"></div>
     <div class="relative z-20 max-w-4xl mx-auto space-y-4 px-2">
-        <h3 class="text-sm sm:text-xl font-medium tracking-wide text-slate-200" data-aos="fade-down" data-aos-duration="700">Welcome to</h3>
+        <h3 class="text-sm sm:text-xl font-medium tracking-wide text-slate-200" data-aos="fade-down" data-aos-duration="700">
+            {{ hero.subjudul|default:"Welcome to" }}
+        </h3>
         <h1 class="text-2xl sm:text-5xl font-extrabold tracking-tight text-amber-400 drop-shadow-md leading-tight" data-aos="zoom-in" data-aos-delay="150" data-aos-duration="800">
-            {{ title|default:"Administrasi Publik" }}</h1>
+            {{ hero.judul|default:"Administrasi Publik" }}
+        </h1>
         <p class="text-slate-200 text-sm sm:text-lg font-medium leading-relaxed" data-aos="fade-up" data-aos-delay="250" data-aos-duration="800">
-            {{ faculty|default:"Fakultas IlmuSosial dan Ilmu Politik" }}<br>Universitas Tadulako</p>
+            {% if hero and hero.deskripsi %}
+                {{ hero.deskripsi|linebreaksbr }}
+            {% else %}
+                Fakultas Ilmu Sosial dan Ilmu Politik<br>Universitas Tadulako
+            {% endif %}
+        </p>
         <div class="pt-4" data-aos="fade-up" data-aos-delay="350" data-aos-duration="800">
             <a href="#sambutan"
                 class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-6 py-3 rounded-full shadow-lg transition text-xs sm:text-sm inline-block">Jelajahi

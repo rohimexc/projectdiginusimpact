@@ -2,7 +2,7 @@ from django import forms
 from .models import (
     Sambutan, Galeri, Berita, Dosen, TenagaPendidik, TentangPage,
     VisiMisiTujuan, MisiItem, TujuanItem,
-    AkademikPage, DokumenAkademik
+    AkademikPage, DokumenAkademik, Hero
 )
 from django.core.exceptions import ValidationError
 import re
@@ -388,3 +388,53 @@ class AdminUserUpdateForm(forms.ModelForm):
             user.save()
             user.groups.set(self.cleaned_data['groups'])
         return user
+
+class GaleriForm(forms.ModelForm):
+    class Meta:
+        model = Galeri
+        fields = ['foto', 'urutan', 'judul']
+        widgets = {
+            'foto': forms.FileInput(attrs={
+                'class': 'w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100',
+            }),
+            'urutan': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Nomor urutan tampil (misal: 1, 2, 3...)',
+                'min': 1
+            }),
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Keterangan atau caption foto (opsional)'
+            }),
+        }
+
+
+class HeroForm(forms.ModelForm):
+    class Meta:
+        model = Hero
+        fields = ['video_url', 'foto', 'judul', 'subjudul', 'deskripsi', 'is_active']
+        widgets = {
+            'video_url': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Tautan / link video (misal: /static/video/banner.mp4 atau https://...)'
+            }),
+            'foto': forms.FileInput(attrs={
+                'class': 'w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100',
+            }),
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Judul Hero (default: Administrasi Publik)'
+            }),
+            'subjudul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Subjudul / Teks Atas (default: Welcome to)'
+            }),
+            'deskripsi': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none resize-none',
+                'rows': 3,
+                'placeholder': 'Deskripsi Hero'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-teal-600 bg-white border-slate-300 rounded focus:ring-teal-500 cursor-pointer'
+            }),
+        }

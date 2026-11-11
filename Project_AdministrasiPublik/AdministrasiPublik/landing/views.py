@@ -10,14 +10,14 @@ from django.contrib.auth.models import User
 from .models import (
     Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog, Dosen,
     TentangPage, VisiMisiTujuan, MisiItem, TujuanItem,
-    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita
+    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita, Hero
 )
 from django.db.models import Q, F
 from .forms import (
     BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, 
     CustomAuthenticationForm, DosenForm, TentangPageForm,
     VisiMisiTujuanForm, MisiItemForm, TujuanItemForm,
-    AkademikPageForm, DokumenAkademikForm
+    AkademikPageForm, DokumenAkademikForm, GaleriForm, HeroForm
 )
 from django.core.paginator import Paginator
 from akun.views import catat_riwayat_login
@@ -26,7 +26,8 @@ from django.utils import timezone
 
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
-    galeri_list = Galeri.objects.all()
+    galeri_list = Galeri.objects.all().order_by('urutan', '-tanggal', '-id')
+    hero = Hero.objects.filter(is_active=True).first()
     akademik_list = Akademik.objects.all()
     staf_list = TenagaPendidik.objects.all()
     akreditasi = Akreditasi.objects.first()
@@ -36,6 +37,7 @@ def index(request):
     context = {
         'berita_list': berita_list,
         'galeri_list': galeri_list,
+        'hero': hero,
         'akademik_list': akademik_list,
         'staf_list': staf_list,
         'akreditasi': akreditasi,
@@ -1166,3 +1168,149 @@ def akademik_dokumen_delete(request, pk):
 
 
 
+
+
+# ==========================================
+# MANAJEMEN GALERI FOTO
+# ==========================================
+@login_required(login_url='landing:login')
+def dashboard_galeri(request):
+    galeri_list = Galeri.objects.all().order_by('urutan', '-tanggal', '-id')
+    form = GaleriForm()
+
+    # Modal hapus via ?hapus=ID
+    delete_galeri = None
+    hapus_id = request.GET.get('hapus')
+    if hapus_id:
+        delete_galeri = get_object_or_404(Galeri, id=hapus_id)
+
+    # Modal edit via ?edit=ID
+    edit_galeri = None
+    edit_form = None
+    edit_id = request.GET.get('edit')
+    if edit_id:
+        edit_galeri = get_object_or_404(Galeri, id=edit_id)
+        edit_form = GaleriForm(instance=edit_galeri)
+
+    context = {
+        'galeri_list': galeri_list,
+        'form': form,
+        'delete_galeri': delete_galeri,
+        'edit_galeri': edit_galeri,
+        'edit_form': edit_form,
+    }
+    return render(request, 'landing/admin/dashboard_galeri.html', context)
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def galeri_create(request):
+    form = GaleriForm(request.POST, request.FILES)
+    if form.is_valid():
+        galeri = form.save()
+        catat_log(request, request.user, f"Menambahkan Foto Galeri: '{galeri.judul or galeri.id}'", "Foto galeri baru ditambahkan")
+        messages.success(request, "Foto galeri berhasil ditambahkan!")
+    else:
+        messages.error(request, "Gagal menambahkan foto galeri. Periksa isian form.")
+    return redirect('landing:dashboard_galeri')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def galeri_update(request, pk):
+    galeri = get_object_or_404(Galeri, pk=pk)
+    form = GaleriForm(request.POST, request.FILES, instance=galeri)
+    if form.is_valid():
+        galeri = form.save()
+        catat_log(request, request.user, f"Memperbarui Foto Galeri: '{galeri.judul or galeri.id}'", "Foto galeri diperbarui")
+        messages.success(request, "Foto galeri berhasil diperbarui!")
+    else:
+        messages.error(request, "Gagal memperbarui foto galeri. Periksa isian form.")
+    return redirect('landing:dashboard_galeri')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def galeri_delete(request, pk):
+    galeri = get_object_or_404(Galeri, pk=pk)
+    judul = galeri.judul or f"Foto #{galeri.id}"
+    galeri.delete()
+    catat_log(request, request.user, f"Menghapus Foto Galeri: '{judul}'", "Foto galeri dihapus")
+    messages.success(request, f"Foto galeri '{judul}' berhasil dihapus!")
+    return redirect('landing:dashboard_galeri')
+
+
+# ==========================================
+# MANAJEMEN HERO BANNER
+# ==========================================
+@login_required(login_url='landing:login')
+def dashboard_hero(request):
+    hero_list = Hero.objects.all().order_by('-is_active', '-updated_at', '-id')
+    form = HeroForm()
+
+    # Modal hapus via ?hapus=ID
+    delete_hero = None
+    hapus_id = request.GET.get('hapus')
+    if hapus_id:
+        delete_hero = get_object_or_404(Hero, id=hapus_id)
+
+    # Modal edit via ?edit=ID
+    edit_hero = None
+    edit_form = None
+    edit_id = request.GET.get('edit')
+    if edit_id:
+        edit_hero = get_object_or_404(Hero, id=edit_id)
+        edit_form = HeroForm(instance=edit_hero)
+
+    context = {
+        'hero_list': hero_list,
+        'form': form,
+        'delete_hero': delete_hero,
+        'edit_hero': edit_hero,
+        'edit_form': edit_form,
+    }
+    return render(request, 'landing/admin/dashboard_hero.html', context)
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def hero_create(request):
+    form = HeroForm(request.POST, request.FILES)
+    if form.is_valid():
+        hero = form.save(commit=False)
+        if hero.is_active:
+            Hero.objects.filter(is_active=True).update(is_active=False)
+        hero.save()
+        catat_log(request, request.user, f"Menambahkan Banner Hero: '{hero.judul}'", "Hero banner baru ditambahkan")
+        messages.success(request, "Data Hero Banner berhasil ditambahkan!")
+    else:
+        messages.error(request, "Gagal menambahkan Hero. Periksa format isian form.")
+    return redirect('landing:dashboard_hero')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def hero_update(request, pk):
+    hero = get_object_or_404(Hero, pk=pk)
+    form = HeroForm(request.POST, request.FILES, instance=hero)
+    if form.is_valid():
+        hero_obj = form.save(commit=False)
+        if hero_obj.is_active:
+            Hero.objects.exclude(pk=hero.pk).filter(is_active=True).update(is_active=False)
+        hero_obj.save()
+        catat_log(request, request.user, f"Memperbarui Banner Hero: '{hero_obj.judul}'", "Hero banner diperbarui")
+        messages.success(request, "Data Hero Banner berhasil diperbarui!")
+    else:
+        messages.error(request, "Gagal memperbarui Hero. Periksa format isian form.")
+    return redirect('landing:dashboard_hero')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def hero_delete(request, pk):
+    hero = get_object_or_404(Hero, pk=pk)
+    judul = hero.judul or f"Hero #{hero.id}"
+    hero.delete()
+    catat_log(request, request.user, f"Menghapus Banner Hero: '{judul}'", "Hero banner dihapus")
+    messages.success(request, f"Hero banner '{judul}' berhasil dihapus!")
+    return redirect('landing:dashboard_hero')

@@ -83,12 +83,70 @@ class Sambutan(models.Model):
         return self.judul
 
 class Galeri(models.Model):
-    judul = models.CharField(max_length=200)
-    foto = models.ImageField(upload_to='images/galeri/')
+    judul = models.CharField(max_length=200, blank=True, null=True, verbose_name="Judul / Keterangan Foto")
+    foto = models.ImageField(upload_to='images/galeri/', verbose_name="Foto Galeri")
+    urutan = models.PositiveIntegerField(default=1, verbose_name="Urutan Tampil")
     tanggal = models.DateField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Galeri Foto"
+        verbose_name_plural = "Daftar Galeri Foto"
+        ordering = ['urutan', '-tanggal', '-id']
+
     def __str__(self):
-        return self.judul
+        return self.judul or f"Foto Galeri #{self.id}"
+
+
+class Hero(models.Model):
+    video_url = models.CharField(
+        max_length=500, 
+        blank=True, 
+        null=True, 
+        verbose_name="Link Video",
+        help_text="Link video mp4 / banner (misal: /static/video/banner.mp4 atau URL video)"
+    )
+    foto = models.ImageField(
+        upload_to='hero/', 
+        blank=True, 
+        null=True, 
+        verbose_name="Foto Hero",
+        help_text="Foto banner hero atau poster latar"
+    )
+    judul = models.CharField(
+        max_length=200, 
+        default="Administrasi Publik", 
+        blank=True, 
+        null=True, 
+        verbose_name="Judul Hero"
+    )
+    subjudul = models.CharField(
+        max_length=255, 
+        default="Welcome to", 
+        blank=True, 
+        null=True, 
+        verbose_name="Subjudul / Teks Atas"
+    )
+    deskripsi = models.TextField(
+        default="Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako", 
+        blank=True, 
+        null=True, 
+        verbose_name="Deskripsi Hero"
+    )
+    is_active = models.BooleanField(
+        default=True, 
+        verbose_name="Status Aktif",
+        help_text="Centang untuk menampilkan hero ini di halaman utama"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Hero Banner"
+        verbose_name_plural = "Daftar Hero Banner"
+        ordering = ['-is_active', '-updated_at', '-id']
+
+    def __str__(self):
+        return f"Hero: {self.judul or self.video_url or self.id}"
 
 class Berita(models.Model):
     judul = models.CharField(max_length=200)

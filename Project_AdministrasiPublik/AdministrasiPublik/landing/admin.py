@@ -1,9 +1,11 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
 from .models import (
     Sambutan, Galeri, Berita, Akademik, 
     TenagaPendidik, Dosen, Akreditasi, Kontak, TentangPage,
     VisiMisiTujuan, MisiItem, TujuanItem,
-    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita
+    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita,
+    Hero
 )
 
 
@@ -51,10 +53,51 @@ class SambutanAdmin(admin.ModelAdmin):
 
 @admin.register(Galeri)
 class GaleriAdmin(admin.ModelAdmin):
-    list_display = ('judul', 'tanggal')
+    list_display = ('foto_preview', 'urutan', 'aksi', 'judul', 'tanggal')
+    list_editable = ('urutan',)
     list_filter = ('tanggal',)
     search_fields = ('judul',)
-    ordering = ('-tanggal',)
+    ordering = ('urutan', '-tanggal', '-id')
+
+    def foto_preview(self, obj):
+        if obj.foto:
+            return mark_safe(f'<a href="{obj.foto.url}" target="_blank"><img src="{obj.foto.url}" width="60" height="45" style="object-fit:cover; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Klik untuk preview" /></a>')
+        return "-"
+    foto_preview.short_description = "Foto"
+
+    def aksi(self, obj):
+        from django.urls import reverse
+        change_url = reverse('admin:landing_galeri_change', args=[obj.id])
+        delete_url = reverse('admin:landing_galeri_delete', args=[obj.id])
+        preview_tag = f'<a href="{obj.foto.url}" target="_blank" style="margin-right:8px; font-weight:600; color:#0f6b6b;" title="Preview">Preview</a>' if obj.foto else ''
+        return mark_safe(f'{preview_tag}<a href="{change_url}" style="margin-right:8px; font-weight:600; color:#d97706;">Edit</a><a href="{delete_url}" style="font-weight:600; color:#dc2626;">Hapus</a>')
+    aksi.short_description = "Aksi"
+
+
+@admin.register(Hero)
+class HeroAdmin(admin.ModelAdmin):
+    list_display = ('video_url_display', 'foto_preview', 'aksi', 'judul', 'is_active')
+    list_editable = ('is_active',)
+    search_fields = ('judul', 'subjudul', 'video_url')
+    list_filter = ('is_active', 'updated_at')
+
+    def video_url_display(self, obj):
+        return obj.video_url or "-"
+    video_url_display.short_description = "Link Video"
+
+    def foto_preview(self, obj):
+        if obj.foto:
+            return mark_safe(f'<a href="{obj.foto.url}" target="_blank"><img src="{obj.foto.url}" width="70" height="40" style="object-fit:cover; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Klik untuk preview" /></a>')
+        return "-"
+    foto_preview.short_description = "Foto"
+
+    def aksi(self, obj):
+        from django.urls import reverse
+        change_url = reverse('admin:landing_hero_change', args=[obj.id])
+        delete_url = reverse('admin:landing_hero_delete', args=[obj.id])
+        preview_url = obj.video_url or (obj.foto.url if obj.foto else '#')
+        return mark_safe(f'<a href="{preview_url}" target="_blank" style="margin-right:8px; font-weight:600; color:#0f6b6b;">Preview</a><a href="{change_url}" style="margin-right:8px; font-weight:600; color:#d97706;">Edit</a><a href="{delete_url}" style="font-weight:600; color:#dc2626;">Hapus</a>')
+    aksi.short_description = "Aksi"
 
 @admin.register(Berita)
 class BeritaAdmin(admin.ModelAdmin):

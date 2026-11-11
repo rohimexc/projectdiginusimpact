@@ -42,6 +42,18 @@ urlpatterns = [
     path('admin-portal/dosen/ubah/<int:pk>/', views.dosen_update, name='dosen_update'),
     path('admin-portal/dosen/hapus/<int:pk>/', views.dosen_delete, name='dosen_delete'),
 
+    # Rute Manajemen Galeri Foto
+    path('admin-portal/galeri/', views.dashboard_galeri, name='dashboard_galeri'),
+    path('admin-portal/galeri/tambah/', views.galeri_create, name='galeri_create'),
+    path('admin-portal/galeri/<int:pk>/ubah/', views.galeri_update, name='galeri_update'),
+    path('admin-portal/galeri/<int:pk>/hapus/', views.galeri_delete, name='galeri_delete'),
+
+    # Rute Manajemen Hero Banner
+    path('admin-portal/hero/', views.dashboard_hero, name='dashboard_hero'),
+    path('admin-portal/hero/tambah/', views.hero_create, name='hero_create'),
+    path('admin-portal/hero/<int:pk>/ubah/', views.hero_update, name='hero_update'),
+    path('admin-portal/hero/<int:pk>/hapus/', views.hero_delete, name='hero_delete'),
+
 # --- URL PASSWORD RESET ---
 path('admin-portal/password-reset/', 
          auth_views.PasswordResetView.as_view(
