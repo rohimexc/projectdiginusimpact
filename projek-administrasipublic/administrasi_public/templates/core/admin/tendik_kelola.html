@@ -60,7 +60,7 @@
             <h2 class="text-lg font-bold text-slate-800">Daftar Tenaga Kependidikan (Tendik)</h2>
             <p class="text-xs text-slate-400 mt-0.5">Kelola data staf administrasi dan tata usaha program studi</p>
           </div>
-          <a href="{% url 'tenaga_kependidikan_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-sm self-start sm:self-auto">
+          <a href="{% url 'tendik_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-sm self-start sm:self-auto">
             <i class="bi bi-plus-lg"></i> Tambah Tendik Baru
           </a>
         </div>
@@ -120,12 +120,12 @@
                         <i class="bi bi-eye"></i>
                       </button>
                       <!-- Edit -->
-                      <a href="{% url 'tenaga_kependidikan_update' t.pk %}" title="Edit Data Tendik" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                      <a href="{% url 'tendik_update' t.pk %}" title="Edit Data Tendik" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
                         <i class="bi bi-pencil-square"></i>
                       </a>
                       <!-- Hapus -->
                       <button type="button" 
-                              onclick="konfirmasiHapusTendik('{% url 'tenaga_kependidikan_delete' t.pk %}', '{{ t.nama|escapejs }}')"
+                              onclick="konfirmasiHapusTendik('{% url 'tendik_delete' t.pk %}', '{{ t.nama|escapejs }}')"
                               title="Hapus Data Tendik" 
                               class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
                         <i class="bi bi-trash"></i>

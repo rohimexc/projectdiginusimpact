@@ -7,6 +7,7 @@ from django.db.models import Q, F
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 from .models import (
     Sambutan, Galeri, Hero, Berita, TenagaPendidik, AuditLog, 
@@ -17,6 +18,7 @@ from .forms import (
     BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, 
     HalamanTentangForm, HalamanAkademikForm, GaleriForm, HeroForm
 )
+from .validators import validate_image_file, validate_video_file, validate_document_file
 
 User = get_user_model()
 
@@ -29,6 +31,19 @@ def catat_audit(request, action, description):
         description=description,
         ip_address=ip
     )
+
+
+def _validate_request_files(request, field_validators):
+    """Validasi file unggahan pada layer view sesuai jenis dan batas ukurannya."""
+    errors = []
+    for field_name, validator in field_validators.items():
+        uploaded = request.FILES.get(field_name)
+        if uploaded:
+            try:
+                validator(uploaded)
+            except ValidationError as exc:
+                errors.extend(exc.messages)
+    return errors
 
 # ==========================================
 # 1. LANDING PAGE & BERITA PUBLIK
@@ -428,7 +443,7 @@ def admin_dashboard(request):
 
     total_user = User.objects.count()
     total_galeri = Galeri.objects.count()
-    total_hero = Hero.objects.count()
+    hero_obj = Hero.objects.filter(is_active=True).first() or Hero.objects.first()
     logs = AuditLog.objects.all().order_by('-timestamp')
 
     context = {
@@ -441,7 +456,7 @@ def admin_dashboard(request):
         'tendik_p': tendik_p,
         'total_user': total_user,
         'total_galeri': total_galeri,
-        'total_hero': total_hero,
+        'hero_obj': hero_obj,
         'logs': logs,
     }
     return render(request, 'core/admin/dashboard.html', context)
@@ -527,8 +542,11 @@ def user_toggle_status(request, pk):
 @login_required(login_url='user_login')
 def berita_create(request):
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'gambar': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = BeritaForm(request.POST, request.FILES)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             b = form.save()
             catat_audit(request, 'Tambah Berita', f"Menambahkan berita: {b.judul}")
             messages.success(request, 'Berita berhasil ditambahkan!')
@@ -542,8 +560,11 @@ def berita_create(request):
 def berita_update(request, pk):
     berita = get_object_or_404(Berita, pk=pk)
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'gambar': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = BeritaForm(request.POST, request.FILES, instance=berita)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             form.save()
             catat_audit(request, 'Edit Berita', f"Memperbarui berita: {berita.judul}")
             messages.success(request, 'Berita berhasil diperbarui!')
@@ -570,8 +591,11 @@ def berita_delete(request, pk):
 @login_required(login_url='user_login')
 def dosen_create(request):
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'foto': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = TenagaPendidikForm(request.POST, request.FILES)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             pegawai = form.save(commit=False)
             pegawai.jenis = 'DOSEN'
             pegawai.save()
@@ -587,8 +611,11 @@ def dosen_create(request):
 def dosen_update(request, pk):
     dosen = get_object_or_404(TenagaPendidik, pk=pk, jenis='DOSEN')
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'foto': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = TenagaPendidikForm(request.POST, request.FILES, instance=dosen)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             form.save()
             catat_audit(request, 'Edit Dosen', f"Memperbarui Dosen: {dosen.nama}")
             messages.success(request, f"Data dosen {dosen.nama} berhasil diperbarui!")
@@ -615,8 +642,11 @@ def dosen_delete(request, pk):
 @login_required(login_url='user_login')
 def tendik_create(request):
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'foto': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = TenagaPendidikForm(request.POST, request.FILES)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             pegawai = form.save(commit=False)
             pegawai.jenis = 'TENDIK'
             pegawai.save()
@@ -632,8 +662,11 @@ def tendik_create(request):
 def tendik_update(request, pk):
     tendik = get_object_or_404(TenagaPendidik, pk=pk, jenis='TENDIK')
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'foto': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = TenagaPendidikForm(request.POST, request.FILES, instance=tendik)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             form.save()
             catat_audit(request, 'Edit Tendik', f"Memperbarui Tendik: {tendik.nama}")
             messages.success(request, f"Data tendik {tendik.nama} berhasil diperbarui!")
@@ -758,8 +791,11 @@ def admin_kelola_sambutan(request):
         )
 
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'foto': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = SambutanForm(request.POST, request.FILES, instance=sambutan)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             form.save()
             catat_audit(request, 'Edit Sambutan', 'Memperbarui sambutan koordinator prodi')
             messages.success(request, 'Sambutan Koordinator Prodi berhasil diperbarui!')
@@ -798,13 +834,20 @@ def admin_kelola_tentang(request, kategori='profil'):
     )
 
     if request.method == 'POST':
-        if request.POST.get('hapus_gambar') == '1' and halaman.gambar:
+        upload_errors = _validate_request_files(
+            request,
+            {'gambar': validate_image_file, 'file_utama': validate_document_file},
+        )
+        for err in upload_errors:
+            messages.error(request, err)
+
+        if not upload_errors and request.POST.get('hapus_gambar') == '1' and halaman.gambar and 'gambar' not in request.FILES:
             halaman.gambar.delete(save=False)
             halaman.gambar = None
             halaman.save()
 
         form = HalamanTentangForm(request.POST, request.FILES, instance=halaman)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             form.save()
             catat_audit(request, 'Edit Halaman Tentang', f"Memperbarui konten {halaman.get_kategori_display()}")
             messages.success(request, f"{halaman.get_kategori_display()} berhasil diperbarui!")
@@ -958,21 +1001,31 @@ def admin_kelola_akademik(request, kategori='siga8'):
             file_doc = request.FILES.get('file_dokumen')
             ket_doc = request.POST.get('keterangan_dokumen', '').strip()
             if judul_doc and file_doc:
-                DokumenAkademik.objects.create(
-                    halaman=halaman,
-                    judul=judul_doc,
-                    file=file_doc,
-                    keterangan=ket_doc
-                )
-                catat_audit(request, 'Tambah Dokumen Akademik', f"Menambahkan berkas {judul_doc} ke {halaman.get_kategori_display()}")
-                messages.success(request, f"Berkas '{judul_doc}' berhasil diunggah!")
+                upload_errors = _validate_request_files(request, {'file_dokumen': validate_document_file})
+                if upload_errors:
+                    for err in upload_errors:
+                        messages.error(request, err)
+                else:
+                    doc = DokumenAkademik(
+                        halaman=halaman,
+                        judul=judul_doc,
+                        file=file_doc,
+                        keterangan=ket_doc
+                    )
+                    doc.full_clean()
+                    doc.save()
+                    catat_audit(request, 'Tambah Dokumen Akademik', f"Menambahkan berkas {judul_doc} ke {halaman.get_kategori_display()}")
+                    messages.success(request, f"Berkas '{judul_doc}' berhasil diunggah!")
             else:
                 messages.error(request, 'Judul dokumen dan file wajib diisi!')
             return redirect('admin_kelola_akademik_kategori', kategori=kategori)
 
         # Update form utama HalamanAkademik
+        upload_errors = _validate_request_files(request, {'file_utama': validate_document_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = HalamanAkademikForm(request.POST, request.FILES, instance=halaman)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             form.save()
             catat_audit(request, 'Edit Halaman Akademik', f"Memperbarui konten {halaman.get_kategori_display()}")
             messages.success(request, f"{halaman.get_kategori_display()} berhasil diperbarui!")
@@ -1031,8 +1084,11 @@ def galeri_create(request):
         return redirect('user_login')
 
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'gambar': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = GaleriForm(request.POST, request.FILES)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             galeri = form.save()
             catat_audit(request, 'Tambah Galeri', f"Menambahkan Foto Galeri: {galeri.judul or 'Foto Galeri'}")
             messages.success(request, 'Foto kegiatan berhasil ditambahkan ke galeri!')
@@ -1057,8 +1113,11 @@ def galeri_update(request, pk):
 
     galeri = get_object_or_404(Galeri, pk=pk)
     if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'gambar': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
         form = GaleriForm(request.POST, request.FILES, instance=galeri)
-        if form.is_valid():
+        if not upload_errors and form.is_valid():
             form.save()
             catat_audit(request, 'Edit Galeri', f"Memperbarui Foto Galeri #{galeri.id}")
             messages.success(request, 'Data galeri foto berhasil diperbarui!')
@@ -1089,7 +1148,7 @@ def galeri_delete(request, pk):
 
 
 # ==========================================
-# 12. MANAJEMEN HERO (VIDEO & FOTO)
+# 12. MANAJEMEN HERO BANNER (TUNGGAL)
 # ==========================================
 
 @login_required(login_url='user_login')
@@ -1098,53 +1157,43 @@ def admin_kelola_hero(request):
     if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
         logout(request)
         return redirect('user_login')
-    daftar_hero = Hero.objects.all().order_by('-is_active', '-created_at')
-    return render(request, 'core/admin/hero_kelola.html', {'daftar_hero': daftar_hero})
 
-
-@login_required(login_url='user_login')
-def hero_create(request):
-    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
-        logout(request)
-        return redirect('user_login')
+    hero = Hero.objects.filter(is_active=True).first() or Hero.objects.first()
+    if not hero:
+        hero = Hero.objects.create(
+            subjudul='Program Studi Administrasi Publik',
+            judul='Mewujudkan Tata Kelola Publik yang Inovatif & Berintegritas',
+            is_active=True,
+        )
 
     if request.method == 'POST':
-        form = HeroForm(request.POST, request.FILES)
-        if form.is_valid():
-            hero = form.save(commit=False)
-            if hero.is_active:
-                Hero.objects.filter(is_active=True).update(is_active=False)
-            hero.save()
-            catat_audit(request, 'Tambah Hero', f"Menambahkan Hero Banner: {hero.judul}")
-            messages.success(request, 'Data Hero berhasil ditambahkan!')
-            return redirect('admin_kelola_hero')
-    else:
-        form = HeroForm(initial={'is_active': True})
+        upload_errors = _validate_request_files(
+            request,
+            {'video_file': validate_video_file, 'foto': validate_image_file},
+        )
+        for err in upload_errors:
+            messages.error(request, err)
 
-    return render(request, 'core/admin/hero_form.html', {
-        'form': form,
-        'title': 'Tambah Hero Banner Baru'
-    })
-
-
-@login_required(login_url='user_login')
-def hero_update(request, pk):
-    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
-        logout(request)
-        return redirect('user_login')
-
-    hero = get_object_or_404(Hero, pk=pk)
-    if request.method == 'POST':
         form = HeroForm(request.POST, request.FILES, instance=hero)
-        if form.is_valid():
-            is_act = form.cleaned_data.get('is_active')
-            if is_act:
-                Hero.objects.filter(is_active=True).exclude(pk=hero.pk).update(is_active=False)
-            form.save()
-            catat_audit(request, 'Edit Hero', f"Memperbarui Hero: {hero.judul}")
-            messages.success(request, 'Data Hero berhasil diperbarui!')
+        if not upload_errors and form.is_valid():
+            hero_obj = form.save(commit=False)
+
+            if request.POST.get('hapus_video') == '1' and 'video_file' not in request.FILES:
+                if hero_obj.video_file:
+                    hero_obj.video_file.delete(save=False)
+                hero_obj.video_file = None
+
+            if request.POST.get('hapus_foto') == '1' and 'foto' not in request.FILES:
+                if hero_obj.foto:
+                    hero_obj.foto.delete(save=False)
+                hero_obj.foto = None
+
+            hero_obj.save()
+            if hero_obj.is_active:
+                Hero.objects.filter(is_active=True).exclude(pk=hero_obj.pk).update(is_active=False)
+
+            catat_audit(request, 'Edit Hero Banner', f"Memperbarui Hero Banner: {hero_obj.judul or 'Hero'}")
+            messages.success(request, 'Hero Banner berhasil diperbarui!')
             return redirect('admin_kelola_hero')
     else:
         form = HeroForm(instance=hero)
@@ -1152,42 +1201,5 @@ def hero_update(request, pk):
     return render(request, 'core/admin/hero_form.html', {
         'form': form,
         'hero': hero,
-        'title': f'Edit Hero Banner: {hero.judul or "Hero"}'
+        'title': 'Manajemen Hero Banner',
     })
-
-
-@login_required(login_url='user_login')
-def hero_delete(request, pk):
-    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
-        logout(request)
-        return redirect('user_login')
-
-    hero = get_object_or_404(Hero, pk=pk)
-    judul = hero.judul or f"Hero #{hero.id}"
-    hero.delete()
-    catat_audit(request, 'Hapus Hero', f"Menghapus Hero: {judul}")
-    messages.success(request, 'Data Hero berhasil dihapus!')
-    return redirect('admin_kelola_hero')
-
-
-@login_required(login_url='user_login')
-def hero_toggle_status(request, pk):
-    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
-    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
-        logout(request)
-        return redirect('user_login')
-
-    hero = get_object_or_404(Hero, pk=pk)
-    if not hero.is_active:
-        Hero.objects.filter(is_active=True).update(is_active=False)
-        hero.is_active = True
-        hero.save()
-        messages.success(request, f'Hero "{hero.judul}" diaktifkan sebagai background beranda!')
-    else:
-        hero.is_active = False
-        hero.save()
-        messages.info(request, f'Hero "{hero.judul}" dinonaktifkan. Beranda akan menggunakan video default.')
-
-    catat_audit(request, 'Toggle Status Hero', f"Mengubah status Hero #{hero.id} menjadi {'Aktif' if hero.is_active else 'Nonaktif'}")
-    return redirect('admin_kelola_hero')

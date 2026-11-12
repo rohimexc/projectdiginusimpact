@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
@@ -52,14 +52,11 @@ from core.views import (
     galeri_update,
     galeri_delete,
     admin_kelola_hero,
-    hero_create,
-    hero_update,
-    hero_delete,
-    hero_toggle_status,
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ckeditor5/', include('django_ckeditor_5.urls')),
 
     # 1. Halaman Publik Utama
     path('', home, name='home'),
@@ -133,12 +130,8 @@ urlpatterns = [
     path('dashboard/user/hapus/<int:pk>/', user_delete, name='user_delete'),
     path('dashboard/user/toggle/<int:pk>/', user_toggle_status, name='user_toggle_status'),
 
-    # 7. Admin Kelola Hero (Video & Foto)
+    # 7. Admin Kelola Hero (Tunggal)
     path('dashboard/hero/', admin_kelola_hero, name='admin_kelola_hero'),
-    path('dashboard/hero/tambah/', hero_create, name='hero_create'),
-    path('dashboard/hero/edit/<int:pk>/', hero_update, name='hero_update'),
-    path('dashboard/hero/hapus/<int:pk>/', hero_delete, name='hero_delete'),
-    path('dashboard/hero/toggle/<int:pk>/', hero_toggle_status, name='hero_toggle_status'),
 
     # 8. Admin Kelola Galeri (Foto & Urutan)
     path('dashboard/galeri/', admin_kelola_galeri, name='admin_kelola_galeri'),

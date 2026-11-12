@@ -2,6 +2,12 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django_ckeditor_5.fields import CKEditor5Field  # type: ignore
+from .validators import (
+    validate_image_file,
+    validate_video_file,
+    validate_pdf_file,
+    validate_document_file,
+)
 
 
 # 1. Model Sambutan Koordinator Prodi (Menggunakan CKEditor 5)
@@ -9,7 +15,13 @@ class Sambutan(models.Model):
     judul = models.CharField(max_length=200, default="Sambutan Koordinator Prodi")
     isi = CKEditor5Field('Isi Sambutan', config_name='extends')
     nama_author = models.CharField(max_length=150, verbose_name="Nama Pimpinan / Koordinator")
-    foto = models.ImageField(upload_to='sambutan/', blank=True, null=True, help_text="Upload foto resmi koordinator prodi")
+    foto = models.ImageField(
+        upload_to='sambutan/',
+        blank=True,
+        null=True,
+        validators=[validate_image_file],
+        help_text="Upload foto resmi koordinator prodi (JPG, PNG, WEBP maks 10 MB)"
+    )
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Terakhir Diperbarui")
 
     class Meta:
@@ -23,7 +35,13 @@ class Sambutan(models.Model):
 # 2. Model Galeri Kegiatan
 class Galeri(models.Model):
     judul = models.CharField(max_length=200, blank=True, default="Dokumentasi Kegiatan", help_text="Keterangan / Judul foto kegiatan")
-    gambar = models.ImageField(upload_to='galeri/', blank=True, null=True, help_text="Upload foto dokumentasi kegiatan")
+    gambar = models.ImageField(
+        upload_to='galeri/',
+        blank=True,
+        null=True,
+        validators=[validate_image_file],
+        help_text="Upload foto dokumentasi kegiatan (JPG, PNG, WEBP maks 10 MB)"
+    )
     urutan = models.PositiveIntegerField(default=1, help_text="Urutan posisi foto di galeri beranda (contoh: 1, 2, 3...)")
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -42,8 +60,20 @@ class Hero(models.Model):
     subjudul = models.CharField(max_length=255, blank=True, default="Welcome to", help_text="Subjudul kecil di atas judul utama")
     deskripsi = models.TextField(blank=True, default="Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako", help_text="Deskripsi singkat hero")
     link_video = models.CharField(max_length=500, blank=True, null=True, help_text="Link video YouTube atau URL file MP4")
-    video_file = models.FileField(upload_to='hero/video/', blank=True, null=True, help_text="Upload file video MP4 dari komputer (opsional)")
-    foto = models.ImageField(upload_to='hero/foto/', blank=True, null=True, help_text="Foto latar belakang Hero jika tanpa video atau poster")
+    video_file = models.FileField(
+        upload_to='hero/video/',
+        blank=True,
+        null=True,
+        validators=[validate_video_file],
+        help_text="Upload file video (MP4/WEBM/OGG, maksimal 100 MB)"
+    )
+    foto = models.ImageField(
+        upload_to='hero/foto/',
+        blank=True,
+        null=True,
+        validators=[validate_image_file],
+        help_text="Upload Gambar Hero (JPG, PNG, WEBP maks 10 MB)"
+    )
     is_active = models.BooleanField(default=True, help_text="Aktifkan sebagai tampilan hero utama di Beranda")
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -57,15 +87,24 @@ class Hero(models.Model):
 
     @property
     def youtube_embed_url(self):
-        """Mengonversi link YouTube biasa ke URL embed yang kompatibel autoplay background"""
+        """Mengonversi link YouTube (watch, youtu.be, shorts, embed, live) ke URL embed autoplay background"""
         if not self.link_video:
             return ""
         url = self.link_video.strip()
+        lower_url = url.lower()
+        if not any(domain in lower_url for domain in ('youtube.com', 'youtu.be', 'youtube-nocookie.com')):
+            return ""
         import re
-        match = re.search(r'(?:v=|\/|youtu\.be\/)([0-9A-Za-z_-]{11})', url)
+        match = re.search(
+            r'(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([0-9A-Za-z_-]{11})',
+            url
+        )
         if match:
             video_id = match.group(1)
-            return f"https://www.youtube.com/embed/{video_id}?autoplay=1&mute=1&loop=1&playlist={video_id}&controls=0&showinfo=0&rel=0&iv_load_policy=3"
+            return (
+                f"https://www.youtube.com/embed/{video_id}"
+                f"?autoplay=1&mute=1&loop=1&playlist={video_id}&controls=0&rel=0&playsinline=1&iv_load_policy=3"
+            )
         return ""
 
 
@@ -74,7 +113,13 @@ class Berita(models.Model):
     judul = models.CharField(max_length=255)
     ringkasan = models.TextField(blank=True, null=True)
     konten = CKEditor5Field('Konten Berita', config_name='extends')
-    gambar = models.ImageField(upload_to='berita/', blank=True, null=True, help_text="Upload foto/gambar berita")
+    gambar = models.ImageField(
+        upload_to='berita/',
+        blank=True,
+        null=True,
+        validators=[validate_image_file],
+        help_text="Upload foto/gambar berita (JPG, PNG, WEBP maks 10 MB)"
+    )
     views = models.PositiveIntegerField(default=0, verbose_name="Jumlah Dilihat")
     likes = models.PositiveIntegerField(default=0, verbose_name="Jumlah Suka")
     shares = models.PositiveIntegerField(default=0, verbose_name="Jumlah Dibagikan")
@@ -152,7 +197,13 @@ class TenagaPendidik(models.Model):
     jenis_kelamin = models.CharField(max_length=1, choices=GENDER_CHOICES, default='L', verbose_name="Jenis Kelamin")
     bidang_ilmu = models.CharField(max_length=200, verbose_name="Bidang Ilmu / Jabatan")
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='DOSEN TETAP')
-    foto = models.ImageField(upload_to='pegawai/', blank=True, null=True, help_text="Upload foto rasio 1:1")
+    foto = models.ImageField(
+        upload_to='pegawai/',
+        blank=True,
+        null=True,
+        validators=[validate_image_file],
+        help_text="Upload foto rasio 1:1 (JPG, PNG, WEBP maks 10 MB)"
+    )
 
     # Identitas Kepegawaian (blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
@@ -212,15 +263,17 @@ class HalamanTentang(models.Model):
         upload_to='tentang/',
         blank=True,
         null=True,
+        validators=[validate_image_file],
         verbose_name="Bagan / Gambar",
-        help_text="Upload gambar/bagan (JPG, PNG, atau WEBP)"
+        help_text="Upload gambar/bagan (JPG, PNG, atau WEBP maks 10 MB)"
     )
     file_utama = models.FileField(
         upload_to='tentang/berkas/',
         blank=True,
         null=True,
+        validators=[validate_pdf_file],
         verbose_name="Berkas / Dokumen PDF",
-        help_text="Upload dokumen PDF resmi (misal: Sertifikat Akreditasi)"
+        help_text="Upload dokumen PDF resmi (maks 20 MB)"
     )
     isi = CKEditor5Field('Isi Konten / Keterangan', config_name='extends', blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -325,7 +378,13 @@ class HalamanAkademik(models.Model):
     subjudul = models.CharField(max_length=255, blank=True, null=True, verbose_name="Subjudul / Ringkasan")
     isi = CKEditor5Field('Isi Konten Akademik', config_name='extends')
     link_eksternal = models.URLField(blank=True, null=True, verbose_name="Tautan Eksternal / Portal")
-    file_utama = models.FileField(upload_to='akademik/dokumen/', blank=True, null=True, verbose_name="Dokumen Utama (PDF/Excel)")
+    file_utama = models.FileField(
+        upload_to='akademik/dokumen/',
+        blank=True,
+        null=True,
+        validators=[validate_document_file],
+        verbose_name="Dokumen Utama (PDF/Word/Excel/PPT)"
+    )
     nama_file_utama = models.CharField(max_length=150, blank=True, null=True, verbose_name="Label Tombol Unduh", help_text="Contoh: Unduh Kurikulum Lengkap (PDF)")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Terakhir Diperbarui")
 
@@ -342,7 +401,11 @@ class HalamanAkademik(models.Model):
 class DokumenAkademik(models.Model):
     halaman = models.ForeignKey(HalamanAkademik, on_delete=models.CASCADE, related_name='dokumen_list', verbose_name="Halaman Terkait")
     judul = models.CharField(max_length=255, verbose_name="Nama Dokumen / Berkas")
-    file = models.FileField(upload_to='akademik/berkas/', verbose_name="Upload File (PDF/Doc/Xls)")
+    file = models.FileField(
+        upload_to='akademik/berkas/',
+        validators=[validate_document_file],
+        verbose_name="Upload File (PDF/Doc/Xls/Ppt)"
+    )
     keterangan = models.CharField(max_length=255, blank=True, null=True, verbose_name="Keterangan Singkat")
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Unggah")
 

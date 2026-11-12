@@ -162,28 +162,32 @@
   </nav>
 
   <!-- Hero Section dengan Background Video & Foto Dinamis -->
-  <section class="relative w-full h-screen overflow-hidden flex items-center justify-center text-center pt-[70px]" id="hero">
+  <section class="relative w-full h-screen overflow-hidden flex items-center justify-center text-center pt-[70px] bg-slate-950" id="hero">
     {% if hero %}
+      {% if hero.foto %}
+        <img src="{{ hero.foto.url }}" alt="{{ hero.judul }}" class="absolute inset-0 w-full h-full object-cover z-0">
+      {% endif %}
+
       {% if hero.video_file %}
-        <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
+        <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline {% if hero.foto %}poster="{{ hero.foto.url }}"{% endif %}>
           <source src="{{ hero.video_file.url }}" type="video/mp4">
         </video>
       {% elif hero.youtube_embed_url %}
         <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-          <iframe class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vw] h-[140vh] min-w-full min-h-full object-cover scale-125"
-                  src="{{ hero.youtube_embed_url }}" 
-                  frameborder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          <iframe class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.77vh] min-w-full h-[56.25vw] min-h-full pointer-events-none"
+                  src="{{ hero.youtube_embed_url }}"
+                  title="{{ hero.judul|default:'Hero Video' }}"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
                   allowfullscreen>
           </iframe>
         </div>
       {% elif hero.link_video %}
-        <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
+        <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline {% if hero.foto %}poster="{{ hero.foto.url }}"{% endif %}>
           <source src="{{ hero.link_video }}" type="video/mp4">
         </video>
-      {% elif hero.foto %}
-        <img src="{{ hero.foto.url }}" alt="{{ hero.judul }}" class="absolute inset-0 w-full h-full object-cover z-0">
-      {% else %}
+      {% elif not hero.foto %}
         <video class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0" autoplay loop muted playsinline>
           <source src="{% static 'vidio/vidio1.mp4' %}" type="video/mp4">
         </video>

@@ -84,6 +84,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Izinkan preview dokumen di dalam iframe pada domain yang sama
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+# Izinkan pengiriman origin referrer untuk embed video YouTube lintas-domain (mencegah YouTube Error 153)
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
 AUTH_USER_MODEL = 'users.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -101,6 +103,10 @@ EMAIL_HOST_USER = 'gitaxs82@gmail.com'
 EMAIL_HOST_PASSWORD = 'qmam pxso jjef oqpt'
 DEFAULT_FROM_EMAIL = 'Admin Portal UNTAD <gitaxs82@gmail.com>'
 # Konfigurasi CKEditor 5
+CKEDITOR_5_ALLOW_ALL_FILE_TYPES = False
+CKEDITOR_5_UPLOAD_FILE_TYPES = ['jpg', 'jpeg', 'png', 'webp']
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = 'staff'
+
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],

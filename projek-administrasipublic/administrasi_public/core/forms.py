@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan, Galeri, Hero
 from .models import HalamanTentang, HalamanAkademik, DokumenAkademik
+from .validators import validate_image_file, validate_video_file, validate_document_file
 
 User = get_user_model()
 
@@ -24,13 +25,21 @@ class BeritaForm(forms.ModelForm):
             }),
             'gambar': forms.FileInput(attrs={
                 'class': 'w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
-                'accept': 'image/*'
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'data-upload-type': 'image',
+                'data-max-mb': '10'
             }),
             'posted_at': forms.DateTimeInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
                 'type': 'datetime-local'
             }),
         }
+
+    def clean_gambar(self):
+        file = self.cleaned_data.get('gambar')
+        if file and hasattr(file, 'content_type'):
+            validate_image_file(file)
+        return file
 
 
 class TenagaPendidikForm(forms.ModelForm):
@@ -77,7 +86,9 @@ class TenagaPendidikForm(forms.ModelForm):
             }),
             'foto': forms.FileInput(attrs={
                 'class': 'w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
-                'accept': 'image/*'
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'data-upload-type': 'image',
+                'data-max-mb': '10'
             }),
             'email': forms.EmailInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
@@ -100,6 +111,12 @@ class TenagaPendidikForm(forms.ModelForm):
                 'placeholder': '0812xxxxxxxx'
             }),
         }
+
+    def clean_foto(self):
+        file = self.cleaned_data.get('foto')
+        if file and hasattr(file, 'content_type'):
+            validate_image_file(file)
+        return file
 
 
 # Pilihan Role
@@ -199,13 +216,21 @@ class SambutanForm(forms.ModelForm):
             }),
             'foto': forms.FileInput(attrs={
                 'class': 'w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
-                'accept': 'image/*'
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'data-upload-type': 'image',
+                'data-max-mb': '10'
             }),
             'isi': CKEditor5Widget(
                 attrs={'class': 'django_ckeditor_5'}, 
                 config_name='extends'
             )
         }
+
+    def clean_foto(self):
+        file = self.cleaned_data.get('foto')
+        if file and hasattr(file, 'content_type'):
+            validate_image_file(file)
+        return file
 
 
 class HalamanTentangForm(forms.ModelForm):
@@ -219,13 +244,21 @@ class HalamanTentangForm(forms.ModelForm):
             }),
             'gambar': forms.FileInput(attrs={
                 'class': 'w-full p-2 border rounded-xl border-slate-200 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
-                'accept': 'image/*'
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'data-upload-type': 'image',
+                'data-max-mb': '10'
             }),
             'isi': CKEditor5Widget(
                 attrs={'class': 'django_ckeditor_5'}, 
                 config_name='extends'
             )
         }
+
+    def clean_gambar(self):
+        file = self.cleaned_data.get('gambar')
+        if file and hasattr(file, 'content_type'):
+            validate_image_file(file)
+        return file
 
 
 class HalamanAkademikForm(forms.ModelForm):
@@ -251,12 +284,21 @@ class HalamanAkademikForm(forms.ModelForm):
             }),
             'file_utama': forms.FileInput(attrs={
                 'class': 'w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx',
+                'data-upload-type': 'document',
+                'data-max-mb': '25'
             }),
             'isi': CKEditor5Widget(
                 attrs={'class': 'django_ckeditor_5'}, 
                 config_name='extends'
             )
         }
+
+    def clean_file_utama(self):
+        file = self.cleaned_data.get('file_utama')
+        if file and hasattr(file, 'content_type'):
+            validate_document_file(file)
+        return file
 
 
 # Form Manajemen Galeri Foto
@@ -272,7 +314,9 @@ class GaleriForm(forms.ModelForm):
         widgets = {
             'gambar': forms.FileInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
-                'accept': 'image/*'
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'data-upload-type': 'image',
+                'data-max-mb': '10'
             }),
             'urutan': forms.NumberInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
@@ -285,20 +329,26 @@ class GaleriForm(forms.ModelForm):
             }),
         }
 
+    def clean_gambar(self):
+        file = self.cleaned_data.get('gambar')
+        if file and hasattr(file, 'content_type'):
+            validate_image_file(file)
+        return file
 
-# Form Manajemen Hero (Video & Foto)
+
+# Form Manajemen Hero (1 Banner Tunggal: Link Video / Upload Video Maks 100MB & Gambar Hero)
 class HeroForm(forms.ModelForm):
     class Meta:
         model = Hero
         fields = ['link_video', 'video_file', 'foto', 'judul', 'subjudul', 'deskripsi', 'is_active']
         labels = {
             'link_video': 'Link Video (YouTube atau URL MP4)',
-            'video_file': 'Atau Upload File Video MP4 (Opsional)',
-            'foto': 'Foto Hero Background (Opsional / Pengganti Video)',
+            'video_file': 'Atau Upload Video (MP4/WEBM/OGG, Maksimal 100 MB)',
+            'foto': 'Upload Gambar Hero (JPG/PNG/WEBP, Maks 10 MB)',
             'judul': 'Judul Utama Hero',
             'subjudul': 'Subjudul Hero',
             'deskripsi': 'Deskripsi Hero',
-            'is_active': 'Status Aktif di Beranda',
+            'is_active': 'Aktifkan Tampilan Hero Kustom di Beranda',
         }
         widgets = {
             'link_video': forms.TextInput(attrs={
@@ -307,11 +357,15 @@ class HeroForm(forms.ModelForm):
             }),
             'video_file': forms.FileInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
-                'accept': 'video/mp4,video/webm'
+                'accept': '.mp4,.webm,.ogg,video/mp4,video/webm,video/ogg',
+                'data-upload-type': 'video',
+                'data-max-mb': '100'
             }),
             'foto': forms.FileInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
-                'accept': 'image/*'
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'data-upload-type': 'image',
+                'data-max-mb': '10'
             }),
             'judul': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
@@ -330,3 +384,21 @@ class HeroForm(forms.ModelForm):
                 'class': 'w-4 h-4 text-brand-teal rounded border-slate-300 focus:ring-teal-500 cursor-pointer'
             }),
         }
+
+    def clean_link_video(self):
+        link = (self.cleaned_data.get('link_video') or '').strip()
+        if link and not (link.startswith('http://') or link.startswith('https://')):
+            raise forms.ValidationError('Link video harus diawali dengan http:// atau https://')
+        return link
+
+    def clean_video_file(self):
+        file = self.cleaned_data.get('video_file')
+        if file and hasattr(file, 'content_type'):
+            validate_video_file(file)
+        return file
+
+    def clean_foto(self):
+        file = self.cleaned_data.get('foto')
+        if file and hasattr(file, 'content_type'):
+            validate_image_file(file)
+        return file
