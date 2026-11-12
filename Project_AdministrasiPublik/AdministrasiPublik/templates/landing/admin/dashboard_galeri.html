@@ -377,6 +377,43 @@
             closeModalTambah();
         }
     });
+
+    // Validasi Keamanan Upload File Galeri di Sisi JS (Client-Side)
+    document.querySelectorAll('input[type="file"][name="foto"]').forEach(function(input) {
+        input.setAttribute('accept', '.jpg,.jpeg,.png,.webp');
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const allowedExts = ['.jpg', '.jpeg', '.png', '.webp'];
+            const fileName = file.name.toLowerCase();
+            const isValidExt = allowedExts.some(ext => fileName.endsWith(ext));
+
+            if (!isValidExt) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Format Gambar Ditolak!',
+                    text: 'Hanya file gambar berformat .jpg, .jpeg, .png, atau .webp yang diperbolehkan demi keamanan sistem.',
+                    confirmButtonColor: '#0f6b6b'
+                });
+                input.value = '';
+                return;
+            }
+
+            const maxPhotoSize = 5 * 1024 * 1024; // 5 MB
+            if (file.size > maxPhotoSize) {
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ukuran Gambar Terlalu Besar!',
+                    text: `Ukuran file foto (${fileSizeMB} MB) melebihi batas maksimal 5 MB.`,
+                    confirmButtonColor: '#0f6b6b'
+                });
+                input.value = '';
+                return;
+            }
+        });
+    });
 </script>
 {% endblock %}
 

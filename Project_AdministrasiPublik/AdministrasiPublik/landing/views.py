@@ -1241,76 +1241,50 @@ def galeri_delete(request, pk):
 
 
 # ==========================================
-# MANAJEMEN HERO BANNER
+# MANAJEMEN HERO BANNER (SINGLETON / EDIT LANGSUNG)
 # ==========================================
 @login_required(login_url='landing:login')
 def dashboard_hero(request):
-    hero_list = Hero.objects.all().order_by('-is_active', '-updated_at', '-id')
-    form = HeroForm()
+    hero = Hero.objects.first()
+    if not hero:
+        hero = Hero.objects.create(
+            video_url='/static/video/banner.mp4',
+            judul='Administrasi Publik',
+            subjudul='Welcome to',
+            deskripsi='Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako',
+            is_active=True
+        )
 
-    # Modal hapus via ?hapus=ID
-    delete_hero = None
-    hapus_id = request.GET.get('hapus')
-    if hapus_id:
-        delete_hero = get_object_or_404(Hero, id=hapus_id)
-
-    # Modal edit via ?edit=ID
-    edit_hero = None
-    edit_form = None
-    edit_id = request.GET.get('edit')
-    if edit_id:
-        edit_hero = get_object_or_404(Hero, id=edit_id)
-        edit_form = HeroForm(instance=edit_hero)
+    if request.method == 'POST':
+        form = HeroForm(request.POST, request.FILES, instance=hero)
+        if form.is_valid():
+            form.save()
+            catat_log(request, request.user, f"Memperbarui Pengaturan Hero Banner: '{hero.judul}'", "Pengaturan Hero Banner berhasil disimpan")
+            messages.success(request, "Pengaturan Hero Banner berhasil disimpan!")
+            return redirect('landing:dashboard_hero')
+        else:
+            messages.error(request, "Gagal menyimpan Hero Banner. Periksa kembali jenis file (Maks 100MB untuk video, 5MB untuk gambar) dan isian form.")
+    else:
+        form = HeroForm(instance=hero)
 
     context = {
-        'hero_list': hero_list,
+        'hero': hero,
         'form': form,
-        'delete_hero': delete_hero,
-        'edit_hero': edit_hero,
-        'edit_form': edit_form,
     }
     return render(request, 'landing/admin/dashboard_hero.html', context)
 
 
 @login_required(login_url='landing:login')
-@require_POST
 def hero_create(request):
-    form = HeroForm(request.POST, request.FILES)
-    if form.is_valid():
-        hero = form.save(commit=False)
-        if hero.is_active:
-            Hero.objects.filter(is_active=True).update(is_active=False)
-        hero.save()
-        catat_log(request, request.user, f"Menambahkan Banner Hero: '{hero.judul}'", "Hero banner baru ditambahkan")
-        messages.success(request, "Data Hero Banner berhasil ditambahkan!")
-    else:
-        messages.error(request, "Gagal menambahkan Hero. Periksa format isian form.")
     return redirect('landing:dashboard_hero')
 
 
 @login_required(login_url='landing:login')
-@require_POST
 def hero_update(request, pk):
-    hero = get_object_or_404(Hero, pk=pk)
-    form = HeroForm(request.POST, request.FILES, instance=hero)
-    if form.is_valid():
-        hero_obj = form.save(commit=False)
-        if hero_obj.is_active:
-            Hero.objects.exclude(pk=hero.pk).filter(is_active=True).update(is_active=False)
-        hero_obj.save()
-        catat_log(request, request.user, f"Memperbarui Banner Hero: '{hero_obj.judul}'", "Hero banner diperbarui")
-        messages.success(request, "Data Hero Banner berhasil diperbarui!")
-    else:
-        messages.error(request, "Gagal memperbarui Hero. Periksa format isian form.")
     return redirect('landing:dashboard_hero')
 
 
 @login_required(login_url='landing:login')
-@require_POST
 def hero_delete(request, pk):
-    hero = get_object_or_404(Hero, pk=pk)
-    judul = hero.judul or f"Hero #{hero.id}"
-    hero.delete()
-    catat_log(request, request.user, f"Menghapus Banner Hero: '{judul}'", "Hero banner dihapus")
-    messages.success(request, f"Hero banner '{judul}' berhasil dihapus!")
+    messages.warning(request, "Hero Banner utama tidak dapat dihapus karena hanya ada 1.")
     return redirect('landing:dashboard_hero')

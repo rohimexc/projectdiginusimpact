@@ -6,19 +6,32 @@
 {% block content %}
 <!-- Hero Section -->
 <header id="beranda"
-    class="relative text-white py-24 sm:py-32 px-4 sm:px-6 text-center overflow-hidden min-h-[450px] sm:min-h-[500px] flex items-center justify-center">
-    {% if hero and hero.video_url %}
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0" {% if hero.foto %}poster="{{ hero.foto.url }}"{% endif %}>
-            <source src="{{ hero.video_url }}" type="video/mp4">
-        </video>
-    {% elif hero and hero.foto %}
-        <img src="{{ hero.foto.url }}" alt="{{ hero.judul }}" class="absolute inset-0 w-full h-full object-cover z-0">
+    class="relative text-white py-24 sm:py-32 px-4 sm:px-6 text-center overflow-hidden min-h-[450px] sm:min-h-[500px] flex items-center justify-center bg-slate-950">
+    
+    <!-- 1. Background Gambar Hero: Tampil langsung pertama kali sepersekian detik selama video masih di-load -->
+    {% if hero and hero.foto %}
+        <img id="heroImageFallback" src="{{ hero.foto.url }}" alt="{{ hero.judul }}" class="absolute inset-0 w-full h-full object-cover z-0">
     {% else %}
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
-            <source src="{% static 'video/banner.mp4' %}" type="video/mp4">
-        </video>
+        <div id="heroImageFallback" class="absolute inset-0 w-full h-full bg-gradient-to-br from-teal-950 via-slate-900 to-teal-900 z-0"></div>
     {% endif %}
+
+    <!-- 2. Video Background: Awalnya transparan (opacity-0), transisi mulus (fade-in) ke opacity-100 saat video mulai berputar -->
+    <video id="heroVideo" autoplay muted loop playsinline
+        class="absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-1000 ease-in-out"
+        {% if hero and hero.foto %}poster="{{ hero.foto.url }}"{% endif %}>
+        {% if hero and hero.video_file %}
+            <source src="{{ hero.video_file.url }}" type="video/mp4">
+        {% elif hero and hero.video_url %}
+            <source src="{{ hero.video_url }}" type="video/mp4">
+        {% else %}
+            <source src="{% static 'video/banner.mp4' %}" type="video/mp4">
+        {% endif %}
+    </video>
+
+    <!-- 3. Dark Overlay -->
     <div class="absolute inset-0 bg-black/60 z-10"></div>
+
+    <!-- 4. Konten Teks Hero -->
     <div class="relative z-20 max-w-4xl mx-auto space-y-4 px-2">
         <h3 class="text-sm sm:text-xl font-medium tracking-wide text-slate-200" data-aos="fade-down" data-aos-duration="700">
             {{ hero.subjudul|default:"Welcome to" }}
@@ -199,4 +212,24 @@
         </div>
     </div>
 </section>
+
+<!-- Script Transisi Hero: Gambar tampil dulu sepersekian detik, video fade-in saat siap diputar -->
+<script>
+    (function() {
+        const video = document.getElementById("heroVideo");
+        if (video) {
+            function revealHeroVideo() {
+                video.classList.remove("opacity-0");
+                video.classList.add("opacity-100");
+            }
+            if (video.readyState >= 3) {
+                revealHeroVideo();
+            } else {
+                video.addEventListener("playing", revealHeroVideo, { once: true });
+                video.addEventListener("canplay", revealHeroVideo, { once: true });
+                video.addEventListener("loadeddata", revealHeroVideo, { once: true });
+            }
+        }
+    })();
+</script>
 {% endblock %}

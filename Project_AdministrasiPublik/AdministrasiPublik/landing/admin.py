@@ -76,28 +76,29 @@ class GaleriAdmin(admin.ModelAdmin):
 
 @admin.register(Hero)
 class HeroAdmin(admin.ModelAdmin):
-    list_display = ('video_url_display', 'foto_preview', 'aksi', 'judul', 'is_active')
-    list_editable = ('is_active',)
+    list_display = ('foto_preview', 'video_display', 'judul', 'subjudul', 'updated_at')
+    fields = ('video_file', 'video_url', 'foto', 'subjudul', 'judul', 'deskripsi', 'is_active')
     search_fields = ('judul', 'subjudul', 'video_url')
-    list_filter = ('is_active', 'updated_at')
 
-    def video_url_display(self, obj):
+    def video_display(self, obj):
+        if obj.video_file:
+            return mark_safe(f'<span style="font-weight:600; color:#0f6b6b;">📁 File: {obj.video_file.name}</span>')
         return obj.video_url or "-"
-    video_url_display.short_description = "Link Video"
+    video_display.short_description = "Video"
 
     def foto_preview(self, obj):
         if obj.foto:
             return mark_safe(f'<a href="{obj.foto.url}" target="_blank"><img src="{obj.foto.url}" width="70" height="40" style="object-fit:cover; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.2);" title="Klik untuk preview" /></a>')
         return "-"
-    foto_preview.short_description = "Foto"
+    foto_preview.short_description = "Gambar Hero"
 
-    def aksi(self, obj):
-        from django.urls import reverse
-        change_url = reverse('admin:landing_hero_change', args=[obj.id])
-        delete_url = reverse('admin:landing_hero_delete', args=[obj.id])
-        preview_url = obj.video_url or (obj.foto.url if obj.foto else '#')
-        return mark_safe(f'<a href="{preview_url}" target="_blank" style="margin-right:8px; font-weight:600; color:#0f6b6b;">Preview</a><a href="{change_url}" style="margin-right:8px; font-weight:600; color:#d97706;">Edit</a><a href="{delete_url}" style="font-weight:600; color:#dc2626;">Hapus</a>')
-    aksi.short_description = "Aksi"
+    def has_add_permission(self, request):
+        if Hero.objects.exists():
+            return False
+        return super().has_add_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 @admin.register(Berita)
 class BeritaAdmin(admin.ModelAdmin):

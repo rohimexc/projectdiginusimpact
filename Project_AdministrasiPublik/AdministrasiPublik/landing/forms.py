@@ -1,3 +1,4 @@
+import os
 from django import forms
 from .models import (
     Sambutan, Galeri, Berita, Dosen, TenagaPendidik, TentangPage,
@@ -164,10 +165,7 @@ class SambutanForm(forms.ModelForm):
         }
 
 
-class GaleriForm(forms.ModelForm):
-    class Meta:
-        model = Galeri
-        fields = ['judul', 'foto']
+# (GaleriForm didefinisikan lengkap di bagian bawah)
 
 
 # Form Berita (Lengkap dengan CKEditor 5 dan Peringatan Slug Bahasa Indonesia)
@@ -396,6 +394,7 @@ class GaleriForm(forms.ModelForm):
         widgets = {
             'foto': forms.FileInput(attrs={
                 'class': 'w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100',
+                'accept': '.jpg,.jpeg,.png,.webp',
             }),
             'urutan': forms.NumberInput(attrs={
                 'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
@@ -408,33 +407,65 @@ class GaleriForm(forms.ModelForm):
             }),
         }
 
+    def clean_foto(self):
+        foto = self.cleaned_data.get('foto')
+        if foto and hasattr(foto, 'size'):
+            ext = os.path.splitext(foto.name)[1].lower()
+            if ext not in ['.jpg', '.jpeg', '.png', '.webp']:
+                raise forms.ValidationError("Format foto tidak didukung! Hanya file .jpg, .jpeg, .png, dan .webp yang diperbolehkan.")
+            if foto.size > 5 * 1024 * 1024:
+                raise forms.ValidationError("Ukuran foto melebihi batas maksimal 5 MB.")
+        return foto
+
 
 class HeroForm(forms.ModelForm):
     class Meta:
         model = Hero
-        fields = ['video_url', 'foto', 'judul', 'subjudul', 'deskripsi', 'is_active']
+        fields = ['video_file', 'video_url', 'foto', 'subjudul', 'judul', 'deskripsi']
         widgets = {
+            'video_file': forms.FileInput(attrs={
+                'class': 'w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100',
+                'accept': '.mp4,.webm',
+            }),
             'video_url': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
-                'placeholder': 'Tautan / link video (misal: /static/video/banner.mp4 atau https://...)'
+                'placeholder': 'Atau link video (misal: /static/video/banner.mp4 atau https://...)'
             }),
             'foto': forms.FileInput(attrs={
                 'class': 'w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100',
-            }),
-            'judul': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
-                'placeholder': 'Judul Hero (default: Administrasi Publik)'
+                'accept': '.jpg,.jpeg,.png,.webp',
             }),
             'subjudul': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
-                'placeholder': 'Subjudul / Teks Atas (default: Welcome to)'
+                'placeholder': 'Welcome to'
+            }),
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Administrasi Publik'
             }),
             'deskripsi': forms.Textarea(attrs={
                 'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none resize-none',
                 'rows': 3,
-                'placeholder': 'Deskripsi Hero'
-            }),
-            'is_active': forms.CheckboxInput(attrs={
-                'class': 'w-4 h-4 text-teal-600 bg-white border-slate-300 rounded focus:ring-teal-500 cursor-pointer'
+                'placeholder': 'Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako'
             }),
         }
+
+    def clean_video_file(self):
+        video = self.cleaned_data.get('video_file')
+        if video and hasattr(video, 'size'):
+            ext = os.path.splitext(video.name)[1].lower()
+            if ext not in ['.mp4', '.webm']:
+                raise forms.ValidationError("Format file video tidak didukung! Hanya file .mp4 dan .webm yang diperbolehkan.")
+            if video.size > 100 * 1024 * 1024:
+                raise forms.ValidationError(f"Ukuran video ({video.size / (1024*1024):.1f} MB) melebihi batas maksimal 100 MB.")
+        return video
+
+    def clean_foto(self):
+        foto = self.cleaned_data.get('foto')
+        if foto and hasattr(foto, 'size'):
+            ext = os.path.splitext(foto.name)[1].lower()
+            if ext not in ['.jpg', '.jpeg', '.png', '.webp']:
+                raise forms.ValidationError("Format gambar tidak didukung! Hanya file .jpg, .jpeg, .png, dan .webp yang diperbolehkan.")
+            if foto.size > 5 * 1024 * 1024:
+                raise forms.ValidationError(f"Ukuran gambar ({foto.size / (1024*1024):.1f} MB) melebihi batas maksimal 5 MB.")
+        return foto

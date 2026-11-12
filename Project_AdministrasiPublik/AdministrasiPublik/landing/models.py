@@ -1,7 +1,27 @@
 from django.db import models
-from django_ckeditor_5.fields import CKEditor5Field
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+
+
+def validate_video_file_size(value):
+    max_size = 100 * 1024 * 1024  # 100 MB
+    if value.size > max_size:
+        raise ValidationError("Ukuran file video tidak boleh melebihi 100 MB.")
+
+
+def validate_image_file_size(value):
+    max_size = 5 * 1024 * 1024  # 5 MB
+    if value.size > max_size:
+        raise ValidationError("Ukuran file gambar tidak boleh melebihi 5 MB.")
+
+
+def validate_document_file_size(value):
+    max_size = 10 * 1024 * 1024  # 10 MB
+    if value.size > max_size:
+        raise ValidationError("Ukuran berkas dokumen tidak boleh melebihi 10 MB.")
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class TentangPage(models.Model):
@@ -84,7 +104,14 @@ class Sambutan(models.Model):
 
 class Galeri(models.Model):
     judul = models.CharField(max_length=200, blank=True, null=True, verbose_name="Judul / Keterangan Foto")
-    foto = models.ImageField(upload_to='images/galeri/', verbose_name="Foto Galeri")
+    foto = models.ImageField(
+        upload_to='images/galeri/', 
+        verbose_name="Foto Galeri",
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
+            validate_image_file_size
+        ]
+    )
     urutan = models.PositiveIntegerField(default=1, verbose_name="Urutan Tampil")
     tanggal = models.DateField(auto_now_add=True)
 
@@ -103,14 +130,29 @@ class Hero(models.Model):
         blank=True, 
         null=True, 
         verbose_name="Link Video",
-        help_text="Link video mp4 / banner (misal: /static/video/banner.mp4 atau URL video)"
+        help_text="Link video banner (misal: /static/video/banner.mp4 atau URL video)"
+    )
+    video_file = models.FileField(
+        upload_to='hero/videos/',
+        blank=True,
+        null=True,
+        verbose_name="Upload File Video",
+        help_text="File video hero (Maksimal 100 MB, format: MP4, WebM)",
+        validators=[
+            FileExtensionValidator(allowed_extensions=['mp4', 'webm']),
+            validate_video_file_size
+        ]
     )
     foto = models.ImageField(
         upload_to='hero/', 
         blank=True, 
         null=True, 
-        verbose_name="Foto Hero",
-        help_text="Foto banner hero atau poster latar"
+        verbose_name="Upload Gambar Hero",
+        help_text="Gambar hero yang tampil langsung saat video masih dimuat (Maksimal 5 MB, format: JPG, JPEG, PNG, WEBP)",
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
+            validate_image_file_size
+        ]
     )
     judul = models.CharField(
         max_length=200, 
@@ -140,9 +182,15 @@ class Hero(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def get_video_source(self):
+        if self.video_file:
+            return self.video_file.url
+        return self.video_url or ""
+
     class Meta:
         verbose_name = "Hero Banner"
-        verbose_name_plural = "Daftar Hero Banner"
+        verbose_name_plural = "Hero Banner"
         ordering = ['-is_active', '-updated_at', '-id']
 
     def __str__(self):
