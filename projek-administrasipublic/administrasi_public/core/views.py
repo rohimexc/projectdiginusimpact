@@ -56,12 +56,17 @@ def home(request):
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
     daftar_tenaga_kependidikan = TenagaPendidik.objects.filter(jenis='TENDIK')[:4]
 
+    visi_obj = VisiMisiTujuan.objects.first()
+    daftar_tujuan = visi_obj.tujuan_items.all() if visi_obj else []
+
     context = {
         'hero': hero,
         'sambutan': sambutan,
         'daftar_galeri': daftar_galeri,
         'daftar_berita': daftar_berita,
         'daftar_tenaga_kependidikan': daftar_tenaga_kependidikan,
+        'visi_obj': visi_obj,
+        'daftar_tujuan': daftar_tujuan,
     }
     return render(request, 'core/index.html', context)
 
