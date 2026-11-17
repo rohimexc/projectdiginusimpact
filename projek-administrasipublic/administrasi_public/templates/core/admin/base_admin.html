@@ -40,8 +40,12 @@
   <div class="flex-1 flex flex-col min-w-0">
     
     <!-- Header / Navbar Atas Terpadu -->
-    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
-      <div class="flex items-center gap-2">
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-2.5">
+        <!-- Tombol Menu Hamburger Khusus Layar HP & Tablet -->
+        <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 -ml-1 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition flex items-center justify-center" aria-label="Buka Menu Admin">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
         {% block page_header %}
           <h1 class="text-base font-bold text-slate-800">Admin Portal</h1>
         {% endblock %}

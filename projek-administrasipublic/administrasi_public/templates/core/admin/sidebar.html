@@ -1,16 +1,25 @@
 {% load static %}
-<!-- SIDEBAR ADMIN TERPUSAT - TEMA HIJAU BERANDA & AKTIF/HOVER EMAS -->
-<aside class="w-64 bg-[#084c5a] text-slate-100 flex flex-col justify-between shrink-0 min-h-screen border-r border-[#05313a] shadow-xl">
+<!-- OVERLAY BACKDROP UNTUK MOBILE & TABLET -->
+<div id="admin-sidebar-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity duration-300" onclick="toggleAdminSidebar()"></div>
+
+<!-- SIDEBAR ADMIN TERPUSAT - RESPONSIF 3 DEVICE (MOBILE, TAB, DESKTOP) -->
+<aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#084c5a] text-slate-100 flex flex-col justify-between -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen lg:shrink-0 lg:shadow-xl border-r border-[#05313a] overflow-y-auto">
   <div>
     <!-- Logo & Nama Portal -->
-    <div class="p-6 flex items-center gap-3 border-b border-white/10 bg-[#05313a]/50">
-      <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold shadow-inner border border-white/15">
-        <i class="bi bi-bank text-lg text-brand-gold"></i>
+    <div class="p-5 sm:p-6 flex items-center justify-between border-b border-white/10 bg-[#05313a]/50">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold shadow-inner border border-white/15">
+          <i class="bi bi-bank text-lg text-brand-gold"></i>
+        </div>
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-white">Admin Portal</h2>
+          <p class="text-[10px] text-teal-200/80 font-medium">FISIP UNTAD</p>
+        </div>
       </div>
-      <div>
-        <h2 class="text-xs font-bold uppercase tracking-wider text-white">Admin Portal</h2>
-        <p class="text-[10px] text-teal-200/80 font-medium">FISIP UNTAD</p>
-      </div>
+      <!-- Tombol Tutup X Khusus Layar HP & Tablet -->
+      <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden text-teal-200 hover:text-white p-1.5 rounded-lg hover:bg-white/10 focus:outline-none transition" aria-label="Tutup Sidebar">
+        <i class="bi bi-x-lg text-lg"></i>
+      </button>
     </div>
 
     <!-- Navigasi Menu Sidebar -->
@@ -121,3 +130,22 @@
     </a>
   </div>
 </aside>
+
+<!-- SCRIPT TOGGLE SIDEBAR MOBILE & TABLET -->
+<script>
+  function toggleAdminSidebar() {
+    const sidebar = document.getElementById('admin-sidebar');
+    const backdrop = document.getElementById('admin-sidebar-backdrop');
+    if (!sidebar) return;
+    const isClosed = sidebar.classList.contains('-translate-x-full');
+    if (isClosed) {
+      sidebar.classList.remove('-translate-x-full');
+      if (backdrop) backdrop.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden', 'lg:overflow-auto');
+    } else {
+      sidebar.classList.add('-translate-x-full');
+      if (backdrop) backdrop.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden', 'lg:overflow-auto');
+    }
+  }
+</script>

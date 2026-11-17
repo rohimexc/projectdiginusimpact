@@ -152,7 +152,109 @@
         </li>
       {% endif %}
     </ul>
+
+    <!-- Tombol Menu Mobile & Tablet -->
+    <button type="button" id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="lg:hidden text-white px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 focus:outline-none transition flex items-center gap-1.5 text-xs font-bold shadow-sm" aria-label="Buka Menu">
+      <i class="fas fa-bars text-sm" id="menu-icon-bars"></i>
+      <i class="fas fa-times text-sm hidden" id="menu-icon-close"></i>
+      <span>Menu</span>
+    </button>
   </nav>
+
+  <!-- Overlay Backdrop Menu Mobile & Tablet -->
+  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[48] hidden lg:hidden" onclick="closeMobileMenu()"></div>
+
+  <!-- Drawer Menu Mobile & Tablet (Dropdown) -->
+  <div id="mobile-menu-drawer" class="fixed top-[70px] left-0 w-full bg-[#084c5a]/98 backdrop-blur-md text-white border-b border-white/10 shadow-2xl z-50 hidden max-h-[calc(100dvh-70px)] overflow-y-auto transition-all duration-300">
+    <div class="px-5 py-4 space-y-2.5 text-xs">
+      <a href="{% url 'home' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-home w-5 text-[#fab005]"></i> Beranda
+      </a>
+
+      <!-- Mobile Dropdown: Tentang -->
+      <div class="border-t border-white/10 pt-2">
+        <button type="button" onclick="toggleMobileAccordion('mobile-tentang-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+          <span class="flex items-center gap-2.5"><i class="fas fa-info-circle w-5 text-[#fab005]"></i> Tentang</span>
+          <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-tentang-icon"></i>
+        </button>
+        <div id="mobile-tentang-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="{% url 'tentang_detail' 'profil' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil Program Studi</a>
+          <a href="{% url 'tentang_detail' 'sejarah' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sejarah & Dasar Hukum</a>
+          <a href="{% url 'tentang_detail' 'visi_misi' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Visi, Misi & Tujuan</a>
+          <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil Lulusan</a>
+          <a href="{% url 'tentang_detail' 'akreditasi' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sertifikat Akreditasi</a>
+        </div>
+      </div>
+
+      <a href="{% url 'home' %}#penelitian" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-images w-5 text-[#fab005]"></i> Galeri
+      </a>
+      <a href="{% url 'berita_list' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold text-[#ffd43b]">
+        <i class="fas fa-newspaper w-5 text-[#fab005]"></i> Berita
+      </a>
+
+      <!-- Mobile Dropdown: Akademik -->
+      <div class="border-t border-white/10 pt-2">
+        <button type="button" onclick="toggleMobileAccordion('mobile-akademik-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+          <span class="flex items-center gap-2.5"><i class="fas fa-graduation-cap w-5 text-[#fab005]"></i> Akademik</span>
+          <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-akademik-icon"></i>
+        </button>
+        <div id="mobile-akademik-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="{% url 'akademik_detail' 'siga8' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">SIGA-8</a>
+          <a href="{% url 'akademik_detail' 'kurikulum' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Kurikulum</a>
+          <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Jadwal Perkuliahan</a>
+          <a href="{% url 'akademik_detail' 'rps' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">RPS</a>
+          <a href="{% url 'akademik_detail' 'panduan' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Panduan Akademik</a>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown: Staf -->
+      <div class="border-t border-white/10 pt-2">
+        <button type="button" onclick="toggleMobileAccordion('mobile-staf-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+          <span class="flex items-center gap-2.5"><i class="fas fa-users w-5 text-[#fab005]"></i> Staf</span>
+          <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-staf-icon"></i>
+        </button>
+        <div id="mobile-staf-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="{% url 'tenaga_pendidik_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Pengajar</a>
+          <a href="{% url 'tenaga_kependidikan_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Kependidikan</a>
+        </div>
+      </div>
+
+      <!-- Auth Mobile -->
+      <div class="pt-3 border-t border-white/15">
+        {% if request.user.is_authenticated %}
+          <div class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-xl mb-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-[#fab005] text-slate-900 font-bold flex items-center justify-center text-xs">
+                {{ request.user.username|slice:":2"|upper }}
+              </div>
+              <div>
+                <p class="font-bold leading-tight">{{ request.user.first_name|default:request.user.username }}</p>
+                <p class="text-[10px] text-white/70">{{ request.user.email|default:"Pengguna" }}</p>
+              </div>
+            </div>
+            <a href="{% url 'user_logout' %}?next={{ request.path }}" class="text-xs bg-rose-500/80 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg font-semibold">
+              Logout
+            </a>
+          </div>
+          {% if request.user.is_staff or request.user.is_superuser %}
+            <a href="{% url 'admin_dashboard' %}" class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl mb-1 shadow-sm">
+              <i class="fas fa-gauge-high mr-1.5"></i> Dashboard Admin
+            </a>
+          {% endif %}
+        {% else %}
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="{% url 'user_login' %}?next={{ request.path }}" class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl shadow-sm">
+              Masuk
+            </a>
+            <a href="{% url 'user_register' %}?next={{ request.path }}" class="block text-center py-2.5 bg-white/15 text-white font-semibold rounded-xl border border-white/20">
+              Daftar
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 
   <!-- Konten Utama Detail Berita -->
   <main class="flex-1 pt-28 pb-20 px-6">
@@ -824,6 +926,45 @@
     // Jika URL mengandung hash #komentar-section (misal saat redirect login/registrasi atau dari halaman warta)
     if (window.location.hash === '#komentar-section') {
       showKomentar();
+    }
+
+    // Mobile Navbar Drawer & Accordion
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (drawer) {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function toggleMobileAccordion(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.toggle('hidden');
+      }
     }
   </script>
 </body>

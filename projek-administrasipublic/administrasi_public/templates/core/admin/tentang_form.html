@@ -25,22 +25,23 @@
     }
   </script>
 </head>
-<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex h-screen overflow-hidden">
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
 
-  <!-- Sidebar Terkunci Satu Layar -->
-  <aside class="w-64 h-screen flex-shrink-0 sticky top-0 z-30">
-    {% include 'core/admin/sidebar.html' %}
-  </aside>
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
 
-  <!-- Area Konten Utama Scroll Independen -->
-  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
-      <div class="flex items-center gap-3">
-        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:text-brand-gold hover:underline flex items-center gap-1 font-medium transition duration-200">
+  <!-- Area Konten Utama -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 -ml-1 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition flex items-center justify-center" aria-label="Buka Menu Admin">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+        <a href="{% url 'admin_dashboard' %}" class="hidden sm:inline-flex text-xs text-brand-teal hover:text-brand-gold hover:underline items-center gap-1 font-medium transition duration-200">
           <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
         </a>
-        <span class="text-slate-300">/</span>
-        <h1 class="text-base font-bold text-slate-800">{{ title }}</h1>
+        <span class="hidden sm:inline text-slate-300">/</span>
+        <h1 class="text-sm sm:text-base font-bold text-slate-800">{{ title }}</h1>
       </div>
       <a href="{% url 'tentang_detail' kategori_aktif %}" target="_blank" class="text-xs font-semibold text-brand-darkteal hover:text-slate-900 bg-teal-50 hover:bg-brand-gold px-3.5 py-2 rounded-xl border border-teal-200 transition duration-200 flex items-center gap-1.5 shadow-sm">
         <i class="bi bi-box-arrow-up-right text-[10px]"></i> Lihat Halaman Publik

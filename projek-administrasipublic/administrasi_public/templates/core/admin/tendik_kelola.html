@@ -34,13 +34,16 @@
 
   <!-- KONTEN UTAMA -->
   <div class="flex-1 flex flex-col min-w-0">
-    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
-      <div class="flex items-center gap-3">
-        <a href="{% url 'admin_dashboard' %}" class="text-xs text-brand-teal hover:underline flex items-center gap-1 font-medium">
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 -ml-1 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition flex items-center justify-center" aria-label="Buka Menu Admin">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+        <a href="{% url 'admin_dashboard' %}" class="hidden sm:inline-flex text-xs text-brand-teal hover:underline items-center gap-1 font-medium">
           <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
         </a>
-        <span class="text-slate-300">/</span>
-        <h1 class="text-base font-bold text-slate-800">Manajemen Tenaga Kependidikan</h1>
+        <span class="hidden sm:inline text-slate-300">/</span>
+        <h1 class="text-sm sm:text-base font-bold text-slate-800">Manajemen Tenaga Kependidikan</h1>
       </div>
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-brand-gold text-slate-900 font-bold flex items-center justify-center text-xs">
