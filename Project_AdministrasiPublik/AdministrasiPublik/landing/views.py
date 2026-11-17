@@ -28,6 +28,8 @@ def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
     galeri_list = Galeri.objects.all().order_by('urutan', '-tanggal', '-id')
     hero = Hero.objects.filter(is_active=True).first()
+    if hero and hero.deskripsi:
+        hero.deskripsi = hero.deskripsi.replace('\\n', '\n')
     akademik_list = Akademik.objects.all()
     staf_list = TenagaPendidik.objects.all()
     akreditasi = Akreditasi.objects.first()
