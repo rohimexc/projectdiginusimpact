@@ -35,6 +35,29 @@
       }
     }
   </script>
+  <style>
+    /* Animasi AOS Mobile Cepat, Ringan & Friendly */
+    @media (max-width: 768px) {
+      body, html {
+        overflow-x: hidden !important;
+      }
+      [data-aos] {
+        transition-duration: 450ms !important;
+        transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+      }
+      [data-aos="fade-left"],
+      [data-aos="fade-right"] {
+        transform: translate3d(0, 20px, 0) !important;
+      }
+      [data-aos="fade-left"].aos-animate,
+      [data-aos="fade-right"].aos-animate {
+        transform: translate3d(0, 0, 0) !important;
+      }
+      [data-aos][data-aos-delay] {
+        transition-delay: 50ms !important;
+      }
+    }
+  </style>
 </head>
 <body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased flex flex-col min-h-screen">
 
@@ -504,7 +527,12 @@
   <!-- AOS Script -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 700, once: true });
+    AOS.init({
+      duration: window.innerWidth < 768 ? 450 : 650,
+      offset: window.innerWidth < 768 ? 25 : 60,
+      once: true,
+      easing: 'ease-out-cubic'
+    });
 
     // Fungsi Pengambil CSRF Token yang Pasti Aman
     function getCSRFToken() {
