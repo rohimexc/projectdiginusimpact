@@ -26,20 +26,25 @@
 <body class="bg-slate-50 font-sans text-slate-800">
 
     <!-- Navbar Utama -->
-    <nav class="bg-[#0f6b6b] text-white shadow-md sticky top-0 z-50 py-3.5 px-6">
+    <nav class="bg-[#0f6b6b] text-white shadow-md sticky top-0 z-50 py-3 sm:py-3.5 px-4 sm:px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <!-- Logo & Title -->
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow">
+            <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-2.5 sm:gap-3 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center shadow shrink-0 group-hover:scale-105 transition">
                     <span class="text-xs font-bold text-red-600">🏛️</span>
                 </div>
                 <div>
-                    <span class="font-bold text-base tracking-wide block leading-tight">Administrasi Publik</span>
-                    <span class="text-[10px] text-teal-100 tracking-wider">FISIP Universitas Tadulako</span>
+                    <span class="font-bold text-sm sm:text-base tracking-wide block leading-tight group-hover:text-amber-300 transition">Administrasi Publik</span>
+                    <span class="text-[9px] sm:text-[10px] text-teal-100 tracking-wider">FISIP Universitas Tadulako</span>
                 </div>
-            </div>
+            </a>
 
-<!-- Menu Navigation (Menu Utama Bisa Diklik) -->
+            <!-- Tombol Hamburger (Mobile & Tablet: < lg) -->
+            <button id="mobileNavToggleBtn" type="button" aria-label="Buka Menu" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white transition focus:outline-none shadow-2xs">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+
+            <!-- Menu Navigation Desktop (lg:flex) -->
             <div class="hidden lg:flex items-center space-x-6 text-sm font-medium">
                 <a href="{% url 'landing:landing_home' %}#beranda" class="hover:text-amber-300 transition py-2">Beranda</a>
                 
@@ -114,6 +119,133 @@
             </div>
         </div>
     </nav>
+
+    <!-- BACKDROP OVERLAY MOBILE / TABLET -->
+    <div id="mobileNavBackdrop" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+
+    <!-- SLIDE-OVER DRAWER MOBILE / TABLET -->
+    <div id="mobileNavDrawer" class="fixed top-0 right-0 w-[85vw] sm:w-80 max-w-sm h-full bg-[#0a4f4f] text-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col lg:hidden">
+        <!-- Header Drawer -->
+        <div class="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow shrink-0">
+                    <span class="text-xs font-bold text-red-600">🏛️</span>
+                </div>
+                <div>
+                    <span class="font-bold text-xs sm:text-sm tracking-wide block leading-tight">Administrasi Publik</span>
+                    <span class="text-[9px] text-teal-200">FISIP Untad</span>
+                </div>
+            </div>
+            <button id="closeMobileNavBtn" type="button" aria-label="Tutup Menu" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition focus:outline-none">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Daftar Menu (Scrollable with Accordion) -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-1.5 text-xs font-medium">
+            <!-- Beranda -->
+            <a href="{% url 'landing:landing_home' %}#beranda" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <i class="fa-solid fa-house text-teal-300 w-4 text-center"></i>
+                <span>Beranda</span>
+            </a>
+
+            <!-- Accordion Tentang -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-circle-info text-teal-300 w-4 text-center"></i>
+                        <span>Tentang</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="{% url 'landing:landing_home' %}#sambutan" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Sambutan Koorprodi</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='profil' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Profil Program Studi</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='sejarah' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Sejarah & Dasar Hukum</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='visi' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Visi, Misi & Tujuan</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='profil-lulusan' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Profil Lulusan</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Sertifikat Akreditasi</a>
+                </div>
+            </div>
+
+            <!-- Accordion Akademik -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-graduation-cap text-teal-300 w-4 text-center"></i>
+                        <span>Akademik</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="{% url 'landing:akademik_index' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Halaman Akademik</a>
+                    <a href="{% url 'landing:detail_akademik' slug='siga-8' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">SIGA-8</a>
+                    <a href="{% url 'landing:detail_akademik' slug='kurikulum' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Kurikulum</a>
+                    <a href="{% url 'landing:detail_akademik' slug='jadwal-perkuliahan' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Jadwal Perkuliahan</a>
+                    <a href="{% url 'landing:detail_akademik' slug='rps' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">RPS</a>
+                    <a href="{% url 'landing:detail_akademik' slug='panduan-akademik' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Panduan Akademik</a>
+                </div>
+            </div>
+
+            <!-- Accordion Staf -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-users text-teal-300 w-4 text-center"></i>
+                        <span>Staf & Pengajar</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="{% url 'landing:landing_home' %}#sambutan" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Tenaga Pengajar (Dosen)</a>
+                    <a href="{% url 'landing:tenaga_pendidik_beranda' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Tenaga Kependidikan</a>
+                </div>
+            </div>
+
+            <!-- Accordion Penelitian -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-flask text-teal-300 w-4 text-center"></i>
+                        <span>Penelitian</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="#" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Fokus Riset</a>
+                </div>
+            </div>
+
+            <!-- Galeri Kegiatan -->
+            <a href="{% url 'landing:landing_home' %}#galeri" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <i class="fa-solid fa-images text-teal-300 w-4 text-center"></i>
+                <span>Galeri Kegiatan</span>
+            </a>
+
+            <!-- Berita Terbaru -->
+            <a href="{% url 'landing:berita_list' %}" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <i class="fa-solid fa-newspaper text-teal-300 w-4 text-center"></i>
+                <span>Berita Terbaru</span>
+            </a>
+
+            <!-- Akreditasi -->
+            <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <i class="fa-solid fa-certificate text-teal-300 w-4 text-center"></i>
+                <span>Akreditasi BAN-PT</span>
+            </a>
+        </div>
+
+        <!-- Footer Drawer -->
+        <div class="p-4 border-t border-white/10 bg-[#084040]/80 space-y-2">
+            <a href="{% url 'landing:dashboard_admin' %}" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-amber-400 hover:bg-amber-500 text-slate-900 rounded-xl font-bold text-xs shadow-md transition">
+                <i class="fa-solid fa-gauge"></i>
+                <span>Portal Admin</span>
+            </a>
+            <p class="text-[10px] text-teal-200 text-center">
+                FISIP Universitas Tadulako &bull; Palu
+            </p>
+        </div>
+    </div>
 
     <!-- KONTEN UTAMA -->
     {% block content %}
@@ -191,6 +323,69 @@
                 scrollBtn.classList.remove('opacity-100', 'pointer-events-auto');
             }
         });
+
+        // Controller Mobile & Tablet Navigation Drawer
+        (function() {
+            const toggleBtn = document.getElementById('mobileNavToggleBtn');
+            const closeBtn = document.getElementById('closeMobileNavBtn');
+            const drawer = document.getElementById('mobileNavDrawer');
+            const backdrop = document.getElementById('mobileNavBackdrop');
+
+            function openDrawer() {
+                if (!drawer || !backdrop) return;
+                backdrop.classList.remove('hidden');
+                setTimeout(() => backdrop.classList.add('opacity-100'), 10);
+                drawer.classList.remove('translate-x-full');
+                drawer.classList.add('translate-x-0');
+                document.body.classList.add('overflow-hidden');
+            }
+
+            function closeDrawer() {
+                if (!drawer || !backdrop) return;
+                drawer.classList.remove('translate-x-0');
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.remove('opacity-100');
+                setTimeout(() => backdrop.classList.add('hidden'), 300);
+                document.body.classList.remove('overflow-hidden');
+            }
+
+            if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
+            if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+            if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeDrawer();
+            });
+
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', closeDrawer);
+            });
+
+            // Accordion dropdown di mobile drawer
+            document.querySelectorAll('.mobile-accordion-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const chevron = this.querySelector('.fa-chevron-down');
+                    const isExpanded = !content.classList.contains('hidden');
+
+                    // Tutup accordion lain agar rapi
+                    document.querySelectorAll('.mobile-accordion-content').forEach(c => {
+                        if (c !== content) c.classList.add('hidden');
+                    });
+                    document.querySelectorAll('.mobile-accordion-btn .fa-chevron-down').forEach(ch => {
+                        if (ch !== chevron) ch.classList.remove('rotate-180');
+                    });
+
+                    if (isExpanded) {
+                        content.classList.add('hidden');
+                        if (chevron) chevron.classList.remove('rotate-180');
+                    } else {
+                        content.classList.remove('hidden');
+                        if (chevron) chevron.classList.add('rotate-180');
+                    }
+                });
+            });
+        })();
     </script>
 
     <!-- AOS Animate JS CDN & Inisialisasi -->

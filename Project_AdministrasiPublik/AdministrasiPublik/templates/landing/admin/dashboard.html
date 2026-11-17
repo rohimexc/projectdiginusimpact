@@ -87,10 +87,6 @@
         <td>{{ log.keterangan }}</td>   <!-- Pastikan ini ada -->
     <td>{{ log.ip_address }}</td>
     </tr>
-    {% empty %}
-    <tr>
-        <td colspan="5" class="p-6 text-center text-slate-400">Belum ada log aktivitas tercatat di database.</td>
-    </tr>
     {% endfor %}
 </tbody>
             </table>
@@ -135,6 +131,7 @@
                     "previous": "Sebelumnya"
                 },
                 "zeroRecords": "Data tidak ditemukan",
+                "emptyTable": "Belum ada log aktivitas tercatat di database.",
                 "infoEmpty": "Menampilkan 0 sampai 0 dari 0 data",
                 "infoFiltered": "(difilter dari _MAX_ total data)"
             },

@@ -8,36 +8,53 @@
 {% block content %}
 <style>
     /* Styling konten CKEditor 5 agar tampil rapi dan proporsional */
-    .ck-content h1, .ck-content h2, .ck-content h3, .ck-content h4 {
+    .ck-content h1,
+    .ck-content h2,
+    .ck-content h3,
+    .ck-content h4 {
         color: #0f6b6b;
         font-weight: 700;
         margin-top: 1.5rem;
         margin-bottom: 0.75rem;
     }
-    .ck-content h1 { font-size: 1.5rem; }
-    .ck-content h2 { font-size: 1.25rem; }
-    .ck-content h3 { font-size: 1.1rem; }
+
+    .ck-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .ck-content h2 {
+        font-size: 1.25rem;
+    }
+
+    .ck-content h3 {
+        font-size: 1.1rem;
+    }
+
     .ck-content p {
         margin-bottom: 0.875rem;
         line-height: 1.7;
         color: #334155;
     }
+
     .ck-content ul {
         list-style-type: disc;
         margin-left: 1.5rem;
         margin-bottom: 1rem;
         color: #334155;
     }
+
     .ck-content ol {
         list-style-type: decimal;
         margin-left: 1.5rem;
         margin-bottom: 1rem;
         color: #334155;
     }
+
     .ck-content li {
         margin-bottom: 0.35rem;
         line-height: 1.6;
     }
+
     .ck-content blockquote {
         border-left: 4px solid #008080;
         padding-left: 1rem;
@@ -49,21 +66,26 @@
         padding-bottom: 0.5rem;
         border-radius: 0 0.5rem 0.5rem 0;
     }
+
     .ck-content table {
         width: 100%;
         border-collapse: collapse;
         margin: 1.25rem 0;
     }
-    .ck-content table th, .ck-content table td {
+
+    .ck-content table th,
+    .ck-content table td {
         border: 1px solid #cbd5e1;
         padding: 0.75rem;
         text-align: left;
     }
+
     .ck-content table th {
         background-color: #f1f5f9;
         font-weight: 600;
         color: #1e293b;
     }
+
     .ck-content img {
         max-width: 100%;
         height: auto;
@@ -93,8 +115,8 @@
         <!-- Tombol Pil Navigasi Tentang (Sesuai 5 Sub Menu) -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-b border-slate-200/80 pb-4">
             {% for item in tentang_nav_list %}
-            <a href="{% url 'landing:detail_tentang' jenis=item.slug %}" 
-               class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition duration-150 shadow-2xs flex items-center gap-1.5 {% if item.slug == active_slug %}bg-[#0f6b6b] text-amber-300 shadow-sm border border-[#0f6b6b]{% else %}bg-white text-slate-700 border border-slate-200 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b]{% endif %}">
+            <a href="{% url 'landing:detail_tentang' jenis=item.slug %}"
+                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition duration-150 shadow-2xs flex items-center gap-1.5 {% if item.slug == active_slug %}bg-[#0f6b6b] text-amber-300 shadow-sm border border-[#0f6b6b]{% else %}bg-white text-slate-700 border border-slate-200 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b]{% endif %}">
                 <i class="{{ item.icon }} text-xs"></i>
                 <span>{{ item.title }}</span>
             </a>
@@ -108,19 +130,24 @@
 
         <!-- Tombol Pil Navigasi Internal (Visi, Misi, Tujuan) -->
         <div class="flex items-center gap-2" data-aos="fade-up">
-            <a href="#visi" class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
+            <a href="#visi"
+                class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
                 Visi
             </a>
-            <a href="#misi" class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
+            <a href="#misi"
+                class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
                 Misi
             </a>
-            <a href="#tujuan" class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
+            <a href="#tujuan"
+                class="px-4 py-1.5 rounded-lg border border-teal-200 bg-teal-50 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b] text-teal-900 font-semibold text-xs sm:text-sm transition shadow-2xs">
                 Tujuan
             </a>
         </div>
 
         <!-- KARTU VISI -->
-        <div id="visi" class="scroll-mt-24 bg-[#0b5454] rounded-2xl p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] shadow-md transition" data-aos="fade-up">
+        <div id="visi"
+            class="scroll-mt-24 bg-[#0b5454] rounded-2xl p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] shadow-md transition"
+            data-aos="fade-up">
             <h2 class="text-xl sm:text-2xl font-bold text-[#f59e0b] mb-3 tracking-wide">
                 Visi
             </h2>
@@ -142,8 +169,10 @@
 
             <div class="space-y-3 pt-1">
                 {% for misi in misi_list %}
-                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-center sm:items-start gap-4 sm:gap-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs">
+                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-center sm:items-start gap-4 sm:gap-6"
+                    data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                    <div
+                        class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs">
                         {{ misi.urutan|default:forloop.counter }}
                     </div>
                     <div class="text-slate-700 text-sm sm:text-base leading-relaxed">
@@ -151,7 +180,8 @@
                     </div>
                 </div>
                 {% empty %}
-                <div class="p-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-slate-400 text-sm">
+                <div
+                    class="p-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-slate-400 text-sm">
                     Belum ada data misi yang diisi.
                 </div>
                 {% endfor %}
@@ -171,8 +201,10 @@
 
             <div class="space-y-3 pt-1">
                 {% for tujuan in tujuan_list %}
-                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-start gap-4 sm:gap-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs mt-0.5">
+                <div class="bg-white rounded-xl border border-slate-200/90 shadow-2xs p-5 sm:p-6 border-l-[5px] border-[#f59e0b] hover:shadow-md transition flex items-start gap-4 sm:gap-6"
+                    data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                    <div
+                        class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-teal-50 text-[#0f6b6b] font-black text-sm sm:text-base flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs mt-0.5">
                         {{ tujuan.urutan|default:forloop.counter }}
                     </div>
                     <div class="space-y-1">
@@ -190,7 +222,8 @@
                     </div>
                 </div>
                 {% empty %}
-                <div class="p-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-slate-400 text-sm">
+                <div
+                    class="p-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center text-slate-400 text-sm">
                     Belum ada data tujuan yang diisi.
                 </div>
                 {% endfor %}
@@ -200,7 +233,7 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const targetSection = "{{ target_section|default:'' }}";
             if (window.location.hash) {
                 const el = document.querySelector(window.location.hash);
@@ -225,28 +258,37 @@
         <!-- Banner & Pratinjau Sertifikat Akreditasi Resmi (Satu Kesatuan Rapi, Tidak Double) -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden" data-aos="fade-up">
             <!-- Header Status Akreditasi BAN-PT -->
-            <div class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div
+                class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div class="space-y-2 max-w-2xl">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
                         <i class="fa-solid fa-award"></i>
                         Status Akreditasi BAN-PT
                     </div>
                     <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">
-                        Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi|default:"Unggul (A)" }}</span>
+                        Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi|default:"Unggul (A)"
+                            }}</span>
                     </h2>
                     <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
-                        Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br class="hidden sm:inline">
-                        {% if akreditasi.nomor_sk and akreditasi.nomor_sk != '-' %}<strong>No. SK:</strong> {{ akreditasi.nomor_sk }} &bull;{% endif %}
-                        {% if akreditasi.tanggal_kadaluarsa %}<strong>Berlaku hingga:</strong> {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Program Studi Sarjana Administrasi Publik FISIP Universitas Tadulako{% endif %}
+                        Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br
+                            class="hidden sm:inline">
+                        {% if akreditasi.nomor_sk and akreditasi.nomor_sk != '-' %}<strong>No. SK:</strong> {{
+                        akreditasi.nomor_sk }} &bull;{% endif %}
+                        {% if akreditasi.tanggal_kadaluarsa %}<strong>Berlaku hingga:</strong> {{
+                        akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Program Studi Sarjana Administrasi Publik
+                        FISIP Universitas Tadulako{% endif %}
                     </p>
                 </div>
                 {% if cert_url %}
                 <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
-                    <a href="{{ cert_url }}" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition border border-white/20 shadow-xs">
+                    <a href="{{ cert_url }}" target="_blank"
+                        class="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition border border-white/20 shadow-xs">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         <span>Buka Tab Baru</span>
                     </a>
-                    <a href="{{ cert_url }}" download class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-xs hover:scale-[1.02] transform">
+                    <a href="{{ cert_url }}" download
+                        class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-xs hover:scale-[1.02] transform">
                         <i class="fa-solid fa-file-arrow-down"></i>
                         <span>Unduh Sertifikat (PDF)</span>
                     </a>
@@ -257,12 +299,15 @@
             <!-- Viewer PDF Langsung Pas Sesuai Lebar Halaman (Fit to Width) -->
             {% if cert_url %}
             <div class="w-full bg-slate-100 p-2 sm:p-4 border-t border-teal-900/10">
-                <div class="w-full h-[750px] sm:h-[950px] bg-white rounded-xl overflow-hidden border border-slate-300/80 shadow-inner">
-                    <iframe src="{{ cert_url }}#view=FitH&toolbar=1" class="w-full h-full border-0" title="Sertifikat Akreditasi Program Studi">
+                <div
+                    class="w-full h-[750px] sm:h-[950px] bg-white rounded-xl overflow-hidden border border-slate-300/80 shadow-inner">
+                    <iframe src="{{ cert_url }}#view=FitH&toolbar=1" class="w-full h-full border-0"
+                        title="Sertifikat Akreditasi Program Studi">
                         <object data="{{ cert_url }}#view=FitH" type="application/pdf" class="w-full h-full">
                             <p class="p-6 text-center text-slate-500 text-sm">
-                                Peramban Anda tidak mendukung pratinjau dokumen interaktif. 
-                                <a href="{{ cert_url }}" target="_blank" class="text-[#0f6b6b] font-bold underline">Klik di sini untuk melihat sertifikat langsung.</a>
+                                Peramban Anda tidak mendukung pratinjau dokumen interaktif.
+                                <a href="{{ cert_url }}" target="_blank" class="text-[#0f6b6b] font-bold underline">Klik
+                                    di sini untuk melihat sertifikat langsung.</a>
                             </p>
                         </object>
                     </iframe>
@@ -283,9 +328,11 @@
             </div>
             <div class="ck-content text-slate-700 text-sm leading-relaxed">
                 {% if konten_obj and konten_obj.konten %}
-                    {{ konten_obj.konten|safe }}
+                {{ konten_obj.konten|safe }}
                 {% else %}
-                    <p class="text-slate-500">Program Studi Sarjana Administrasi Publik Fakultas Ilmu Sosial dan Ilmu Politik Universitas Tadulako senantiasa menjaga penjaminan mutu akademik dan kurikulum sesuai dengan standar akreditasi nasional dan internasional.</p>
+                <p class="text-slate-500">Program Studi Sarjana Administrasi Publik Fakultas Ilmu Sosial dan Ilmu
+                    Politik Universitas Tadulako senantiasa menjaga penjaminan mutu akademik dan kurikulum sesuai dengan
+                    standar akreditasi nasional dan internasional.</p>
                 {% endif %}
             </div>
         </div>
@@ -306,9 +353,9 @@
             </div>
             <div class="ck-content text-slate-700 text-sm leading-relaxed">
                 {% if konten_obj and konten_obj.konten %}
-                    {{ konten_obj.konten|safe }}
+                {{ konten_obj.konten|safe }}
                 {% else %}
-                    <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+                <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
                 {% endif %}
             </div>
         </div>
@@ -329,9 +376,9 @@
             </div>
             <div class="ck-content text-slate-700 text-sm leading-relaxed">
                 {% if konten_obj and konten_obj.konten %}
-                    {{ konten_obj.konten|safe }}
+                {{ konten_obj.konten|safe }}
                 {% else %}
-                    <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+                <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
                 {% endif %}
             </div>
         </div>
@@ -349,9 +396,9 @@
         </div>
         <div class="ck-content text-slate-700 text-sm leading-relaxed">
             {% if konten_obj and konten_obj.konten %}
-                {{ konten_obj.konten|safe }}
+            {{ konten_obj.konten|safe }}
             {% else %}
-                <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+            <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
             {% endif %}
         </div>
         {% if konten_obj and konten_obj.file_dokumen %}
@@ -360,7 +407,8 @@
                 <i class="fa-solid fa-paperclip text-[#0f6b6b]"></i>
                 <span>Dokumen Lampiran Tersedia</span>
             </div>
-            <a href="{{ konten_obj.file_dokumen.url }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-[#0f6b6b] hover:bg-[#0f6b6b] hover:text-white rounded-xl text-xs font-semibold transition border border-teal-200">
+            <a href="{{ konten_obj.file_dokumen.url }}" target="_blank"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-[#0f6b6b] hover:bg-[#0f6b6b] hover:text-white rounded-xl text-xs font-semibold transition border border-teal-200">
                 <i class="fa-solid fa-download"></i>
                 Unduh Berkas Lampiran
             </a>
