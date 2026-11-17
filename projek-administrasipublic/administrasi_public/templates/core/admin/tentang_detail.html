@@ -437,9 +437,12 @@
 
             <!-- Misi -->
             <div class="mb-8">
-              <h3 class="text-xl font-bold text-[#0b7285] mb-4 flex items-center gap-2">
+              <h3 class="text-xl font-bold text-[#0b7285] mb-2 flex items-center gap-2">
                 <i class="fas fa-bullseye text-[#fab005]"></i> Misi
               </h3>
+              <p class="text-slate-600 text-sm mb-4">
+                {{ visi_obj.misi_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:" }}
+              </p>
               <div class="space-y-3">
                 {% for item in daftar_misi %}
                   <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-center gap-4">
@@ -459,18 +462,36 @@
 
             <!-- Tujuan -->
             <div>
-              <h3 class="text-xl font-bold text-[#0b7285] mb-4 flex items-center gap-2">
+              <h3 class="text-xl font-bold text-[#0b7285] mb-2 flex items-center gap-2">
                 <i class="fas fa-award text-[#fab005]"></i> Tujuan
               </h3>
+              <p class="text-slate-600 text-sm mb-4">
+                {{ visi_obj.tujuan_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:" }}
+              </p>
               <div class="space-y-3">
-                <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-start gap-4">
-                  <div class="w-9 h-9 rounded-full bg-[#0b7285]/10 text-[#0b7285] font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">1</div>
-                  <div class="flex-1">
-                    <h4 class="text-base font-bold text-[#0b7285]">Employabilitas</h4>
-                    <p class="text-xs italic text-[#0b7285] mb-1 font-medium">Employability</p>
-                    <p class="text-slate-600 text-sm leading-relaxed">Menghasilkan lulusan yang menguasai teknologi dan ilmu administrasi publik serta berdaya saing global.</p>
+                {% for item in daftar_tujuan %}
+                  <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-start gap-4">
+                    <div class="w-9 h-9 rounded-full bg-[#0b7285]/10 text-[#0b7285] font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
+                      {{ item.urutan|default:forloop.counter }}
+                    </div>
+                    <div class="flex-1">
+                      <h4 class="text-base font-bold text-[#0b7285] leading-snug">{{ item.judul }}</h4>
+                      {% if item.subjudul %}
+                        <p class="text-xs italic text-[#0b7285] mb-1 font-medium">{{ item.subjudul }}</p>
+                      {% endif %}
+                      <p class="text-slate-600 text-sm leading-relaxed">{{ item.deskripsi }}</p>
+                    </div>
                   </div>
-                </div>
+                {% empty %}
+                  <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-start gap-4">
+                    <div class="w-9 h-9 rounded-full bg-[#0b7285]/10 text-[#0b7285] font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">1</div>
+                    <div class="flex-1">
+                      <h4 class="text-base font-bold text-[#0b7285]">Employabilitas</h4>
+                      <p class="text-xs italic text-[#0b7285] mb-1 font-medium">Employability</p>
+                      <p class="text-slate-600 text-sm leading-relaxed">Menghasilkan lulusan yang menguasai ilmu pengetahuan dan teknologi terdepan di bidang administrasi dan kebijakan publik.</p>
+                    </div>
+                  </div>
+                {% endfor %}
               </div>
             </div>
           </article>
