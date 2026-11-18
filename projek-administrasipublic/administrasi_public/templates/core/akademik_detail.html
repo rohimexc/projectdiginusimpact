@@ -408,13 +408,13 @@
 
           <!-- Isi Konten Teks -->
           {% if halaman.isi %}
-          <div class="text-slate-700 leading-relaxed text-sm sm:text-[15px] space-y-4 content-detail">
+          <div class="text-slate-700 leading-relaxed text-sm sm:text-[15px] space-y-4 content-detail text-justify">
             {{ halaman.isi|safe }}
           </div>
           {% else %}
-          <div class="text-slate-600 text-sm leading-relaxed space-y-3">
+          <div class="text-slate-600 text-sm leading-relaxed space-y-3 text-justify">
             <p>Sistem Informasi Akademik Terpadu (SIGA-8) Universitas Tadulako merupakan portal manajemen perkuliahan yang mencakup:</p>
-            <ul class="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-slate-600">
+            <ul class="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-slate-600 text-justify">
               <li>Pengisian Rencana Studi (KRS) daring secara terjadwal setiap awal semester.</li>
               <li>Monitoring kehadiran dan rekapitulasi presensi perkuliahan real-time.</li>
               <li>Akses transkrip nilai akademik serta Kartu Hasil Studi (KHS).</li>
@@ -428,6 +428,25 @@
 
     </div>
   </main>
+
+  <style>
+    .content-detail,
+    .content-detail p,
+    .content-detail div,
+    .content-detail span,
+    .content-detail li {
+      text-align: justify !important;
+      text-justify: inter-word !important;
+    }
+    .content-detail img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.75rem;
+      margin: 1.25rem auto;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+      display: block;
+    }
+  </style>
 
   <!-- FOOTER -->
   <footer class="bg-brand-darkteal text-white pt-12 mt-20" data-aos="fade-up" data-aos-duration="600">

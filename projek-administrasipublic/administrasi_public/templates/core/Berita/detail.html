@@ -57,6 +57,14 @@
         transition-delay: 50ms !important;
       }
     }
+    .content-detail,
+    .content-detail p,
+    .content-detail div,
+    .content-detail span,
+    .content-detail li {
+      text-align: justify !important;
+      text-justify: inter-word !important;
+    }
   </style>
 </head>
 <body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased flex flex-col min-h-screen">
@@ -326,7 +334,7 @@
         {% endif %}
 
         <!-- Isi Berita -->
-        <div class="text-slate-700 leading-relaxed text-sm sm:text-base space-y-4 mb-10 border-b border-slate-100 pb-8 content-detail">
+        <div class="text-slate-700 leading-relaxed text-sm sm:text-base space-y-4 mb-10 border-b border-slate-100 pb-8 content-detail text-justify">
           {{ berita.konten|safe }}
         </div>
 
