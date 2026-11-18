@@ -360,55 +360,56 @@
             {% endif %}
 
             <div class="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white">
-              <div class="bg-[#0b7285] px-6 py-4 text-white">
-                <h3 class="text-base sm:text-lg font-bold tracking-tight">Pratinjau Dokumen</h3>
-                <p class="text-xs text-slate-100 mt-0.5">Sertifikat Resmi Program Studi Administrasi Publik</p>
+              <div class="bg-[#0b7285] px-4 sm:px-6 py-3.5 text-white flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h3 class="text-sm sm:text-base font-bold tracking-tight flex items-center gap-2">
+                    <i class="fas fa-file-pdf text-[#ffd43b]"></i> Pratinjau Dokumen Sertifikat
+                  </h3>
+                  <p class="text-[11px] text-teal-100 hidden sm:block">Sertifikat Resmi Program Studi Administrasi Publik</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="zoomPDF(-0.2)" title="Perkecil" class="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-xs transition">
+                    <i class="fas fa-search-minus"></i>
+                  </button>
+                  <span id="pdf-zoom-level" class="text-xs font-mono font-bold px-2 py-1 bg-black/20 rounded">100%</span>
+                  <button type="button" onclick="zoomPDF(0.2)" title="Perbesar" class="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-xs transition">
+                    <i class="fas fa-search-plus"></i>
+                  </button>
+                </div>
               </div>
 
-              <div class="p-4 sm:p-6 bg-slate-100 flex flex-col items-center justify-center">
-                {% if halaman.file_utama %}
-                  <div class="w-full bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-                    <iframe 
-                      src="{{ halaman.file_utama.url }}#toolbar=1&navpanes=0&scrollbar=1" 
-                      class="w-full h-[650px] sm:h-[800px] border-0" 
-                      title="Sertifikat Akreditasi PDF">
-                      <div class="p-8 text-center text-xs text-slate-500">
-                        Browser Anda tidak mendukung preview PDF langsung. 
-                        <a href="{{ halaman.file_utama.url }}" target="_blank" class="font-bold underline text-[#0b7285] ml-1">Buka Dokumen PDF di sini</a>
-                      </div>
-                    </iframe>
-                  </div>
-                  <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
-                    <a href="{{ halaman.file_utama.url }}" target="_blank" download class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0b7285] hover:bg-[#fab005] hover:text-slate-900 text-white text-xs font-semibold rounded-xl shadow-sm transition">
-                      <i class="fas fa-download"></i> Unduh Berkas PDF
-                    </a>
-                    <a href="{{ halaman.file_utama.url }}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 hover:border-[#0b7285] text-slate-700 hover:text-[#0b7285] text-xs font-semibold rounded-xl shadow-sm transition">
-                      <i class="fas fa-external-link-alt"></i> Buka di Tab Baru
-                    </a>
-                  </div>
-                {% elif halaman.gambar %}
+              <div class="p-3 sm:p-6 bg-slate-100 flex flex-col items-center justify-center">
+                {% if halaman.gambar %}
                   <div class="w-full bg-white rounded-xl p-4 shadow-md flex justify-center border border-slate-200">
                     <img src="{{ halaman.gambar.url }}" alt="{{ halaman.judul }}" class="max-w-full max-h-[750px] mx-auto rounded-xl object-contain">
                   </div>
                 {% else %}
-                  <div class="w-full bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-                    <iframe 
-                      src="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}#toolbar=1&navpanes=0&scrollbar=1" 
-                      class="w-full h-[650px] sm:h-[800px] border-0" 
-                      title="Sertifikat Akreditasi PDF">
-                      <div class="p-8 text-center text-xs text-slate-500">
-                        Browser Anda tidak mendukung preview PDF langsung. 
-                        <a href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" target="_blank" class="font-bold underline text-[#0b7285] ml-1">Buka Dokumen PDF di sini</a>
-                      </div>
-                    </iframe>
+                  <!-- Viewer Canvas Container (PDF.js) - Langsung Tampil Gambar di HP & Desktop -->
+                  <div id="pdf-viewer-wrapper" class="w-full bg-white rounded-xl shadow-md border border-slate-200 p-2 sm:p-6 overflow-hidden">
+                    <div id="pdf-loading-spinner" class="py-16 flex flex-col items-center justify-center text-slate-500">
+                      <i class="fas fa-circle-notch fa-spin text-3xl text-[#0b7285] mb-3"></i>
+                      <p class="text-xs font-semibold text-slate-700">Memuat pratinjau dokumen...</p>
+                      <p class="text-[11px] text-slate-400 mt-1">Harap tunggu sebentar</p>
+                    </div>
+                    <div id="pdf-canvas-container" class="w-full flex flex-col items-center gap-4 max-h-[850px] overflow-y-auto"></div>
                   </div>
+
                   <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
-                    <a href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" target="_blank" download class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0b7285] hover:bg-[#fab005] hover:text-slate-900 text-white text-xs font-semibold rounded-xl shadow-sm transition">
-                      <i class="fas fa-download"></i> Unduh Berkas PDF
-                    </a>
-                    <a href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 hover:border-[#0b7285] text-slate-700 hover:text-[#0b7285] text-xs font-semibold rounded-xl shadow-sm transition">
-                      <i class="fas fa-external-link-alt"></i> Buka di Tab Baru
-                    </a>
+                    {% if halaman.file_utama %}
+                      <a href="{{ halaman.file_utama.url }}" target="_blank" download class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0b7285] hover:bg-[#fab005] hover:text-slate-900 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+                        <i class="fas fa-download"></i> Unduh Berkas PDF
+                      </a>
+                      <a href="{{ halaman.file_utama.url }}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 hover:border-[#0b7285] text-slate-700 hover:text-[#0b7285] text-xs font-semibold rounded-xl shadow-sm transition">
+                        <i class="fas fa-external-link-alt"></i> Buka Layar Penuh
+                      </a>
+                    {% else %}
+                      <a href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" target="_blank" download class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0b7285] hover:bg-[#fab005] hover:text-slate-900 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+                        <i class="fas fa-download"></i> Unduh Berkas PDF
+                      </a>
+                      <a href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 hover:border-[#0b7285] text-slate-700 hover:text-[#0b7285] text-xs font-semibold rounded-xl shadow-sm transition">
+                        <i class="fas fa-external-link-alt"></i> Buka Layar Penuh
+                      </a>
+                    {% endif %}
                   </div>
                 {% endif %}
               </div>
@@ -714,5 +715,101 @@
 
     document.getElementById('mobile-menu-toggle')?.addEventListener('click', toggleMobileMenu);
   </script>
+
+  {% if halaman.kategori == 'akreditasi' and not halaman.gambar %}
+  <!-- PDF.js CDN & Viewer Script (Rendering Canvas Native untuk Mobile HP & Desktop) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    let pdfDoc = null;
+    let currentScale = 1.0;
+    const pdfUrl = "{% if halaman.file_utama %}{{ halaman.file_utama.url }}{% else %}{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}{% endif %}";
+
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+      function renderAllPages() {
+        const container = document.getElementById('pdf-canvas-container');
+        const spinner = document.getElementById('pdf-loading-spinner');
+        if (!container || !pdfDoc) return;
+
+        container.innerHTML = '';
+        const pixelRatio = window.devicePixelRatio || 1;
+        const containerWidth = container.clientWidth || (window.innerWidth > 640 ? 640 : window.innerWidth - 32);
+
+        for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+          pdfDoc.getPage(pageNum).then(function(page) {
+            const unscaledViewport = page.getViewport({ scale: 1 });
+            const fitScale = (containerWidth / unscaledViewport.width) * currentScale;
+            const viewport = page.getViewport({ scale: fitScale });
+
+            const pageWrapper = document.createElement('div');
+            pageWrapper.className = 'w-full flex flex-col items-center mb-4';
+
+            if (pdfDoc.numPages > 1) {
+              const badge = document.createElement('span');
+              badge.className = 'text-[10px] font-bold text-slate-500 mb-1.5 px-2.5 py-0.5 bg-slate-200/80 rounded-full';
+              badge.textContent = 'Halaman ' + pageNum + ' dari ' + pdfDoc.numPages;
+              pageWrapper.appendChild(badge);
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'w-full max-w-full rounded-lg shadow-sm border border-slate-200 bg-white';
+            const context = canvas.getContext('2d');
+
+            canvas.width = Math.floor(viewport.width * pixelRatio);
+            canvas.height = Math.floor(viewport.height * pixelRatio);
+            canvas.style.width = Math.floor(viewport.width) + 'px';
+            canvas.style.maxWidth = '100%';
+            canvas.style.height = 'auto';
+
+            context.scale(pixelRatio, pixelRatio);
+
+            page.render({
+              canvasContext: context,
+              viewport: viewport
+            });
+
+            pageWrapper.appendChild(canvas);
+            container.appendChild(pageWrapper);
+          });
+        }
+        if (spinner) spinner.style.display = 'none';
+      }
+
+      function zoomPDF(delta) {
+        const newScale = Math.min(Math.max(0.6, currentScale + delta), 2.5);
+        if (Math.abs(newScale - currentScale) > 0.05) {
+          currentScale = newScale;
+          const zoomLabel = document.getElementById('pdf-zoom-level');
+          if (zoomLabel) zoomLabel.textContent = Math.round(currentScale * 100) + '%';
+          renderAllPages();
+        }
+      }
+
+      if (pdfUrl) {
+        pdfjsLib.getDocument(pdfUrl).promise.then(function(doc) {
+          pdfDoc = doc;
+          renderAllPages();
+        }).catch(function(err) {
+          console.warn('PDF.js gagal memuat PDF, menggunakan fallback iframe:', err);
+          const spinner = document.getElementById('pdf-loading-spinner');
+          const container = document.getElementById('pdf-canvas-container');
+          if (spinner) spinner.style.display = 'none';
+          if (container) {
+            container.innerHTML = '<iframe src="' + pdfUrl + '#toolbar=1" class="w-full h-[600px] sm:h-[750px] border-0 rounded-lg shadow-inner bg-white"></iframe>';
+          }
+        });
+      }
+
+      let resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          if (pdfDoc) renderAllPages();
+        }, 300);
+      });
+    }
+  </script>
+  {% endif %}
 </body>
 </html>
