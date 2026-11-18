@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
@@ -384,3 +385,18 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.aktivitas} pada {self.waktu}"
+
+
+class PengunjungWeb(models.Model):
+    tanggal = models.DateField(default=timezone.localdate, db_index=True)
+    ip_address = models.CharField(max_length=50, blank=True, null=True)
+    session_key = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Pengunjung Web"
+        verbose_name_plural = "Daftar Pengunjung Web"
+        unique_together = ('tanggal', 'session_key')
+
+    def __str__(self):
+        return f"{self.tanggal} - {self.session_key or self.ip_address}"

@@ -104,15 +104,8 @@
     </div>
 </div>
 
-                <!-- Dropdown Kemahasiswaan -->
-                <div class="relative group cursor-pointer py-2">
-                    <a href="{% url 'landing:galeri_list' %}" class="hover:text-amber-300 flex items-center gap-1">
-                        Kemahasiswaan & Alumni <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                    </a>
-                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
-                        <a href="{% url 'landing:galeri_list' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Galeri Kegiatan</a>
-                    </div>
-                </div>
+                <!-- Kemahasiswaan & Alumni -->
+                <a href="#" class="hover:text-amber-300 transition py-2">Kemahasiswaan & Alumni</a>
 
                 <!-- Menu Langsung Galeri Kegiatan -->
                 <a href="{% url 'landing:galeri_list' %}" class="hover:text-amber-300 transition py-2">Galeri Kegiatan</a>
@@ -202,15 +195,9 @@
             </div>
 
             <!-- 6. Kemahasiswaan & Alumni -->
-            <div class="rounded-xl overflow-hidden bg-white/5">
-                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
-                    <span>Kemahasiswaan & Alumni</span>
-                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
-                </button>
-                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
-                    <a href="{% url 'landing:galeri_list' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Galeri Kegiatan</a>
-                </div>
-            </div>
+            <a href="#" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <span>Kemahasiswaan & Alumni</span>
+            </a>
 
             <!-- 7. Menu Langsung Galeri Kegiatan -->
             <a href="{% url 'landing:galeri_list' %}" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
@@ -260,7 +247,7 @@
                     <li><a href="#" class="hover:underline">Website UNTAD</a></li>
                     <li><a href="#" class="hover:underline">Website Kepegawaian</a></li>
                     <li><a href="{% url 'landing:detail_akademik' slug='siga-8' %}" class="hover:underline">SIGA-8</a></li>
-                    <li><a href="#" class="hover:underline">Dosen Prodi Administrasi Publik</a></li>
+                    <li><a href="{% url 'landing:dosen_beranda' %}" class="hover:underline">Dosen Prodi Administrasi Publik</a></li>
                     <li><a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="hover:underline">Sertifikat Akreditasi</a></li>
                 </ul>
             </div>
@@ -274,8 +261,8 @@
                 </div>
                 <div class="bg-[#084848] p-4 rounded-xl text-xs space-y-1 text-teal-100 border border-teal-700/50">
                     <p class="font-bold text-white mb-1">Pengunjung</p>
-                    <p>Hari Ini: 0000</p>
-                    <p>Total: 006320</p>
+                    <p>Hari Ini: {{ pengunjung_hari_ini|default:"0001" }}</p>
+                    <p>Total: {{ total_pengunjung|default:"006321" }}</p>
                 </div>
             </div>
         </div>
