@@ -682,14 +682,18 @@
     // Mobile Navbar Drawer & Accordion
     function toggleMobileMenu() {
       const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
       const iconBars = document.getElementById('menu-icon-bars');
       const iconClose = document.getElementById('menu-icon-close');
+      if (!drawer) return;
       if (drawer.classList.contains('hidden')) {
         drawer.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
         if (iconBars) iconBars.classList.add('hidden');
         if (iconClose) iconClose.classList.remove('hidden');
       } else {
         drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
         if (iconBars) iconBars.classList.remove('hidden');
         if (iconClose) iconClose.classList.add('hidden');
       }
@@ -697,10 +701,12 @@
 
     function closeMobileMenu() {
       const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
       const iconBars = document.getElementById('menu-icon-bars');
       const iconClose = document.getElementById('menu-icon-close');
       if (drawer) {
         drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
         if (iconBars) iconBars.classList.remove('hidden');
         if (iconClose) iconClose.classList.add('hidden');
       }
@@ -708,12 +714,12 @@
 
     function toggleMobileAccordion(id) {
       const el = document.getElementById(id);
+      const icon = document.getElementById(id.replace('-menu', '-icon'));
       if (el) {
         el.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
       }
     }
-
-    document.getElementById('mobile-menu-toggle')?.addEventListener('click', toggleMobileMenu);
   </script>
 
   {% if halaman.kategori == 'akreditasi' and not halaman.gambar %}
