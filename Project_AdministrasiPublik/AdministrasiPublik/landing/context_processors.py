@@ -45,3 +45,4 @@ def visitor_count_processor(request):
             'pengunjung_hari_ini': '0001',
             'total_pengunjung': '006321'
         }
+
