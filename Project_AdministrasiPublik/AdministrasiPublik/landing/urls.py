@@ -18,6 +18,8 @@ urlpatterns = [
     path('berita/<slug:slug>/hapus/', views.berita_delete_view, name='berita_delete'),
     
     path('tenaga-pendidik/', views.tenaga_pendidik_beranda_view, name='tenaga_pendidik_beranda'),
+    path('tenaga-pengajar/', views.dosen_beranda_view, name='dosen_beranda'),
+    path('galeri-kegiatan/', views.galeri_kegiatan_view, name='galeri_list'),
     path('dashboard/tendik/', views.tenaga_pendidik_view, name='tenaga_pendidik'),
     path('dashboard/tendik/tambah/', views.tendik_create_view, name='tendik_create'),
     path('dashboard/tendik/<int:pk>/ubah/', views.tendik_update_view, name='tendik_update'),

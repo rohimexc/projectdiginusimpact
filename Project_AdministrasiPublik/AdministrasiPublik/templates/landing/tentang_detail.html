@@ -258,59 +258,67 @@
         <!-- Banner & Pratinjau Sertifikat Akreditasi Resmi (Satu Kesatuan Rapi, Tidak Double) -->
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden" data-aos="fade-up">
             <!-- Header Status Akreditasi BAN-PT -->
-            <div
-                class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] p-6 sm:p-8 text-white border-l-[6px] border-[#f59e0b] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div class="space-y-2 max-w-2xl">
-                    <div
-                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
+            <div class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] p-5 sm:p-7 text-white border-l-[6px] border-[#f59e0b] flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                <div class="space-y-2 flex-1 min-w-0">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-xs text-amber-300 text-xs font-bold border border-white/20">
                         <i class="fa-solid fa-award"></i>
-                        Status Akreditasi BAN-PT
+                        <span>Status Akreditasi BAN-PT</span>
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">
-                        Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi|default:"Unggul (A)"
-                            }}</span>
+                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-wide">
+                        Peringkat: <span class="text-amber-300">{{ akreditasi.status_akreditasi|default:"Unggul (A)" }}</span>
                     </h2>
                     <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
-                        Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br
-                            class="hidden sm:inline">
-                        {% if akreditasi.nomor_sk and akreditasi.nomor_sk != '-' %}<strong>No. SK:</strong> {{
-                        akreditasi.nomor_sk }} &bull;{% endif %}
-                        {% if akreditasi.tanggal_kadaluarsa %}<strong>Berlaku hingga:</strong> {{
-                        akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Program Studi Sarjana Administrasi Publik
-                        FISIP Universitas Tadulako{% endif %}
+                        Berdasarkan Keputusan Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) <br class="hidden sm:inline">
+                        {% if akreditasi.nomor_sk and akreditasi.nomor_sk != '-' %}<strong>No. SK:</strong> {{ akreditasi.nomor_sk }} &bull;{% endif %}
+                        {% if akreditasi.tanggal_kadaluarsa %}<strong>Berlaku hingga:</strong> {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Program Studi Sarjana Administrasi Publik FISIP Universitas Tadulako{% endif %}
                     </p>
                 </div>
                 {% if cert_url %}
-                <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
+                <div class="flex flex-wrap items-center gap-2.5 self-start lg:self-center shrink-0">
                     <a href="{{ cert_url }}" target="_blank"
-                        class="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition border border-white/20 shadow-xs">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition border border-white/20 shadow-xs whitespace-nowrap">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
                         <span>Buka Tab Baru</span>
                     </a>
                     <a href="{{ cert_url }}" download
-                        class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md shrink-0 text-xs hover:scale-[1.02] transform">
-                        <i class="fa-solid fa-file-arrow-down"></i>
-                        <span>Unduh Sertifikat (PDF)</span>
+                        class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-[#f59e0b] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] text-slate-900 font-extrabold rounded-xl transition shadow-md text-xs whitespace-nowrap">
+                        <i class="fa-solid fa-file-arrow-down text-sm"></i>
+                        <span>Unduh Sertifikat</span>
                     </a>
                 </div>
                 {% endif %}
             </div>
 
-            <!-- Viewer PDF Langsung Pas Sesuai Lebar Halaman (Fit to Width) -->
+            <!-- Viewer PDF Langsung Pas Sesuai Lebar Halaman (Menggunakan PDF.js untuk Mobile & Desktop) -->
             {% if cert_url %}
             <div class="w-full bg-slate-100 p-2 sm:p-4 border-t border-teal-900/10">
-                <div
-                    class="w-full h-[750px] sm:h-[950px] bg-white rounded-xl overflow-hidden border border-slate-300/80 shadow-inner">
-                    <iframe src="{{ cert_url }}#view=FitH&toolbar=1" class="w-full h-full border-0"
-                        title="Sertifikat Akreditasi Program Studi">
-                        <object data="{{ cert_url }}#view=FitH" type="application/pdf" class="w-full h-full">
-                            <p class="p-6 text-center text-slate-500 text-sm">
-                                Peramban Anda tidak mendukung pratinjau dokumen interaktif.
-                                <a href="{{ cert_url }}" target="_blank" class="text-[#0f6b6b] font-bold underline">Klik
-                                    di sini untuk melihat sertifikat langsung.</a>
-                            </p>
-                        </object>
-                    </iframe>
+                <div class="w-full bg-slate-900 rounded-xl overflow-hidden border border-slate-700/80 shadow-inner flex flex-col">
+                    <!-- Status Bar Dokumen -->
+                    <div class="px-4 py-2.5 bg-slate-950/80 border-b border-white/10 flex items-center justify-between text-xs text-white">
+                        <span id="certPdfStatusText" class="text-[11px] text-teal-300 font-semibold flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span>Memuat pratinjau sertifikat...</span>
+                        </span>
+                        <a href="{{ cert_url }}" target="_blank" class="text-[11px] text-amber-300 hover:underline flex items-center gap-1">
+                            <span>Buka Layar Penuh</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                        </a>
+                    </div>
+
+                    <!-- Scrollable Container untuk Halaman-Halaman PDF -->
+                    <div id="certPdfScrollContainer" class="w-full min-h-[480px] max-h-[850px] overflow-y-auto p-2 sm:p-6 flex flex-col items-center bg-slate-900/90 space-y-4">
+                        <div id="certPdfLoadingSpinner" class="flex flex-col items-center justify-center py-20 text-teal-400 gap-2">
+                            <i class="fa-solid fa-circle-notch fa-spin text-2xl"></i>
+                            <span class="text-xs text-slate-300">Merender pratinjau sertifikat PDF...</span>
+                        </div>
+                        
+                        <div id="certPdfErrorFallback" class="hidden text-center py-12 px-4 text-slate-300 space-y-3">
+                            <p class="text-xs">Sertifikat tidak dapat dimuat otomatis di peramban ini.</p>
+                            <a href="{{ cert_url }}" target="_blank" class="inline-block px-4 py-2 bg-teal-700 hover:bg-teal-600 text-white rounded-lg text-xs font-semibold">
+                                Buka / Unduh Berkas Sertifikat
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endif %}
@@ -418,4 +426,73 @@
     {% endif %}
 
 </div>
+
+{% if jenis == 'sertifikat' %}
+<!-- PDF.js Mozilla CDN untuk Render Halaman Dokumen PDF Asli di Layar HP & Desktop -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    (function() {
+        const fileUrl = "{% if konten_obj and konten_obj.file_dokumen %}{{ konten_obj.file_dokumen.url }}{% elif akreditasi and akreditasi.sertifikat %}{{ akreditasi.sertifikat.url }}{% endif %}";
+        if (!fileUrl) return;
+
+        const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(fileUrl);
+        const container = document.getElementById('certPdfScrollContainer');
+        const spinner = document.getElementById('certPdfLoadingSpinner');
+        const statusText = document.getElementById('certPdfStatusText');
+
+        if (!container) return;
+
+        if (isImage) {
+            if (spinner) spinner.style.display = 'none';
+            if (statusText) statusText.innerHTML = '<i class="fa-solid fa-image"></i> <span>Pratinjau Sertifikat Gambar</span>';
+            const img = document.createElement('img');
+            img.src = fileUrl;
+            img.className = 'max-w-full max-h-[750px] rounded-lg shadow-xl object-contain mx-auto';
+            container.appendChild(img);
+            return;
+        }
+
+        // Setup PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        pdfjsLib.getDocument(fileUrl).promise.then(async function(pdf) {
+            if (spinner) spinner.style.display = 'none';
+            if (statusText) statusText.innerHTML = `<i class="fa-solid fa-file-pdf"></i> <span>Pratinjau Sertifikat (${pdf.numPages} Halaman)</span>`;
+
+            const containerWidth = Math.min((container.clientWidth || 800) - 24, 850);
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const unscaledViewport = page.getViewport({ scale: 1 });
+                const scale = containerWidth / unscaledViewport.width;
+                const viewport = page.getViewport({ scale: Math.max(scale, 1.0) });
+
+                const pageWrapper = document.createElement('div');
+                pageWrapper.className = 'w-full flex flex-col items-center my-2';
+
+                const canvas = document.createElement('canvas');
+                canvas.className = 'shadow-xl rounded-lg bg-white max-w-full border border-slate-700';
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+                const label = document.createElement('span');
+                label.className = 'text-[11px] text-slate-400 font-medium mt-1';
+                label.innerText = `Halaman ${pageNum} dari ${pdf.numPages}`;
+
+                pageWrapper.appendChild(canvas);
+                pageWrapper.appendChild(label);
+                container.appendChild(pageWrapper);
+            }
+        }).catch(function(err) {
+            console.error("PDF.js render error:", err);
+            if (spinner) spinner.style.display = 'none';
+            const fallback = document.getElementById('certPdfErrorFallback');
+            if (fallback) fallback.classList.remove('hidden');
+        });
+    })();
+</script>
+{% endif %}
 {% endblock %}

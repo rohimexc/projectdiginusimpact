@@ -78,29 +78,8 @@
     </div>
 </section>
 
-<!-- Galeri Kegiatan -->
-<section id="galeri" class="max-w-6xl mx-auto py-12 sm:py-16 px-4 sm:px-6 border-t border-slate-200">
-    <div class="text-center mb-8 sm:mb-10" data-aos="fade-up">
-        <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Galeri Kegiatan</h2>
-    </div>
-    <div class="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm" data-aos="fade-up" data-aos-delay="100">
-        {% if galeri_list %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {% for g in galeri_list %}
-            <div class="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-100 hover:shadow-md transition" data-aos="zoom-in" data-aos-delay="{{ forloop.counter|default:1 }}00">
-                <img src="{{ g.foto.url }}" alt="{{ g.judul }}" class="w-full h-44 sm:h-48 object-cover rounded-lg">
-                <p class="text-xs font-semibold text-slate-700 text-center truncate">{{ g.judul }}</p>
-            </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <p class="text-slate-400 text-sm italic text-center py-6">Belum ada galeri kegiatan.</p>
-        {% endif %}
-    </div>
-</section>
-
 <!-- Berita Terbaru -->
-<section id="berita" class="max-w-6xl mx-auto py-12 sm:py-16 px-4 sm:px-6">
+<section id="berita" class="max-w-6xl mx-auto py-12 sm:py-16 px-4 sm:px-6 border-t border-slate-200">
     <div class="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-10 text-center sm:text-left gap-4" data-aos="fade-up">
         <div>
             <h2 class="text-2xl sm:text-3xl font-bold text-tealBrand">Berita Terbaru</h2>

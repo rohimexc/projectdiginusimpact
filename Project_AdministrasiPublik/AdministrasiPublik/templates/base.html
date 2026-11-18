@@ -99,30 +99,23 @@
     </button>
     <!-- Dropdown Menu -->
     <div class="absolute left-0 mt-0 w-48 bg-white text-slate-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-        <a href="" class="block px-4 py-2.5 text-xs hover:bg-teal-50 hover:text-teal-700 rounded-t-lg">Tenaga Pengajar</a>
+        <a href="{% url 'landing:dosen_beranda' %}" class="block px-4 py-2.5 text-xs hover:bg-teal-50 hover:text-teal-700 rounded-t-lg">Tenaga Pengajar</a>
         <a href="{% url 'landing:tenaga_pendidik_beranda' %}" class="block px-4 py-2.5 text-xs hover:bg-teal-50 hover:text-teal-700 rounded-b-lg">Tenaga Kependidikan</a>
     </div>
 </div>
 
                 <!-- Dropdown Kemahasiswaan -->
                 <div class="relative group cursor-pointer py-2">
-                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                    <a href="{% url 'landing:galeri_list' %}" class="hover:text-amber-300 flex items-center gap-1">
                         Kemahasiswaan & Alumni <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </a>
                     <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
-                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Galeri Kegiatan</a>
+                        <a href="{% url 'landing:galeri_list' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Galeri Kegiatan</a>
                     </div>
                 </div>
 
-                <!-- Dropdown Akreditasi -->
-                <div class="relative group cursor-pointer py-2">
-                    <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="hover:text-amber-300 flex items-center gap-1">
-                        Akreditasi <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                    </a>
-                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
-                        <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sertifikat BAN-PT</a>
-                    </div>
-                </div>
+                <!-- Menu Langsung Galeri Kegiatan -->
+                <a href="{% url 'landing:galeri_list' %}" class="hover:text-amber-300 transition py-2">Galeri Kegiatan</a>
             </div>
         </div>
     </nav>
@@ -203,7 +196,7 @@
                     <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
                 </button>
                 <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
-                    <a href="#" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Tenaga Pengajar</a>
+                    <a href="{% url 'landing:dosen_beranda' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Tenaga Pengajar</a>
                     <a href="{% url 'landing:tenaga_pendidik_beranda' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Tenaga Kependidikan</a>
                 </div>
             </div>
@@ -215,20 +208,15 @@
                     <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
                 </button>
                 <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
-                    <a href="{% url 'landing:landing_home' %}#galeri" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Galeri Kegiatan</a>
+                    <a href="{% url 'landing:galeri_list' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Galeri Kegiatan</a>
                 </div>
             </div>
 
-            <!-- 7. Akreditasi -->
-            <div class="rounded-xl overflow-hidden bg-white/5">
-                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
-                    <span>Akreditasi</span>
-                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
-                </button>
-                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
-                    <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Sertifikat BAN-PT</a>
-                </div>
-            </div>
+            <!-- 7. Menu Langsung Galeri Kegiatan -->
+            <a href="{% url 'landing:galeri_list' %}" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <span>Galeri Kegiatan</span>
+                <i class="fa-solid fa-images text-[11px] text-teal-300"></i>
+            </a>
         </div>
 
         <!-- Footer Drawer -->

@@ -159,17 +159,35 @@
             </div>
         </div>
 
-        <!-- Embedded Viewer PDF Langsung di Laman -->
-        <div class="w-full bg-slate-100 p-2 sm:p-4">
-            <div class="w-full h-[750px] sm:h-[950px] bg-white rounded-xl overflow-hidden border border-slate-300/80 shadow-inner">
-                <iframe src="{{ current_page.file_utama.url }}#view=FitH&toolbar=1" class="w-full h-full border-0" title="Pratinjau Dokumen {{ current_page.judul }}">
-                    <object data="{{ current_page.file_utama.url }}#view=FitH" type="application/pdf" class="w-full h-full">
-                        <p class="p-6 text-center text-slate-500 text-sm">
-                            Peramban Anda tidak mendukung tampilan dokumen interaktif secara langsung. 
-                            <a href="{{ current_page.file_utama.url }}" target="_blank" class="text-[#0f6b6b] font-bold underline">Klik di sini untuk melihat berkas langsung.</a>
-                        </p>
-                    </object>
-                </iframe>
+        <!-- Embedded Viewer PDF Langsung di Laman Menggunakan PDF.js (Kompatibel 100% Mobile & Desktop) -->
+        <div class="w-full bg-slate-100 p-2 sm:p-4 border-t border-teal-900/10">
+            <div class="w-full bg-slate-900 rounded-xl overflow-hidden border border-slate-700/80 shadow-inner flex flex-col">
+                <!-- Status Bar Dokumen -->
+                <div class="px-4 py-2.5 bg-slate-950/80 border-b border-white/10 flex items-center justify-between text-xs text-white">
+                    <span id="pdfStatusText" class="text-[11px] text-teal-300 font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>Memuat pratinjau dokumen...</span>
+                    </span>
+                    <a href="{{ current_page.file_utama.url }}" target="_blank" class="text-[11px] text-amber-300 hover:underline flex items-center gap-1">
+                        <span>Buka Layar Penuh</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                    </a>
+                </div>
+
+                <!-- Scrollable Container untuk Halaman-Halaman PDF -->
+                <div id="pdfScrollContainer" class="w-full min-h-[480px] max-h-[850px] overflow-y-auto p-2 sm:p-6 flex flex-col items-center bg-slate-900/90 space-y-4">
+                    <div id="pdfLoadingSpinner" class="flex flex-col items-center justify-center py-20 text-teal-400 gap-2">
+                        <i class="fa-solid fa-circle-notch fa-spin text-2xl"></i>
+                        <span class="text-xs text-slate-300">Merender pratinjau dokumen PDF...</span>
+                    </div>
+                    
+                    <div id="pdfErrorFallback" class="hidden text-center py-12 px-4 text-slate-300 space-y-3">
+                        <p class="text-xs">Dokumen tidak dapat dimuat otomatis di peramban ini.</p>
+                        <a href="{{ current_page.file_utama.url }}" target="_blank" class="inline-block px-4 py-2 bg-teal-700 hover:bg-teal-600 text-white rounded-lg text-xs font-semibold">
+                            Buka / Unduh Berkas Dokumen
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -241,4 +259,71 @@
     {% endif %}
 
 </div>
+
+{% if current_page.file_utama %}
+<!-- PDF.js Mozilla CDN untuk Render Halaman Dokumen PDF Asli di Layar HP & Desktop -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    (function() {
+        const fileUrl = "{{ current_page.file_utama.url }}";
+        if (!fileUrl) return;
+
+        const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(fileUrl);
+        const container = document.getElementById('pdfScrollContainer');
+        const spinner = document.getElementById('pdfLoadingSpinner');
+        const statusText = document.getElementById('pdfStatusText');
+
+        if (isImage) {
+            if (spinner) spinner.style.display = 'none';
+            if (statusText) statusText.innerHTML = '<i class="fa-solid fa-image"></i> <span>Pratinjau Berkas Gambar</span>';
+            const img = document.createElement('img');
+            img.src = fileUrl;
+            img.className = 'max-w-full max-h-[750px] rounded-lg shadow-xl object-contain mx-auto';
+            container.appendChild(img);
+            return;
+        }
+
+        // Setup PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        pdfjsLib.getDocument(fileUrl).promise.then(async function(pdf) {
+            if (spinner) spinner.style.display = 'none';
+            if (statusText) statusText.innerHTML = `<i class="fa-solid fa-file-pdf"></i> <span>Pratinjau Dokumen (${pdf.numPages} Halaman)</span>`;
+
+            const containerWidth = Math.min((container.clientWidth || 800) - 24, 850);
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const unscaledViewport = page.getViewport({ scale: 1 });
+                const scale = containerWidth / unscaledViewport.width;
+                const viewport = page.getViewport({ scale: Math.max(scale, 1.0) });
+
+                const pageWrapper = document.createElement('div');
+                pageWrapper.className = 'w-full flex flex-col items-center my-2';
+
+                const canvas = document.createElement('canvas');
+                canvas.className = 'shadow-xl rounded-lg bg-white max-w-full border border-slate-700';
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+                const label = document.createElement('span');
+                label.className = 'text-[11px] text-slate-400 font-medium mt-1';
+                label.innerText = `Halaman ${pageNum} dari ${pdf.numPages}`;
+
+                pageWrapper.appendChild(canvas);
+                pageWrapper.appendChild(label);
+                container.appendChild(pageWrapper);
+            }
+        }).catch(function(err) {
+            console.error("PDF.js render error:", err);
+            if (spinner) spinner.style.display = 'none';
+            const fallback = document.getElementById('pdfErrorFallback');
+            if (fallback) fallback.classList.remove('hidden');
+        });
+    })();
+</script>
+{% endif %}
 {% endblock %}

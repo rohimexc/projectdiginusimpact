@@ -353,6 +353,18 @@ def tenaga_pendidik_beranda_view(request):
         'tendik_list': pendidik_list
     })
 
+def dosen_beranda_view(request):
+    dosen_list = Dosen.objects.all().order_by('nama')
+    return render(request, 'landing/Dosen/dosen_public_list.html', {
+        'dosen_list': dosen_list
+    })
+
+def galeri_kegiatan_view(request):
+    galeri_list = Galeri.objects.all().order_by('urutan', '-tanggal', '-id')
+    return render(request, 'landing/galeri_list.html', {
+        'galeri_list': galeri_list
+    })
+
 # 1. READ / HALAMAN KELOLA TENDIK & DOSEN (Dilengkapi Modal Hapus)
 @login_required(login_url='landing:login')
 def tenaga_pendidik_view(request):
