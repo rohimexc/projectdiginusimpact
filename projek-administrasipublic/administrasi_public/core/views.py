@@ -65,6 +65,19 @@ def home(request):
 
 
 def galeri_list(request):
+    # Auto-seed foto kegiatan bila data galeri masih kosong
+    if not Galeri.objects.exists():
+        sample_galeri = [
+            ("Kuliah Umum: Transformasi Digital Sektor Publik", "berita/Untitled_ALVBYOy.png", 1),
+            ("Pengabdian Masyarakat di Desa Binaan FISIP", "berita/Untitled_BkdR4hu.png", 2),
+            ("Seminar Nasional Kebijakan Publik & Smart Governance", "berita/IMG_0453.JPEG", 3),
+            ("Pelatihan Kepemimpinan Mahasiswa Administrasi Publik", "berita/3d80edb0db6f6ab2fa95cf3cf5006344.jpg", 4),
+            ("Kunjungan Studi Lapangan Tata Kelola Pemerintahan", "berita/gugugaga.webp", 5),
+            ("Rapat Kerja Kurikulum Berbasis OBE & MBKM", "berita/Untitled.png", 6),
+        ]
+        for judul, gambar, urutan in sample_galeri:
+            Galeri.objects.create(judul=judul, gambar=gambar, urutan=urutan)
+
     query = request.GET.get('q', '').strip()
     galeri_qs = Galeri.objects.all().order_by('urutan', '-created_at')
 
@@ -84,6 +97,41 @@ def galeri_list(request):
 
 
 def berita_list(request):
+    # Auto-seed berita bila data berita masih kosong
+    if not Berita.objects.exists():
+        from django.utils import timezone
+        sample_berita = [
+            (
+                "Kuliah Tamu: Transformasi Digital dan Reformasi Birokrasi Menuju Smart Governance",
+                "Program Studi Administrasi Publik menggelar kuliah tamu menghadirkan pakar tata kelola digital untuk membahas reformasi birokrasi era modern.",
+                "<p>Program Studi Administrasi Publik FISIP Universitas Tadulako sukses menyelenggarakan Kuliah Tamu bertajuk <strong>'Transformasi Digital dan Reformasi Birokrasi Menuju Smart Governance'</strong>. Acara ini dihadiri oleh ratusan mahasiswa dan dosen, membahas strategi implementasi teknologi dalam peningkatan efisiensi layanan publik di era Society 5.0.</p>",
+                "berita/Untitled_ALVBYOy.png",
+                128,
+                34,
+                12,
+            ),
+            (
+                "Pengabdian Masyarakat: Penguatan Kapasitas Administrasi dan Akuntabilitas Desa",
+                "Dosen dan mahasiswa Administrasi Publik melaksanakan program pendampingan tata kelola administrasi dan keuangan desa binaan.",
+                "<p>Sebagai wujud nyata implementasi Tri Dharma Perguruan Tinggi, tim dosen dan mahasiswa Program Studi Administrasi Publik FISIP Universitas Tadulako melaksanakan kegiatan Pengabdian kepada Masyarakat (PkM) dengan fokus <strong>'Penguatan Kapasitas Aparatur Desa dalam Tata Kelola Administrasi dan Akuntabilitas Publik'</strong>.</p>",
+                "berita/Untitled_BkdR4hu.png",
+                95,
+                27,
+                8,
+            ),
+        ]
+        for judul, ringkasan, konten, gambar, views, likes, shares in sample_berita:
+            Berita.objects.create(
+                judul=judul,
+                ringkasan=ringkasan,
+                konten=konten,
+                gambar=gambar,
+                views=views,
+                likes=likes,
+                shares=shares,
+                posted_at=timezone.now(),
+            )
+
     query = request.GET.get('q', '')
     tahun = request.GET.get('tahun', '')
     bulan = request.GET.get('bulan', '')

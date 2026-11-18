@@ -651,12 +651,28 @@
   <!-- AOS Script & Init -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script>
-    AOS.init({
-      duration: window.innerWidth < 768 ? 450 : 650,
-      offset: window.innerWidth < 768 ? 25 : 60,
-      once: true,
-      easing: 'ease-out-cubic'
-    });
+    try {
+      if (typeof AOS !== 'undefined') {
+        AOS.init({
+          duration: window.innerWidth < 768 ? 450 : 650,
+          offset: window.innerWidth < 768 ? 25 : 60,
+          once: true,
+          easing: 'ease-out-cubic'
+        });
+      }
+    } catch (e) {
+      console.warn('AOS initialization error:', e);
+    }
+    // Failsafe: pastikan semua elemen konten ber-AOS selalu terlihat jika CDN lambat/gagal
+    setTimeout(function() {
+      document.querySelectorAll('[data-aos]').forEach(function(el) {
+        if (!el.classList.contains('aos-animate')) {
+          el.classList.add('aos-animate');
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }
+      });
+    }, 1000);
 
     // Mobile Navbar Drawer & Accordion
     function toggleMobileMenu() {
