@@ -7,6 +7,7 @@ from django.contrib.auth import views as auth_views
 # Import view dari core.views
 from core.views import (
     home,
+    galeri_list,
     berita_list,
     berita_detail,
     berita_like,
@@ -60,6 +61,7 @@ urlpatterns = [
 
     # 1. Halaman Publik Utama
     path('', home, name='home'),
+    path('galeri/', galeri_list, name='galeri_list'),
     path('Berita/', berita_list, name='berita_list'),
     path('Berita/<int:pk>/', berita_detail, name='berita_detail'),
     path('Berita/<int:pk>/like/', berita_like, name='berita_like'),

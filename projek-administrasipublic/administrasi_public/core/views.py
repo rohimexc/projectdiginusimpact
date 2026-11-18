@@ -52,18 +52,35 @@ def _validate_request_files(request, field_validators):
 def home(request):
     hero = Hero.objects.filter(is_active=True).first()
     sambutan = Sambutan.objects.first()
-    daftar_galeri = Galeri.objects.all().order_by('urutan', '-created_at')[:8]
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
     daftar_tenaga_kependidikan = TenagaPendidik.objects.filter(jenis='TENDIK')[:4]
 
     context = {
         'hero': hero,
         'sambutan': sambutan,
-        'daftar_galeri': daftar_galeri,
         'daftar_berita': daftar_berita,
         'daftar_tenaga_kependidikan': daftar_tenaga_kependidikan,
     }
     return render(request, 'core/index.html', context)
+
+
+def galeri_list(request):
+    query = request.GET.get('q', '').strip()
+    galeri_qs = Galeri.objects.all().order_by('urutan', '-created_at')
+
+    if query:
+        galeri_qs = galeri_qs.filter(judul__icontains=query)
+
+    paginator = Paginator(galeri_qs, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'query': query,
+        'total_galeri': galeri_qs.count(),
+    }
+    return render(request, 'core/galeri/list.html', context)
 
 
 def berita_list(request):
