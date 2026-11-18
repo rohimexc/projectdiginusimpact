@@ -511,10 +511,27 @@
   </section>
 
   <!-- ================= FOOTER & HUBUNGI KAMI ================= -->
-  <footer class="bg-brand-darkteal text-white pt-12">
+  <footer class="bg-brand-darkteal text-white pt-10 md:pt-12">
+    <!-- Profil Singkat Prodi (Khusus Tampilan Mobile HP: Tampil di paling atas sebagai pembuka Footer yang rapi) -->
+    <div class="max-w-6xl mx-auto px-6 mb-8 md:hidden" data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-3">
+        <i class="fas fa-graduation-cap text-3xl text-brand-gold"></i>
+        <div>
+          <h4 class="text-base font-bold text-brand-gold leading-tight">Administrasi Publik</h4>
+          <p class="text-xs text-teal-200">FISIP Universitas Tadulako</p>
+        </div>
+      </div>
+      <p class="text-slate-300 text-xs leading-relaxed mb-3">
+        Mencetak sarjana yang unggul, berintegritas, serta berwawasan lingkungan dalam perumusan kebijakan dan pelayanan publik.
+      </p>
+      <p class="text-xs text-teal-200 flex items-center gap-2">
+        <i class="fa-solid fa-building-columns text-brand-gold"></i> Kampus Bumi Tadulako, Palu
+      </p>
+    </div>
+
     <!-- Contact Card & Maps Embed -->
-    <div class="max-w-5xl mx-auto px-6 -translate-y-12" data-aos="fade-up" data-aos-duration="800">
-      <div class="bg-brand-teal rounded-2xl p-8 flex flex-col md:flex-row gap-8 shadow-2xl">
+    <div class="max-w-5xl mx-auto px-6 mb-8 md:mb-0 translate-y-0 md:-translate-y-12" data-aos="fade-up" data-aos-duration="800">
+      <div class="bg-brand-teal rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row gap-8 shadow-2xl">
         <div class="flex-1 min-w-[280px]">
           <h3 class="text-lg font-semibold mb-5 flex items-center gap-2">
             <i class="fa-solid fa-address-book text-brand-gold"></i> Informasi Kontak
@@ -546,8 +563,8 @@
     <!-- 4 Kolom Footer Lengkap -->
     <div class="max-w-6xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-white/10 text-xs" data-aos="fade-up" data-aos-delay="100">
       
-      <!-- Kolom 1: Profil Singkat Prodi -->
-      <div class="space-y-3">
+      <!-- Kolom 1: Profil Singkat Prodi (Tampil di Desktop, di Mobile sudah ditampilkan di atas) -->
+      <div class="space-y-3 hidden md:block">
         <div class="flex items-center gap-2.5">
           <i class="fas fa-graduation-cap text-2xl text-brand-gold"></i>
           <div>
