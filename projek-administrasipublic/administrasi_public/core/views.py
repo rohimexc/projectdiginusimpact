@@ -132,10 +132,12 @@ def berita_list(request):
                 posted_at=timezone.now(),
             )
 
-    query = request.GET.get('q', '')
-    tahun = request.GET.get('tahun', '')
-    bulan = request.GET.get('bulan', '')
-    tanggal = request.GET.get('tanggal', '')
+    query = request.GET.get('q', '').strip()
+    tanggal_mulai = request.GET.get('tanggal_mulai', '').strip()
+    tanggal_akhir = request.GET.get('tanggal_akhir', '').strip()
+    tahun = request.GET.get('tahun', '').strip()
+    bulan = request.GET.get('bulan', '').strip()
+    tanggal = request.GET.get('tanggal', '').strip()
 
     berita_qs = Berita.objects.all().order_by('-posted_at')
 
@@ -144,12 +146,17 @@ def berita_list(request):
             Q(judul__icontains=query) | Q(konten__icontains=query)
         )
 
+    # 2 Filter Berita: Judul & Rentang Tanggal
+    if tanggal_mulai:
+        berita_qs = berita_qs.filter(posted_at__date__gte=tanggal_mulai)
+    if tanggal_akhir:
+        berita_qs = berita_qs.filter(posted_at__date__lte=tanggal_akhir)
+    if tanggal and not tanggal_mulai and not tanggal_akhir:
+        berita_qs = berita_qs.filter(posted_at__date=tanggal)
     if tahun:
         berita_qs = berita_qs.filter(posted_at__year=tahun)
     if bulan:
         berita_qs = berita_qs.filter(posted_at__month=bulan)
-    if tanggal:
-        berita_qs = berita_qs.filter(posted_at__date=tanggal)
 
     paginator = Paginator(berita_qs, 9)
     page_number = request.GET.get('page')
@@ -158,6 +165,8 @@ def berita_list(request):
     context = {
         'page_obj': page_obj,
         'query': query,
+        'selected_tanggal_mulai': tanggal_mulai,
+        'selected_tanggal_akhir': tanggal_akhir,
         'selected_tahun': tahun,
         'selected_bulan': bulan,
         'selected_tanggal': tanggal,

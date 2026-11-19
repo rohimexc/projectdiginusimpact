@@ -377,16 +377,12 @@
 
           </div>
 
-          <!-- Tombol Salin Tautan Cepat (Ikon Saja) -->
-          <button id="btn-copy-link" title="Salin Tautan Berita" aria-label="Salin Tautan Berita" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white border border-slate-200 text-[#0b7285] hover:border-[#0b7285] hover:bg-teal-50 shadow-xs active:scale-95 transition cursor-pointer">
-            <i class="fas fa-link text-xs"></i>
-          </button>
         </div>
 
       </article>
 
       <!-- ================= SEKSI KOMENTAR PENGUNJUNG (DEFAULT HIDE - MUNCUL KETIKA KLIK IKON KOMENTAR) ================= -->
-      <section id="komentar-section" class="hidden bg-white rounded-3xl p-6 sm:p-10 shadow-md border border-slate-200/80 mb-10 transition-all duration-300">
+      <section id="komentar-section" class="hidden bg-white rounded-3xl p-4 sm:p-8 md:p-10 shadow-md border border-slate-200/80 mb-10 transition-all duration-300 overflow-hidden">
         
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
           <div class="flex items-center gap-3">
@@ -489,9 +485,9 @@
             </div>
           {% endif %}
 
-          <div class="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-2xl p-2 focus-within:bg-white focus-within:border-[#0b7285] focus-within:ring-2 focus-within:ring-[#0b7285]/20 transition-all duration-200 shadow-xs">
+          <div class="flex items-center gap-2 bg-slate-50 border border-slate-200/90 rounded-2xl p-1.5 sm:p-2 focus-within:bg-white focus-within:border-[#0b7285] focus-within:ring-2 focus-within:ring-[#0b7285]/20 transition-all duration-200 shadow-xs w-full min-w-0">
             <!-- Avatar Inisial / Icon Pengguna -->
-            <div class="w-9 h-9 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs uppercase shrink-0">
               {% if request.user.is_authenticated %}
                 <span class="text-[#0b7285]">{{ request.user.first_name|default:request.user.username|slice:":2"|upper }}</span>
               {% else %}
@@ -505,15 +501,15 @@
               id="comment-isi" 
               name="isi" 
               required 
-              placeholder="{% if request.user.is_authenticated %}Tulis komentar Anda di sini...{% else %}Tulis komentar... (login terlebih dahulu untuk mengirim){% endif %}" 
-              class="flex-1 bg-transparent text-xs text-slate-800 placeholder-slate-400 outline-none px-2 py-1.5"
+              placeholder="{% if request.user.is_authenticated %}Tulis komentar Anda...{% else %}Tulis komentar... (login terlebih dahulu){% endif %}" 
+              class="flex-1 min-w-0 bg-transparent text-xs text-slate-800 placeholder-slate-400 outline-none px-2 py-1.5"
             >
 
             <!-- Tombol Kirim: HANYA ICON KIRIM SAJA -->
             <button 
               type="submit" 
               id="btn-submit-comment" 
-              class="w-10 h-10 rounded-xl bg-[#0b7285] hover:bg-[#084c5a] active:scale-95 text-white flex items-center justify-center shadow-md shadow-[#0b7285]/25 transition duration-150 cursor-pointer shrink-0" 
+              class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0b7285] hover:bg-[#084c5a] active:scale-95 text-white flex items-center justify-center shadow-md shadow-[#0b7285]/25 transition duration-150 cursor-pointer shrink-0" 
               title="Kirim Komentar"
             >
               <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
@@ -978,7 +974,6 @@
     });
 
     // 4. Salin Tautan & Share Count (AJAX POST)
-    const btnCopy = document.getElementById('btn-copy-link');
     const btnShare = document.getElementById('btn-share');
     const shareCounter = document.getElementById('share-counter');
     const toast = document.getElementById('copy-toast');
@@ -1019,12 +1014,6 @@
           url: window.location.href
         }).catch(() => {});
       }
-    }
-
-    if (btnCopy) {
-      btnCopy.addEventListener('click', function() {
-        performShare(btnShare ? btnShare.dataset.id : null);
-      });
     }
 
     if (btnShare) {
