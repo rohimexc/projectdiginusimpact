@@ -8,13 +8,21 @@ rm -rf ~/projectdiginusimpact/day-1companyprofile
 rm -rf ~/projectdiginusimpact/projek-administrasipublic/env
 rm -rf ~/projectdiginusimpact/projek-administrasipublic/venv
 
-if [ ! -d "$HOME/.virtualenvs/myenv/bin" ]; then
+# Deteksi virtualenv yang sudah ada (kas-env atau myenv)
+if [ -d "$HOME/.virtualenvs/kas-env/bin" ]; then
+  VENV_DIR="$HOME/.virtualenvs/kas-env"
+elif [ -d "$HOME/.virtualenvs/myenv/bin" ]; then
+  VENV_DIR="$HOME/.virtualenvs/myenv"
+elif [ -n "$VIRTUAL_ENV" ]; then
+  VENV_DIR="$VIRTUAL_ENV"
+else
   echo "=== 1. MEMBUAT VIRTUAL ENVIRONMENT ==="
   python3 -m venv ~/.virtualenvs/myenv
+  VENV_DIR="$HOME/.virtualenvs/myenv"
 fi
 
-echo "=== 2. MENGAKTIFKAN VIRTUAL ENVIRONMENT ==="
-source ~/.virtualenvs/myenv/bin/activate
+echo "=== 2. MENGAKTIFKAN VIRTUAL ENVIRONMENT: $VENV_DIR ==="
+source "$VENV_DIR/bin/activate"
 
 echo "=== 3. INSTALL REQUIREMENTS (HEMAT DISK) ==="
 pip install --no-cache-dir -r requirements.txt
@@ -33,5 +41,5 @@ fi
 echo ""
 echo "=========================================================="
 echo "SUKSES! Semua dependensi dan database sudah siap!"
-echo "Virtualenv: /home/$USER/.virtualenvs/myenv"
+echo "Virtualenv: $VENV_DIR"
 echo "=========================================================="

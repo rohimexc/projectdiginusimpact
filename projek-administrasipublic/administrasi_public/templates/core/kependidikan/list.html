@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,28 +41,36 @@
   <style>
     /* Animasi AOS Mobile Cepat, Ringan & Friendly */
     @media (max-width: 768px) {
-      body, html {
+
+      body,
+      html {
         overflow-x: hidden !important;
       }
+
       [data-aos] {
         transition-duration: 450ms !important;
         transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
       }
+
       [data-aos="fade-left"],
       [data-aos="fade-right"] {
         transform: translate3d(0, 20px, 0) !important;
       }
+
       [data-aos="fade-left"].aos-animate,
       [data-aos="fade-right"].aos-animate {
         transform: translate3d(0, 0, 0) !important;
       }
+
       [data-aos][data-aos-delay] {
         transition-delay: 50ms !important;
       }
     }
   </style>
 </head>
-<body class="font-poppins bg-slate-50 text-slate-800 overflow-x-hidden antialiased min-h-screen flex flex-col justify-between">
+
+<body
+  class="font-poppins bg-slate-50 text-slate-800 overflow-x-hidden antialiased min-h-screen flex flex-col justify-between">
 
   <!-- Floating WhatsApp -->
   <a href="https://wa.me/6285330144401" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
@@ -69,7 +78,8 @@
   </a>
 
   <!-- Header / Navbar Konsisten (Ikon Toga Kuning Emas) -->
-  <nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-6 md:px-10 z-50 shadow-md">
+  <nav
+    class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-6 md:px-10 z-50 shadow-md">
     <div class="flex items-center gap-3 text-white">
       <i class="fas fa-graduation-cap text-3xl text-[#ffd43b]"></i>
       <div>
@@ -77,83 +87,110 @@
         <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
       </div>
     </div>
-    
+
     <ul class="hidden lg:flex list-none items-center gap-4">
-      <li><a href="{% url 'home' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Beranda</a></li>
-      <li><a href="{% url 'tentang_detail' 'profil' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Tentang <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
-      <li><a href="{% url 'galeri_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a></li>
-      <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a></li>
-      
+      <li><a href="{% url 'home' %}"
+          class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Beranda</a>
+      </li>
+      <li><a href="{% url 'tentang_detail' 'profil' %}"
+          class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Tentang
+          <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="{% url 'galeri_list' %}"
+          class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a>
+      </li>
+      <li><a href="{% url 'berita_list' %}"
+          class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a>
+      </li>
+
       <!-- Dropdown Menu Akademik -->
       <li class="relative group">
-        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
-          Akademik <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        <button type="button"
+          class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Akademik <i
+            class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
         </button>
         <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
           <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
-            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+            <a href="{% url 'akademik_detail' 'siga8' %}"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8
             </a>
-            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+            <a href="{% url 'akademik_detail' 'kurikulum' %}"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-book-open text-[#fab005] w-4"></i> Kurikulum
             </a>
-            <a href="{% url 'akademik_detail' 'jadwal' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+            <a href="{% url 'akademik_detail' 'jadwal' %}"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-calendar-alt text-[#fab005] w-4"></i> Jadwal Perkuliahan
             </a>
-            <a href="{% url 'akademik_detail' 'rps' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+            <a href="{% url 'akademik_detail' 'rps' %}"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-file-signature text-[#fab005] w-4"></i> RPS
             </a>
-            <a href="{% url 'akademik_detail' 'panduan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+            <a href="{% url 'akademik_detail' 'panduan' %}"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-book-bookmark text-[#fab005] w-4"></i> Panduan Akademik
             </a>
           </div>
         </div>
       </li>
-      
+
       <!-- Dropdown Staf -->
       <li class="relative group">
-        <button type="button" class="text-white text-xs font-semibold py-2 px-3 rounded-md bg-white/15 text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+        <button type="button"
+          class="text-white text-xs font-semibold py-2 px-3 rounded-md bg-white/15 text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
           Staf <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
         </button>
         <div class="absolute left-0 top-full pt-2 w-52 hidden group-hover:block z-50">
           <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
-            <a href="{% url 'tenaga_pendidik_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+            <a href="{% url 'tenaga_pendidik_list' %}"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-chalkboard-teacher text-[#fab005] w-4"></i> Tenaga Pengajar
             </a>
-            <a href="{% url 'tenaga_kependidikan_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition bg-teal-50 text-[#0b7285] font-semibold">
+            <a href="{% url 'tenaga_kependidikan_list' %}"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition bg-teal-50 text-[#0b7285] font-semibold">
               <i class="fas fa-user-gear text-[#fab005] w-4"></i> Tenaga Kependidikan
             </a>
           </div>
         </div>
       </li>
 
-      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+      <li><a href="#"
+          class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Kemahasiswaan
+          & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
 
       <!-- Status Pengguna / Admin -->
       {% if request.user.is_authenticated %}
-        <li class="flex items-center gap-2 pl-3 border-l border-white/20">
-          <div class="w-7 h-7 rounded-full bg-[#fcc419] text-slate-900 flex items-center justify-center text-xs font-bold shadow-xs">
-            {{ request.user.first_name|default:request.user.username|slice:":2"|upper }}
-          </div>
-          <span class="text-white text-xs font-semibold">{{ request.user.first_name|default:request.user.username }}</span>
-          <a href="{% url 'user_logout' %}?next={{ request.path }}" title="Keluar dari akun" class="text-xs text-rose-300 hover:text-white ml-1 p-1">
-            <i class="fas fa-arrow-right-from-bracket"></i>
-          </a>
-        </li>
+      <li class="flex items-center gap-2 pl-3 border-l border-white/20">
+        <div
+          class="w-7 h-7 rounded-full bg-[#fcc419] text-slate-900 flex items-center justify-center text-xs font-bold shadow-xs">
+          {{ request.user.first_name|default:request.user.username|slice:":2"|upper }}
+        </div>
+        <span class="text-white text-xs font-semibold">{{ request.user.first_name|default:request.user.username
+          }}</span>
+        <a href="{% url 'user_logout' %}?next={{ request.path }}" title="Keluar dari akun"
+          class="text-xs text-rose-300 hover:text-white ml-1 p-1">
+          <i class="fas fa-arrow-right-from-bracket"></i>
+        </a>
+      </li>
       {% else %}
-        <li class="pl-2 flex items-center gap-2">
-          <a href="{% url 'user_login' %}?next={{ request.path }}" class="bg-[#fcc419] hover:bg-[#fab005] text-slate-900 text-xs font-bold py-1.5 px-3.5 rounded-full transition shadow-sm">
-            Masuk
-          </a>
-          <a href="{% url 'user_register' %}?next={{ request.path }}" class="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold py-1.5 px-3.5 rounded-full transition border border-white/20">
-            Daftar
-          </a>
-        </li>
+      <li class="pl-2 flex items-center gap-2">
+        <a href="{% url 'user_login' %}?next={{ request.path }}"
+          class="bg-[#fcc419] hover:bg-[#fab005] text-slate-900 text-xs font-bold py-1.5 px-3.5 rounded-full transition shadow-sm">
+          Masuk
+        </a>
+        <a href="{% url 'user_register' %}?next={{ request.path }}"
+          class="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold py-1.5 px-3.5 rounded-full transition border border-white/20">
+          Daftar
+        </a>
+      </li>
       {% endif %}
     </ul>
 
     <!-- Tombol Menu Mobile & Tablet -->
-    <button type="button" id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="lg:hidden text-white px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 focus:outline-none transition flex items-center gap-1.5 text-xs font-bold shadow-sm" aria-label="Buka Menu">
+    <button type="button" id="mobile-menu-toggle" onclick="toggleMobileMenu()"
+      class="lg:hidden text-white px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 focus:outline-none transition flex items-center gap-1.5 text-xs font-bold shadow-sm"
+      aria-label="Buka Menu">
       <i class="fas fa-bars text-sm" id="menu-icon-bars"></i>
       <i class="fas fa-times text-sm hidden" id="menu-icon-close"></i>
       <span>Menu</span>
@@ -161,10 +198,12 @@
   </nav>
 
   <!-- Overlay Backdrop Menu Mobile & Tablet -->
-  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[48] hidden lg:hidden" onclick="closeMobileMenu()"></div>
+  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[48] hidden lg:hidden"
+    onclick="closeMobileMenu()"></div>
 
   <!-- Drawer Menu Mobile (Dropdown) -->
-  <div id="mobile-menu-drawer" class="fixed top-[70px] left-0 w-full bg-[#084c5a]/98 backdrop-blur-md text-white border-b border-white/10 shadow-2xl z-50 hidden max-h-[calc(100dvh-70px)] overflow-y-auto transition-all duration-300">
+  <div id="mobile-menu-drawer"
+    class="fixed top-[70px] left-0 w-full bg-[#084c5a]/98 backdrop-blur-md text-white border-b border-white/10 shadow-2xl z-50 hidden max-h-[calc(100dvh-70px)] overflow-y-auto transition-all duration-300">
     <div class="px-5 py-4 space-y-2.5 text-xs">
       <a href="{% url 'home' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
         <i class="fas fa-home w-5 text-[#fab005]"></i> Beranda
@@ -172,84 +211,107 @@
 
       <!-- Mobile Dropdown: Tentang -->
       <div class="border-t border-white/10 pt-2">
-        <button type="button" onclick="toggleMobileAccordion('mobile-tentang-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <button type="button" onclick="toggleMobileAccordion('mobile-tentang-menu')"
+          class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
           <span class="flex items-center gap-2.5"><i class="fas fa-info-circle w-5 text-[#fab005]"></i> Tentang</span>
           <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-tentang-icon"></i>
         </button>
-        <div id="mobile-tentang-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
-          <a href="{% url 'tentang_detail' 'profil' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil Program Studi</a>
-          <a href="{% url 'tentang_detail' 'sejarah' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sejarah & Dasar Hukum</a>
-          <a href="{% url 'tentang_detail' 'visi_misi' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Visi, Misi & Tujuan</a>
-          <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil Lulusan</a>
-          <a href="{% url 'tentang_detail' 'akreditasi' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sertifikat Akreditasi</a>
+        <div id="mobile-tentang-menu"
+          class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="{% url 'tentang_detail' 'profil' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil
+            Program Studi</a>
+          <a href="{% url 'tentang_detail' 'sejarah' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sejarah &
+            Dasar Hukum</a>
+          <a href="{% url 'tentang_detail' 'visi_misi' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Visi,
+            Misi & Tujuan</a>
+          <a href="{% url 'tentang_detail' 'profil_lulusan' %}"
+            class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil Lulusan</a>
+          <a href="{% url 'tentang_detail' 'akreditasi' %}"
+            class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sertifikat Akreditasi</a>
         </div>
       </div>
 
-      <a href="{% url 'galeri_list' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+      <a href="{% url 'galeri_list' %}"
+        class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
         <i class="fas fa-images w-5 text-[#fab005]"></i> Galeri
       </a>
-      <a href="{% url 'berita_list' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+      <a href="{% url 'berita_list' %}"
+        class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
         <i class="fas fa-newspaper w-5 text-[#fab005]"></i> Berita
       </a>
 
       <!-- Mobile Dropdown: Akademik -->
       <div class="border-t border-white/10 pt-2">
-        <button type="button" onclick="toggleMobileAccordion('mobile-akademik-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
-          <span class="flex items-center gap-2.5"><i class="fas fa-graduation-cap w-5 text-[#fab005]"></i> Akademik</span>
+        <button type="button" onclick="toggleMobileAccordion('mobile-akademik-menu')"
+          class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+          <span class="flex items-center gap-2.5"><i class="fas fa-graduation-cap w-5 text-[#fab005]"></i>
+            Akademik</span>
           <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-akademik-icon"></i>
         </button>
-        <div id="mobile-akademik-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+        <div id="mobile-akademik-menu"
+          class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
           <a href="{% url 'akademik_detail' 'siga8' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">SIGA-8</a>
-          <a href="{% url 'akademik_detail' 'kurikulum' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Kurikulum</a>
-          <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Jadwal Perkuliahan</a>
+          <a href="{% url 'akademik_detail' 'kurikulum' %}"
+            class="block py-1 px-2 rounded hover:text-[#ffd43b]">Kurikulum</a>
+          <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Jadwal
+            Perkuliahan</a>
           <a href="{% url 'akademik_detail' 'rps' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">RPS</a>
-          <a href="{% url 'akademik_detail' 'panduan' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Panduan Akademik</a>
+          <a href="{% url 'akademik_detail' 'panduan' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Panduan
+            Akademik</a>
         </div>
       </div>
 
       <!-- Mobile Dropdown: Staf -->
       <div class="border-t border-white/10 pt-2">
-        <button type="button" onclick="toggleMobileAccordion('mobile-staf-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold text-[#ffd43b]">
+        <button type="button" onclick="toggleMobileAccordion('mobile-staf-menu')"
+          class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold text-[#ffd43b]">
           <span class="flex items-center gap-2.5"><i class="fas fa-users w-5 text-[#fab005]"></i> Staf</span>
           <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-staf-icon"></i>
         </button>
         <div id="mobile-staf-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
-          <a href="{% url 'tenaga_pendidik_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Pengajar</a>
-          <a href="{% url 'tenaga_kependidikan_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Kependidikan</a>
+          <a href="{% url 'tenaga_pendidik_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga
+            Pengajar</a>
+          <a href="{% url 'tenaga_kependidikan_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga
+            Kependidikan</a>
         </div>
       </div>
 
       <!-- Auth Mobile -->
       <div class="pt-3 border-t border-white/15">
         {% if request.user.is_authenticated %}
-          <div class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-xl mb-2">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-full bg-[#fab005] text-slate-900 font-bold flex items-center justify-center text-xs">
-                {{ request.user.username|slice:":2"|upper }}
-              </div>
-              <div>
-                <p class="font-bold leading-tight">{{ request.user.first_name|default:request.user.username }}</p>
-                <p class="text-[10px] text-white/70">{{ request.user.email|default:"Pengguna" }}</p>
-              </div>
+        <div class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-xl mb-2">
+          <div class="flex items-center gap-2.5">
+            <div
+              class="w-8 h-8 rounded-full bg-[#fab005] text-slate-900 font-bold flex items-center justify-center text-xs">
+              {{ request.user.username|slice:":2"|upper }}
             </div>
-            <a href="{% url 'user_logout' %}?next={{ request.path }}" class="text-xs bg-rose-500/80 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg font-semibold">
-              Logout
-            </a>
+            <div>
+              <p class="font-bold leading-tight">{{ request.user.first_name|default:request.user.username }}</p>
+              <p class="text-[10px] text-white/70">{{ request.user.email|default:"Pengguna" }}</p>
+            </div>
           </div>
-          {% if request.user.is_staff or request.user.is_superuser %}
-            <a href="{% url 'admin_dashboard' %}" class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl mb-1 shadow-sm">
-              <i class="fas fa-gauge-high mr-1.5"></i> Dashboard Admin
-            </a>
-          {% endif %}
+          <a href="{% url 'user_logout' %}?next={{ request.path }}"
+            class="text-xs bg-rose-500/80 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg font-semibold">
+            Logout
+          </a>
+        </div>
+        {% if request.user.is_staff or request.user.is_superuser %}
+        <a href="{% url 'admin_dashboard' %}"
+          class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl mb-1 shadow-sm">
+          <i class="fas fa-gauge-high mr-1.5"></i> Dashboard Admin
+        </a>
+        {% endif %}
         {% else %}
-          <div class="grid grid-cols-2 gap-2 pt-1">
-            <a href="{% url 'user_login' %}?next={{ request.path }}" class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl shadow-sm">
-              Masuk
-            </a>
-            <a href="{% url 'user_register' %}?next={{ request.path }}" class="block text-center py-2.5 bg-white/15 text-white font-semibold rounded-xl border border-white/20">
-              Daftar
-            </a>
-          </div>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <a href="{% url 'user_login' %}?next={{ request.path }}"
+            class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl shadow-sm">
+            Masuk
+          </a>
+          <a href="{% url 'user_register' %}?next={{ request.path }}"
+            class="block text-center py-2.5 bg-white/15 text-white font-semibold rounded-xl border border-white/20">
+            Daftar
+          </a>
+        </div>
         {% endif %}
       </div>
     </div>
@@ -257,11 +319,12 @@
 
   <!-- Area Konten Utama -->
   <main class="pt-[110px] pb-20 px-6 max-w-7xl mx-auto w-full flex-1">
-    
+
     <!-- Tombol Kembali ke Beranda & Judul Header (Meluncur dari atas via AOS) -->
     <div data-aos="fade-down" data-aos-duration="600">
       <div class="mb-6">
-        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 text-xs font-medium text-teal-700 hover:text-teal-900 transition">
+        <a href="{% url 'home' %}"
+          class="inline-flex items-center gap-2 text-xs font-medium text-teal-700 hover:text-teal-900 transition">
           &larr; Kembali ke Beranda
         </a>
       </div>
@@ -275,67 +338,72 @@
     </div>
 
     <!-- Grid Kartu Tendik (Meluncur dari bawah via AOS) -->
-    <div data-aos="fade-up" data-aos-duration="700" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center">
+    <div data-aos="fade-up" data-aos-duration="700"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center">
       {% for tendik in tenaga_kependidikan_list %}
-        <!-- Card Container -->
-        <div class="group relative w-72 h-[380px] bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
-          
-          <!-- ================= SISI DEPAN KARTU ================= -->
-          <div class="w-full h-full p-4 flex flex-col justify-between">
-            <!-- Frame Foto Asli -->
-            <div class="w-full h-[270px] rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-100">
-              {% if tendik.foto %}
-                <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover">
-              {% else %}
-                <i class="fa-solid fa-user-gear text-6xl text-slate-300"></i>
-              {% endif %}
-            </div>
+      <!-- Card Container -->
+      <div
+        class="group relative w-72 h-[380px] bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
 
-            <!-- Nama Tendik (Badge Putih dengan Border Halus) -->
-            <div class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-              <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide truncate">
-                {{ tendik.nama }}
-              </h3>
-            </div>
+        <!-- ================= SISI DEPAN KARTU ================= -->
+        <div class="w-full h-full p-4 flex flex-col justify-between">
+          <!-- Frame Foto Asli -->
+          <div
+            class="w-full h-[270px] rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-100">
+            {% if tendik.foto %}
+            <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover">
+            {% else %}
+            <i class="fa-solid fa-user-gear text-6xl text-slate-300"></i>
+            {% endif %}
           </div>
 
-          <!-- ================= SISI BELAKANG (OVERLAY MENUMPUK SAAT HOVER) ================= -->
-          <div class="absolute inset-0 bg-[#0b7285] text-white p-6 rounded-2xl flex flex-col justify-center border-2 border-[#fab005]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-            <!-- Nama -->
-            <h2 class="text-sm font-bold uppercase tracking-wider mb-3 leading-snug">
+          <!-- Nama Tendik (Badge Putih dengan Border Halus) -->
+          <div
+            class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide truncate">
               {{ tendik.nama }}
-            </h2>
-            
-            <div class="w-full border-b border-white/20 mb-4"></div>
+            </h3>
+          </div>
+        </div>
 
-            <!-- Rincian Data -->
-            <div class="space-y-3 text-xs leading-relaxed">
-              <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                <span class="font-medium text-slate-200">NIP:</span>
-                <span class="font-semibold text-right">{{ tendik.nidn|default:"-" }}</span>
-              </div>
+        <!-- ================= SISI BELAKANG (OVERLAY MENUMPUK SAAT HOVER) ================= -->
+        <div
+          class="absolute inset-0 bg-[#0b7285] text-white p-6 rounded-2xl flex flex-col justify-center border-2 border-[#fab005]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+          <!-- Nama -->
+          <h2 class="text-sm font-bold uppercase tracking-wider mb-3 leading-snug">
+            {{ tendik.nama }}
+          </h2>
 
-              {% if tendik.bidang_ilmu %}
-              <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                <span class="font-medium text-slate-200">Bidang:</span>
-                <span class="font-semibold text-right">{{ tendik.bidang_ilmu }}</span>
-              </div>
-              {% endif %}
+          <div class="w-full border-b border-white/20 mb-4"></div>
 
-              <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                <span class="font-medium text-slate-200">Status:</span>
-                <span class="font-semibold text-right text-[#fab005]">{{ tendik.status|default:"Tendik" }}</span>
-              </div>
+          <!-- Rincian Data -->
+          <div class="space-y-3 text-xs leading-relaxed">
+            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+              <span class="font-medium text-slate-200">NIP:</span>
+              <span class="font-semibold text-right">{{ tendik.nidn|default:"-" }}</span>
             </div>
 
+            {% if tendik.bidang_ilmu %}
+            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+              <span class="font-medium text-slate-200">Bidang:</span>
+              <span class="font-semibold text-right">{{ tendik.bidang_ilmu }}</span>
+            </div>
+            {% endif %}
+
+            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+              <span class="font-medium text-slate-200">Status:</span>
+              <span class="font-semibold text-right text-[#fab005]">{{ tendik.status|default:"Tendik" }}</span>
+            </div>
           </div>
 
         </div>
+
+      </div>
       {% empty %}
-        <div class="col-span-full text-center py-20 text-slate-400">
-          <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
-          <p class="text-sm font-medium">Belum ada data tenaga kependidikan ditemukan.</p>
-        </div>
+      <div class="col-span-full text-center py-20 text-slate-400">
+        <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
+        <p class="text-sm font-medium">Belum ada data tenaga kependidikan ditemukan.</p>
+      </div>
       {% endfor %}
     </div>
 
@@ -392,6 +460,9 @@
         if (icon) icon.classList.toggle('rotate-180');
       }
     }
+
+    document.getElementById('mobile-menu-toggle')?.addEventListener('click', toggleMobileMenu);
   </script>
 </body>
+
 </html>
