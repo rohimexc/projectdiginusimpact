@@ -8,8 +8,10 @@ rm -rf ~/projectdiginusimpact/day-1companyprofile
 rm -rf ~/projectdiginusimpact/projek-administrasipublic/env
 rm -rf ~/projectdiginusimpact/projek-administrasipublic/venv
 
-echo "=== 1. MEMBUAT VIRTUAL ENVIRONMENT ==="
-python3 -m venv ~/.virtualenvs/myenv
+if [ ! -d "$HOME/.virtualenvs/myenv/bin" ]; then
+  echo "=== 1. MEMBUAT VIRTUAL ENVIRONMENT ==="
+  python3 -m venv ~/.virtualenvs/myenv
+fi
 
 echo "=== 2. MENGAKTIFKAN VIRTUAL ENVIRONMENT ==="
 source ~/.virtualenvs/myenv/bin/activate
@@ -20,6 +22,13 @@ pip install --no-cache-dir -r requirements.txt
 echo "=== 4. COLLECTSTATIC & MIGRATE ==="
 python manage.py collectstatic --noinput
 python manage.py migrate
+
+# Otomatis reload web app jika file WSGI ada
+WSGI_FILE="/var/www/${USER}_pythonanywhere_com_wsgi.py"
+if [ -f "$WSGI_FILE" ]; then
+  touch "$WSGI_FILE"
+  echo "=== 5. WEB APP BERHASIL DIRELOAD ==="
+fi
 
 echo ""
 echo "=========================================================="
