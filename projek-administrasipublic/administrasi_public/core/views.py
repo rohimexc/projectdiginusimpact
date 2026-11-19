@@ -53,13 +53,11 @@ def home(request):
     hero = Hero.objects.filter(is_active=True).first()
     sambutan = Sambutan.objects.first()
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
-    daftar_tenaga_kependidikan = TenagaPendidik.objects.filter(jenis='TENDIK')[:4]
 
     context = {
         'hero': hero,
         'sambutan': sambutan,
         'daftar_berita': daftar_berita,
-        'daftar_tenaga_kependidikan': daftar_tenaga_kependidikan,
     }
     return render(request, 'core/index.html', context)
 

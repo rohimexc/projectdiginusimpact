@@ -454,54 +454,6 @@
     </div>
   </section>
 
-  <!-- ================= TENAGA KEPENDIDIKAN ================= -->
-  <section class="py-16 px-6 text-center bg-white" id="staf-section">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-2xl font-bold text-brand-teal mb-2" data-aos="fade-up">Tenaga Kependidikan</h2>
-      <p class="text-xs text-slate-500 mb-8" data-aos="fade-up" data-aos-delay="100">Staf & Pengelola Administrasi Program Studi Administrasi Publik</p>
-
-      {% if daftar_tenaga_kependidikan %}
-        <div class="flex flex-wrap justify-center gap-6">
-          {% for tendik in daftar_tenaga_kependidikan %}
-            <div data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00" class="w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col justify-between">
-              <div>
-                <div class="w-full overflow-hidden bg-slate-100 rounded-t-xl" style="aspect-ratio: 4 / 5;">
-                  {% if tendik.foto %}
-                    <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover">
-                  {% else %}
-                    <div class="w-full h-full flex items-center justify-center text-slate-300">
-                      <i class="fa-solid fa-user-gear text-5xl"></i>
-                    </div>
-                  {% endif %}
-                </div>
-                <div class="p-4">
-                  <span class="text-[10px] font-semibold text-brand-teal bg-teal-50 px-2 py-0.5 rounded uppercase">
-                    {{ tendik.status }}
-                  </span>
-                  <h3 class="text-sm font-bold text-brand-teal mt-2 mb-1 line-clamp-1">{{ tendik.nama }}</h3>
-                  <p class="text-xs text-slate-500 line-clamp-2">{{ tendik.bidang_ilmu }}</p>
-                </div>
-              </div>
-              <div class="p-4 pt-0">
-                <a href="{% url 'tenaga_kependidikan_detail' tendik.pk %}" class="text-xs font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
-                  Lihat selengkapnya &rarr;
-                </a>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-
-        <div class="mt-10" data-aos="zoom-in">
-          <a href="{% url 'tenaga_kependidikan_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
-            Lihat Semua Tenaga Kependidikan &rarr;
-          </a>
-        </div>
-      {% else %}
-        <div class="text-sm text-slate-500 py-10" data-aos="fade-in">Belum ada data tenaga kependidikan.</div>
-      {% endif %}
-    </div>
-  </section>
-
   <!-- Event Terdekat -->
   <section class="py-16 px-6 text-center bg-slate-50" id="kemahasiswaan" data-aos="fade-up">
     <h2 class="text-2xl font-bold text-brand-teal mb-2">Event Terdekat</h2>
