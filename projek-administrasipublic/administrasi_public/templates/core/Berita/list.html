@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Warta & Berita Terkini - Administrasi Publik UNTAD</title>
+  <title>Berita Terkini - Administrasi Publik UNTAD</title>
   
   <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -329,8 +329,14 @@
         &larr; Kembali ke Beranda
       </a>
     </div>
+
+    <!-- Judul Header: Berita Terkini -->
+    <div class="text-center mb-8" data-aos="fade-down" data-aos-duration="600">
+      <h1 class="text-3xl font-extrabold text-[#0b7285] mb-2">Berita Terkini</h1>
+      <p class="text-xs text-slate-500">Informasi dan dokumentasi kegiatan seputar Program Studi Administrasi Publik.</p>
+    </div>
     
-    <!-- Bagian Form Filter (Meluncur Halus dari Atas - 2 Filter: Judul & Rentang Tanggal) -->
+    <!-- Bagian Form Filter (2 Filter: Judul & Rentang Tanggal) -->
     <div data-aos="fade-down" data-aos-duration="600">
       <form method="GET" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 mb-10 max-w-4xl mx-auto flex flex-col sm:flex-row gap-2.5 items-center justify-between">
         <!-- 1. Filter Judul -->
@@ -450,7 +456,7 @@
       {% empty %}
         <div class="col-span-full text-center py-20 text-slate-400" data-aos="fade-in">
           <i class="far fa-newspaper text-5xl mb-4 text-slate-300"></i>
-          <p class="text-sm font-medium">Belum ada warta atau berita yang ditemukan.</p>
+          <p class="text-sm font-medium">Belum ada berita yang ditemukan.</p>
         </div>
       {% endfor %}
     </div>
