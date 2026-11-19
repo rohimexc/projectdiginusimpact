@@ -146,13 +146,14 @@ def berita_list(request):
             Q(judul__icontains=query) | Q(konten__icontains=query)
         )
 
-    # 2 Filter Berita: Judul & Rentang Tanggal
-    if tanggal_mulai:
-        berita_qs = berita_qs.filter(posted_at__date__gte=tanggal_mulai)
-    if tanggal_akhir:
-        berita_qs = berita_qs.filter(posted_at__date__lte=tanggal_akhir)
-    if tanggal and not tanggal_mulai and not tanggal_akhir:
+    # Filter Berita: Judul & Tanggal
+    if tanggal:
         berita_qs = berita_qs.filter(posted_at__date=tanggal)
+    elif tanggal_mulai or tanggal_akhir:
+        if tanggal_mulai:
+            berita_qs = berita_qs.filter(posted_at__date__gte=tanggal_mulai)
+        if tanggal_akhir:
+            berita_qs = berita_qs.filter(posted_at__date__lte=tanggal_akhir)
     if tahun:
         berita_qs = berita_qs.filter(posted_at__year=tahun)
     if bulan:

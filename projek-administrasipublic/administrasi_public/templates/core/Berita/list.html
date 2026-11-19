@@ -350,22 +350,14 @@
           >
         </div>
 
-        <!-- 2. Filter Rentang Tanggal -->
-        <div class="w-full sm:w-auto flex items-center gap-2">
+        <!-- 2. Filter Tanggal (Satu Input Tanggal Saja) -->
+        <div class="w-full sm:w-auto">
           <input 
             type="date" 
-            name="tanggal_mulai" 
-            value="{{ selected_tanggal_mulai }}" 
-            title="Tanggal Mulai"
-            class="w-1/2 sm:w-36 text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition text-slate-700"
-          >
-          <span class="text-xs text-slate-400 font-medium shrink-0">s/d</span>
-          <input 
-            type="date" 
-            name="tanggal_akhir" 
-            value="{{ selected_tanggal_akhir }}" 
-            title="Tanggal Akhir"
-            class="w-1/2 sm:w-36 text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition text-slate-700"
+            name="tanggal" 
+            value="{{ selected_tanggal }}" 
+            title="Pilih Tanggal"
+            class="w-full sm:w-44 text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-brand-teal transition text-slate-700"
           >
         </div>
 
