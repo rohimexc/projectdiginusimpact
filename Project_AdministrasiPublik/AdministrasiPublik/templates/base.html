@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Administrasi Publik - FISIP Universitas Tadulako{% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animate CSS CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <style>
+        html, body {
+            overflow-x: hidden !important;
+            max-width: 100vw !important;
+            position: relative;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tealBrand: '#008080',
+                        tealDark: '#005f5f',
+                        tealHeader: '#0b6666'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 overflow-x-hidden relative">
+
+    <!-- Navbar Utama -->
+    <nav class="bg-[#0f6b6b] text-white shadow-md sticky top-0 z-50 py-3 sm:py-3.5 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo & Title -->
+            <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-2.5 sm:gap-3 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center shadow shrink-0 group-hover:scale-105 transition">
+                    <span class="text-xs font-bold text-red-600">🏛️</span>
+                </div>
+                <div>
+                    <span class="font-bold text-sm sm:text-base tracking-wide block leading-tight group-hover:text-amber-300 transition">Administrasi Publik</span>
+                    <span class="text-[9px] sm:text-[10px] text-teal-100 tracking-wider">FISIP Universitas Tadulako</span>
+                </div>
+            </a>
+
+            <!-- Tombol Hamburger (Mobile & Tablet: < lg) -->
+            <button id="mobileNavToggleBtn" type="button" aria-label="Buka Menu" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white transition focus:outline-none shadow-2xs">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+
+            <!-- Menu Navigation Desktop (lg:flex) -->
+            <div class="hidden lg:flex items-center space-x-6 text-sm font-medium">
+                <a href="{% url 'landing:landing_home' %}#beranda" class="hover:text-amber-300 transition py-2">Beranda</a>
+                
+                <!-- Dropdown Tentang (Teks utamanya bisa diklik ke #sambutan) -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="{% url 'landing:landing_home' %}#sambutan" class="hover:text-amber-300 flex items-center gap-1">
+                        Tentang <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-52 bg-white text-slate-800 shadow-xl rounded-xl py-2 hidden group-hover:block border border-slate-100 z-50">
+                        <a href="{% url 'landing:detail_tentang' jenis='profil' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Profil Program Studi</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='sejarah' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sejarah & Dasar Hukum</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='visi' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Visi, Misi & Tujuan</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='profil-lulusan' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Profil Lulusan</a>
+                        <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Sertifikat Akreditasi</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown Penelitian -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="#" class="hover:text-amber-300 flex items-center gap-1">
+                        Penelitian <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-48 bg-white text-slate-800 shadow-xl rounded-lg py-2 hidden group-hover:block border border-slate-100">
+                        <a href="#" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Fokus Riset</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown Akademik -->
+                <div class="relative group cursor-pointer py-2">
+                    <a href="{% url 'landing:akademik_index' %}" class="hover:text-amber-300 flex items-center gap-1">
+                        Akademik <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </a>
+                    <div class="absolute top-full left-0 w-52 bg-white text-slate-800 shadow-xl rounded-xl py-2 hidden group-hover:block border border-slate-100 z-50">
+                        <a href="{% url 'landing:detail_akademik' slug='siga-8' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">SIGA-8</a>
+                        <a href="{% url 'landing:detail_akademik' slug='kurikulum' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Kurikulum</a>
+                        <a href="{% url 'landing:detail_akademik' slug='jadwal-perkuliahan' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Jadwal Perkuliahan</a>
+                        <a href="{% url 'landing:detail_akademik' slug='rps' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">RPS</a>
+                        <a href="{% url 'landing:detail_akademik' slug='panduan-akademik' %}" class="block px-4 py-2 text-xs hover:bg-teal-50 hover:text-tealBrand">Panduan Akademik</a>
+                    </div>
+                </div>
+
+<div class="relative group">
+    <button class="flex items-center gap-1 hover:text-amber-300 transition py-2">
+        Staf <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+    </button>
+    <!-- Dropdown Menu -->
+    <div class="absolute left-0 mt-0 w-48 bg-white text-slate-800 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+        <a href="{% url 'landing:dosen_beranda' %}" class="block px-4 py-2.5 text-xs hover:bg-teal-50 hover:text-teal-700 rounded-t-lg">Tenaga Pengajar</a>
+        <a href="{% url 'landing:tenaga_pendidik_beranda' %}" class="block px-4 py-2.5 text-xs hover:bg-teal-50 hover:text-teal-700 rounded-b-lg">Tenaga Kependidikan</a>
+    </div>
+</div>
+
+                <!-- Kemahasiswaan & Alumni -->
+                <a href="#" class="hover:text-amber-300 transition py-2">Kemahasiswaan & Alumni</a>
+
+                <!-- Menu Langsung Galeri Kegiatan -->
+                <a href="{% url 'landing:galeri_list' %}" class="hover:text-amber-300 transition py-2">Galeri Kegiatan</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BACKDROP OVERLAY MOBILE / TABLET -->
+    <div id="mobileNavBackdrop" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+
+    <!-- SLIDE-OVER DRAWER MOBILE / TABLET -->
+    <div id="mobileNavDrawer" class="fixed top-0 right-0 w-[85vw] sm:w-80 max-w-sm h-full bg-[#0a4f4f] text-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out hidden flex-col lg:hidden">
+        <!-- Header Drawer -->
+        <div class="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow shrink-0">
+                    <span class="text-xs font-bold text-red-600">🏛️</span>
+                </div>
+                <div>
+                    <span class="font-bold text-xs sm:text-sm tracking-wide block leading-tight">Administrasi Publik</span>
+                    <span class="text-[9px] text-teal-200">FISIP Untad</span>
+                </div>
+            </div>
+            <button id="closeMobileNavBtn" type="button" aria-label="Tutup Menu" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition focus:outline-none">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Daftar Menu (Scrollable with Accordion - 100% Persis Struktur Desktop & Screenshot) -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-1.5 text-xs font-medium">
+            <!-- 1. Beranda -->
+            <a href="{% url 'landing:landing_home' %}#beranda" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <span>Beranda</span>
+            </a>
+
+            <!-- 2. Tentang -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <span>Tentang</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="{% url 'landing:detail_tentang' jenis='profil' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Profil Program Studi</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='sejarah' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Sejarah & Dasar Hukum</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='visi' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Visi, Misi & Tujuan</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='profil-lulusan' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Profil Lulusan</a>
+                    <a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Sertifikat Akreditasi</a>
+                </div>
+            </div>
+
+            <!-- 3. Penelitian -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <span>Penelitian</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="#" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Fokus Riset</a>
+                </div>
+            </div>
+
+            <!-- 4. Akademik -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <span>Akademik</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="{% url 'landing:detail_akademik' slug='siga-8' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">SIGA-8</a>
+                    <a href="{% url 'landing:detail_akademik' slug='kurikulum' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Kurikulum</a>
+                    <a href="{% url 'landing:detail_akademik' slug='jadwal-perkuliahan' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Jadwal Perkuliahan</a>
+                    <a href="{% url 'landing:detail_akademik' slug='rps' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">RPS</a>
+                    <a href="{% url 'landing:detail_akademik' slug='panduan-akademik' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Panduan Akademik</a>
+                </div>
+            </div>
+
+            <!-- 5. Staf -->
+            <div class="rounded-xl overflow-hidden bg-white/5">
+                <button type="button" class="mobile-accordion-btn w-full flex items-center justify-between px-3.5 py-2.5 text-white hover:bg-white/10 transition">
+                    <span>Staf</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-teal-300 transition-transform duration-200"></i>
+                </button>
+                <div class="mobile-accordion-content hidden px-3.5 pb-2 pt-1 space-y-1 border-t border-white/5 bg-[#094242]">
+                    <a href="{% url 'landing:dosen_beranda' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Tenaga Pengajar</a>
+                    <a href="{% url 'landing:tenaga_pendidik_beranda' %}" class="mobile-nav-link block px-3 py-1.5 rounded-lg text-slate-200 hover:text-amber-300 hover:bg-white/5 transition">Tenaga Kependidikan</a>
+                </div>
+            </div>
+
+            <!-- 6. Kemahasiswaan & Alumni -->
+            <a href="#" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <span>Kemahasiswaan & Alumni</span>
+            </a>
+
+            <!-- 7. Menu Langsung Galeri Kegiatan -->
+            <a href="{% url 'landing:galeri_list' %}" class="mobile-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/10 text-white transition">
+                <span>Galeri Kegiatan</span>
+            </a>
+        </div>
+
+        <!-- Footer Drawer -->
+        <div class="p-4 border-t border-white/10 bg-[#084040]/80 space-y-2">
+            <a href="{% url 'landing:dashboard_admin' %}" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-amber-400 hover:bg-amber-500 text-slate-900 rounded-xl font-bold text-xs shadow-md transition">
+                <i class="fa-solid fa-gauge"></i>
+                <span>Portal Admin</span>
+            </a>
+            <p class="text-[10px] text-teal-200 text-center">
+                FISIP Universitas Tadulako &bull; Palu
+            </p>
+        </div>
+    </div>
+
+    <!-- KONTEN UTAMA -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer Bawah -->
+    <footer class="bg-[#0b5c5c] text-slate-200 pt-12 pb-6 px-6 border-t border-teal-900">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-8 pb-8 border-b border-teal-800 text-sm">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">🏛️</span>
+                    <div>
+                        <h3 class="font-bold text-white text-base">Administrasi Publik</h3>
+                        <p class="text-xs text-teal-200">FISIP Untad</p>
+                    </div>
+                </div>
+                <p class="text-xs text-teal-100 leading-relaxed space-y-1">
+                    <span class="block">📍 Jl. Soekarno Hatta No.KM.9, Tondo, Kec. Mantikulore, Kota Palu, Sulawesi Tengah 94148</span>
+                    <span class="block pt-1">📞 085330144401</span>
+                    <span class="block">📧 Admpublik.FISIP@untad.ac.id</span>
+                </p>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-white text-base mb-4">Tautan Cepat</h3>
+                <ul class="space-y-2 text-xs text-teal-100">
+                    <li><a href="#" class="hover:underline">Website FISIP</a></li>
+                    <li><a href="#" class="hover:underline">Website UNTAD</a></li>
+                    <li><a href="#" class="hover:underline">Website Kepegawaian</a></li>
+                    <li><a href="{% url 'landing:detail_akademik' slug='siga-8' %}" class="hover:underline">SIGA-8</a></li>
+                    <li><a href="{% url 'landing:dosen_beranda' %}" class="hover:underline">Dosen Prodi Administrasi Publik</a></li>
+                    <li><a href="{% url 'landing:detail_tentang' jenis='sertifikat' %}" class="hover:underline">Sertifikat Akreditasi</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="font-bold text-white text-base">Follow Us</h3>
+                <div class="flex gap-3 text-lg">
+                    <a href="#" class="w-9 h-9 bg-white text-teal-800 rounded-full flex items-center justify-center hover:bg-teal-100"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-9 h-9 bg-white text-teal-800 rounded-full flex items-center justify-center hover:bg-teal-100"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-9 h-9 bg-white text-teal-800 rounded-full flex items-center justify-center hover:bg-teal-100"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+                <div class="bg-[#084848] p-4 rounded-xl text-xs space-y-1 text-teal-100 border border-teal-700/50">
+                    <p class="font-bold text-white mb-1">Pengunjung</p>
+                    <p>Hari Ini: {{ pengunjung_hari_ini|default:"0001" }}</p>
+                    <p>Total: {{ total_pengunjung|default:"006321" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-6 text-center text-xs text-teal-300">
+            <p>&copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako. Crafted by Diginus</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-2xl text-2xl transition">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Floating Scroll Top Button (Hanya muncul saat discroll ke bawah) -->
+    <button id="scrollTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 left-6 z-50 bg-amber-400 hover:bg-amber-500 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg text-sm font-bold transition-all duration-300 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Script JavaScript untuk memunculkan tombol panah atas saat di-scroll -->
+    <script>
+        const scrollBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollBtn.classList.remove('opacity-0', 'pointer-events-none');
+                scrollBtn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                scrollBtn.classList.add('opacity-0', 'pointer-events-none');
+                scrollBtn.classList.remove('opacity-100', 'pointer-events-auto');
+            }
+        });
+
+        // Controller Mobile & Tablet Navigation Drawer
+        (function() {
+            const toggleBtn = document.getElementById('mobileNavToggleBtn');
+            const closeBtn = document.getElementById('closeMobileNavBtn');
+            const drawer = document.getElementById('mobileNavDrawer');
+            const backdrop = document.getElementById('mobileNavBackdrop');
+
+            function openDrawer() {
+                if (!drawer || !backdrop) return;
+                drawer.classList.remove('hidden');
+                drawer.classList.add('flex');
+                backdrop.classList.remove('hidden');
+                void drawer.offsetWidth;
+                setTimeout(() => backdrop.classList.add('opacity-100'), 10);
+                drawer.classList.remove('translate-x-full');
+                drawer.classList.add('translate-x-0');
+                document.body.classList.add('overflow-hidden');
+            }
+
+            function closeDrawer() {
+                if (!drawer || !backdrop) return;
+                drawer.classList.remove('translate-x-0');
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.remove('opacity-100');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                    drawer.classList.add('hidden');
+                    drawer.classList.remove('flex');
+                }, 300);
+                document.body.classList.remove('overflow-hidden');
+            }
+
+            if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
+            if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+            if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeDrawer();
+            });
+
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', closeDrawer);
+            });
+
+            // Accordion dropdown di mobile drawer
+            document.querySelectorAll('.mobile-accordion-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const chevron = this.querySelector('.fa-chevron-down');
+                    const isExpanded = !content.classList.contains('hidden');
+
+                    // Tutup accordion lain agar rapi
+                    document.querySelectorAll('.mobile-accordion-content').forEach(c => {
+                        if (c !== content) c.classList.add('hidden');
+                    });
+                    document.querySelectorAll('.mobile-accordion-btn .fa-chevron-down').forEach(ch => {
+                        if (ch !== chevron) ch.classList.remove('rotate-180');
+                    });
+
+                    if (isExpanded) {
+                        content.classList.add('hidden');
+                        if (chevron) chevron.classList.remove('rotate-180');
+                    } else {
+                        content.classList.remove('hidden');
+                        if (chevron) chevron.classList.add('rotate-180');
+                    }
+                });
+            });
+        })();
+    </script>
+
+    <!-- AOS Animate JS CDN & Inisialisasi -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50,
+            easing: 'ease-out-cubic',
+        });
+    </script>
+</body>
+</html>

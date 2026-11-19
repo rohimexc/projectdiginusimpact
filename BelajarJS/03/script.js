@@ -1,0 +1,1 @@
+console.log("Ini adalah Java script dari external file");

@@ -1,0 +1,738 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ berita.judul }} - Administrasi Publik{% endblock %}
+
+{% block content %}
+<style>
+    /* Styling Typography Konten CKEditor */
+    .ck-content h1, .ck-content h2, .ck-content h3, .ck-content h4 {
+        color: #0f6b6b;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .ck-content h1 { font-size: 1.5rem; }
+    .ck-content h2 { font-size: 1.25rem; }
+    .ck-content h3 { font-size: 1.1rem; }
+    .ck-content p {
+        margin-bottom: 0.875rem;
+        line-height: 1.8;
+        color: #334155;
+    }
+    .ck-content ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+    .ck-content ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+    .ck-content li {
+        margin-bottom: 0.35rem;
+        line-height: 1.6;
+    }
+    .ck-content blockquote {
+        border-left: 4px solid #008080;
+        padding-left: 1rem;
+        margin: 1.25rem 0;
+        font-style: italic;
+        color: #475569;
+        background-color: #f8fafc;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+    .ck-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.25rem 0;
+    }
+    .ck-content table th, .ck-content table td {
+        border: 1px solid #cbd5e1;
+        padding: 0.75rem;
+        text-align: left;
+    }
+    .ck-content table th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    .ck-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+        margin: 1rem 0;
+    }
+
+    /* Animasi Pop & Bounce Khas Instagram untuk Tombol Like */
+    @keyframes igHeartBounce {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.4); }
+        50% { transform: scale(0.9); }
+        70% { transform: scale(1.15); }
+        100% { transform: scale(1); }
+    }
+    .ig-heart-pop {
+        animation: igHeartBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Animasi Double Tap Heart Instagram */
+    @keyframes igDoubleTapPop {
+        0% { transform: scale(0); opacity: 0; }
+        45% { transform: scale(1.25); opacity: 0.95; }
+        70% { transform: scale(1); opacity: 0.9; }
+        100% { transform: scale(1.15); opacity: 0; }
+    }
+    .ig-tap-heart {
+        animation: igDoubleTapPop 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+</style>
+
+<div class="max-w-4xl mx-auto py-10 px-4 sm:px-6 space-y-8 min-h-screen">
+
+    <!-- Tombol Navigasi Kembali -->
+    <div class="flex items-center gap-2" data-aos="fade-right" data-aos-duration="600">
+        <a href="{% url 'landing:berita_list' %}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 px-3.5 py-2 rounded-xl transition border border-teal-200 shadow-2xs">
+            <i class="fa-solid fa-arrow-left text-[11px]"></i>
+            <span>Semua Berita</span>
+        </a>
+        <a href="{% url 'landing:landing_home' %}#berita" class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 px-3.5 py-2 rounded-xl transition border border-slate-200">
+            <i class="fa-solid fa-house text-[11px]"></i>
+            <span>Beranda</span>
+        </a>
+    </div>
+
+    <!-- Alert Messages (jika ada feedback dari sistem) -->
+    {% if messages %}
+    <div class="space-y-2" data-aos="fade-down">
+        {% for message in messages %}
+        <div class="p-4 rounded-xl text-xs flex items-center justify-between {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200{% else %}bg-teal-50 text-teal-800 border border-teal-200{% endif %}">
+            <div class="flex items-center gap-2">
+                <i class="{% if message.tags == 'error' %}fa-solid fa-circle-exclamation text-red-500{% else %}fa-solid fa-circle-check text-teal-600{% endif %}"></i>
+                <span>{{ message }}</span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ========================================================================= -->
+    <!-- CARD UTAMA BERITA (SATU KESATUAN: JUDUL, FOTO, DESKRIPSI & BAR INTERAKSI) -->
+    <!-- ========================================================================= -->
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden" data-aos="fade-up" data-aos-duration="800">
+        
+        <!-- Judul Berita & Tanggal -->
+        <div class="p-6 sm:p-10 pb-4 sm:pb-6 space-y-3">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-semibold border border-amber-200 shadow-2xs">
+                    <i class="fa-solid fa-calendar-day text-amber-600 text-[11px]"></i>
+                    <span>{{ berita.post_date|date:"d M Y, H:i" }} WITA</span>
+                </span>
+            </div>
+
+            <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0f6b6b] leading-tight tracking-tight">
+                {{ berita.judul }}
+            </h1>
+        </div>
+
+        <!-- Foto Utama Berita (Bisa Double-Tap untuk Like ala Instagram) -->
+        {% if berita.gambar %}
+        <div class="px-6 sm:px-10 pb-6">
+            <div class="relative w-full h-72 sm:h-96 bg-slate-200 rounded-2xl overflow-hidden shadow-xs border border-slate-200 select-none cursor-pointer group" 
+                 ondblclick="handleImageDoubleTap(event)" title="Klik 2x foto untuk menyukai (seperti Instagram)">
+                <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+                
+                <!-- Floating Heart Animation for Double Click -->
+                <div id="imageHeartPop" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0">
+                    <i class="fa-solid fa-heart text-white/95 drop-shadow-2xl text-8xl sm:text-9xl"></i>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Deskripsi / Konten Berita -->
+        <div class="px-6 sm:px-10 pb-8 ck-content text-slate-700 text-sm sm:text-base leading-relaxed break-words overflow-hidden">
+            {{ berita.konten|safe }}
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- BAR INTERAKSI 4 IKON SEJAJAR DI BAWAH KONTEN (PERSIS SKETSA GAMBAR)   -->
+        <!-- 1. View | 2. Like | 3. Komentar | 4. Share                            -->
+        <!-- ===================================================================== -->
+        <div class="border-t border-slate-100 bg-slate-50/70 px-6 sm:px-10 py-4 flex items-center justify-between flex-wrap gap-4">
+            
+            <div class="flex items-center gap-2.5 sm:gap-3.5 flex-wrap">
+                <!-- Hidden CSRF Token -->
+                {% csrf_token %}
+
+                <!-- 1. JUMLAH VIEW (Bertambah setiap ada user yang baca, tersimpan di database) -->
+                <div class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold shadow-2xs select-none" 
+                     title="Jumlah penayangan berita ini (otomatis bertambah)">
+                    <i class="fa-solid fa-eye text-teal-600 text-sm sm:text-base"></i>
+                    <span id="viewCountBadge" class="font-extrabold text-teal-800">{{ berita.views_count }}</span>
+                </div>
+
+                <!-- 2. TOMBOL LIKE (Ketika diklik jadi merah, angka like bertambah, tersimpan di database) -->
+                <button type="button" id="likeBtn" onclick="toggleLike(event)" 
+                    class="group inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs active:scale-95 cursor-pointer select-none {% if user_has_liked %}bg-rose-50 text-rose-600 border border-rose-300 shadow-rose-100{% else %}bg-white text-slate-700 border border-slate-200 hover:border-rose-300 hover:text-rose-600{% endif %}" 
+                    title="Sukai berita ini (Klik untuk like)">
+                    
+                    <i id="likeIcon" class="{% if user_has_liked %}fa-solid fa-heart text-rose-500{% else %}fa-regular fa-heart text-slate-400 group-hover:text-rose-500{% endif %} text-base sm:text-lg transition-transform"></i>
+                    
+                    <span id="likeCount" class="font-extrabold {% if user_has_liked %}text-rose-600{% else %}text-slate-800 group-hover:text-rose-600{% endif %} transition-colors">
+                        {{ berita.total_likes }}
+                    </span>
+                </button>
+
+                <!-- 3. TOMBOL JUMLAH KOMENTAR (Ketika diklik, memunculkan/hide card komentar) -->
+                <button type="button" id="commentToggleBtn" onclick="toggleComments(event)"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 hover:border-sky-300 hover:text-sky-600 text-slate-700 text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs cursor-pointer select-none group" 
+                    title="Buka dan tulis komentar">
+                    <i class="fa-regular fa-comment text-sky-500 group-hover:scale-110 transition-transform text-base sm:text-lg"></i>
+                    <span id="headerCommentCount" class="font-extrabold text-slate-800 group-hover:text-sky-600 transition-colors">
+                        {{ berita.total_komentar }}
+                    </span>
+                </button>
+
+                <!-- 4. TOMBOL JUMLAH SHARE (Ketika diklik, menyalin tautan, jumlah share bertambah di database) -->
+                <button type="button" id="shareBtn" onclick="bagikanBerita(event)" 
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 hover:border-emerald-300 hover:text-emerald-600 text-slate-700 text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs active:scale-95 cursor-pointer select-none group" 
+                    title="Bagikan berita & salin tautan">
+                    <i class="fa-solid fa-share-nodes text-emerald-500 group-hover:scale-110 transition-transform text-base sm:text-lg"></i>
+                    <span id="shareCount" class="font-extrabold text-slate-800 group-hover:text-emerald-600 transition-colors">
+                        {{ berita.shares_count }}
+                    </span>
+                </button>
+            </div>
+
+            <!-- Feedback Toast Saat Share / Tautan Disalin -->
+            <div id="shareToast" class="hidden text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full items-center gap-1.5 transition shadow-2xs">
+                <i class="fa-solid fa-check text-emerald-600"></i>
+                <span id="shareToastText">Tautan berhasil disalin!</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- CARD KOMENTAR (DI-HIDE OTOMATIS, MUNCUL SAAT USER KLIK TOMBOL KOMENTAR)  -->
+    <!-- ========================================================================= -->
+    <div id="card-komentar" class="hidden bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-10 space-y-6 transition-all duration-300" data-aos="fade-up">
+        
+        <!-- Header Card Komentar -->
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 flex-wrap gap-2">
+            <h3 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2.5">
+                <span class="w-9 h-9 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center text-sm shadow-2xs">
+                    <i class="fa-solid fa-comments"></i>
+                </span>
+                <span>Komentar</span>
+                <span id="komentarCountBadge" class="bg-[#0f6b6b] text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-extrabold shadow-2xs">
+                    {{ berita.total_komentar }}
+                </span>
+            </h3>
+
+            <div class="flex items-center gap-3">
+                {% if user.is_authenticated %}
+                <div class="text-xs text-slate-500 hidden sm:flex items-center gap-2">
+                    <span>Login sebagai <strong class="text-teal-700">{{ user.get_full_name|default:user.username }}</strong></span>
+                    <a href="{% url 'landing:logout' %}?next={{ request.path }}#card-komentar" class="text-red-500 hover:underline font-semibold">(Keluar)</a>
+                </div>
+                {% endif %}
+
+                <!-- Tombol Tutup/Sembunyikan Card Komentar -->
+                <button type="button" onclick="toggleComments(event)" 
+                    class="text-xs text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 flex items-center gap-1.5 font-semibold transition cursor-pointer"
+                    title="Sembunyikan komentar">
+                    <span>Tutup</span>
+                    <i class="fa-solid fa-chevron-up text-[10px]"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- DAFTAR KOMENTAR PENGUNJUNG (Username + Teks Komentar k-------) -->
+        <div id="komentarList" class="space-y-3.5">
+            {% for k in komentar_list %}
+            <div class="bg-slate-50/70 p-4 sm:p-5 rounded-2xl border border-slate-200/80 space-y-2 hover:border-teal-200 transition">
+                <div class="flex items-center gap-3">
+                    <!-- Inisial Avatar Bulat Bergradasi -->
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#005f5f] to-[#148383] text-amber-300 font-bold flex items-center justify-center text-xs shadow-inner shrink-0">
+                        {{ k.nama|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <h5 class="font-bold text-slate-800 text-xs sm:text-sm leading-tight">
+                            {{ k.nama }}
+                            {% if k.user %}
+                            <span class="text-[10px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-semibold ml-1">@{{ k.user.username }}</span>
+                            {% endif %}
+                        </h5>
+                        <p class="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
+                            <i class="fa-regular fa-clock text-[9px]"></i>
+                            <span>{{ k.created_at|date:"d M Y, H:i" }} WITA</span>
+                        </p>
+                    </div>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed pl-12 whitespace-pre-line">
+                    {{ k.isi }}
+                </p>
+            </div>
+            {% empty %}
+            <div id="noCommentBox" class="p-8 bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-center text-slate-400 space-y-2">
+                <i class="fa-regular fa-comment-dots text-3xl text-slate-300"></i>
+                <p class="text-xs font-medium">Belum ada komentar pada berita ini.</p>
+                <p class="text-[11px] text-slate-400">Jadilah yang pertama untuk memberikan tanggapan!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- FORM INPUT KOMENTAR & TOMBOL KIRIM (Persis sketsa [ input komentar ] ▷ kirim) -->
+        <div class="pt-4 border-t border-slate-100">
+            {% if user.is_authenticated %}
+            <!-- Form Aktif Saat Sudah Login -->
+            <form id="commentForm" method="POST" action="{% url 'landing:berita_komentar' berita.slug %}" class="space-y-3">
+                {% csrf_token %}
+                <div class="relative flex items-center bg-slate-50 border border-slate-300 rounded-2xl focus-within:ring-2 focus-within:ring-teal-600 focus-within:bg-white focus-within:border-teal-600 transition p-2 pr-3 shadow-inner">
+                    <textarea id="inputIsi" name="isi" required rows="2" placeholder="Tulis tanggapan atau komentar Anda..." 
+                        class="w-full bg-transparent px-3 py-1.5 text-xs sm:text-sm text-slate-800 focus:outline-none resize-none placeholder-slate-400"></textarea>
+                    
+                    <button type="submit" id="submitCommentBtn" 
+                        class="shrink-0 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition shadow-md flex items-center gap-2 cursor-pointer active:scale-95">
+                        <span id="submitBtnText">Kirim</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </div>
+            </form>
+            {% else %}
+            <!-- Kotak Ajakan Login Saat Belum Login (Komentar Harus Login) -->
+            <div class="bg-gradient-to-r from-teal-50/70 via-white to-amber-50/60 p-5 sm:p-6 rounded-2xl border border-teal-200/80 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <h4 class="text-sm font-bold text-slate-800 flex items-center justify-center sm:justify-start gap-2">
+                        <i class="fa-solid fa-lock text-amber-500"></i>
+                        <span>Ingin ikut menulis komentar?</span>
+                    </h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Pengunjung wajib masuk akun untuk berkomentar. Jika belum memiliki akun, silakan buat akun baru secara gratis (otomatis berstatus <strong>USER</strong>).
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2.5 shrink-0">
+                    <a href="{% url 'landing:login' %}?next={{ request.path }}#card-komentar" 
+                       class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl transition shadow-sm">
+                        Masuk (Login)
+                    </a>
+                    <a href="{% url 'landing:register' %}?next={{ request.path }}#card-komentar" 
+                       class="px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-bold rounded-xl transition shadow-sm">
+                        Buat Akun
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- SEKSI REKOMENDASI BERITA LAINNYA -->
+    {% if berita_lainnya %}
+    <div class="space-y-4 pt-6" data-aos="fade-up">
+        <div class="flex items-center justify-between">
+            <h3 class="text-lg sm:text-xl font-bold text-tealBrand flex items-center gap-2">
+                <i class="fa-solid fa-newspaper text-teal-600"></i>
+                <span>Berita Terkait Lainnya</span>
+            </h3>
+            <a href="{% url 'landing:berita_list' %}" class="text-xs font-semibold text-teal-700 hover:text-teal-900 transition flex items-center gap-1">
+                <span>Lihat Semua</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {% for b in berita_lainnya %}
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition flex flex-col justify-between p-4 space-y-3">
+                <div class="space-y-2">
+                    {% if b.gambar %}
+                    <!-- Rasio gambar konsisten portrait 4:5 -->
+                    <img src="{{ b.gambar.url }}" alt="{{ b.judul }}" class="w-full aspect-[4/5] object-cover rounded-xl mb-2">
+                    {% endif %}
+                    <div class="flex items-center gap-2 text-[10px] text-slate-400">
+                        <span class="text-amber-600 font-semibold">{{ b.post_date|date:"d M Y" }}</span>
+                        <span>&bull;</span>
+                        <span><i class="fa-regular fa-eye"></i> {{ b.views_count }}</span>
+                        <span>&bull;</span>
+                        <span><i class="fa-regular fa-heart text-rose-500"></i> {{ b.total_likes }}</span>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-xs sm:text-sm line-clamp-2">{{ b.judul }}</h4>
+                </div>
+                <div class="pt-2 border-t border-slate-100">
+                    <a href="{% url 'landing:berita_detail' b.slug %}" class="text-teal-700 font-semibold text-xs hover:underline flex items-center gap-1">
+                        <span>Baca Berita</span>
+                        <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- ========================================================================= -->
+<!-- JAVASCRIPT: LIKE INSTAN ALA IG, SCROLL KOMENTAR, SHARE DENGAN DATABASE     -->
+<!-- ========================================================================= -->
+<script>
+    // 1. Inisialisasi State Lokal
+    let isLiked = {{ user_has_liked|yesno:"true,false" }};
+    let currentLikes = {{ berita.total_likes|default:0 }};
+    let currentShares = {{ berita.shares_count|default:0 }};
+    let isPendingLike = false;
+    let isPendingShare = false;
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // 2. Render Tampilan Tombol Like (Merah menyala ala IG saat disukai)
+    function renderLikeUI(liked, count, playPop = false) {
+        const likeBtn = document.getElementById('likeBtn');
+        const likeIcon = document.getElementById('likeIcon');
+        const likeCount = document.getElementById('likeCount');
+
+        if (likeCount) {
+            likeCount.innerText = count;
+        }
+
+        if (liked) {
+            if (likeBtn) {
+                likeBtn.className = "group inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs active:scale-95 cursor-pointer select-none bg-rose-50 text-rose-600 border border-rose-300 shadow-rose-100";
+            }
+            if (likeIcon) {
+                likeIcon.className = "fa-solid fa-heart text-rose-500 text-base sm:text-lg transition-transform";
+                if (playPop) {
+                    likeIcon.classList.add('ig-heart-pop');
+                    setTimeout(() => likeIcon.classList.remove('ig-heart-pop'), 450);
+                }
+            }
+            if (likeCount) {
+                likeCount.className = "font-extrabold text-rose-600 transition-colors";
+            }
+        } else {
+            if (likeBtn) {
+                likeBtn.className = "group inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs active:scale-95 cursor-pointer select-none bg-white text-slate-700 border border-slate-200 hover:border-rose-300 hover:text-rose-600";
+            }
+            if (likeIcon) {
+                likeIcon.className = "fa-regular fa-heart text-slate-400 group-hover:text-rose-500 text-base sm:text-lg transition-transform";
+                if (playPop) {
+                    likeIcon.classList.add('ig-heart-pop');
+                    setTimeout(() => likeIcon.classList.remove('ig-heart-pop'), 450);
+                }
+            }
+            if (likeCount) {
+                likeCount.className = "font-extrabold text-slate-800 group-hover:text-rose-600 transition-colors";
+            }
+        }
+    }
+
+    // 3. Toggle Like Instan (Optimistic UI tanpa reload)
+    function toggleLike(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        if (isPendingLike) return;
+        isPendingLike = true;
+
+        const prevLiked = isLiked;
+        const prevCount = currentLikes;
+
+        // Seketika berubah di layar detik itu juga
+        isLiked = !isLiked;
+        currentLikes = isLiked ? (currentLikes + 1) : Math.max(0, currentLikes - 1);
+        renderLikeUI(isLiked, currentLikes, true);
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value 
+                          || getCookie('csrftoken') 
+                          || '{{ csrf_token }}';
+
+        fetch("{% url 'landing:berita_like' berita.slug %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'ajax=1'
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        })
+        .then(data => {
+            isPendingLike = false;
+            if (data.status === 'success') {
+                isLiked = data.liked;
+                currentLikes = data.total_likes;
+                renderLikeUI(isLiked, currentLikes, false);
+            } else {
+                isLiked = prevLiked;
+                currentLikes = prevCount;
+                renderLikeUI(isLiked, currentLikes, false);
+            }
+        })
+        .catch(err => {
+            isPendingLike = false;
+            console.error('Like error:', err);
+            isLiked = prevLiked;
+            currentLikes = prevCount;
+            renderLikeUI(isLiked, currentLikes, false);
+        });
+    }
+
+    // 4. Double-Tap Foto seperti Instagram
+    function handleImageDoubleTap(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        const heartEl = document.getElementById('imageHeartPop');
+        if (heartEl) {
+            heartEl.classList.remove('ig-tap-heart');
+            void heartEl.offsetWidth; // re-trigger animation
+            heartEl.classList.add('ig-tap-heart');
+            setTimeout(() => heartEl.classList.remove('ig-tap-heart'), 900);
+        }
+        if (!isLiked) {
+            toggleLike(e);
+        }
+    }
+
+    // 5. Fitur Buka/Tutup Card Komentar saat Icon Komentar Diklik
+    function toggleComments(e) {
+        if (e) {
+            e.preventDefault();
+        }
+        const commentSection = document.getElementById('card-komentar');
+        const toggleBtn = document.getElementById('commentToggleBtn');
+
+        if (!commentSection) return;
+
+        const isHidden = commentSection.classList.contains('hidden');
+
+        if (isHidden) {
+            // Tampilkan card komentar
+            commentSection.classList.remove('hidden');
+            if (toggleBtn) {
+                toggleBtn.classList.add('border-sky-400', 'bg-sky-50/70', 'text-sky-700');
+            }
+            // Scroll halus ke card komentar
+            setTimeout(() => {
+                commentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const textarea = document.getElementById('inputIsi');
+                if (textarea) {
+                    textarea.focus();
+                }
+            }, 100);
+        } else {
+            // Sembunyikan card komentar
+            commentSection.classList.add('hidden');
+            if (toggleBtn) {
+                toggleBtn.classList.remove('border-sky-400', 'bg-sky-50/70', 'text-sky-700');
+            }
+        }
+    }
+
+    // Auto-reveal card komentar jika halaman dibuka dengan anchor #card-komentar (misal setelah login/register)
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.hash === '#card-komentar') {
+            const commentSection = document.getElementById('card-komentar');
+            const toggleBtn = document.getElementById('commentToggleBtn');
+            if (commentSection) {
+                commentSection.classList.remove('hidden');
+                if (toggleBtn) {
+                    toggleBtn.classList.add('border-sky-400', 'bg-sky-50/70', 'text-sky-700');
+                }
+                setTimeout(() => {
+                    commentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    const textarea = document.getElementById('inputIsi');
+                    if (textarea) textarea.focus();
+                }, 300);
+            }
+        }
+    });
+
+    // 6. Fitur Share / Bagikan (Salin Link + Bertambah di Database)
+    function bagikanBerita(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        const url = window.location.href.split('#')[0];
+        const shareCountSpan = document.getElementById('shareCount');
+        const shareToast = document.getElementById('shareToast');
+
+        // Salin ke Clipboard
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url);
+        } else {
+            const temp = document.createElement('input');
+            temp.value = url;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+        }
+
+        // Tampilkan feedback toast
+        if (shareToast) {
+            shareToast.classList.remove('hidden');
+            shareToast.classList.add('inline-flex');
+            setTimeout(() => {
+                shareToast.classList.add('hidden');
+                shareToast.classList.remove('inline-flex');
+            }, 3000);
+        }
+
+        // Kirim penambahan share ke database via AJAX
+        if (!isPendingShare) {
+            isPendingShare = true;
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value 
+                              || getCookie('csrftoken') 
+                              || '{{ csrf_token }}';
+
+            fetch("{% url 'landing:berita_share' berita.slug %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'ajax=1'
+            })
+            .then(res => res.json())
+            .then(data => {
+                isPendingShare = false;
+                if (data.status === 'success') {
+                    currentShares = data.shares_count;
+                    if (shareCountSpan) {
+                        shareCountSpan.innerText = currentShares;
+                    }
+                }
+            })
+            .catch(err => {
+                isPendingShare = false;
+                console.error('Share increment error:', err);
+            });
+        }
+    }
+
+    // 7. Fitur Kirim Komentar via AJAX
+    const commentForm = document.getElementById('commentForm');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const isiInput = document.getElementById('inputIsi');
+            const submitBtn = document.getElementById('submitCommentBtn');
+            const submitBtnText = document.getElementById('submitBtnText');
+            const komentarList = document.getElementById('komentarList');
+            const noCommentBox = document.getElementById('noCommentBox');
+            const komentarCountBadge = document.getElementById('komentarCountBadge');
+            const headerCommentCount = document.getElementById('headerCommentCount');
+
+            if (!isiInput.value.trim()) {
+                alert('Silakan tulis komentar Anda terlebih dahulu!');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtnText.innerText = "Mengirim...";
+
+            const formData = new FormData(commentForm);
+            formData.append('ajax', '1');
+
+            fetch("{% url 'landing:berita_komentar' berita.slug %}", {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                submitBtn.disabled = false;
+                submitBtnText.innerText = "Kirim";
+
+                if (data.status === 'success') {
+                    if (noCommentBox) {
+                        noCommentBox.style.display = 'none';
+                    }
+
+                    // Buat elemen komentar baru
+                    const newCommentEl = document.createElement('div');
+                    newCommentEl.className = "bg-teal-50/50 p-4 sm:p-5 rounded-2xl border border-teal-200 shadow-2xs space-y-2 transition-all duration-500";
+                    newCommentEl.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#005f5f] to-[#148383] text-amber-300 font-bold flex items-center justify-center text-xs shadow-inner shrink-0">
+                                ${data.komentar.initial}
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-slate-800 text-xs sm:text-sm leading-tight">
+                                    ${data.komentar.nama}
+                                    <span class="text-[10px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-bold ml-1.5">Baru saja</span>
+                                </h5>
+                                <p class="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
+                                    <i class="fa-regular fa-clock text-[9px]"></i>
+                                    <span>${data.komentar.created_at} WITA</span>
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed pl-12 whitespace-pre-line">
+                            ${data.komentar.isi}
+                        </p>
+                    `;
+
+                    komentarList.insertBefore(newCommentEl, komentarList.firstChild);
+
+                    if (komentarCountBadge) {
+                        komentarCountBadge.innerText = data.total_komentar;
+                    }
+                    if (headerCommentCount) {
+                        headerCommentCount.innerText = data.total_komentar;
+                    }
+
+                    isiInput.value = '';
+                } else {
+                    alert(data.message || 'Gagal mengirim komentar.');
+                    if (data.require_login) {
+                        window.location.href = "{% url 'landing:login' %}?next={{ request.path }}#card-komentar";
+                    }
+                }
+            })
+            .catch(err => {
+                submitBtn.disabled = false;
+                submitBtnText.innerText = "Kirim";
+                console.error('Error kirim komentar:', err);
+                commentForm.submit();
+            });
+        });
+    }
+</script>
+{% endblock %}
