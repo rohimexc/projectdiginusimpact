@@ -344,77 +344,138 @@
       <!-- ================= BLOK 2 AOS: KARTU KONTEN UTAMA ================= -->
       <section data-aos="fade-up" data-aos-duration="700">
         {% if halaman.kategori == 'akreditasi' %}
-          <!-- TAMPILAN AKREDITASI -->
-          <article class="bg-white rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-200/80 mb-8">
-            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
-              <span class="w-2.5 h-7 bg-[#0b7285] rounded-full inline-block"></span>
-              <h2 class="text-xl sm:text-2xl font-bold text-[#0b7285] tracking-tight">
-                Sertifikat & Status Akreditasi
-              </h2>
-            </div>
+          <!-- ================= TAMPILAN AKREDITASI MINIMALIS ================= -->
+          <div class="mb-12">
+            <!-- 1. Grid Kartu Informasi Akreditasi (4 Kartu di Bagian Atas) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <!-- Kartu 1: Akreditasi -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-2xs">
+                <span class="block text-xs font-semibold text-slate-400 tracking-wider uppercase mb-1.5">AKREDITASI</span>
+                <span class="text-xl sm:text-2xl font-bold text-[#0D636D]">Baik Sekali</span>
+              </div>
 
-            {% if halaman.isi and halaman.isi != '<p>Konten belum diisi.</p>' %}
-            <div class="text-slate-700 leading-relaxed text-sm mb-6 content-detail text-justify">
-              {{ halaman.isi|safe }}
-            </div>
-            {% endif %}
-
-            <div class="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white">
-              <div class="bg-[#0b7285] px-4 sm:px-6 py-3.5 text-white flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h3 class="text-sm sm:text-base font-bold tracking-tight flex items-center gap-2">
-                    <i class="fas fa-file-pdf text-[#ffd43b]"></i> Pratinjau Dokumen Sertifikat
-                  </h3>
-                  <p class="text-[11px] text-teal-100 hidden sm:block">Sertifikat Resmi Program Studi Administrasi Publik</p>
+              <!-- Kartu 2: Nomor SK BAN-PT -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-2xs flex items-center justify-between gap-4">
+                <div class="min-w-0 flex-1">
+                  <span class="block text-xs font-semibold text-slate-400 tracking-wider uppercase mb-1.5">NOMOR SK BAN-PT</span>
+                  <span id="nomor-sk-text" class="text-base sm:text-lg font-bold text-slate-800 leading-snug break-words">No. 4128/SK/BAN-PT/Ak.PPJ/S/VI/2022</span>
                 </div>
-                <div class="flex items-center gap-2">
-                  <button type="button" onclick="zoomPDF(-0.2)" title="Perkecil" class="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-xs transition">
-                    <i class="fas fa-search-minus"></i>
-                  </button>
-                  <span id="pdf-zoom-level" class="text-xs font-mono font-bold px-2 py-1 bg-black/20 rounded">100%</span>
-                  <button type="button" onclick="zoomPDF(0.2)" title="Perbesar" class="w-8 h-8 rounded-lg bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-xs transition">
-                    <i class="fas fa-search-plus"></i>
-                  </button>
+                <button 
+                  type="button" 
+                  onclick="salinNomorSK(this)" 
+                  class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-200 text-slate-600 hover:border-[#0D636D] hover:text-[#0D636D] text-xs font-semibold transition bg-white shadow-2xs shrink-0 cursor-pointer"
+                  title="Salin Nomor SK"
+                >
+                  <i class="far fa-copy text-xs"></i>
+                  <span>Salin</span>
+                </button>
+              </div>
+
+              <!-- Kartu 3: Lembaga Akreditasi -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-2xs">
+                <span class="block text-xs font-semibold text-slate-400 tracking-wider uppercase mb-1.5">LEMBAGA AKREDITASI</span>
+                <span class="text-lg sm:text-xl font-bold text-slate-800">BAN-PT / LAMSPAK</span>
+              </div>
+
+              <!-- Kartu 4: Masa Berlaku -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-2xs">
+                <span class="block text-xs font-semibold text-slate-400 tracking-wider uppercase mb-1.5">MASA BERLAKU</span>
+                <span class="text-lg sm:text-xl font-bold text-slate-800">Hingga 26 Juli 2027</span>
+              </div>
+            </div>
+
+            <!-- 2. Viewer Dokumen Sertifikat dengan Toolbar Atas Minimalis -->
+            <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white mb-8">
+              <!-- Bar Header Dokumen (Hijau Teal #0D636D) -->
+              <div class="bg-[#0D636D] px-4 sm:px-6 py-3.5 sm:py-4 text-white flex flex-wrap items-center justify-between gap-3 rounded-t-2xl">
+                <!-- Sisi Kiri: Ikon Dokumen & Judul -->
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-[#fab005] shrink-0">
+                    <i class="fa-solid fa-file-lines text-base"></i>
+                  </div>
+                  <h3 class="text-sm sm:text-base font-bold text-white tracking-tight">
+                    Dokumen Sertifikat Akreditasi
+                  </h3>
+                </div>
+
+                <!-- Sisi Kanan: Kontrol Zoom Minimalis, Separator & Tombol Download -->
+                <div class="flex items-center gap-2 sm:gap-2.5">
+                  <!-- Kontrol Zoom Minimalis -->
+                  <div class="flex items-center bg-white/10 rounded-xl p-0.5 sm:p-1 border border-white/10">
+                    <button 
+                      type="button" 
+                      onclick="zoomPDF(-0.2)" 
+                      title="Perkecil" 
+                      class="w-7 h-7 rounded-lg hover:bg-white/15 text-white flex items-center justify-center text-xs transition cursor-pointer"
+                    >
+                      <i class="fas fa-search-minus"></i>
+                    </button>
+                    <span id="pdf-zoom-level" class="text-xs font-bold text-white px-2 font-mono select-none">100%</span>
+                    <button 
+                      type="button" 
+                      onclick="zoomPDF(0.2)" 
+                      title="Perbesar" 
+                      class="w-7 h-7 rounded-lg hover:bg-white/15 text-white flex items-center justify-center text-xs transition cursor-pointer"
+                    >
+                      <i class="fas fa-search-plus"></i>
+                    </button>
+                  </div>
+
+                  <!-- Garis Pemisah Vertikal Tipis -->
+                  <div class="h-6 w-px bg-white/20 mx-0.5 sm:mx-1"></div>
+
+                  <!-- Tombol Kapsul Putih Download -->
+                  {% if halaman.file_utama %}
+                    <a 
+                      href="{{ halaman.file_utama.url }}" 
+                      target="_blank" 
+                      download 
+                      class="inline-flex items-center gap-2 bg-white text-teal-900 hover:bg-teal-50 rounded-full px-4 sm:px-5 py-1.5 text-xs font-semibold shadow-xs transition cursor-pointer shrink-0"
+                    >
+                      <i class="fas fa-download text-xs"></i>
+                      <span>Download</span>
+                    </a>
+                  {% else %}
+                    <a 
+                      href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" 
+                      target="_blank" 
+                      download 
+                      class="inline-flex items-center gap-2 bg-white text-teal-900 hover:bg-teal-50 rounded-full px-4 sm:px-5 py-1.5 text-xs font-semibold shadow-xs transition cursor-pointer shrink-0"
+                    >
+                      <i class="fas fa-download text-xs"></i>
+                      <span>Download</span>
+                    </a>
+                  {% endif %}
                 </div>
               </div>
 
-              <div class="p-3 sm:p-6 bg-slate-100 flex flex-col items-center justify-center">
+              <!-- Area Pratinjau Dokumen -->
+              <div class="p-4 sm:p-6 bg-slate-50 flex flex-col items-center justify-center rounded-b-2xl">
+                <!-- Lencana Kapsul Halaman di Bagian Atas Tengah -->
+                <div class="mb-4">
+                  <span id="pdf-page-badge" class="bg-slate-200/80 text-slate-600 text-xs font-medium rounded-full px-3 py-1 shadow-2xs select-none">
+                    Halaman 1 dari 6
+                  </span>
+                </div>
+
                 {% if halaman.gambar %}
-                  <div class="w-full bg-white rounded-xl p-4 shadow-md flex justify-center border border-slate-200">
+                  <div class="w-full bg-white rounded-xl p-4 shadow-sm flex justify-center border border-slate-200">
                     <img src="{{ halaman.gambar.url }}" alt="{{ halaman.judul }}" class="max-w-full max-h-[750px] mx-auto rounded-xl object-contain">
                   </div>
                 {% else %}
-                  <!-- Viewer Canvas Container (PDF.js) - Langsung Tampil Gambar di HP & Desktop -->
-                  <div id="pdf-viewer-wrapper" class="w-full bg-white rounded-xl shadow-md border border-slate-200 p-2 sm:p-6 overflow-hidden">
+                  <!-- Viewer Canvas Container (PDF.js) -->
+                  <div id="pdf-viewer-wrapper" class="w-full bg-white rounded-xl shadow-sm border border-slate-200 p-2 sm:p-6 overflow-hidden">
                     <div id="pdf-loading-spinner" class="py-16 flex flex-col items-center justify-center text-slate-500">
-                      <i class="fas fa-circle-notch fa-spin text-3xl text-[#0b7285] mb-3"></i>
+                      <i class="fas fa-circle-notch fa-spin text-3xl text-[#0D636D] mb-3"></i>
                       <p class="text-xs font-semibold text-slate-700">Memuat pratinjau dokumen...</p>
                       <p class="text-[11px] text-slate-400 mt-1">Harap tunggu sebentar</p>
                     </div>
                     <div id="pdf-canvas-container" class="w-full flex flex-col items-center gap-4 max-h-[850px] overflow-y-auto"></div>
                   </div>
-
-                  <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
-                    {% if halaman.file_utama %}
-                      <a href="{{ halaman.file_utama.url }}" target="_blank" download class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0b7285] hover:bg-[#fab005] hover:text-slate-900 text-white text-xs font-semibold rounded-xl shadow-sm transition">
-                        <i class="fas fa-download"></i> Unduh Berkas PDF
-                      </a>
-                      <a href="{{ halaman.file_utama.url }}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 hover:border-[#0b7285] text-slate-700 hover:text-[#0b7285] text-xs font-semibold rounded-xl shadow-sm transition">
-                        <i class="fas fa-external-link-alt"></i> Buka Layar Penuh
-                      </a>
-                    {% else %}
-                      <a href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" target="_blank" download class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0b7285] hover:bg-[#fab005] hover:text-slate-900 text-white text-xs font-semibold rounded-xl shadow-sm transition">
-                        <i class="fas fa-download"></i> Unduh Berkas PDF
-                      </a>
-                      <a href="{% static 'pdf/SK_KEPANITIAN DAN PENGISI ACARA FRONTROW 2026.pdf' %}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-300 hover:border-[#0b7285] text-slate-700 hover:text-[#0b7285] text-xs font-semibold rounded-xl shadow-sm transition">
-                        <i class="fas fa-external-link-alt"></i> Buka Layar Penuh
-                      </a>
-                    {% endif %}
-                  </div>
                 {% endif %}
               </div>
             </div>
-          </article>
+          </div>
 
         {% elif halaman.kategori == 'visi_misi' or halaman.kategori == 'tujuan' %}
           <!-- TAMPILAN VISI MISI TUJUAN -->
@@ -728,6 +789,22 @@
         if (icon) icon.classList.toggle('rotate-180');
       }
     }
+
+    // Salin Nomor SK ke Clipboard
+    function salinNomorSK(btn) {
+      const text = document.getElementById('nomor-sk-text')?.innerText || 'No. 4128/SK/BAN-PT/Ak.PPJ/S/VI/2022';
+      navigator.clipboard.writeText(text.trim()).then(function() {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check text-xs text-emerald-600"></i> <span class="text-emerald-600">Tersalin!</span>';
+        btn.classList.add('border-emerald-300', 'bg-emerald-50');
+        setTimeout(function() {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove('border-emerald-300', 'bg-emerald-50');
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Gagal menyalin:', err);
+      });
+    }
   </script>
 
   {% if halaman.kategori == 'akreditasi' and not halaman.gambar %}
@@ -803,6 +880,10 @@
       if (pdfUrl) {
         pdfjsLib.getDocument(pdfUrl).promise.then(function(doc) {
           pdfDoc = doc;
+          const pageBadge = document.getElementById('pdf-page-badge');
+          if (pageBadge && pdfDoc.numPages) {
+            pageBadge.textContent = 'Halaman 1 dari ' + pdfDoc.numPages;
+          }
           renderAllPages();
         }).catch(function(err) {
           console.warn('PDF.js gagal memuat PDF, menggunakan fallback iframe:', err);
