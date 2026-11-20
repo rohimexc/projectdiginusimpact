@@ -478,85 +478,110 @@
           </div>
 
         {% elif halaman.kategori == 'visi_misi' or halaman.kategori == 'tujuan' %}
-          <!-- TAMPILAN VISI MISI TUJUAN -->
-          <article class="bg-white rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-200/80 mb-8">
-            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
-              <span class="w-2.5 h-7 bg-[#0b7285] rounded-full inline-block"></span>
-              <h2 class="text-xl sm:text-2xl font-bold text-[#0b7285] tracking-tight">
-                Visi, Misi, dan Tujuan Program Studi
-              </h2>
-            </div>
-
-            <!-- Visi -->
-            <div class="bg-[#0b7285] text-white rounded-2xl p-6 sm:p-8 border-l-[6px] border-[#fab005] shadow-md mb-8">
-              <h3 class="text-lg sm:text-xl font-bold text-[#fab005] mb-2.5 flex items-center gap-2">
-                <i class="fas fa-eye text-[#fab005]"></i> Visi
-              </h3>
-              <p class="text-white/95 text-sm sm:text-[15px] leading-relaxed text-justify">
+          <!-- ================= TAMPILAN VISI MISI TUJUAN MINIMALIS ================= -->
+          <div class="mb-12">
+            <!-- 1. Bagian Visi (Kartu Highlight Bersih) -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 border-l-4 border-l-[#0D636D] shadow-2xs mb-6">
+              <span class="block text-xs font-semibold uppercase tracking-wider text-[#0D636D] mb-2.5">
+                VISI PROGRAM STUDI
+              </span>
+              <p class="text-base sm:text-lg md:text-xl font-semibold text-slate-800 leading-relaxed">
                 {{ visi_obj.visi_teks|default:"Menjadi program studi yang unggul secara global dalam bidang ilmu administrasi publik sebagai mitra strategis untuk kehidupan yang lebih baik bagi Rakyat Indonesia dan Umat Manusia melalui pendidikan, penelitian, dan pelayanan tata kelola publik yang berwawasan lingkungan dan berkelanjutan." }}
               </p>
             </div>
 
-            <!-- Misi -->
-            <div class="mb-8">
-              <h3 class="text-xl font-bold text-[#0b7285] mb-2 flex items-center gap-2">
-                <i class="fas fa-bullseye text-[#fab005]"></i> Misi
-              </h3>
-              <p class="text-slate-600 text-sm mb-4">
-                {{ visi_obj.misi_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:" }}
-              </p>
-              <div class="space-y-3">
-                {% for item in daftar_misi %}
-                  <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-center gap-4">
-                    <div class="w-9 h-9 rounded-full bg-[#0b7285]/10 text-[#0b7285] font-bold text-sm flex items-center justify-center shrink-0">
-                      {{ item.urutan|default:forloop.counter }}
-                    </div>
-                    <p class="text-slate-700 text-sm leading-relaxed flex-1 text-justify">{{ item.isi }}</p>
-                  </div>
-                {% empty %}
-                  <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-center gap-4">
-                    <div class="w-9 h-9 rounded-full bg-[#0b7285]/10 text-[#0b7285] font-bold text-sm flex items-center justify-center shrink-0">1</div>
-                    <p class="text-slate-700 text-sm leading-relaxed flex-1 text-justify">Menyelenggarakan pembelajaran, penelitian, dan inovasi administrasi publik secara terpadu, berkelanjutan, dan berdampak lingkungan.</p>
-                  </div>
-                {% endfor %}
-              </div>
-            </div>
+            <!-- 2. Bagian Misi & Tujuan (Grid 2 Kolom Simetris) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Kartu Misi -->
+              <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-2xs flex flex-col">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                  <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                    MISI
+                  </span>
+                  <h3 class="text-xl sm:text-2xl font-bold text-slate-800">
+                    Misi Program Studi
+                  </h3>
+                </div>
 
-            <!-- Tujuan -->
-            <div>
-              <h3 class="text-xl font-bold text-[#0b7285] mb-2 flex items-center gap-2">
-                <i class="fas fa-award text-[#fab005]"></i> Tujuan
-              </h3>
-              <p class="text-slate-600 text-sm mb-4">
-                {{ visi_obj.tujuan_intro|default:"Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:" }}
-              </p>
-              <div class="space-y-3">
-                {% for item in daftar_tujuan %}
-                  <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-start gap-4">
-                    <div class="w-9 h-9 rounded-full bg-[#0b7285]/10 text-[#0b7285] font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-                      {{ item.urutan|default:forloop.counter }}
+                <div class="space-y-4 flex-1">
+                  {% for item in daftar_misi %}
+                    <div class="flex items-start gap-3.5">
+                      <span class="bg-teal-50 text-[#0D636D] font-semibold text-xs rounded-full w-7 h-7 flex items-center justify-center shrink-0 mt-0.5">
+                        {{ forloop.counter|stringformat:"02d" }}
+                      </span>
+                      <p class="text-sm md:text-base text-slate-600 leading-relaxed flex-1">
+                        {{ item.isi }}
+                      </p>
                     </div>
-                    <div class="flex-1">
-                      <h4 class="text-base font-bold text-[#0b7285] leading-snug">{{ item.judul }}</h4>
-                      {% if item.subjudul %}
-                        <p class="text-xs italic text-[#0b7285] mb-1 font-medium">{{ item.subjudul }}</p>
-                      {% endif %}
-                      <p class="text-slate-600 text-sm leading-relaxed text-justify">{{ item.deskripsi }}</p>
+                  {% empty %}
+                    <div class="flex items-start gap-3.5">
+                      <span class="bg-teal-50 text-[#0D636D] font-semibold text-xs rounded-full w-7 h-7 flex items-center justify-center shrink-0 mt-0.5">
+                        01
+                      </span>
+                      <p class="text-sm md:text-base text-slate-600 leading-relaxed flex-1">
+                        Menyelenggarakan pembelajaran, penelitian, dan inovasi administrasi publik secara terpadu, berkelanjutan, dan berdampak lingkungan.
+                      </p>
                     </div>
-                  </div>
-                {% empty %}
-                  <div class="bg-slate-50/80 rounded-xl border border-slate-200/80 border-l-4 border-l-[#0b7285] p-4 sm:p-5 flex items-start gap-4">
-                    <div class="w-9 h-9 rounded-full bg-[#0b7285]/10 text-[#0b7285] font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">1</div>
-                    <div class="flex-1">
-                      <h4 class="text-base font-bold text-[#0b7285]">Employabilitas</h4>
-                      <p class="text-xs italic text-[#0b7285] mb-1 font-medium">Employability</p>
-                      <p class="text-slate-600 text-sm leading-relaxed text-justify">Menghasilkan lulusan yang menguasai ilmu pengetahuan dan teknologi terdepan di bidang administrasi dan kebijakan publik.</p>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <!-- Kartu Tujuan -->
+              <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-2xs flex flex-col">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                  <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                    TUJUAN
+                  </span>
+                  <h3 class="text-xl sm:text-2xl font-bold text-slate-800">
+                    Tujuan Pendidikan
+                  </h3>
+                </div>
+
+                <div class="space-y-4 flex-1">
+                  {% for item in daftar_tujuan %}
+                    <div class="flex items-start gap-3.5">
+                      <span class="bg-teal-50 text-[#0D636D] font-semibold text-xs rounded-full w-7 h-7 flex items-center justify-center shrink-0 mt-0.5">
+                        {{ forloop.counter|stringformat:"02d" }}
+                      </span>
+                      <div class="flex-1">
+                        {% if item.judul %}
+                          <h4 class="text-sm md:text-base font-semibold text-slate-800 leading-snug">
+                            {{ item.judul }}
+                            {% if item.subjudul %}
+                              <span class="text-xs font-normal text-slate-400 italic ml-1">({{ item.subjudul }})</span>
+                            {% endif %}
+                          </h4>
+                        {% endif %}
+                        {% if item.deskripsi %}
+                          <p class="text-sm text-slate-600 leading-relaxed mt-1">
+                            {{ item.deskripsi }}
+                          </p>
+                        {% elif item.isi %}
+                          <p class="text-sm text-slate-600 leading-relaxed mt-1">
+                            {{ item.isi }}
+                          </p>
+                        {% endif %}
+                      </div>
                     </div>
-                  </div>
-                {% endfor %}
+                  {% empty %}
+                    <div class="flex items-start gap-3.5">
+                      <span class="bg-teal-50 text-[#0D636D] font-semibold text-xs rounded-full w-7 h-7 flex items-center justify-center shrink-0 mt-0.5">
+                        01
+                      </span>
+                      <div class="flex-1">
+                        <h4 class="text-sm md:text-base font-semibold text-slate-800 leading-snug">
+                          Employabilitas <span class="text-xs font-normal text-slate-400 italic ml-1">(Employability)</span>
+                        </h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mt-1">
+                          Menghasilkan lulusan yang menguasai ilmu pengetahuan dan teknologi terdepan di bidang administrasi dan kebijakan publik.
+                        </p>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
             </div>
-          </article>
+          </div>
 
         {% else %}
           <!-- TAMPILAN PROFIL PROGRAM STUDI & SEJARAH -->
