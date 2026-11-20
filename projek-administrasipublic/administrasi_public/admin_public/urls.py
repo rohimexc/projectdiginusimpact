@@ -18,6 +18,7 @@ from core.views import (
     berita_update,
     berita_delete,
     tenaga_pendidik_list,
+    tenaga_pendidik_detail,
     tenaga_kependidikan_list,
     tenaga_kependidikan_detail,
     tenaga_kependidikan_create,
@@ -73,6 +74,7 @@ urlpatterns = [
 
     # 3. Publik Staf, Tentang & Akademik
     path('staf/tenaga-pengajar/', tenaga_pendidik_list, name='tenaga_pendidik_list'),
+    path('staf/tenaga-pengajar/<int:pk>/', tenaga_pendidik_detail, name='tenaga_pendidik_detail'),
     path('staf/tenaga-kependidikan/', tenaga_kependidikan_list, name='tenaga_kependidikan_list'),
     path('staf/tenaga-kependidikan/<int:pk>/', tenaga_kependidikan_detail, name='tenaga_kependidikan_detail'),
     path('tentang/<str:kategori>/', tentang_detail, name='tentang_detail'),

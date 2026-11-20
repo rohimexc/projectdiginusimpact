@@ -192,9 +192,25 @@ class TenagaPendidik(models.Model):
         ('KEPALA TATA USAHA', 'KEPALA TATA USAHA'),
     ]
 
+    JABATAN_FUNGSIONAL_CHOICES = [
+        ('Guru Besar', 'Guru Besar'),
+        ('Lektor Kepala', 'Lektor Kepala'),
+        ('Lektor', 'Lektor'),
+        ('Asisten Ahli', 'Asisten Ahli'),
+        ('Tenaga Pengajar', 'Tenaga Pengajar'),
+    ]
+
     jenis = models.CharField(max_length=20, choices=JENIS_CHOICES, default='DOSEN')
     nama = models.CharField(max_length=200, help_text="Nama lengkap beserta gelar")
     jenis_kelamin = models.CharField(max_length=1, choices=GENDER_CHOICES, default='L', verbose_name="Jenis Kelamin")
+    jabatan_fungsional = models.CharField(
+        max_length=50,
+        choices=JABATAN_FUNGSIONAL_CHOICES,
+        blank=True,
+        null=True,
+        verbose_name="Jabatan Fungsional",
+        help_text="Pilihan jabatan fungsional dosen (cth: Guru Besar, Lektor Kepala, Lektor, Asisten Ahli)"
+    )
     bidang_ilmu = models.CharField(max_length=200, verbose_name="Bidang Ilmu / Jabatan")
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='DOSEN TETAP')
     foto = models.ImageField(
@@ -231,6 +247,14 @@ class TenagaPendidik(models.Model):
 
     def __str__(self):
         return f"{self.nama} ({self.jenis})"
+
+    @property
+    def jabatan(self):
+        return self.jabatan_fungsional or self.status or "Dosen Tetap"
+
+    @property
+    def bidang_keahlian(self):
+        return self.bidang_ilmu or "Ilmu Administrasi Publik"
 
 
 # 6. Model Audit Log

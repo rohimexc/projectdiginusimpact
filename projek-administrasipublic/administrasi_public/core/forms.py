@@ -56,19 +56,22 @@ class TenagaPendidikForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if 'jenis' in self.fields:
             self.fields['jenis'].required = False
-        for f in ['nidn', 'nip', 'nuptk', 'no_hp', 'email', 'foto', 'bidang_ilmu', 'status']:
+        for f in ['nidn', 'nip', 'nuptk', 'no_hp', 'email', 'foto', 'bidang_ilmu', 'status', 'jabatan_fungsional']:
             if f in self.fields:
                 self.fields[f].required = False
 
     class Meta:
         model = TenagaPendidik
         fields = [
-            'jenis', 'nama', 'jenis_kelamin', 'bidang_ilmu', 'status', 'foto',
+            'jenis', 'nama', 'jenis_kelamin', 'jabatan_fungsional', 'bidang_ilmu', 'status', 'foto',
             'email', 'nidn', 'nip', 'nuptk', 'no_hp', 'pangkat_golongan'
         ]
         widgets = {
             'jenis': forms.Select(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs font-semibold text-teal-800'
+            }),
+            'jabatan_fungsional': forms.Select(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs'
             }),
             'nama': forms.TextInput(attrs={
                 'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',

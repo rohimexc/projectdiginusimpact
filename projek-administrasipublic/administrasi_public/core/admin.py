@@ -40,9 +40,9 @@ class BeritaAdmin(admin.ModelAdmin):
 
 @admin.register(TenagaPendidik)
 class TenagaPendidikAdmin(admin.ModelAdmin):
-    list_display = ('nama', 'bidang_ilmu', 'status', 'nidn', 'email')
+    list_display = ('nama', 'jenis', 'jabatan_fungsional', 'bidang_ilmu', 'status', 'nidn', 'email')
     search_fields = ('nama', 'bidang_ilmu', 'nidn', 'nip')
-    list_filter = ('status', 'bidang_ilmu')
+    list_filter = ('jenis', 'jabatan_fungsional', 'status', 'bidang_ilmu')
     ordering = ('nama',)
 
     

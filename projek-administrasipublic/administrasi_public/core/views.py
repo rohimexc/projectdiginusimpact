@@ -398,17 +398,60 @@ def komentar_hapus(request, pk):
 
 
 def tenaga_pendidik_list(request):
-    query = request.GET.get('q', '')
-    dosen_qs = TenagaPendidik.objects.filter(jenis='DOSEN').order_by('nama')
+    query = request.GET.get('q', '').strip()
+    selected_jabatan = request.GET.get('jabatan', '').strip()
 
+    dosen_qs = TenagaPendidik.objects.filter(jenis='DOSEN')
+
+    # Hitung jumlah per jabatan fungsional secara dinamis dari database
+    total_dosen = dosen_qs.count()
+    count_guru_besar = dosen_qs.filter(Q(jabatan_fungsional__iexact='Guru Besar') | Q(status__iexact='PROFESOR')).count()
+    count_lektor_kepala = dosen_qs.filter(jabatan_fungsional__iexact='Lektor Kepala').count()
+    count_lektor = dosen_qs.filter(jabatan_fungsional__iexact='Lektor').count()
+    count_asisten_ahli = dosen_qs.filter(jabatan_fungsional__iexact='Asisten Ahli').count()
+
+    jabatan_counts = {
+        'all': total_dosen,
+        'guru_besar': count_guru_besar,
+        'lektor_kepala': count_lektor_kepala,
+        'lektor': count_lektor,
+        'asisten_ahli': count_asisten_ahli,
+    }
+
+    # Filter Jabatan Fungsional
+    if selected_jabatan:
+        if selected_jabatan.lower() == 'guru besar':
+            dosen_qs = dosen_qs.filter(Q(jabatan_fungsional__iexact='Guru Besar') | Q(status__iexact='PROFESOR'))
+        else:
+            dosen_qs = dosen_qs.filter(jabatan_fungsional__iexact=selected_jabatan)
+
+    # Filter Kata Kunci (Nama, NIP, NIDN, Bidang Keahlian/Ilmu)
     if query:
         dosen_qs = dosen_qs.filter(
             Q(nama__icontains=query) |
-            Q(bidang_ilmu__icontains=query) |
-            Q(nidn__icontains=query)
+            Q(nip__icontains=query) |
+            Q(nidn__icontains=query) |
+            Q(bidang_ilmu__icontains=query)
         )
 
-    return render(request, 'core/dosen/list.html', {'dosen_list': dosen_qs, 'query': query})
+    dosen_qs = dosen_qs.order_by('nama')
+
+    has_active_filter = bool(query or selected_jabatan)
+
+    context = {
+        'daftar_dosen': dosen_qs,
+        'dosen_list': dosen_qs,
+        'query': query,
+        'selected_jabatan': selected_jabatan,
+        'jabatan_counts': jabatan_counts,
+        'has_active_filter': has_active_filter,
+    }
+    return render(request, 'core/dosen/list.html', context)
+
+
+def tenaga_pendidik_detail(request, pk):
+    dosen = get_object_or_404(TenagaPendidik, pk=pk, jenis='DOSEN')
+    return render(request, 'core/dosen/detail.html', {'dosen': dosen})
 
 
 def tenaga_kependidikan_list(request):

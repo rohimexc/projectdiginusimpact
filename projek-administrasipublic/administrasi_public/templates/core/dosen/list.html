@@ -284,7 +284,7 @@
     <div class="max-w-6xl mx-auto">
       
       <!-- BLOK 1 AOS: Header Halaman -->
-      <header data-aos="fade-down" data-aos-duration="600" class="mb-10 text-center sm:text-left">
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-8 text-center sm:text-left">
         <p class="text-xs font-bold uppercase tracking-widest text-[#0b7285] mb-1.5 flex items-center justify-center sm:justify-start gap-2">
           <span>STAF & DOSEN</span>
           <span class="text-[8px] opacity-60">•</span>
@@ -298,11 +298,128 @@
         </p>
       </header>
 
+      <!-- ================= KARTU PENCARIAN & FILTER DOSEN (2 BARIS KAPSUL) ================= -->
+      <div data-aos="fade-down" data-aos-duration="600" class="mb-10 w-full">
+        <form method="GET" action="{% url 'tenaga_pendidik_list' %}" id="dosen-filter-form" class="bg-white rounded-[28px] sm:rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm transition hover:shadow-md">
+          <!-- Hidden Input untuk Jabatan Fungsional -->
+          <input type="hidden" name="jabatan" id="jabatan-input" value="{{ selected_jabatan }}">
+
+          <!-- BARIS 1: Input Pencarian & Tombol Submit Cari -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+            <!-- Input Teks (Pill Kapsul) -->
+            <div class="flex-1 relative flex items-center">
+              <input 
+                type="text" 
+                name="q" 
+                id="dosen-search-input"
+                value="{{ query }}" 
+                placeholder="Cari Nama Dosen, NIP, NIDN, Bidang Keahlian..." 
+                autocomplete="off"
+                class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-5 py-2.5 sm:py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+              >
+              {% if query %}
+                <button 
+                  type="button" 
+                  onclick="clearSearchInput()"
+                  class="absolute right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition" 
+                  title="Hapus pencarian"
+                >
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              {% endif %}
+            </div>
+
+            <!-- Tombol Submit Cari (Pill Kapsul #0D636D) -->
+            <button 
+              type="submit" 
+              class="rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-7 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
+            >
+              <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
+              <span>Cari</span>
+            </button>
+          </div>
+
+          <!-- BARIS 2: Filter Jabatan Fungsional & Tombol Reset -->
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-3.5 mt-3 border-t border-slate-100">
+            <!-- Sisi Kiri: Slider Icon + Label + Tombol Jabatan Fungsional -->
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mr-1 select-none">
+                <i class="fa-solid fa-sliders text-[#0D636D]"></i> Jabatan Fungsional:
+              </span>
+
+              <!-- Preset Semua Dosen -->
+              <button 
+                type="button" 
+                onclick="setJabatanFilter('')" 
+                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if not selected_jabatan %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+              >
+                Semua Dosen ({{ jabatan_counts.all|default:0 }})
+              </button>
+
+              <!-- Guru Besar -->
+              <button 
+                type="button" 
+                onclick="setJabatanFilter('Guru Besar')" 
+                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'guru besar' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+              >
+                Guru Besar ({{ jabatan_counts.guru_besar|default:0 }})
+              </button>
+
+              <!-- Lektor Kepala -->
+              <button 
+                type="button" 
+                onclick="setJabatanFilter('Lektor Kepala')" 
+                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'lektor kepala' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+              >
+                Lektor Kepala ({{ jabatan_counts.lektor_kepala|default:0 }})
+              </button>
+
+              <!-- Lektor -->
+              <button 
+                type="button" 
+                onclick="setJabatanFilter('Lektor')" 
+                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'lektor' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+              >
+                Lektor ({{ jabatan_counts.lektor|default:0 }})
+              </button>
+
+              <!-- Asisten Ahli -->
+              <button 
+                type="button" 
+                onclick="setJabatanFilter('Asisten Ahli')" 
+                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'asisten ahli' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+              >
+                Asisten Ahli ({{ jabatan_counts.asisten_ahli|default:0 }})
+              </button>
+            </div>
+
+            <!-- Sisi Kanan: Tombol Reset -->
+            {% if has_active_filter %}
+              <a 
+                href="{% url 'tenaga_pendidik_list' %}" 
+                class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100/70 transition cursor-pointer shadow-2xs self-end sm:self-auto"
+                title="Kembalikan semua filter ke kondisi awal"
+              >
+                <i class="fas fa-arrows-rotate text-[11px]"></i>
+                <span>Reset</span>
+              </a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+
       <!-- BLOK 2 AOS: Grid Kartu Dosen -->
       <section data-aos="fade-up" data-aos-duration="700">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div id="dosen-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {% for dosen in daftar_dosen %}
-            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+            <div 
+              class="dosen-card bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between"
+              data-nama="{{ dosen.nama|lower }}"
+              data-nip="{{ dosen.nip|default:''|lower }}"
+              data-nidn="{{ dosen.nidn|default:''|lower }}"
+              data-bidang="{{ dosen.bidang_ilmu|default:''|lower }} {{ dosen.bidang_keahlian|default:''|lower }}"
+              data-jabatan="{{ dosen.jabatan_fungsional|default:dosen.jabatan|default:''|lower }}"
+            >
               <div>
                 <!-- Wadah Foto Rasio 4:5 -->
                 <div class="w-full overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 5;">
@@ -340,9 +457,20 @@
           {% empty %}
             <div class="col-span-full text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200">
               <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
-              <p class="text-sm font-medium">Belum ada data tenaga pengajar yang dimasukkan.</p>
+              <p class="text-sm font-medium">Belum ada data tenaga pengajar yang sesuai kriteria.</p>
+              {% if has_active_filter %}
+              <a href="{% url 'tenaga_pendidik_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
+                Reset Filter
+              </a>
+              {% endif %}
             </div>
           {% endfor %}
+
+          <!-- Pesan jika live filter tidak menemukan data -->
+          <div id="dosen-no-results" class="col-span-full text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200 hidden">
+            <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+            <p class="text-sm font-medium">Tidak ada tenaga pengajar yang sesuai dengan pencarian atau filter.</p>
+          </div>
         </div>
       </section>
 
@@ -530,6 +658,52 @@
         el.classList.toggle('hidden');
         if (icon) icon.classList.toggle('rotate-180');
       }
+    }
+
+    // ================= LOGIKA FILTER & PENCARIAN DOSEN =================
+    function setJabatanFilter(val) {
+      document.getElementById('jabatan-input').value = val;
+      document.getElementById('dosen-filter-form').submit();
+    }
+
+    function clearSearchInput() {
+      const input = document.getElementById('dosen-search-input');
+      if (input) input.value = '';
+      document.getElementById('dosen-filter-form').submit();
+    }
+
+    // Live Instant Search Filter untuk Dosen
+    const dosenSearchInput = document.getElementById('dosen-search-input');
+    const dosenCards = document.querySelectorAll('.dosen-card');
+    const dosenNoResults = document.getElementById('dosen-no-results');
+
+    if (dosenSearchInput && dosenCards.length > 0) {
+      dosenSearchInput.addEventListener('input', function() {
+        const val = this.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        dosenCards.forEach(card => {
+          const nama = card.getAttribute('data-nama') || '';
+          const nip = card.getAttribute('data-nip') || '';
+          const nidn = card.getAttribute('data-nidn') || '';
+          const bidang = card.getAttribute('data-bidang') || '';
+
+          if (!val || nama.includes(val) || nip.includes(val) || nidn.includes(val) || bidang.includes(val)) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (dosenNoResults) {
+          if (visibleCount === 0) {
+            dosenNoResults.classList.remove('hidden');
+          } else {
+            dosenNoResults.classList.add('hidden');
+          }
+        }
+      });
     }
   </script>
 </body>
