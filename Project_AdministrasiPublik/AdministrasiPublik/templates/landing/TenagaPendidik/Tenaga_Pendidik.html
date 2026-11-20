@@ -27,6 +27,23 @@
             </p>
         </div>
 
+        <!-- Form Pencarian Tenaga Kependidikan (Sesuai Contoh Gambar) -->
+        <form method="GET" action="{% url 'landing:tenaga_pendidik_beranda' %}" class="bg-white rounded-full border border-slate-200/90 shadow-xs p-1.5 sm:p-2 pl-6 flex items-center justify-between gap-3 max-w-4xl mx-auto" data-aos="fade-up">
+            <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Cari Nama Staf, NIP..."
+                class="w-full bg-transparent border-none text-xs sm:text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none">
+            
+            {% if filter_aktif %}
+            <a href="{% url 'landing:tenaga_pendidik_beranda' %}" class="text-xs text-rose-500 hover:text-rose-700 font-semibold px-2 shrink-0 flex items-center gap-1 transition">
+                <i class="fa-solid fa-xmark"></i> Reset
+            </a>
+            {% endif %}
+
+            <button type="submit" class="px-6 py-2.5 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-sm shrink-0 transition">
+                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                <span>Cari</span>
+            </button>
+        </form>
+
         <!-- Grid Kartu Overlay Menumpuk saat Hover -->
         {% if pendidik_list %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">

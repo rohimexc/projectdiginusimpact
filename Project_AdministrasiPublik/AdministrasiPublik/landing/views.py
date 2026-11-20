@@ -23,6 +23,7 @@ from django.core.paginator import Paginator
 from akun.views import catat_riwayat_login
 from akun.models import RiwayatLogin, UserProfile
 from django.utils import timezone
+from datetime import datetime, timedelta
 
 def index(request):
     berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
@@ -58,29 +59,84 @@ def akademik(request):
         return redirect('landing:detail_akademik', slug=first_page.slug)
     return redirect('landing:landing_home')
 
-# 1. Halaman Daftar Berita (DENGAN SEARCH & FILTER TANGGAL)
+# 1. Halaman Daftar Berita (DENGAN SEARCH, FILTER RENTANG TANGGAL, QUICK RANGE, & SORTING)
 def berita_list_view(request):
-    berita_list = Berita.objects.all().order_by('-post_date')
+    berita_list = Berita.objects.all()
 
-    # Fitur Search berdasarkan judul atau konten
-    query = request.GET.get('q')
+    # Parameter filter
+    query = request.GET.get('q', '').strip()
+    tgl_mulai = request.GET.get('tgl_mulai', '').strip()
+    tgl_selesai = request.GET.get('tgl_selesai', '').strip()
+    rentang = request.GET.get('rentang', 'semua').strip()
+    urutan = request.GET.get('urutan', 'terbaru').strip()
+
+    filter_aktif = False
+    filter_label = ""
+
+    # 1. Filter Pencarian Teks
     if query:
-        berita_list = berita_list.filter(judul__icontains=query) | berita_list.filter(konten__icontains=query)
+        berita_list = berita_list.filter(Q(judul__icontains=query) | Q(konten__icontains=query))
+        filter_aktif = True
 
-    # Fitur Filter berdasarkan Tanggal, Bulan, Tahun
-    tanggal = request.GET.get('tanggal')
-    bulan = request.GET.get('bulan')
-    tahun = request.GET.get('tahun')
+    # 2. Filter Rentang Tanggal Manual (DARI - SAMPAI)
+    if tgl_mulai and tgl_selesai:
+        try:
+            berita_list = berita_list.filter(post_date__date__range=[tgl_mulai, tgl_selesai])
+            filter_aktif = True
+            # Format tampilan dd/mm/yyyy - dd/mm/yyyy
+            d1 = datetime.strptime(tgl_mulai, "%Y-%m-%d").strftime("%d/%m/%Y")
+            d2 = datetime.strptime(tgl_selesai, "%Y-%m-%d").strftime("%d/%m/%Y")
+            filter_label = f"{d1} - {d2}"
+        except Exception:
+            pass
+    elif tgl_mulai:
+        try:
+            berita_list = berita_list.filter(post_date__date__gte=tgl_mulai)
+            filter_aktif = True
+            d1 = datetime.strptime(tgl_mulai, "%Y-%m-%d").strftime("%d/%m/%Y")
+            filter_label = f"Mulai {d1}"
+        except Exception:
+            pass
+    elif tgl_selesai:
+        try:
+            berita_list = berita_list.filter(post_date__date__lte=tgl_selesai)
+            filter_aktif = True
+            d2 = datetime.strptime(tgl_selesai, "%Y-%m-%d").strftime("%d/%m/%Y")
+            filter_label = f"Sampai {d2}"
+        except Exception:
+            pass
+    # 3. Filter Rentang Cepat (Jika tidak mengisi tanggal manual)
+    elif rentang == '7hari':
+        batas = timezone.now() - timedelta(days=7)
+        berita_list = berita_list.filter(post_date__gte=batas)
+        filter_aktif = True
+        filter_label = "7 Hari Terakhir"
+    elif rentang == 'bulan_ini':
+        now = timezone.localdate()
+        berita_list = berita_list.filter(post_date__year=now.year, post_date__month=now.month)
+        filter_aktif = True
+        filter_label = "Bulan Ini"
+    elif rentang == 'tahun_ini':
+        now = timezone.localdate()
+        berita_list = berita_list.filter(post_date__year=now.year)
+        filter_aktif = True
+        filter_label = "Tahun Ini"
 
-    if tanggal:
-        berita_list = berita_list.filter(post_date__day=tanggal)
-    if bulan:
-        berita_list = berita_list.filter(post_date__month=bulan)
-    if tahun:
-        berita_list = berita_list.filter(post_date__year=tahun)
+    # 4. Pengurutan
+    if urutan == 'terlama':
+        berita_list = berita_list.order_by('post_date')
+    else:
+        berita_list = berita_list.order_by('-post_date')
 
     context = {
         'berita_list': berita_list,
+        'query': query,
+        'tgl_mulai': tgl_mulai,
+        'tgl_selesai': tgl_selesai,
+        'rentang': rentang,
+        'urutan': urutan,
+        'filter_aktif': filter_aktif,
+        'filter_label': filter_label,
     }
     return render(request, 'landing/berita/berita_list.html', context)
 
@@ -347,16 +403,65 @@ def berita_delete_view(request, slug):
 # Halaman Publik Tendik & Dosen (Bisa diakses siapa saja tanpa login admin)
 def tenaga_pendidik_beranda_view(request):
     pendidik_list = TenagaPendidik.objects.all().order_by('nama')
+    query = request.GET.get('q', '').strip()
+    filter_aktif = False
+
+    if query:
+        pendidik_list = pendidik_list.filter(
+            Q(nama__icontains=query) | Q(nip__icontains=query) | Q(kategori__icontains=query) | Q(pangkat__icontains=query)
+        )
+        filter_aktif = True
+
     return render(request, 'landing/TenagaPendidik/Tenaga_Pendidik.html', {
         'pendidik_list': pendidik_list,
         'staf_list': pendidik_list,
-        'tendik_list': pendidik_list
+        'tendik_list': pendidik_list,
+        'query': query,
+        'filter_aktif': filter_aktif,
     })
 
 def dosen_beranda_view(request):
     dosen_list = Dosen.objects.all().order_by('nama')
+    query = request.GET.get('q', '').strip()
+    jabatan = request.GET.get('jabatan', '').strip()
+    filter_aktif = False
+
+    # Hitung data statistik jabatan untuk filter chips
+    total_dosen = Dosen.objects.count()
+    guru_besar_count = Dosen.objects.filter(jabatan__icontains='Guru Besar').count()
+    lektor_kepala_count = Dosen.objects.filter(jabatan__icontains='Lektor Kepala').count()
+    lektor_count = Dosen.objects.filter(jabatan__icontains='Lektor').exclude(jabatan__icontains='Kepala').count()
+    asisten_ahli_count = Dosen.objects.filter(jabatan__icontains='Asisten Ahli').count()
+
+    # Filter Pencarian Teks
+    if query:
+        dosen_list = dosen_list.filter(
+            Q(nama__icontains=query) | Q(nip__icontains=query) | Q(nidn__icontains=query) | Q(bidang_ilmu__icontains=query)
+        )
+        filter_aktif = True
+
+    # Filter Jabatan Fungsional
+    if jabatan:
+        filter_aktif = True
+        if jabatan == 'Guru Besar':
+            dosen_list = dosen_list.filter(jabatan__icontains='Guru Besar')
+        elif jabatan == 'Lektor Kepala':
+            dosen_list = dosen_list.filter(jabatan__icontains='Lektor Kepala')
+        elif jabatan == 'Lektor':
+            dosen_list = dosen_list.filter(jabatan__icontains='Lektor').exclude(jabatan__icontains='Kepala')
+        elif jabatan == 'Asisten Ahli':
+            dosen_list = dosen_list.filter(jabatan__icontains='Asisten Ahli')
+
     return render(request, 'landing/Dosen/dosen_public_list.html', {
-        'dosen_list': dosen_list
+        'dosen_list': dosen_list,
+        'query': query,
+        'jabatan': jabatan,
+        'filter_aktif': filter_aktif,
+        'total_dosen': total_dosen,
+        'guru_besar_count': guru_besar_count,
+        'lektor_kepala_count': lektor_kepala_count,
+        'lektor_count': lektor_count,
+        'asisten_ahli_count': asisten_ahli_count,
     })
 
 def galeri_kegiatan_view(request):
