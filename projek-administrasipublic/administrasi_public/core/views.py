@@ -412,14 +412,15 @@ def tenaga_pendidik_list(request):
 
 
 def tenaga_kependidikan_list(request):
-    query = request.GET.get('q', '')
+    query = request.GET.get('q', '').strip()
     kependidikan_qs = TenagaPendidik.objects.filter(jenis='TENDIK').order_by('nama')
 
     if query:
         kependidikan_qs = kependidikan_qs.filter(
             Q(nama__icontains=query) |
+            Q(nidn__icontains=query) |
             Q(bidang_ilmu__icontains=query) |
-            Q(nidn__icontains=query)
+            Q(status__icontains=query)
         )
 
     context = {

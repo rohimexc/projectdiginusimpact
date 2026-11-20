@@ -322,7 +322,7 @@
     <div class="max-w-6xl mx-auto">
 
       <!-- BLOK 1 AOS: Header Halaman -->
-      <header data-aos="fade-down" data-aos-duration="600" class="mb-10 text-center sm:text-left">
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-8 text-center sm:text-left">
         <p class="text-xs font-bold uppercase tracking-widest text-[#0b7285] mb-1.5 flex items-center justify-center sm:justify-start gap-2">
           <span>STAF & TENDIK</span>
           <span class="text-[8px] opacity-60">•</span>
@@ -336,13 +336,53 @@
         </p>
       </header>
 
+      <!-- ================= SEARCH BAR KAPSUL (PILL-SHAPED) ================= -->
+      <div data-aos="fade-down" data-aos-duration="600" class="mb-10 w-full">
+        <form method="GET" action="{% url 'tenaga_kependidikan_list' %}" id="tendik-search-form" class="bg-white rounded-full p-2 sm:p-2.5 border border-slate-200/90 shadow-sm flex items-center gap-2.5 sm:gap-3 transition hover:shadow-md">
+          <!-- Input Pencarian -->
+          <div class="flex-1 relative flex items-center">
+            <input 
+              type="text" 
+              name="q" 
+              id="tendik-search-input"
+              value="{{ query }}" 
+              placeholder="Cari Nama Staf, NIP..." 
+              autocomplete="off"
+              class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-5 py-2.5 sm:py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+            >
+            {% if query %}
+              <a 
+                href="{% url 'tenaga_kependidikan_list' %}" 
+                class="absolute right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition" 
+                title="Hapus pencarian"
+              >
+                <i class="fas fa-times-circle"></i>
+              </a>
+            {% endif %}
+          </div>
+
+          <!-- Tombol Submit Cari -->
+          <button 
+            type="submit" 
+            class="rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-6 sm:px-7 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
+          >
+            <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
+            <span>Cari</span>
+          </button>
+        </form>
+      </div>
+
       <!-- BLOK 2 AOS: Grid Kartu Tendik -->
       <section data-aos="fade-up" data-aos-duration="700">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+        <div id="tendik-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
       {% for tendik in tenaga_kependidikan_list %}
       <!-- Card Container -->
       <div
-        class="group relative w-72 h-[380px] bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
+        class="tendik-card group relative w-72 h-[380px] bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg"
+        data-nama="{{ tendik.nama|lower }}"
+        data-nip="{{ tendik.nidn|default:''|lower }}"
+        data-bidang="{{ tendik.bidang_ilmu|default:''|lower }}"
+      >
 
         <!-- ================= SISI DEPAN KARTU ================= -->
         <div class="w-full h-full p-4 flex flex-col justify-between">
@@ -402,8 +442,20 @@
       <div class="col-span-full text-center py-20 text-slate-400">
         <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
         <p class="text-sm font-medium">Belum ada data tenaga kependidikan ditemukan.</p>
+        {% if query %}
+        <p class="text-xs text-slate-400 mt-1">Kata kunci: "{{ query }}"</p>
+        <a href="{% url 'tenaga_kependidikan_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
+          Reset Pencarian
+        </a>
+        {% endif %}
       </div>
       {% endfor %}
+
+      <!-- Pesan jika live filter tidak menemukan data -->
+      <div id="tendik-no-results" class="col-span-full text-center py-20 text-slate-400 hidden">
+        <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
+        <p class="text-sm font-medium">Tidak ada tenaga kependidikan yang sesuai dengan kata kunci.</p>
+      </div>
         </div>
       </section>
     </div>
@@ -593,6 +645,39 @@
     }
 
     document.getElementById('mobile-menu-toggle')?.addEventListener('click', toggleMobileMenu);
+
+    // Live Instant Search Filter untuk Tendik
+    const tendikSearchInput = document.getElementById('tendik-search-input');
+    const tendikCards = document.querySelectorAll('.tendik-card');
+    const tendikNoResults = document.getElementById('tendik-no-results');
+
+    if (tendikSearchInput && tendikCards.length > 0) {
+      tendikSearchInput.addEventListener('input', function() {
+        const val = this.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        tendikCards.forEach(card => {
+          const nama = card.getAttribute('data-nama') || '';
+          const nip = card.getAttribute('data-nip') || '';
+          const bidang = card.getAttribute('data-bidang') || '';
+
+          if (!val || nama.includes(val) || nip.includes(val) || bidang.includes(val)) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (tendikNoResults) {
+          if (visibleCount === 0) {
+            tendikNoResults.classList.remove('hidden');
+          } else {
+            tendikNoResults.classList.add('hidden');
+          }
+        }
+      });
+    }
   </script>
 </body>
 
