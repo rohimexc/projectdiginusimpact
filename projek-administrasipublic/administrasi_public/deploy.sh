@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+echo "=== 0. TARIK UPDATE TERBARU DARI GITHUB ==="
+if [ -d "$HOME/projectdiginusimpact/.git" ]; then
+  cd "$HOME/projectdiginusimpact"
+  git pull origin dev-anggitamaharani
+  cd "$HOME/projectdiginusimpact/projek-administrasipublic/administrasi_public"
+fi
+
 echo "=== BERSIHKAN FILE TIDAK PERLU UNTUK MENGHEMAT QUOTA ==="
 rm -rf ~/.cache
 rm -rf ~/projectdiginusimpact/belajarDJANGO
