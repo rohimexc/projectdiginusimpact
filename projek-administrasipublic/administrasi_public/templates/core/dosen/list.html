@@ -351,7 +351,8 @@
               <button 
                 type="button" 
                 onclick="setJabatanFilter('')" 
-                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if not selected_jabatan %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                data-jabatan=""
+                class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if not selected_jabatan %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
               >
                 Semua Dosen ({{ jabatan_counts.all|default:0 }})
               </button>
@@ -360,7 +361,8 @@
               <button 
                 type="button" 
                 onclick="setJabatanFilter('Guru Besar')" 
-                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'guru besar' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                data-jabatan="guru besar"
+                class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'guru besar' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
               >
                 Guru Besar ({{ jabatan_counts.guru_besar|default:0 }})
               </button>
@@ -369,7 +371,8 @@
               <button 
                 type="button" 
                 onclick="setJabatanFilter('Lektor Kepala')" 
-                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'lektor kepala' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                data-jabatan="lektor kepala"
+                class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'lektor kepala' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
               >
                 Lektor Kepala ({{ jabatan_counts.lektor_kepala|default:0 }})
               </button>
@@ -378,7 +381,8 @@
               <button 
                 type="button" 
                 onclick="setJabatanFilter('Lektor')" 
-                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'lektor' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                data-jabatan="lektor"
+                class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'lektor' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
               >
                 Lektor ({{ jabatan_counts.lektor|default:0 }})
               </button>
@@ -387,23 +391,23 @@
               <button 
                 type="button" 
                 onclick="setJabatanFilter('Asisten Ahli')" 
-                class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'asisten ahli' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                data-jabatan="asisten ahli"
+                class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer {% if selected_jabatan|lower == 'asisten ahli' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
               >
                 Asisten Ahli ({{ jabatan_counts.asisten_ahli|default:0 }})
               </button>
             </div>
 
-            <!-- Sisi Kanan: Tombol Reset -->
-            {% if has_active_filter %}
-              <a 
-                href="{% url 'tenaga_pendidik_list' %}" 
-                class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100/70 transition cursor-pointer shadow-2xs self-end sm:self-auto"
-                title="Kembalikan semua filter ke kondisi awal"
-              >
-                <i class="fas fa-arrows-rotate text-[11px]"></i>
-                <span>Reset</span>
-              </a>
-            {% endif %}
+            <!-- Sisi Kanan: Tombol Reset (Selalu Tampil) -->
+            <a 
+              href="{% url 'tenaga_pendidik_list' %}" 
+              onclick="resetAllDosenFilter(event)"
+              class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-600 border border-rose-100/80 transition cursor-pointer shadow-2xs shrink-0 self-end sm:self-auto"
+              title="Kembalikan semua filter ke kondisi awal"
+            >
+              <i class="fas fa-arrows-rotate text-[11px]"></i>
+              <span>Reset</span>
+            </a>
           </div>
         </form>
       </div>
@@ -670,6 +674,23 @@
       const input = document.getElementById('dosen-search-input');
       if (input) input.value = '';
       document.getElementById('dosen-filter-form').submit();
+    }
+
+    function resetAllDosenFilter(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('dosen-search-input');
+      const jabatan = document.getElementById('jabatan-input');
+      if (input) input.value = '';
+      if (jabatan) jabatan.value = '';
+
+      // Bersihkan live filter di DOM jika ada
+      const cards = document.querySelectorAll('.dosen-card');
+      cards.forEach(card => card.style.display = '');
+      const noResults = document.getElementById('dosen-no-results');
+      if (noResults) noResults.classList.add('hidden');
+
+      // Selalu muat ulang ke URL awal tanpa filter
+      window.location.href = "{% url 'tenaga_pendidik_list' %}";
     }
 
     // Live Instant Search Filter untuk Dosen
