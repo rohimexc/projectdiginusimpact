@@ -9,7 +9,9 @@ from .models import (
     MisiItem, 
     TujuanItem,
     HalamanAkademik,
-    DokumenAkademik
+    DokumenAkademik,
+    Pengunjung,
+    PengunjungTotal
 )
 
 @admin.register(Sambutan)
@@ -141,3 +143,17 @@ class DokumenAkademikAdmin(admin.ModelAdmin):
     list_filter = ('halaman__kategori',)
     search_fields = ('judul', 'keterangan')
     ordering = ('-uploaded_at',)
+
+
+@admin.register(Pengunjung)
+class PengunjungAdmin(admin.ModelAdmin):
+    list_display = ('ip_address', 'tanggal', 'created_at', 'session_key')
+    list_filter = ('tanggal',)
+    search_fields = ('ip_address', 'session_key')
+    ordering = ('-created_at',)
+    readonly_fields = ('ip_address', 'session_key', 'user_agent', 'path', 'tanggal', 'created_at')
+
+
+@admin.register(PengunjungTotal)
+class PengunjungTotalAdmin(admin.ModelAdmin):
+    list_display = ('total_awal', 'hari_ini_awal', 'updated_at')

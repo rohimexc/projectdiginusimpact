@@ -416,3 +416,38 @@ class DokumenAkademik(models.Model):
 
     def __str__(self):
         return f"{self.judul} ({self.halaman.get_kategori_display()})"
+
+
+# 11. Model Statistik Pengunjung Otomatis
+class Pengunjung(models.Model):
+    ip_address = models.GenericIPAddressField(null=True, blank=True, verbose_name="Alamat IP")
+    session_key = models.CharField(max_length=40, blank=True, null=True, verbose_name="Kunci Sesi")
+    user_agent = models.CharField(max_length=255, blank=True, null=True, verbose_name="User Agent")
+    path = models.CharField(max_length=255, blank=True, null=True, verbose_name="Halaman Terakhir")
+    tanggal = models.DateField(default=timezone.localdate, db_index=True, verbose_name="Tanggal Kunjungan")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Waktu Kunjungan")
+
+    class Meta:
+        verbose_name = "Data Pengunjung"
+        verbose_name_plural = "Statistik Pengunjung"
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['tanggal']),
+            models.Index(fields=['ip_address', 'tanggal']),
+        ]
+
+    def __str__(self):
+        return f"{self.ip_address or 'Anonim'} - {self.tanggal} ({self.created_at.strftime('%H:%M')})"
+
+
+class PengunjungTotal(models.Model):
+    total_awal = models.PositiveIntegerField(default=6320, verbose_name="Angka Dasar Total Pengunjung", help_text="Offset bawaan untuk total statistik")
+    hari_ini_awal = models.PositiveIntegerField(default=24, verbose_name="Angka Dasar Pengunjung Hari Ini", help_text="Offset bawaan untuk hari pertama")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Pengaturan Statistik Pengunjung"
+        verbose_name_plural = "Pengaturan Statistik Pengunjung"
+
+    def __str__(self):
+        return f"Konfigurasi Statistik (Awal: {self.total_awal})"
