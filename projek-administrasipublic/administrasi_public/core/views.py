@@ -130,32 +130,101 @@ def berita_list(request):
                 posted_at=timezone.now(),
             )
 
+    import datetime
+    from django.utils import timezone
+
+    today = timezone.localdate()
+
     query = request.GET.get('q', '').strip()
-    tanggal_mulai = request.GET.get('tanggal_mulai', '').strip()
-    tanggal_akhir = request.GET.get('tanggal_akhir', '').strip()
-    tahun = request.GET.get('tahun', '').strip()
-    bulan = request.GET.get('bulan', '').strip()
-    tanggal = request.GET.get('tanggal', '').strip()
+    start_date_str = (request.GET.get('start_date') or request.GET.get('tanggal_mulai', '')).strip()
+    end_date_str = (request.GET.get('end_date') or request.GET.get('tanggal_akhir', '')).strip()
+    preset = request.GET.get('preset', '').strip()
+    sort = request.GET.get('sort', 'terbaru').strip()
+    if sort not in ('terbaru', 'terlama'):
+        sort = 'terbaru'
 
-    berita_qs = Berita.objects.all().order_by('-posted_at')
+    # Tangani Preset Rentang Tanggal Cepat
+    if preset == '7d':
+        start_date_str = (today - datetime.timedelta(days=7)).strftime('%Y-%m-%d')
+        end_date_str = today.strftime('%Y-%m-%d')
+    elif preset == 'this_month':
+        start_date_str = today.replace(day=1).strftime('%Y-%m-%d')
+        end_date_str = today.strftime('%Y-%m-%d')
+    elif preset == 'this_year':
+        start_date_str = today.replace(month=1, day=1).strftime('%Y-%m-%d')
+        end_date_str = today.strftime('%Y-%m-%d')
+    elif preset == 'all':
+        start_date_str = ''
+        end_date_str = ''
+        preset = 'all'
 
+    # Deteksi preset aktif bila start_date dan end_date cocok
+    if not preset:
+        if not start_date_str and not end_date_str:
+            preset = 'all'
+        elif start_date_str == str(today - datetime.timedelta(days=7)) and end_date_str == str(today):
+            preset = '7d'
+        elif start_date_str == str(today.replace(day=1)) and end_date_str == str(today):
+            preset = 'this_month'
+        elif start_date_str == str(today.replace(month=1, day=1)) and end_date_str == str(today):
+            preset = 'this_year'
+
+    berita_qs = Berita.objects.all()
+
+    # Filter Kata Kunci
     if query:
         berita_qs = berita_qs.filter(
-            Q(judul__icontains=query) | Q(konten__icontains=query)
+            Q(judul__icontains=query) | Q(konten__icontains=query) | Q(ringkasan__icontains=query)
         )
 
-    # Filter Berita: Judul & Tanggal
-    if tanggal:
-        berita_qs = berita_qs.filter(posted_at__date=tanggal)
-    elif tanggal_mulai or tanggal_akhir:
-        if tanggal_mulai:
-            berita_qs = berita_qs.filter(posted_at__date__gte=tanggal_mulai)
-        if tanggal_akhir:
-            berita_qs = berita_qs.filter(posted_at__date__lte=tanggal_akhir)
-    if tahun:
-        berita_qs = berita_qs.filter(posted_at__year=tahun)
-    if bulan:
-        berita_qs = berita_qs.filter(posted_at__month=bulan)
+    # Filter Rentang Tanggal
+    if start_date_str:
+        try:
+            sd = datetime.date.fromisoformat(start_date_str)
+            berita_qs = berita_qs.filter(posted_at__date__gte=sd)
+        except ValueError:
+            pass
+
+    if end_date_str:
+        try:
+            ed = datetime.date.fromisoformat(end_date_str)
+            berita_qs = berita_qs.filter(posted_at__date__lte=ed)
+        except ValueError:
+            pass
+
+    # Urutkan
+    if sort == 'terlama':
+        berita_qs = berita_qs.order_by('posted_at')
+    else:
+        berita_qs = berita_qs.order_by('-posted_at')
+
+    total_berita = berita_qs.count()
+
+    # Label Filter Aktif untuk Bar Status (Format: DD/MM/YYYY – DD/MM/YYYY)
+    active_filter_label = ""
+    has_active_filter = bool(query or (start_date_str and preset != 'all') or (end_date_str and preset != 'all'))
+
+    if start_date_str and end_date_str:
+        try:
+            sd_fmt = datetime.date.fromisoformat(start_date_str).strftime('%d/%m/%Y')
+            ed_fmt = datetime.date.fromisoformat(end_date_str).strftime('%d/%m/%Y')
+            active_filter_label = f"{sd_fmt} – {ed_fmt}"
+        except ValueError:
+            active_filter_label = f"{start_date_str} – {end_date_str}"
+    elif start_date_str:
+        try:
+            sd_fmt = datetime.date.fromisoformat(start_date_str).strftime('%d/%m/%Y')
+            active_filter_label = f"Mulai {sd_fmt}"
+        except ValueError:
+            active_filter_label = f"Mulai {start_date_str}"
+    elif end_date_str:
+        try:
+            ed_fmt = datetime.date.fromisoformat(end_date_str).strftime('%d/%m/%Y')
+            active_filter_label = f"Sampai {ed_fmt}"
+        except ValueError:
+            active_filter_label = f"Sampai {end_date_str}"
+    elif query:
+        active_filter_label = f'"{query}"'
 
     paginator = Paginator(berita_qs, 9)
     page_number = request.GET.get('page')
@@ -164,11 +233,13 @@ def berita_list(request):
     context = {
         'page_obj': page_obj,
         'query': query,
-        'selected_tanggal_mulai': tanggal_mulai,
-        'selected_tanggal_akhir': tanggal_akhir,
-        'selected_tahun': tahun,
-        'selected_bulan': bulan,
-        'selected_tanggal': tanggal,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
+        'preset': preset,
+        'sort': sort,
+        'total_berita': total_berita,
+        'has_active_filter': has_active_filter,
+        'active_filter_label': active_filter_label,
     }
     return render(request, 'core/Berita/list.html', context)
 
