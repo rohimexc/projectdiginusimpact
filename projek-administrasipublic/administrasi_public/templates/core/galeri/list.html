@@ -323,17 +323,17 @@
   </div>
 
   <!-- Area Konten Utama -->
-  <main class="flex-1 pt-28 pb-20 px-6">
+  <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
     <div class="max-w-6xl mx-auto">
       
       <!-- BLOK 1 AOS: Header Halaman -->
-      <header data-aos="fade-down" data-aos-duration="600" class="mb-8 text-center sm:text-left">
-        <p class="text-xs font-bold uppercase tracking-widest text-[#0b7285] mb-1.5 flex items-center justify-center sm:justify-start gap-2">
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
+        <p class="text-xs font-bold uppercase tracking-widest text-[#0b7285] mb-1.5 flex flex-wrap items-center justify-center sm:justify-start gap-x-2 gap-y-1">
           <span>GALERI & DOKUMENTASI</span>
           <span class="text-[8px] opacity-60">•</span>
           <span>ADMINISTRASI PUBLIK</span>
         </p>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
           Galeri Kegiatan
         </h1>
         <p class="text-xs sm:text-sm text-slate-500 font-normal">
@@ -341,35 +341,41 @@
         </p>
       </header>
       
-      <!-- Bagian Form Filter -->
-      <div data-aos="fade-down" data-aos-duration="600">
+      <!-- ================= SEARCH BAR KAPSUL (PILL-SHAPED) ================= -->
+      <div data-aos="fade-down" data-aos-duration="600" class="mb-8 sm:mb-10 w-full">
         <!-- Filter & Pencarian -->
-        <form method="GET" class="bg-white p-2.5 sm:p-3 rounded-2xl shadow-sm border border-slate-200/80 mb-10 w-full flex flex-col sm:flex-row gap-2.5 items-center justify-between">
-        <div class="flex-1 flex items-center gap-2.5 px-3 py-1 bg-slate-50 rounded-xl border border-slate-200 focus-within:bg-white focus-within:border-brand-teal transition">
-          <i class="fas fa-search text-xs text-slate-400"></i>
-          <input 
-            type="text" 
-            name="q" 
-            value="{{ query }}" 
-            placeholder="Cari judul dokumentasi atau kegiatan..." 
-            class="w-full text-xs bg-transparent outline-none text-slate-700 py-1.5"
-          >
-          {% if query %}
-            <a href="{% url 'galeri_list' %}" class="text-slate-400 hover:text-slate-600 text-xs px-1" title="Hapus filter">
-              <i class="fas fa-times"></i>
-            </a>
-          {% endif %}
-        </div>
-        <button 
-          type="submit" 
-          class="bg-[#0b7285] hover:bg-[#084c5a] text-white text-xs font-semibold px-5 py-2.5 rounded-xl shadow-xs transition flex items-center gap-2 shrink-0"
-        >
-          <i class="fas fa-search text-xs"></i>
-          <span>Cari Foto</span>
-        </button>
-      </form>
+        <form method="GET" action="{% url 'galeri_list' %}" class="bg-white rounded-3xl md:rounded-full p-3 md:p-2 border border-slate-200/90 shadow-sm flex flex-col md:flex-row items-stretch md:items-center gap-0 md:gap-3 transition hover:shadow-md">
+          <!-- Input Teks (Pill Kapsul) -->
+          <div class="flex-1 relative flex items-center">
+            <input 
+              type="text" 
+              name="q" 
+              value="{{ query }}" 
+              placeholder="Cari judul dokumentasi atau kegiatan..." 
+              autocomplete="off"
+              class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-5 py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+            >
+            {% if query %}
+              <a 
+                href="{% url 'galeri_list' %}" 
+                class="absolute right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition cursor-pointer" 
+                title="Hapus filter"
+              >
+                <i class="fas fa-times-circle"></i>
+              </a>
+            {% endif %}
+          </div>
 
-    </div>
+          <!-- Tombol Submit Cari Foto (Pill Kapsul Full-width di Mobile) -->
+          <button 
+            type="submit" 
+            class="w-full md:w-auto mt-2.5 md:mt-0 rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-7 py-3 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
+          >
+            <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
+            <span>Cari Foto</span>
+          </button>
+        </form>
+      </div>
 
     <!-- Info Bar / Jumlah Foto -->
     <div class="flex items-center justify-between mb-8 pb-3 border-b border-slate-200/80 text-xs text-slate-500">
