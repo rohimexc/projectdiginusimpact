@@ -28,7 +28,7 @@
 <body class="font-poppins bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
   <!-- Header Banner -->
-  <header class="bg-brand-darkteal text-white pt-10 pb-16 px-6">
+  <header class="bg-brand-darkteal text-white pt-8 sm:pt-10 pb-12 sm:pb-16 px-4 sm:px-6">
     <div class="max-w-5xl mx-auto">
       <nav class="text-xs text-slate-300 mb-3 flex items-center gap-2">
         <a href="{% url 'home' %}" class="hover:text-brand-gold transition">Beranda</a>
@@ -37,13 +37,13 @@
         <span>&gt;</span>
         <span class="text-brand-gold font-medium">{{ dosen.nama }}</span>
       </nav>
-      <h1 class="text-3xl font-bold tracking-tight">Detail Profil Dosen</h1>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Detail Profil Dosen</h1>
     </div>
   </header>
 
   <!-- Konten Profil -->
-  <main class="max-w-5xl mx-auto px-6 -mt-8 mb-16 w-full flex-1">
-    <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden p-8 flex flex-col md:flex-row gap-8 items-start">
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 -mt-8 mb-16 pb-12 w-full flex-1">
+    <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden p-5 sm:p-8 flex flex-col md:flex-row gap-6 sm:gap-8 items-start">
       
       <!-- Foto Persegi (1:1) / Rasio 4:5 -->
       <div class="w-full md:w-72 aspect-square rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 shadow-sm border border-slate-100">
