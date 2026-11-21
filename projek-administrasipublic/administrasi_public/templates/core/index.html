@@ -120,6 +120,7 @@
 
       <li><a href="{% url 'galeri_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Galeri</a></li>
       <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Berita</a></li>
+      <li><a href="{% url 'event_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-brand-accent transition">Event</a></li>
       
       <!-- Dropdown Menu Akademik -->
       <li class="relative group">
@@ -228,6 +229,9 @@
       </a>
       <a href="{% url 'berita_list' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
         <i class="fas fa-newspaper w-5 text-brand-gold"></i> Berita
+      </a>
+      <a href="{% url 'event_list' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-calendar-alt w-5 text-brand-gold"></i> Event & Agenda
       </a>
 
       <!-- Mobile Dropdown: Akademik -->
@@ -454,10 +458,122 @@
     </div>
   </section>
 
-  <!-- Event Terdekat -->
-  <section class="py-16 px-6 text-center bg-slate-50" id="kemahasiswaan" data-aos="fade-up">
-    <h2 class="text-2xl font-bold text-brand-teal mb-2">Event Terdekat</h2>
-    <div class="text-sm text-slate-500 py-10">Belum ada event terjadwal.</div>
+  <!-- ================= EVENT TERDEKAT ================= -->
+  <section class="py-16 sm:py-20 px-4 sm:px-6 md:px-10 bg-slate-50 border-t border-slate-200/60" id="event-terdekat">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Header Section -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10" data-aos="fade-up">
+        <div>
+          <!-- Eyebrow Header Konsisten -->
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-100 text-[#0D636D] text-[11px] font-bold uppercase tracking-wider mb-2.5">
+            <span>AGENDA & KEGIATAN</span>
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#0D636D]"></span>
+            <span>ADMINISTRASI PUBLIK</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0D636D] tracking-tight">Event Terdekat</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">Ikuti berbagai agenda akademik, seminar nasional, kuliah tamu, dan kegiatan kemahasiswaan Program Studi Administrasi Publik</p>
+        </div>
+
+        <div class="self-start md:self-auto w-full sm:w-auto">
+          <a href="{% url 'event_list' %}" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white border border-teal-800 text-[#0D636D] hover:bg-[#0D636D] hover:text-white text-xs font-semibold transition-all duration-200 shadow-xs hover:shadow group w-full sm:w-auto">
+            <span>Lihat Semua Event</span>
+            <i class="fas fa-arrow-right text-[11px] transition-transform group-hover:translate-x-1"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Grid Kartu Poster Rasio 4:5 -->
+      {% if daftar_event %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {% for event in daftar_event %}
+            <div data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00" class="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+              
+              <!-- Container Poster Rasio 4:5 (aspect-[4/5] object-cover) -->
+              <a href="{% url 'event_detail' event.slug %}" class="relative block w-full overflow-hidden bg-slate-100 aspect-[4/5]">
+                {% if event.poster %}
+                  <img src="{{ event.poster.url }}" alt="{{ event.judul }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                {% else %}
+                  <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#084c5a] to-[#0D636D] text-white p-6 text-center">
+                    <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-3 text-brand-gold">
+                      <i class="fas fa-calendar-check text-2xl"></i>
+                    </div>
+                    <span class="text-[10px] font-bold text-teal-200 uppercase tracking-wider mb-1.5">{{ event.kategori }}</span>
+                    <span class="text-xs font-bold line-clamp-3 leading-snug">{{ event.judul }}</span>
+                  </div>
+                {% endif %}
+
+                <!-- Badge Tanggal Minimalis di Pojok Atas Poster (Latar Putih/Teal) -->
+                <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-xs rounded-xl shadow-md border border-slate-100 px-3 py-1.5 text-center min-w-[50px]">
+                  <span class="block text-base font-extrabold text-[#0D636D] leading-none">{{ event.hari_mulai }}</span>
+                  <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">{{ event.bulan_mulai_singkat }}</span>
+                </div>
+
+                <!-- Badge Kategori Pojok Kanan Atas -->
+                <div class="absolute top-3 right-3 bg-[#0D636D]/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow">
+                  {{ event.kategori }}
+                </div>
+              </a>
+
+              <!-- Konten Kartu di Bawah Poster -->
+              <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[11px] font-semibold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full inline-block">
+                      {{ event.kategori }}
+                    </span>
+                    {% if event.waktu %}
+                      <span class="text-[11px] text-slate-400 flex items-center gap-1">
+                        <i class="far fa-clock text-[10px]"></i> {{ event.waktu }}
+                      </span>
+                    {% endif %}
+                  </div>
+
+                  <h3 class="text-sm font-bold text-slate-800 group-hover:text-[#0D636D] transition line-clamp-2 leading-snug mb-3">
+                    <a href="{% url 'event_detail' event.slug %}">{{ event.judul }}</a>
+                  </h3>
+
+                  <!-- Info Tanggal & Lokasi -->
+                  <div class="space-y-1.5 text-xs text-slate-500 mb-4">
+                    <div class="flex items-center gap-2">
+                      <i class="far fa-calendar-alt text-[#0D636D] w-3.5 shrink-0"></i>
+                      <span class="font-medium text-slate-700 truncate">{{ event.tanggal_display }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-map-marker-alt text-rose-500 w-3.5 shrink-0"></i>
+                      <span class="truncate" title="{{ event.lokasi }}">{{ event.lokasi }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Footer Kartu -->
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <a href="{% url 'event_detail' event.slug %}" class="text-xs font-bold text-[#0D636D] hover:underline inline-flex items-center gap-1">
+                    Detail Acara <i class="fas fa-arrow-right text-[10px]"></i>
+                  </a>
+                  {% if event.link_pendaftaran %}
+                    <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold px-3 py-1 rounded-full bg-teal-50 text-[#0D636D] hover:bg-[#0D636D] hover:text-white transition inline-flex items-center gap-1">
+                      <span>Daftar</span>
+                      <i class="fas fa-external-link-alt text-[9px]"></i>
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="bg-white rounded-2xl border border-slate-200 p-8 sm:p-12 text-center max-w-lg mx-auto shadow-xs" data-aos="fade-up">
+          <div class="w-16 h-16 rounded-2xl bg-teal-50 text-[#0D636D] flex items-center justify-center text-2xl mx-auto mb-4">
+            <i class="far fa-calendar-check"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-800 mb-1">Belum Ada Agenda Terdekat</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-5">Saat ini belum ada event atau agenda kegiatan yang terbit. Pantau terus laman ini untuk pengumuman seminar, workshop, dan agenda akademik mendatang.</p>
+        </div>
+      {% endif %}
+
+    </div>
   </section>
 
   <!-- Sistem Informasi -->

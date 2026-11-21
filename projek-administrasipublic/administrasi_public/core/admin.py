@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import (
     Sambutan, 
     Galeri, 
@@ -11,7 +12,8 @@ from .models import (
     HalamanAkademik,
     DokumenAkademik,
     Pengunjung,
-    PengunjungTotal
+    PengunjungTotal,
+    Event
 )
 
 @admin.register(Sambutan)
@@ -157,3 +159,29 @@ class PengunjungAdmin(admin.ModelAdmin):
 @admin.register(PengunjungTotal)
 class PengunjungTotalAdmin(admin.ModelAdmin):
     list_display = ('total_awal', 'hari_ini_awal', 'updated_at')
+
+
+# ==========================================
+# ADMIN BAWAAN DJANGO: EVENT / AGENDA TERDEKAT
+# ==========================================
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('poster_thumbnail', 'judul', 'kategori', 'tanggal_mulai', 'waktu', 'lokasi', 'is_active', 'created_at')
+    list_display_links = ('judul',)
+    list_filter = ('is_active', 'kategori', 'tanggal_mulai')
+    search_fields = ('judul', 'lokasi', 'kategori', 'deskripsi')
+    list_editable = ('is_active',)
+    prepopulated_fields = {'slug': ('judul',)}
+    date_hierarchy = 'tanggal_mulai'
+    ordering = ('tanggal_mulai', '-created_at')
+
+    def poster_thumbnail(self, obj):
+        if obj.poster:
+            return format_html(
+                '<img src="{}" style="width: 48px; height: 60px; object-fit: cover; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);" title="{}" />',
+                obj.poster.url,
+                obj.judul
+            )
+        return format_html('<span style="color: #94a3b8; font-size: 11px; font-style: italic;">Tanpa Poster</span>')
+    poster_thumbnail.short_description = 'Poster (4:5)'
+

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django_ckeditor_5.widgets import CKEditor5Widget
-from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan, Galeri, Hero
+from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan, Galeri, Hero, Event
 from .models import HalamanTentang, HalamanAkademik, DokumenAkademik
 from .validators import validate_image_file, validate_video_file, validate_document_file
 
@@ -405,3 +405,73 @@ class HeroForm(forms.ModelForm):
         if file and hasattr(file, 'content_type'):
             validate_image_file(file)
         return file
+
+
+# ==========================================
+# Form Manajemen Event / Agenda Terdekat (Rasio Poster 4:5)
+# ==========================================
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = [
+            'judul', 'kategori', 'poster', 'tanggal_mulai', 'tanggal_selesai',
+            'waktu', 'lokasi', 'deskripsi', 'link_pendaftaran', 'is_active'
+        ]
+        labels = {
+            'judul': 'Judul Event / Kegiatan',
+            'kategori': 'Kategori Event',
+            'poster': 'Poster Acara (Rasio 4:5)',
+            'tanggal_mulai': 'Tanggal Mulai',
+            'tanggal_selesai': 'Tanggal Selesai (Opsional)',
+            'waktu': 'Waktu Pelaksanaan',
+            'lokasi': 'Tempat / Lokasi Acara',
+            'deskripsi': 'Deskripsi Lengkap Acara',
+            'link_pendaftaran': 'Tautan Pendaftaran (Google Form / Link Eksternal)',
+            'is_active': 'Tampilkan di Beranda (Status Aktif)',
+        }
+        widgets = {
+            'judul': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs font-medium',
+                'placeholder': 'Contoh: Seminar Nasional Tata Kelola Publik Digital'
+            }),
+            'kategori': forms.Select(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs font-semibold text-teal-800 bg-slate-50'
+            }),
+            'poster': forms.FileInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': '.jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp',
+                'data-upload-type': 'image',
+                'data-max-mb': '10'
+            }),
+            'tanggal_mulai': forms.DateInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'type': 'date'
+            }),
+            'tanggal_selesai': forms.DateInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'type': 'date'
+            }),
+            'waktu': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: 08.00 WITA - Selesai'
+            }),
+            'lokasi': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Gedung Teater FISIP UNTAD / Zoom Cloud Meetings'
+            }),
+            'deskripsi': CKEditor5Widget(config_name='extends', attrs={'class': 'django_ckeditor_5'}),
+            'link_pendaftaran': forms.URLInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: https://bit.ly/daftar-seminar-ap'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-brand-teal rounded border-slate-300 focus:ring-teal-500 cursor-pointer'
+            }),
+        }
+
+    def clean_poster(self):
+        file = self.cleaned_data.get('poster')
+        if file and hasattr(file, 'content_type'):
+            validate_image_file(file)
+        return file
+

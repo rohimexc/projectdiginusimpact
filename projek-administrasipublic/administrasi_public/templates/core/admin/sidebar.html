@@ -66,6 +66,13 @@
         <span>Kelola Berita</span>
       </a>
 
+      <!-- 4a. Kelola Event & Agenda (Poster 4:5) -->
+      <a href="{% url 'admin_kelola_event' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'event' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-calendar-event text-base transition-colors duration-200 {% if 'event' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Event</span>
+      </a>
+
       <!-- 4b. Manajemen Galeri Foto -->
       <a href="{% url 'admin_kelola_galeri' %}" 
          class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'galeri' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">

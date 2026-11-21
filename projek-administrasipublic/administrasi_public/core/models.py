@@ -475,3 +475,85 @@ class PengunjungTotal(models.Model):
 
     def __str__(self):
         return f"Konfigurasi Statistik (Awal: {self.total_awal})"
+
+
+# ==========================================
+# 12. MODEL EVENT / AGENDA TERDEKAT (Rasio Poster 4:5)
+# ==========================================
+class Event(models.Model):
+    KATEGORI_CHOICES = [
+        ('Seminar', 'Seminar'),
+        ('Kuliah Tamu', 'Kuliah Tamu'),
+        ('Agenda Prodi', 'Agenda Prodi'),
+        ('Workshop', 'Workshop / Pelatihan'),
+        ('Lomba', 'Lomba / Kompetisi'),
+        ('Lainnya', 'Lainnya'),
+    ]
+
+    judul = models.CharField(max_length=255, verbose_name="Judul Event")
+    slug = models.SlugField(max_length=255, unique=True, blank=True, help_text="Otomatis digenerate dari judul acara")
+    poster = models.ImageField(
+        upload_to='event_posters/',
+        blank=True,
+        null=True,
+        validators=[validate_image_file],
+        help_text="Gunakan gambar poster dengan rasio 4:5 (contoh: 1080x1350 px)"
+    )
+    tanggal_mulai = models.DateField(verbose_name="Tanggal Mulai")
+    tanggal_selesai = models.DateField(blank=True, null=True, verbose_name="Tanggal Selesai (Opsional)")
+    waktu = models.CharField(max_length=100, default="08.00 WITA - Selesai", verbose_name="Waktu Pelaksanaan", help_text="Contoh: 08.00 WITA - Selesai")
+    lokasi = models.CharField(max_length=255, verbose_name="Lokasi / Tempat", help_text="Contoh: Gedung Teater FISIP UNTAD / Zoom Cloud Meetings")
+    kategori = models.CharField(max_length=100, choices=KATEGORI_CHOICES, default='Seminar', verbose_name="Kategori Event")
+    deskripsi = CKEditor5Field('Deskripsi Lengkap Event', config_name='extends', blank=True, null=True)
+    link_pendaftaran = models.URLField(max_length=500, blank=True, null=True, verbose_name="Link Pendaftaran (Opsional)", help_text="Contoh: https://bit.ly/daftar-acara-ap")
+    is_active = models.BooleanField(default=True, verbose_name="Aktif / Tampilkan di Beranda")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Dibuat Pada")
+
+    class Meta:
+        verbose_name = "Event & Agenda"
+        verbose_name_plural = "Daftar Event & Agenda"
+        ordering = ['tanggal_mulai', '-created_at']
+
+    def __str__(self):
+        return f"{self.judul} ({self.tanggal_mulai})"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.judul) or "event"
+            slug = base_slug
+            counter = 1
+            while Event.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    @property
+    def hari_mulai(self):
+        return self.tanggal_mulai.strftime("%d") if self.tanggal_mulai else ""
+
+    @property
+    def bulan_mulai_singkat(self):
+        if not self.tanggal_mulai:
+            return ""
+        BULAN_SINGKAT = {
+            1: "JAN", 2: "FEB", 3: "MAR", 4: "APR", 5: "MEI", 6: "JUN",
+            7: "JUL", 8: "AGU", 9: "SEP", 10: "OKT", 11: "NOV", 12: "DES"
+        }
+        return BULAN_SINGKAT.get(self.tanggal_mulai.month, self.tanggal_mulai.strftime("%b").upper())
+
+    @property
+    def tanggal_display(self):
+        if not self.tanggal_mulai:
+            return ""
+        BULAN_NAMA = {
+            1: "Januari", 2: "Februari", 3: "Maret", 4: "April", 5: "Mei", 6: "Juni",
+            7: "Juli", 8: "Agustus", 9: "September", 10: "Oktober", 11: "November", 12: "Desember"
+        }
+        tgl_mulai_str = f"{self.tanggal_mulai.day} {BULAN_NAMA.get(self.tanggal_mulai.month, '')} {self.tanggal_mulai.year}"
+        if self.tanggal_selesai and self.tanggal_selesai != self.tanggal_mulai:
+            if self.tanggal_mulai.month == self.tanggal_selesai.month and self.tanggal_mulai.year == self.tanggal_selesai.year:
+                return f"{self.tanggal_mulai.day} - {self.tanggal_selesai.day} {BULAN_NAMA.get(self.tanggal_selesai.month, '')} {self.tanggal_selesai.year}"
+            return f"{tgl_mulai_str} s/d {self.tanggal_selesai.day} {BULAN_NAMA.get(self.tanggal_selesai.month, '')} {self.tanggal_selesai.year}"
+        return tgl_mulai_str

@@ -54,6 +54,13 @@ from core.views import (
     galeri_update,
     galeri_delete,
     admin_kelola_hero,
+    event_list,
+    event_detail,
+    admin_kelola_event,
+    event_create,
+    event_update,
+    event_delete,
+    event_toggle_status,
 )
 
 urlpatterns = [
@@ -63,6 +70,8 @@ urlpatterns = [
     # 1. Halaman Publik Utama
     path('', home, name='home'),
     path('galeri/', galeri_list, name='galeri_list'),
+    path('event/', event_list, name='event_list'),
+    path('event/<slug:slug>/', event_detail, name='event_detail'),
     path('Berita/', berita_list, name='berita_list'),
     path('Berita/<int:pk>/', berita_detail, name='berita_detail'),
     path('Berita/<int:pk>/like/', berita_like, name='berita_like'),
@@ -142,6 +151,13 @@ urlpatterns = [
     path('dashboard/galeri/tambah/', galeri_create, name='galeri_create'),
     path('dashboard/galeri/edit/<int:pk>/', galeri_update, name='galeri_update'),
     path('dashboard/galeri/hapus/<int:pk>/', galeri_delete, name='galeri_delete'),
+
+    # 9. Admin Kelola Event & Agenda (Poster 4:5)
+    path('dashboard/event/', admin_kelola_event, name='admin_kelola_event'),
+    path('dashboard/event/tambah/', event_create, name='event_create'),
+    path('dashboard/event/edit/<int:pk>/', event_update, name='event_update'),
+    path('dashboard/event/hapus/<int:pk>/', event_delete, name='event_delete'),
+    path('dashboard/event/toggle/<int:pk>/', event_toggle_status, name='event_toggle_status'),
 ]
 
 # Static & Media URL

@@ -1,0 +1,334 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ event.judul }} - Administrasi Publik UNTAD</title>
+  
+  <!-- Meta SEO -->
+  <meta name="description" content="{{ event.judul }} - Program Studi Administrasi Publik FISIP Universitas Tadulako">
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .prose-content {
+      line-height: 1.8;
+      font-size: 0.875rem;
+      color: #334155;
+    }
+    .prose-content p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+    .prose-content ul, .prose-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .prose-content ul { list-style-type: disc; }
+    .prose-content ol { list-style-type: decimal; }
+    .prose-content h2, .prose-content h3, .prose-content h4 {
+      font-weight: 700;
+      color: #0D636D;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+  </style>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-brand-teal selection:text-white">
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/6285330144401" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Header / Navbar Konsisten -->
+  <nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-4 sm:px-6 lg:px-8 z-50 shadow-md">
+    <a href="{% url 'home' %}" class="flex items-center gap-3 text-white">
+      <i class="fas fa-graduation-cap text-3xl text-[#ffd43b]"></i>
+      <div>
+        <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
+        <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      </div>
+    </a>
+
+    <!-- Menu Desktop -->
+    <ul class="hidden lg:flex list-none items-center gap-4">
+      <li><a href="{% url 'home' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Beranda</a></li>
+      <li><a href="{% url 'tentang_detail' 'profil' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Tentang</a></li>
+      <li><a href="{% url 'galeri_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a></li>
+      <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a></li>
+      <li><a href="{% url 'event_list' %}" class="text-white text-xs font-semibold py-2 px-3 rounded-md bg-white/15 text-[#ffd43b] transition">Event</a></li>
+      <li><a href="{% url 'akademik_detail' 'siga8' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Akademik</a></li>
+      <li><a href="{% url 'tenaga_pendidik_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Staf</a></li>
+    </ul>
+
+    <div class="lg:hidden">
+      <button type="button" onclick="toggleMenu()" class="text-white text-xs font-semibold py-2 px-3 rounded-lg border border-white/20 hover:bg-white/10 flex items-center gap-2">
+        <i class="fas fa-bars"></i> Menu
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="fixed top-[70px] left-0 w-full h-[calc(100vh-70px)] bg-[#0b7285]/98 text-white z-40 hidden flex-col p-6 overflow-y-auto">
+    <div class="flex flex-col gap-3 text-xs">
+      <a href="{% url 'home' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-home w-5 text-brand-gold"></i> Beranda
+      </a>
+      <a href="{% url 'event_list' %}" class="py-2 px-3 rounded-lg bg-white/15 font-semibold flex items-center gap-2.5 text-[#ffd43b]">
+        <i class="fas fa-calendar-alt w-5 text-[#ffd43b]"></i> Event & Agenda
+      </a>
+      <a href="{% url 'berita_list' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-newspaper w-5 text-brand-gold"></i> Berita
+      </a>
+      <a href="{% url 'galeri_list' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-images w-5 text-brand-gold"></i> Galeri
+      </a>
+    </div>
+  </div>
+
+  <!-- KONTEN UTAMA DETAIL EVENT -->
+  <main class="flex-grow pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+
+    <!-- Breadcrumb Navigasi -->
+    <nav class="flex items-center gap-2 text-xs text-slate-400 mb-6 flex-wrap">
+      <a href="{% url 'home' %}" class="hover:text-[#0D636D] transition">Beranda</a>
+      <span>/</span>
+      <a href="{% url 'event_list' %}" class="hover:text-[#0D636D] transition">Agenda & Event</a>
+      <span>/</span>
+      <span class="text-slate-700 font-medium truncate max-w-xs">{{ event.judul }}</span>
+    </nav>
+
+    <!-- Layout Grid: Poster Kiri (4:5) & Info Kanan -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
+      
+      <!-- Kolom Kiri: Poster Rasio 4:5 & Tombol Aksi (lg:col-span-5) -->
+      <div class="lg:col-span-5 flex flex-col gap-5">
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-3">
+          <div class="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100 shadow-inner">
+            {% if event.poster %}
+              <img src="{{ event.poster.url }}" alt="{{ event.judul }}" class="w-full h-full object-cover">
+            {% else %}
+              <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#084c5a] to-[#0D636D] text-white p-8 text-center">
+                <i class="fas fa-calendar-star text-5xl text-brand-gold mb-3"></i>
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-200">{{ event.kategori }}</span>
+              </div>
+            {% endif %}
+
+            <!-- Badge Tanggal Pojok Kiri Atas -->
+            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-xs rounded-2xl shadow-lg border border-slate-100 px-3.5 py-2 text-center min-w-[58px]">
+              <span class="block text-xl font-extrabold text-[#0D636D] leading-none">{{ event.hari_mulai }}</span>
+              <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">{{ event.bulan_mulai_singkat }}</span>
+            </div>
+
+            <!-- Badge Kategori Pojok Kanan Atas -->
+            <div class="absolute top-4 right-4 bg-[#0D636D]/90 backdrop-blur-xs text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">
+              {{ event.kategori }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Pendaftaran & Share -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-3">
+          {% if event.link_pendaftaran %}
+            <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 px-6 rounded-full bg-[#0D636D] hover:bg-teal-900 text-white font-bold text-sm transition text-center shadow-md flex items-center justify-center gap-2 group">
+              <span>Daftar / Registrasi Acara</span>
+              <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+            </a>
+          {% else %}
+            <div class="w-full py-3 px-4 rounded-xl bg-slate-100 text-slate-500 text-xs text-center font-medium">
+              <i class="fas fa-info-circle mr-1 text-[#0D636D]"></i> Pendaftaran langsung di lokasi kegiatan
+            </div>
+          {% endif %}
+
+          <div class="pt-2 flex items-center justify-between text-xs text-slate-500">
+            <span class="font-semibold">Bagikan Event:</span>
+            <div class="flex items-center gap-2">
+              <a href="https://api.whatsapp.com/send?text={{ event.judul|urlencode }}%20{{ request.build_absolute_uri|urlencode }}" target="_blank" class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition flex items-center justify-center" title="Bagikan ke WhatsApp">
+                <i class="fab fa-whatsapp text-base"></i>
+              </a>
+              <button type="button" onclick="salinLinkEvent()" class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition flex items-center gap-1.5 text-[11px] font-medium" id="btnSalinLink">
+                <i class="far fa-copy"></i>
+                <span id="btnSalinText">Salin Tautan</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kolom Kanan: Judul, Info Spesifikasi & Deskripsi (lg:col-span-7) -->
+      <div class="lg:col-span-7 flex flex-col gap-6">
+        
+        <!-- Header Judul -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-xs font-bold text-teal-800 bg-teal-50 px-3 py-1 rounded-full uppercase tracking-wider border border-teal-100">
+              {{ event.kategori }}
+            </span>
+            <span class="text-xs text-slate-400">• Administrasi Publik FISIP UNTAD</span>
+          </div>
+
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 leading-snug tracking-tight mb-6">
+            {{ event.judul }}
+          </h1>
+
+          <!-- Grid Spesifikasi Event -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-slate-100">
+            
+            <!-- Tanggal -->
+            <div class="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+              <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#0D636D] flex items-center justify-center text-lg shrink-0">
+                <i class="far fa-calendar-alt"></i>
+              </div>
+              <div>
+                <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Tanggal Acara</span>
+                <span class="text-xs sm:text-sm font-bold text-slate-800">{{ event.tanggal_display }}</span>
+              </div>
+            </div>
+
+            <!-- Waktu -->
+            <div class="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+              <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#0D636D] flex items-center justify-center text-lg shrink-0">
+                <i class="far fa-clock"></i>
+              </div>
+              <div>
+                <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Waktu Pelaksanaan</span>
+                <span class="text-xs sm:text-sm font-bold text-slate-800">{{ event.waktu }}</span>
+              </div>
+            </div>
+
+            <!-- Tempat / Lokasi -->
+            <div class="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-100 sm:col-span-2">
+              <div class="w-10 h-10 rounded-xl bg-teal-50 text-rose-500 flex items-center justify-center text-lg shrink-0">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <span class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Tempat / Lokasi Kegiatan</span>
+                <span class="text-xs sm:text-sm font-bold text-slate-800">{{ event.lokasi }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Kartu Deskripsi Lengkap -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs">
+          <h2 class="text-base font-bold text-slate-800 border-l-4 border-[#0D636D] pl-3 mb-4">
+            Deskripsi & Rincian Kegiatan
+          </h2>
+          
+          <div class="prose-content">
+            {% if event.deskripsi %}
+              {{ event.deskripsi|safe }}
+            {% else %}
+              <p>Belum ada rincian deskripsi tambahan untuk kegiatan ini. Informasi selengkapnya dapat menghubungi kontak Program Studi Administrasi Publik FISIP Universitas Tadulako.</p>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Rekomendasi Event Lainnya -->
+    {% if event_lainnya %}
+      <div class="mt-12 pt-10 border-t border-slate-200">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-lg sm:text-xl font-bold text-[#0D636D]">Agenda & Event Terdekat Lainnya</h3>
+            <p class="text-xs text-slate-500">Ikuti juga agenda akademik mendatang lainnya</p>
+          </div>
+          <a href="{% url 'event_list' %}" class="text-xs font-semibold text-[#0D636D] hover:underline">
+            Lihat Semua &rarr;
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {% for ev in event_lainnya %}
+            <div class="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-lg transition duration-200 flex flex-col justify-between">
+              <div>
+                <a href="{% url 'event_detail' ev.slug %}" class="relative block w-full aspect-[4/5] overflow-hidden bg-slate-100">
+                  {% if ev.poster %}
+                    <img src="{{ ev.poster.url }}" alt="{{ ev.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                  {% else %}
+                    <div class="w-full h-full flex items-center justify-center bg-teal-900 text-white p-4 text-center">
+                      <span class="text-xs font-bold">{{ ev.judul }}</span>
+                    </div>
+                  {% endif %}
+                  <div class="absolute top-3 left-3 bg-white/95 rounded-xl shadow px-2.5 py-1 text-center min-w-[45px]">
+                    <span class="block text-sm font-bold text-[#0D636D] leading-none">{{ ev.hari_mulai }}</span>
+                    <span class="block text-[9px] font-bold text-slate-500 uppercase">{{ ev.bulan_mulai_singkat }}</span>
+                  </div>
+                </a>
+                <div class="p-4">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                    {{ ev.kategori }}
+                  </span>
+                  <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0D636D] transition line-clamp-2 leading-snug mb-2">
+                    <a href="{% url 'event_detail' ev.slug %}">{{ ev.judul }}</a>
+                  </h4>
+                  <div class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                    <i class="far fa-calendar-alt text-[#0D636D]"></i>
+                    <span>{{ ev.tanggal_display }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 text-right">
+                <a href="{% url 'event_detail' ev.slug %}" class="text-xs font-bold text-[#0D636D] hover:underline">
+                  Detail &rarr;
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+  </main>
+
+  <!-- Include Footer Terpadu -->
+  {% include 'core/footer.html' %}
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    function salinLinkEvent() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const textEl = document.getElementById('btnSalinText');
+        if (textEl) {
+          textEl.textContent = 'Tersalin!';
+          setTimeout(() => {
+            textEl.textContent = 'Salin Tautan';
+          }, 2000);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

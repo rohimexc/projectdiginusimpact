@@ -12,11 +12,11 @@ from django.core.exceptions import ValidationError
 from .models import (
     Sambutan, Galeri, Hero, Berita, TenagaPendidik, AuditLog, 
     HalamanTentang, VisiMisiTujuan, MisiItem, TujuanItem, 
-    HalamanAkademik, DokumenAkademik, KomentarBerita
+    HalamanAkademik, DokumenAkademik, KomentarBerita, Event
 )
 from .forms import (
     BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, 
-    HalamanTentangForm, HalamanAkademikForm, GaleriForm, HeroForm
+    HalamanTentangForm, HalamanAkademikForm, GaleriForm, HeroForm, EventForm
 )
 from .validators import validate_image_file, validate_video_file, validate_document_file
 
@@ -53,11 +53,13 @@ def home(request):
     hero = Hero.objects.filter(is_active=True).first()
     sambutan = Sambutan.objects.first()
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
+    daftar_event = Event.objects.filter(is_active=True).order_by('tanggal_mulai', '-created_at')[:4]
 
     context = {
         'hero': hero,
         'sambutan': sambutan,
         'daftar_berita': daftar_berita,
+        'daftar_event': daftar_event,
     }
     return render(request, 'core/index.html', context)
 
@@ -1384,3 +1386,166 @@ def admin_kelola_hero(request):
         'hero': hero,
         'title': 'Manajemen Hero Banner',
     })
+
+
+# ==========================================
+# 13. EVENT & AGENDA TERDEKAT (PUBLIK & ADMIN CRUD)
+# ==========================================
+
+def event_list(request):
+    """Halaman publik katalog seluruh event / agenda program studi"""
+    events = Event.objects.filter(is_active=True)
+    
+    # 1. Filter Pencarian Keyword
+    q = request.GET.get('q', '').strip()
+    if q:
+        events = events.filter(
+            Q(judul__icontains=q) | 
+            Q(lokasi__icontains=q) | 
+            Q(deskripsi__icontains=q)
+        )
+    
+    # 2. Filter Kategori
+    kategori_selected = request.GET.get('kategori', '').strip()
+    if kategori_selected:
+        events = events.filter(kategori=kategori_selected)
+
+    # 3. Urutkan berdasarkan tanggal terdekat
+    events = events.order_by('tanggal_mulai', '-created_at')
+
+    # 4. Pagination (8 kartu per halaman)
+    paginator = Paginator(events, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    kategori_list = [k[0] for k in Event.KATEGORI_CHOICES]
+
+    context = {
+        'page_obj': page_obj,
+        'events': page_obj.object_list,
+        'total_event': paginator.count,
+        'q': q,
+        'kategori_selected': kategori_selected,
+        'kategori_list': kategori_list,
+    }
+    return render(request, 'core/event/list.html', context)
+
+
+def event_detail(request, slug):
+    """Halaman publik detail lengkap satu event / agenda"""
+    event = None
+    if slug.isdigit():
+        event = Event.objects.filter(Q(slug=slug) | Q(pk=int(slug))).first()
+    else:
+        event = Event.objects.filter(slug=slug).first()
+    
+    if not event:
+        event = get_object_or_404(Event, slug=slug)
+
+    event_lainnya = Event.objects.filter(is_active=True).exclude(pk=event.pk).order_by('tanggal_mulai')[:3]
+
+    context = {
+        'event': event,
+        'event_lainnya': event_lainnya,
+    }
+    return render(request, 'core/event/detail.html', context)
+
+
+@login_required(login_url='user_login')
+def admin_kelola_event(request):
+    """Halaman tabel manajemen CRUD Event di Admin Portal"""
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+    daftar_event = Event.objects.all().order_by('tanggal_mulai', '-created_at')
+    return render(request, 'core/admin/event_kelola.html', {'daftar_event': daftar_event})
+
+
+@login_required(login_url='user_login')
+def event_create(request):
+    """Tambah data event / agenda baru"""
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'poster': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
+        form = EventForm(request.POST, request.FILES)
+        if not upload_errors and form.is_valid():
+            event = form.save()
+            catat_audit(request, 'Tambah Event', f"Menambahkan Event: {event.judul}")
+            messages.success(request, f'Event "{event.judul}" berhasil ditambahkan!')
+            return redirect('admin_kelola_event')
+    else:
+        form = EventForm()
+
+    return render(request, 'core/admin/event_form.html', {
+        'form': form,
+        'title': 'Tambah Event / Agenda Baru',
+    })
+
+
+@login_required(login_url='user_login')
+def event_update(request, pk):
+    """Ubah / perbarui data event"""
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    event = get_object_or_404(Event, pk=pk)
+    if request.method == 'POST':
+        upload_errors = _validate_request_files(request, {'poster': validate_image_file})
+        for err in upload_errors:
+            messages.error(request, err)
+        form = EventForm(request.POST, request.FILES, instance=event)
+        if not upload_errors and form.is_valid():
+            form.save()
+            catat_audit(request, 'Edit Event', f"Memperbarui Event #{event.id} ({event.judul})")
+            messages.success(request, f'Data event "{event.judul}" berhasil diperbarui!')
+            return redirect('admin_kelola_event')
+    else:
+        form = EventForm(instance=event)
+
+    return render(request, 'core/admin/event_form.html', {
+        'form': form,
+        'event': event,
+        'title': f'Edit Event: {event.judul}',
+    })
+
+
+@login_required(login_url='user_login')
+def event_delete(request, pk):
+    """Hapus data event"""
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    event = get_object_or_404(Event, pk=pk)
+    judul = event.judul
+    event.delete()
+    catat_audit(request, 'Hapus Event', f"Menghapus Event: {judul}")
+    messages.success(request, f'Event "{judul}" berhasil dihapus.')
+    return redirect('admin_kelola_event')
+
+
+@login_required(login_url='user_login')
+def event_toggle_status(request, pk):
+    """Toggle status aktif / nonaktif tampilan event di beranda"""
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    event = get_object_or_404(Event, pk=pk)
+    event.is_active = not event.is_active
+    event.save(update_fields=['is_active'])
+    status_str = "diaktifkan" if event.is_active else "dinonaktifkan"
+    catat_audit(request, 'Toggle Status Event', f"Event #{event.id} {status_str}")
+    messages.success(request, f'Status event "{event.judul}" berhasil {status_str}!')
+    return redirect('admin_kelola_event')
