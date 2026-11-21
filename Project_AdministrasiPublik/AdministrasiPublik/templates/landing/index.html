@@ -79,7 +79,7 @@
 </section>
 
 <!-- ========================================== -->
-<!-- SECTION EVENT TERDEKAT (MAROON SLIDER)     -->
+<!-- SECTION EVENT TERDEKAT (TEAL THEME)        -->
 <!-- ========================================== -->
 {% if event_list %}
 <style>
@@ -94,8 +94,9 @@
     .animate-event-slide {
         animation: eventSlideLeft 30s linear infinite;
     }
-    .animate-event-slide:hover {
-        animation-play-state: paused;
+    .animate-event-slide:hover,
+    .animate-event-slide.is-paused {
+        animation-play-state: paused !important;
     }
     .no-scrollbar::-webkit-scrollbar {
         display: none;
@@ -104,73 +105,95 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+    @media (max-width: 640px) {
+        .animate-event-slide {
+            animation-duration: 24s;
+        }
+    }
 </style>
 
-<section id="event-terdekat" class="relative bg-gradient-to-b from-[#6b0f12] via-[#7a1216] to-[#580b0e] py-14 sm:py-20 text-white overflow-hidden shadow-2xl">
-    <!-- Ornamen Pola Halus -->
-    <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 pointer-events-none"></div>
+<section id="event-terdekat" class="relative bg-gradient-to-br from-[#073636] via-[#0b5454] to-[#052828] py-12 sm:py-16 md:py-20 text-white overflow-hidden shadow-2xl">
+    <!-- Ornamen Pola Halus Bertema Teal & Amber -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#2dd4bf_1px,transparent_1px)] [background-size:24px_24px]"></div>
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <!-- Header Section -->
-        <div class="mb-8" data-aos="fade-down" data-aos-duration="600">
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">Event Terdekat</h2>
-            <div class="w-full border-b-2 border-white/80 mt-2"></div>
+        <!-- Header Section Responsif (Mobile, Tablet, Desktop) -->
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8 pb-3 border-b border-teal-400/25" data-aos="fade-down" data-aos-duration="600">
+            <div>
+                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-teal-400/15 border border-teal-300/30 text-teal-200 text-[10px] sm:text-xs font-semibold mb-2">
+                    <i class="fa-solid fa-bullhorn text-amber-300"></i>
+                    <span>Agenda & Jadwal Akademik</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wide">Event Terdekat</h2>
+                <div class="h-1 w-20 sm:w-28 bg-amber-400 rounded-full mt-2"></div>
+                <p class="text-teal-100/80 text-xs sm:text-sm mt-1.5 leading-relaxed">
+                    Jadwal ujian komprehensif, seminar proposal, seminar hasil & kegiatan prodi terkini.
+                </p>
+            </div>
+
+            <!-- Tombol Navigasi Panah: Rapi & Mudah Dijangkau di HP/Tablet/Desktop -->
+            <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                <button id="eventPrevBtn" type="button" aria-label="Event Sebelumnya" title="Geser ke Kiri"
+                    class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-slate-900 border border-white/20 text-white flex items-center justify-center transition shadow-sm active:scale-95 focus:outline-none">
+                    <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+                </button>
+                <button id="eventNextBtn" type="button" aria-label="Event Selanjutnya" title="Geser ke Kanan"
+                    class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-slate-900 border border-white/20 text-white flex items-center justify-center transition shadow-sm active:scale-95 focus:outline-none">
+                    <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+                </button>
+            </div>
         </div>
 
-        <!-- Slider Container dengan Tombol Navigasi -->
+        <!-- Slider Container: Mendukung Auto-Slide & Touch-Swipe di Mobile / Tablet -->
         <div class="relative group/slider">
-            
-            <!-- Tombol Navigasi Kiri -->
-            <button id="eventPrevBtn" type="button" aria-label="Event Sebelumnya"
-                class="absolute -left-2 sm:left-1 top-28 sm:top-24 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center border border-white/30 backdrop-blur-xs transition shadow-lg hover:scale-110 focus:outline-none">
-                <i class="fa-solid fa-chevron-left text-sm"></i>
-            </button>
-
-            <!-- Tombol Navigasi Kanan -->
-            <button id="eventNextBtn" type="button" aria-label="Event Selanjutnya"
-                class="absolute -right-2 sm:right-1 top-28 sm:top-24 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center border border-white/30 backdrop-blur-xs transition shadow-lg hover:scale-110 focus:outline-none">
-                <i class="fa-solid fa-chevron-right text-sm"></i>
-            </button>
 
             <!-- Container Track Bergerak ke Kiri -->
-            <div id="eventScrollContainer" class="overflow-x-auto no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing select-none py-2">
-                <div id="eventMarqueeTrack" class="flex gap-6 sm:gap-8 items-start w-max animate-event-slide hover:[animation-play-state:paused]">
+            <div id="eventScrollContainer" class="overflow-x-auto no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing select-none py-2 touch-pan-x">
+                <div id="eventMarqueeTrack" class="flex gap-4 sm:gap-6 md:gap-7 items-start w-max animate-event-slide hover:[animation-play-state:paused]">
                     
                     <!-- Loop Pertama -->
                     {% for item in event_list %}
-                    <div class="flex flex-col items-center w-60 sm:w-72 shrink-0 group/card">
+                    <div class="flex flex-col items-center w-[215px] sm:w-[255px] md:w-[275px] shrink-0 group/card">
                         
                         <!-- Timeline Header: Tanggal & Kategori di atas garis -->
-                        <div class="text-center mb-2 px-2 h-14 flex flex-col justify-end">
-                            <p class="text-xs sm:text-sm font-bold text-white tracking-wide drop-shadow-xs">{{ item.display_tanggal }}</p>
-                            <p class="text-[11px] sm:text-xs text-rose-200 font-medium">{{ item.kategori }}</p>
+                        <div class="text-center mb-2 px-1 h-13 sm:h-14 flex flex-col justify-end items-center">
+                            <p class="text-xs sm:text-sm font-bold text-white tracking-wide drop-shadow-xs line-clamp-1">{{ item.display_tanggal }}</p>
+                            <span class="text-[10px] sm:text-xs text-amber-300 font-semibold bg-white/10 border border-amber-300/30 px-2 py-0.5 rounded-full mt-1 line-clamp-1">
+                                {{ item.kategori }}
+                            </span>
                         </div>
 
-                        <!-- Garis Horizontal & Ikon Jam Timeline -->
+                        <!-- Garis Horizontal & Ikon Jam Timeline Bertema Teal-Amber -->
                         <div class="w-full relative flex items-center justify-center my-2">
-                            <div class="absolute inset-x-0 h-0.5 bg-white/70"></div>
-                            <div class="relative z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#7a1216] border-2 border-white flex items-center justify-center text-white shadow-md group-hover/card:scale-110 group-hover/card:bg-amber-500 group-hover/card:border-amber-200 transition-all duration-300">
+                            <div class="absolute inset-x-0 h-0.5 bg-teal-300/30"></div>
+                            <div class="relative z-10 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#0c5959] border-2 border-amber-300 text-amber-300 flex items-center justify-center shadow-md group-hover/card:scale-110 group-hover/card:bg-amber-400 group-hover/card:text-slate-900 group-hover/card:border-white transition-all duration-300">
                                 <i class="fa-regular fa-clock text-xs sm:text-sm"></i>
                             </div>
                         </div>
 
                         <!-- Card Flyer Poster -->
-                        <div class="w-full mt-3 bg-white rounded-2xl p-3 sm:p-4 border-4 border-amber-400 shadow-2xl transition-all duration-300 group-hover/card:-translate-y-2 group-hover/card:shadow-amber-400/20 flex flex-col justify-between">
-                            <div class="relative aspect-[9/16] w-full rounded-xl overflow-hidden bg-slate-900 border border-slate-200 cursor-pointer shadow-inner"
+                        <div class="w-full mt-2.5 sm:mt-3 bg-white rounded-2xl p-2.5 sm:p-3.5 border-2 border-teal-500/20 group-hover/card:border-amber-400 shadow-xl group-hover/card:shadow-amber-400/20 transition-all duration-300 group-hover/card:-translate-y-1.5 flex flex-col justify-between">
+                            <!-- Flyer Image Preview -->
+                            <div class="relative aspect-[3/4] sm:aspect-[9/16] w-full rounded-xl overflow-hidden bg-slate-950 border border-slate-200 cursor-pointer shadow-inner group/poster"
                                  onclick="bukaLightboxEvent('{{ item.poster.url }}', '{{ item.nama_mahasiswa|escapejs }}', '{{ item.nim|default:''|escapejs }}', '{{ item.kategori|escapejs }}', '{{ item.display_tanggal|escapejs }}', '{{ item.waktu|default:''|escapejs }}', '{{ item.lokasi|default:''|escapejs }}')">
                                 <img src="{{ item.poster.url }}" alt="{{ item.nama_mahasiswa }}"
                                      class="w-full h-full object-cover transition duration-500 group-hover/card:scale-105" loading="lazy">
-                                <div class="absolute inset-0 bg-black/0 hover:bg-black/25 transition flex items-center justify-center opacity-0 hover:opacity-100">
-                                    <span class="bg-black/60 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1.5 shadow">
-                                        <i class="fa-solid fa-magnifying-glass-plus"></i> Lihat Poster
+                                <div class="absolute inset-0 bg-teal-950/0 hover:bg-teal-950/30 transition flex items-center justify-center opacity-0 group-hover/poster:opacity-100">
+                                    <span class="bg-[#0f6b6b]/90 text-white text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1.5 shadow">
+                                        <i class="fa-solid fa-magnifying-glass-plus text-amber-300"></i> Buka Poster
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="pt-3 pb-1 text-center border-t border-slate-100 mt-3">
-                                <h4 class="text-xs sm:text-sm font-bold text-red-700 leading-snug line-clamp-2">
-                                    {{ item.nama_mahasiswa }} {% if item.nim %}<span class="block text-[11px] text-red-600 font-semibold">({{ item.nim }})</span>{% endif %}
+                            <!-- Nama Mahasiswa & NIM di Bawah Card -->
+                            <div class="pt-2.5 pb-0.5 text-center border-t border-slate-100 mt-2.5">
+                                <h4 class="text-xs sm:text-sm font-bold text-teal-950 leading-snug line-clamp-2">
+                                    {{ item.nama_mahasiswa }}
+                                    {% if item.nim %}
+                                    <span class="block text-[10px] sm:text-xs text-teal-700 font-semibold mt-0.5">({{ item.nim }})</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                         </div>
@@ -180,35 +203,40 @@
 
                     <!-- Loop Kedua (Duplikasi untuk Seamless Infinite Marquee ke Kiri) -->
                     {% for item in event_list %}
-                    <div class="flex flex-col items-center w-60 sm:w-72 shrink-0 group/card" aria-hidden="true">
+                    <div class="flex flex-col items-center w-[215px] sm:w-[255px] md:w-[275px] shrink-0 group/card" aria-hidden="true">
                         
-                        <div class="text-center mb-2 px-2 h-14 flex flex-col justify-end">
-                            <p class="text-xs sm:text-sm font-bold text-white tracking-wide drop-shadow-xs">{{ item.display_tanggal }}</p>
-                            <p class="text-[11px] sm:text-xs text-rose-200 font-medium">{{ item.kategori }}</p>
+                        <div class="text-center mb-2 px-1 h-13 sm:h-14 flex flex-col justify-end items-center">
+                            <p class="text-xs sm:text-sm font-bold text-white tracking-wide drop-shadow-xs line-clamp-1">{{ item.display_tanggal }}</p>
+                            <span class="text-[10px] sm:text-xs text-amber-300 font-semibold bg-white/10 border border-amber-300/30 px-2 py-0.5 rounded-full mt-1 line-clamp-1">
+                                {{ item.kategori }}
+                            </span>
                         </div>
 
                         <div class="w-full relative flex items-center justify-center my-2">
-                            <div class="absolute inset-x-0 h-0.5 bg-white/70"></div>
-                            <div class="relative z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#7a1216] border-2 border-white flex items-center justify-center text-white shadow-md group-hover/card:scale-110 group-hover/card:bg-amber-500 group-hover/card:border-amber-200 transition-all duration-300">
+                            <div class="absolute inset-x-0 h-0.5 bg-teal-300/30"></div>
+                            <div class="relative z-10 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-[#0c5959] border-2 border-amber-300 text-amber-300 flex items-center justify-center shadow-md group-hover/card:scale-110 group-hover/card:bg-amber-400 group-hover/card:text-slate-900 group-hover/card:border-white transition-all duration-300">
                                 <i class="fa-regular fa-clock text-xs sm:text-sm"></i>
                             </div>
                         </div>
 
-                        <div class="w-full mt-3 bg-white rounded-2xl p-3 sm:p-4 border-4 border-amber-400 shadow-2xl transition-all duration-300 group-hover/card:-translate-y-2 group-hover/card:shadow-amber-400/20 flex flex-col justify-between">
-                            <div class="relative aspect-[9/16] w-full rounded-xl overflow-hidden bg-slate-900 border border-slate-200 cursor-pointer shadow-inner"
+                        <div class="w-full mt-2.5 sm:mt-3 bg-white rounded-2xl p-2.5 sm:p-3.5 border-2 border-teal-500/20 group-hover/card:border-amber-400 shadow-xl group-hover/card:shadow-amber-400/20 transition-all duration-300 group-hover/card:-translate-y-1.5 flex flex-col justify-between">
+                            <div class="relative aspect-[3/4] sm:aspect-[9/16] w-full rounded-xl overflow-hidden bg-slate-950 border border-slate-200 cursor-pointer shadow-inner group/poster"
                                  onclick="bukaLightboxEvent('{{ item.poster.url }}', '{{ item.nama_mahasiswa|escapejs }}', '{{ item.nim|default:''|escapejs }}', '{{ item.kategori|escapejs }}', '{{ item.display_tanggal|escapejs }}', '{{ item.waktu|default:''|escapejs }}', '{{ item.lokasi|default:''|escapejs }}')">
                                 <img src="{{ item.poster.url }}" alt="{{ item.nama_mahasiswa }}"
                                      class="w-full h-full object-cover transition duration-500 group-hover/card:scale-105" loading="lazy">
-                                <div class="absolute inset-0 bg-black/0 hover:bg-black/25 transition flex items-center justify-center opacity-0 hover:opacity-100">
-                                    <span class="bg-black/60 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1.5 shadow">
-                                        <i class="fa-solid fa-magnifying-glass-plus"></i> Lihat Poster
+                                <div class="absolute inset-0 bg-teal-950/0 hover:bg-teal-950/30 transition flex items-center justify-center opacity-0 group-hover/poster:opacity-100">
+                                    <span class="bg-[#0f6b6b]/90 text-white text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1.5 shadow">
+                                        <i class="fa-solid fa-magnifying-glass-plus text-amber-300"></i> Buka Poster
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="pt-3 pb-1 text-center border-t border-slate-100 mt-3">
-                                <h4 class="text-xs sm:text-sm font-bold text-red-700 leading-snug line-clamp-2">
-                                    {{ item.nama_mahasiswa }} {% if item.nim %}<span class="block text-[11px] text-red-600 font-semibold">({{ item.nim }})</span>{% endif %}
+                            <div class="pt-2.5 pb-0.5 text-center border-t border-slate-100 mt-2.5">
+                                <h4 class="text-xs sm:text-sm font-bold text-teal-950 leading-snug line-clamp-2">
+                                    {{ item.nama_mahasiswa }}
+                                    {% if item.nim %}
+                                    <span class="block text-[10px] sm:text-xs text-teal-700 font-semibold mt-0.5">({{ item.nim }})</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                         </div>
@@ -223,26 +251,27 @@
 
     </div>
 
-    <!-- MODAL LIGHTBOX POSTER EVENT -->
-    <div id="eventLightboxModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="relative max-w-lg w-full bg-white rounded-2xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh]">
-            <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50">
-                <div>
-                    <h3 id="lightboxNama" class="text-sm font-bold text-slate-800 leading-tight"></h3>
-                    <p id="lightboxSub" class="text-xs text-rose-700 font-semibold mt-0.5"></p>
+    <!-- MODAL LIGHTBOX POSTER EVENT (RESPONSIF MOBILE/TABLET/DESKTOP) -->
+    <div id="eventLightboxModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
+        <div class="relative max-w-lg w-full bg-white rounded-2xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between p-3.5 sm:p-4 border-b border-slate-100 bg-teal-50/70">
+                <div class="min-w-0 pr-3">
+                    <h3 id="lightboxNama" class="text-xs sm:text-sm font-bold text-teal-950 leading-tight truncate"></h3>
+                    <p id="lightboxSub" class="text-[11px] sm:text-xs text-amber-600 font-semibold mt-0.5 truncate"></p>
                 </div>
-                <button type="button" onclick="tutupLightboxEvent()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-xs transition">
+                <button type="button" onclick="tutupLightboxEvent()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center text-xs transition shrink-0">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div class="overflow-y-auto p-4 flex flex-col items-center">
-                <img id="lightboxImg" src="" alt="Poster Penuh" class="max-h-[60vh] w-auto object-contain rounded-xl shadow-md border border-slate-200">
-                <div id="lightboxInfo" class="w-full mt-4 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1"></div>
+            <div class="overflow-y-auto p-3 sm:p-4 flex flex-col items-center">
+                <img id="lightboxImg" src="" alt="Poster Penuh" class="max-h-[50vh] sm:max-h-[60vh] w-auto object-contain rounded-xl shadow-md border border-slate-200">
+                <div id="lightboxInfo" class="w-full mt-3.5 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1.5"></div>
             </div>
         </div>
     </div>
 </section>
 {% endif %}
+
 
 
 <!-- Berita Terbaru -->
@@ -377,30 +406,50 @@
             }
         }
 
-        // Kontrol Tombol Panah Slider Event Terdekat
+        // Kontrol Tombol Panah Slider Event Terdekat (Mobile, Tablet, Desktop)
         const scrollContainer = document.getElementById("eventScrollContainer");
         const marqueeTrack = document.getElementById("eventMarqueeTrack");
         const prevBtn = document.getElementById("eventPrevBtn");
         const nextBtn = document.getElementById("eventNextBtn");
 
-        if (scrollContainer && prevBtn && nextBtn) {
+        if (scrollContainer && prevBtn && nextBtn && marqueeTrack) {
+            let resumeTimer = null;
+
+            function pauseAnimationTemporarily() {
+                marqueeTrack.classList.add('is-paused');
+                if (resumeTimer) clearTimeout(resumeTimer);
+                resumeTimer = setTimeout(() => {
+                    marqueeTrack.classList.remove('is-paused');
+                }, 3000);
+            }
+
+            // Hitung lebar geser responsif sesuai ukuran layar (HP vs Tablet vs Desktop)
+            function getScrollStep() {
+                return window.innerWidth < 640 ? 230 : (window.innerWidth < 1024 ? 270 : 320);
+            }
+
             prevBtn.addEventListener("click", () => {
-                if (marqueeTrack) {
-                    marqueeTrack.style.animationPlayState = 'paused';
-                }
-                scrollContainer.scrollBy({ left: -320, behavior: 'smooth' });
+                pauseAnimationTemporarily();
+                scrollContainer.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
             });
 
             nextBtn.addEventListener("click", () => {
-                if (marqueeTrack) {
-                    marqueeTrack.style.animationPlayState = 'paused';
-                }
-                scrollContainer.scrollBy({ left: 320, behavior: 'smooth' });
+                pauseAnimationTemporarily();
+                scrollContainer.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
             });
+
+            // Dukungan Touch & Swipe di HP / Tablet
+            scrollContainer.addEventListener("touchstart", () => {
+                marqueeTrack.classList.add('is-paused');
+            }, { passive: true });
+
+            scrollContainer.addEventListener("touchend", () => {
+                pauseAnimationTemporarily();
+            }, { passive: true });
         }
     })();
 
-    // Fungsi Modal Lightbox Poster Event
+    // Fungsi Modal Lightbox Poster Event (Bertema Teal & Amber)
     function bukaLightboxEvent(imgUrl, nama, nim, kategori, tanggal, waktu, lokasi) {
         const modal = document.getElementById("eventLightboxModal");
         const img = document.getElementById("lightboxImg");
@@ -414,18 +463,18 @@
             subEl.textContent = kategori + ' • ' + tanggal;
 
             let infoHtml = `
-                <div class="flex items-center justify-between py-1 border-b border-slate-200">
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
                     <span class="text-slate-500 font-medium">Jenis Event:</span>
-                    <span class="font-bold text-rose-700">${kategori}</span>
+                    <span class="font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">${kategori}</span>
                 </div>
-                <div class="flex items-center justify-between py-1 border-b border-slate-200">
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
                     <span class="text-slate-500 font-medium">Jadwal:</span>
                     <span class="font-bold text-slate-800">${tanggal}</span>
                 </div>
             `;
             if (waktu) {
                 infoHtml += `
-                    <div class="flex items-center justify-between py-1 border-b border-slate-200">
+                    <div class="flex items-center justify-between py-1.5 border-b border-slate-200">
                         <span class="text-slate-500 font-medium">Waktu:</span>
                         <span class="font-semibold text-slate-700">${waktu}</span>
                     </div>
@@ -433,7 +482,7 @@
             }
             if (lokasi) {
                 infoHtml += `
-                    <div class="flex items-center justify-between py-1">
+                    <div class="flex items-center justify-between py-1.5">
                         <span class="text-slate-500 font-medium">Tempat / Ruangan:</span>
                         <span class="font-semibold text-slate-700">${lokasi}</span>
                     </div>
