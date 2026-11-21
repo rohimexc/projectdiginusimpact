@@ -37,9 +37,10 @@
         <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">Berita & Informasi Terbaru</h1>
         <div class="w-24 h-1.5 bg-amber-400 rounded-full mx-auto"></div>
         <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">Pusat informasi resmi seputar kegiatan akademik dan kemahasiswaan Program Studi Administrasi Publik FISIP Universitas Tadulako</p>
+    </div>
 
-        <!-- Form Search & Filter Konsisten seperti Contoh Gambar -->
-        <form id="beritaFilterForm" method="GET" action="{% url 'landing:berita_list' %}" class="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4 text-left max-w-full overflow-hidden">
+    <!-- Form Search & Filter Konsisten seperti Contoh Gambar (Di luar max-w-2xl agar di desktop leluasa dan tidak sempit) -->
+    <form id="beritaFilterForm" method="GET" action="{% url 'landing:berita_list' %}" class="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4 text-left" data-aos="fade-up">
             <!-- Baris 1: Input Pencarian + Input Rentang Tanggal + Tombol Search -->
             <div class="flex flex-col md:flex-row items-center gap-2.5 w-full">
                 <!-- Input Teks + Tombol Search Mobile -->
@@ -153,7 +154,6 @@
                 document.getElementById('beritaFilterForm').submit();
             }
         </script>
-    </div>
 
     <!-- Grid Berita Responsive -->
     {% if berita_list %}
