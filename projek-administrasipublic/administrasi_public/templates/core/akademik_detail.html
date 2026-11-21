@@ -295,11 +295,28 @@
       
       <!-- ================= BLOK 1 AOS: HEADER & DERETAN TOMBOL TAB AKADEMIK ================= -->
       <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
-        <p class="text-xs font-bold uppercase tracking-widest text-[#0b7285] mb-1.5 flex flex-wrap items-center justify-center sm:justify-start gap-x-2 gap-y-1">
-          <span>AKADEMIK</span>
-          <span class="text-[8px] opacity-60">•</span>
-          <span>ADMINISTRASI PUBLIK</span>
-        </p>
+        <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+          <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+          <span class="text-slate-400">›</span>
+          <a href="{% url 'akademik_detail' 'siga8' %}" class="hover:text-teal-800 hover:underline transition-colors">Akademik</a>
+          <span class="text-slate-400">›</span>
+          <span class="font-medium text-teal-800">
+            {% if halaman.kategori == 'siga8' %}
+              SIGA-8
+            {% elif halaman.kategori == 'kurikulum' %}
+              Kurikulum
+            {% elif halaman.kategori == 'jadwal' %}
+              Jadwal Perkuliahan
+            {% elif halaman.kategori == 'rps' %}
+              Rencana Pembelajaran Semester (RPS)
+            {% elif halaman.kategori == 'panduan' %}
+              Panduan Akademik
+            {% else %}
+              {{ halaman.judul|default:"Layanan Akademik" }}
+            {% endif %}
+          </span>
+        </nav>
         <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
           {{ halaman.judul|default:"Layanan Akademik Mahasiswa" }}
         </h1>

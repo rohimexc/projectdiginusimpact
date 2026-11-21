@@ -291,12 +291,14 @@
   <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
     <div class="max-w-4xl mx-auto">
       
-      <!-- Tombol Kembali -->
-      <div class="mb-6" data-aos="fade-down" data-aos-duration="500">
-        <a href="{% url 'berita_list' %}" class="inline-flex items-center gap-2 text-xs font-semibold text-[#0b7285] hover:text-[#084c5a] transition">
-          &larr; Kembali ke Berita
-        </a>
-      </div>
+      <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+      <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 mb-5" data-aos="fade-down" data-aos-duration="500">
+        <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+        <span class="text-slate-400">›</span>
+        <a href="{% url 'berita_list' %}" class="hover:text-teal-800 hover:underline transition-colors">Berita Terkini</a>
+        <span class="text-slate-400">›</span>
+        <span class="font-medium text-teal-800 truncate max-w-xs sm:max-w-md">{{ berita.judul }}</span>
+      </nav>
 
       <!-- Kartu Artikel Utama -->
       <article class="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/80 mb-10" data-aos="fade-up" data-aos-duration="600">

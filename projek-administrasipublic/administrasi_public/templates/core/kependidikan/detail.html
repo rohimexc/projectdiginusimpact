@@ -30,11 +30,13 @@
   <!-- Header Banner -->
   <header class="bg-brand-darkteal text-white pt-10 pb-16 px-6">
     <div class="max-w-5xl mx-auto">
-      <nav class="text-xs text-slate-300 mb-3 flex items-center gap-2">
-        <a href="{% url 'home' %}" class="hover:text-brand-gold transition">Beranda</a>
-        <span>&gt;</span>
-        <a href="{% url 'tenaga_kependidikan_list' %}" class="hover:text-brand-gold transition">Tenaga Kependidikan</a>
-        <span>&gt;</span>
+      <nav aria-label="Breadcrumb" class="text-xs text-slate-300 mb-2.5 flex flex-wrap items-center gap-1.5">
+        <a href="{% url 'home' %}" class="hover:text-brand-gold hover:underline transition-colors">Beranda</a>
+        <span class="text-slate-400">›</span>
+        <span class="text-slate-300">Staf</span>
+        <span class="text-slate-400">›</span>
+        <a href="{% url 'tenaga_kependidikan_list' %}" class="hover:text-brand-gold hover:underline transition-colors">Tenaga Kependidikan</a>
+        <span class="text-slate-400">›</span>
         <span class="text-brand-gold font-medium">{{ tenaga_kependidikan.nama }}</span>
       </nav>
       <h1 class="text-3xl font-bold tracking-tight">Detail Profil Tenaga Kependidikan</h1>

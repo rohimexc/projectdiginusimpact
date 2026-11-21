@@ -202,11 +202,12 @@
     
     <!-- Header Halaman & Eyebrow -->
     <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-10" data-aos="fade-up">
-      <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 mb-2.5">
-        <span class="text-xs font-semibold uppercase tracking-wider text-[#0D636D]">AGENDA & KEGIATAN</span>
-        <span class="text-slate-300">•</span>
-        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">ADMINISTRASI PUBLIK</span>
-      </div>
+      <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+      <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+        <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+        <span class="text-slate-400">›</span>
+        <span class="font-medium text-teal-800">Agenda & Event Terdekat</span>
+      </nav>
       <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0D636D] tracking-tight mb-2">
         Agenda & Event Terdekat
       </h1>
