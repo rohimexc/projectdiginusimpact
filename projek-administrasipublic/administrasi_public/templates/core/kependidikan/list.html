@@ -318,17 +318,17 @@
   </div>
 
   <!-- Area Konten Utama -->
-  <main class="flex-1 pt-28 pb-20 px-6">
+  <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
     <div class="max-w-6xl mx-auto">
 
       <!-- BLOK 1 AOS: Header Halaman -->
-      <header data-aos="fade-down" data-aos-duration="600" class="mb-8 text-center sm:text-left">
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
         <p class="text-xs font-bold uppercase tracking-widest text-[#0b7285] mb-1.5 flex items-center justify-center sm:justify-start gap-2">
           <span>STAF & TENDIK</span>
           <span class="text-[8px] opacity-60">•</span>
           <span>ADMINISTRASI PUBLIK</span>
         </p>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
           Tenaga Kependidikan (Tendik)
         </h1>
         <p class="text-xs sm:text-sm text-slate-500 font-normal">
@@ -337,8 +337,8 @@
       </header>
 
       <!-- ================= SEARCH BAR KAPSUL (PILL-SHAPED) ================= -->
-      <div data-aos="fade-down" data-aos-duration="600" class="mb-10 w-full">
-        <form method="GET" action="{% url 'tenaga_kependidikan_list' %}" id="tendik-search-form" class="bg-white rounded-full p-2 sm:p-2.5 border border-slate-200/90 shadow-sm flex items-center gap-2.5 sm:gap-3 transition hover:shadow-md">
+      <div data-aos="fade-down" data-aos-duration="600" class="mb-8 sm:mb-10 w-full">
+        <form method="GET" action="{% url 'tenaga_kependidikan_list' %}" id="tendik-search-form" class="bg-white rounded-full p-1.5 sm:p-2.5 border border-slate-200/90 shadow-sm flex items-center gap-2 sm:gap-3 transition hover:shadow-md">
           <!-- Input Pencarian -->
           <div class="flex-1 relative flex items-center">
             <input 
@@ -348,12 +348,12 @@
               value="{{ query }}" 
               placeholder="Cari Nama Staf, NIP..." 
               autocomplete="off"
-              class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-5 py-2.5 sm:py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+              class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-4 sm:px-5 py-2 sm:py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
             >
             {% if query %}
               <a 
                 href="{% url 'tenaga_kependidikan_list' %}" 
-                class="absolute right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition" 
+                class="absolute right-3.5 sm:right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition cursor-pointer" 
                 title="Hapus pencarian"
               >
                 <i class="fas fa-times-circle"></i>
@@ -364,7 +364,7 @@
           <!-- Tombol Submit Cari -->
           <button 
             type="submit" 
-            class="rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-6 sm:px-7 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
+            class="rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-5 sm:px-7 py-2 sm:py-3 flex items-center justify-center gap-1.5 sm:gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
           >
             <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
             <span>Cari</span>
