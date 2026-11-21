@@ -101,6 +101,9 @@
       <li><a href="{% url 'berita_list' %}"
           class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a>
       </li>
+      <li><a href="{% url 'event_list' %}"
+          class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Event</a>
+      </li>
 
       <!-- Dropdown Menu Akademik -->
       <li class="relative group">
@@ -198,12 +201,12 @@
   </nav>
 
   <!-- Overlay Backdrop Menu Mobile & Tablet -->
-  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[48] hidden lg:hidden"
+  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60 z-[48] hidden lg:hidden" style="background-color: rgba(0, 0, 0, 0.6) !important;"
     onclick="closeMobileMenu()"></div>
 
-  <!-- Drawer Menu Mobile (Dropdown) -->
+  <!-- Drawer Menu Mobile (Dropdown dengan Background Solid Opaque) -->
   <div id="mobile-menu-drawer"
-    class="fixed top-[70px] left-0 w-full bg-[#084c5a]/98 backdrop-blur-md text-white border-b border-white/10 shadow-2xl z-50 hidden max-h-[calc(100dvh-70px)] overflow-y-auto transition-all duration-300">
+    class="fixed top-[70px] left-0 w-full bg-[#084c5a] text-white border-b border-white/10 shadow-2xl z-50 hidden max-h-[calc(100dvh-70px)] overflow-y-auto transition-all duration-300" style="background-color: #084c5a !important; opacity: 1 !important;">
     <div class="px-5 py-4 space-y-2.5 text-xs">
       <a href="{% url 'home' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
         <i class="fas fa-home w-5 text-[#fab005]"></i> Beranda
@@ -238,6 +241,10 @@
       <a href="{% url 'berita_list' %}"
         class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
         <i class="fas fa-newspaper w-5 text-[#fab005]"></i> Berita
+      </a>
+      <a href="{% url 'event_list' %}"
+        class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-calendar-alt w-5 text-[#fab005]"></i> Event & Agenda
       </a>
 
       <!-- Mobile Dropdown: Akademik -->
