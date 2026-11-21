@@ -1,0 +1,402 @@
+{% extends 'landing/admin/template/base.html' %}
+{% load static %}
+
+{% block title %}Kelola Event Terdekat - Admin Portal{% endblock %}
+
+{% block header_title %}Manajemen Event Terdekat{% endblock %}
+
+{% block extra_head %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .dataTables_wrapper .dataTables_length select {
+        padding: 4px 28px 4px 8px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        font-size: 12px;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        padding: 4px 10px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        font-size: 12px;
+        margin-left: 6px;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #0f6b6b !important;
+        color: white !important;
+        border-radius: 8px;
+        border: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-6xl mx-auto pb-12 relative">
+
+    <!-- MODAL KONFIRMASI HAPUS -->
+    {% if delete_event %}
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white p-6 rounded-2xl border border-red-100 shadow-2xl text-center space-y-4" data-aos="zoom-in" data-aos-duration="300">
+            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-xs">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="space-y-1">
+                <h2 class="text-base font-bold text-slate-800">Konfirmasi Hapus Event</h2>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Yakin ingin menghapus data event <strong class="text-slate-800">"{{ delete_event.nama_mahasiswa }}{% if delete_event.nim %} ({{ delete_event.nim }}){% endif %}"</strong> kategori <span class="text-rose-600 font-semibold">{{ delete_event.kategori }}</span>?
+                    Tindakan ini tidak dapat dibatalkan.
+                </p>
+            </div>
+            {% if delete_event.poster %}
+            <div class="flex justify-center py-1">
+                <img src="{{ delete_event.poster.url }}" alt="Preview Hapus" class="w-24 h-32 object-cover rounded-xl border border-slate-200 shadow-xs">
+            </div>
+            {% endif %}
+            <form method="POST" action="{% url 'landing:event_delete' delete_event.id %}" class="flex justify-center gap-3 pt-2">
+                {% csrf_token %}
+                <a href="{% url 'landing:dashboard_event' %}" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+                    Batal
+                </a>
+                <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition shadow-sm">
+                    Ya, Hapus
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- MODAL EDIT EVENT -->
+    {% if edit_event %}
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-xl w-full bg-white p-6 rounded-2xl border border-slate-200 shadow-2xl space-y-5 my-8" data-aos="zoom-in" data-aos-duration="300">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm shadow-xs">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800">Edit Data Event Terdekat</h2>
+                        <p class="text-[11px] text-slate-400">ID #{{ edit_event.id }} &bull; {{ edit_event.nama_mahasiswa }}</p>
+                    </div>
+                </div>
+                <a href="{% url 'landing:dashboard_event' %}" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            </div>
+
+            <form method="POST" action="{% url 'landing:event_update' edit_event.id %}" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Mahasiswa / Peserta <span class="text-red-500">*</span></label>
+                        {{ edit_form.nama_mahasiswa }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">NIM (Opsional)</label>
+                        {{ edit_form.nim }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori Event <span class="text-red-500">*</span></label>
+                        {{ edit_form.kategori }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Event <span class="text-red-500">*</span></label>
+                        {{ edit_form.tanggal_event }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Teks Tanggal Manual (Opsional)</label>
+                        {{ edit_form.hari_tanggal_manual }}
+                        <p class="text-[10px] text-slate-400 mt-0.5">Misal: "Rabu 24 Juni 2026". Kosongkan jika otomatis.</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Waktu (Opsional)</label>
+                        {{ edit_form.waktu }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Lokasi / Ruangan (Opsional)</label>
+                    {{ edit_form.lokasi }}
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Ganti Poster Flyer (Opsional)</label>
+                    {% if edit_event.poster %}
+                    <div class="flex items-center gap-3 p-2.5 bg-slate-50 rounded-xl border border-slate-200 mb-2">
+                        <img src="{{ edit_event.poster.url }}" alt="Poster Saat Ini" class="w-12 h-16 object-cover rounded-lg border border-slate-200 shadow-2xs">
+                        <div class="text-[11px] text-slate-500">
+                            <span class="font-semibold text-slate-700 block">Poster Saat Ini Tersedia</span>
+                            <span class="text-[10px] text-slate-400">Pilih file baru jika ingin mengganti</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {{ edit_form.poster }}
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center pt-1">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Urut Tampil</label>
+                        {{ edit_form.urutan }}
+                    </div>
+                    <div class="flex items-center gap-2 pt-4">
+                        {{ edit_form.is_active }}
+                        <label for="{{ edit_form.is_active.id_for_label }}" class="text-xs font-semibold text-slate-700 select-none">Tampilkan di Beranda (Aktif)</label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+                    <a href="{% url 'landing:dashboard_event' %}" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+                        Batal
+                    </a>
+                    <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition shadow-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk text-xs"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- STATS & HEADER -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" data-aos="fade-down" data-aos-duration="500">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+            <div>
+                <p class="text-xs font-medium text-slate-500">Total Event Terdaftar</p>
+                <p class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_event }}</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Semua seminar, komprehensif, dll.</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl shadow-2xs">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+            <div>
+                <p class="text-xs font-medium text-slate-500">Event Aktif di Beranda</p>
+                <p class="text-2xl font-extrabold text-emerald-600 mt-1">{{ total_aktif }}</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Tampil di slider bergerak ke kiri</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-2xs">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between">
+            <div>
+                <p class="text-xs font-medium text-slate-500">Status Slider Beranda</p>
+                <p class="text-sm font-bold text-rose-800 mt-1 flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Auto-Slide Bergerak ke Kiri
+                </p>
+                <a href="{% url 'landing:landing_home' %}#event-terdekat" target="_blank" class="text-[11px] font-semibold text-teal-600 hover:text-teal-700 hover:underline mt-1 inline-block">
+                    Lihat di Beranda &rarr;
+                </a>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shadow-2xs">
+                <i class="fa-solid fa-person-walking-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARD FORM TAMBAH EVENT -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4" data-aos="fade-up" data-aos-duration="600">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-sm shadow-2xs">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-slate-800">Tambah Event Terdekat Baru</h2>
+                    <p class="text-[11px] text-slate-400">Tambahkan seminar komprehensif, sempro, semhas, dll. untuk ditampilkan pada slider beranda.</p>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST" action="{% url 'landing:event_create' %}" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Mahasiswa / Peserta <span class="text-red-500">*</span></label>
+                    {{ form.nama_mahasiswa }}
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">NIM (Opsional)</label>
+                    {{ form.nim }}
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori Event <span class="text-red-500">*</span></label>
+                    {{ form.kategori }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Event <span class="text-red-500">*</span></label>
+                    {{ form.tanggal_event }}
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Teks Tanggal Manual (Opsional)</label>
+                    {{ form.hari_tanggal_manual }}
+                    <p class="text-[10px] text-slate-400 mt-0.5">Biarkan kosong agar otomatis, misal: "Rabu 24 Juni 2026"</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Waktu Pelaksanaan (Opsional)</label>
+                    {{ form.waktu }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Lokasi / Ruangan (Opsional)</label>
+                    {{ form.lokasi }}
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Poster Flyer (JPG/PNG/WebP, Maks 5MB) <span class="text-red-500">*</span></label>
+                    {{ form.poster }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center pt-1">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Urut Tampil</label>
+                    {{ form.urutan }}
+                </div>
+                <div class="flex items-center gap-2 pt-4">
+                    {{ form.is_active }}
+                    <label for="{{ form.is_active.id_for_label }}" class="text-xs font-semibold text-slate-700 select-none">Langsung Tampilkan di Beranda (Aktif)</label>
+                </div>
+                <div class="flex justify-end pt-3">
+                    <button type="submit" class="w-full sm:w-auto px-6 py-2.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-xl transition shadow-xs flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-xs"></i> Tambahkan Event
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- TABEL DAFTAR EVENT -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-3 border-b border-slate-100">
+            <div>
+                <h2 class="text-sm font-bold text-slate-800">Daftar Event Terdekat</h2>
+                <p class="text-[11px] text-slate-400">Total {{ event_list.count }} event terdaftar di sistem.</p>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table id="eventTable" class="w-full text-left border-collapse text-xs">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                        <th class="p-3 w-12 text-center">Urutan</th>
+                        <th class="p-3 w-16 text-center">Poster</th>
+                        <th class="p-3">Nama Mahasiswa & NIM</th>
+                        <th class="p-3">Kategori</th>
+                        <th class="p-3">Tanggal Pelaksanaan</th>
+                        <th class="p-3">Waktu & Lokasi</th>
+                        <th class="p-3 text-center">Status</th>
+                        <th class="p-3 text-center w-28">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for item in event_list %}
+                    <tr class="hover:bg-slate-50/70 transition">
+                        <td class="p-3 text-center font-bold text-slate-700">#{{ item.urutan }}</td>
+                        <td class="p-3 text-center">
+                            {% if item.poster %}
+                            <a href="{{ item.poster.url }}" target="_blank" title="Klik untuk lihat poster penuh">
+                                <img src="{{ item.poster.url }}" alt="{{ item.nama_mahasiswa }}" class="w-10 h-14 object-cover rounded-lg border border-slate-200 shadow-2xs hover:scale-110 transition mx-auto">
+                            </a>
+                            {% else %}
+                            <span class="text-slate-300 text-xs italic">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-800 block text-xs">{{ item.nama_mahasiswa }}</span>
+                            {% if item.nim %}
+                            <span class="text-[11px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{{ item.nim }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3">
+                            <span class="px-2 py-1 rounded-md text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-100">
+                                {{ item.kategori }}
+                            </span>
+                        </td>
+                        <td class="p-3">
+                            <div class="font-semibold text-slate-700 text-xs">{{ item.display_tanggal }}</div>
+                            <div class="text-[10px] text-slate-400">{{ item.tanggal_event|date:"d M Y" }}</div>
+                        </td>
+                        <td class="p-3 text-slate-600 text-[11px]">
+                            <div><i class="fa-regular fa-clock text-slate-400 mr-1"></i>{{ item.waktu|default:"-" }}</div>
+                            <div class="text-slate-400"><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i>{{ item.lokasi|default:"-" }}</div>
+                        </td>
+                        <td class="p-3 text-center">
+                            {% if item.is_active %}
+                            <span class="px-2.5 py-1 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aktif
+                            </span>
+                            {% else %}
+                            <span class="px-2.5 py-1 text-[10px] font-semibold rounded-full bg-slate-100 text-slate-500">
+                                Nonaktif
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <a href="?edit={{ item.id }}" class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 flex items-center justify-center text-xs transition shadow-2xs" title="Edit Event">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <a href="?hapus={{ item.id }}" class="w-7 h-7 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center text-xs transition shadow-2xs" title="Hapus Event">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="p-8 text-center text-slate-400 italic">
+                            Belum ada event terdaftar. Tambahkan event pertama melalui form di atas.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- DataTables Script -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        if ($('#eventTable tbody tr').length > 0 && !$('#eventTable tbody td').hasClass('text-slate-400')) {
+            $('#eventTable').DataTable({
+                "pageLength": 10,
+                "ordering": true,
+                "order": [[0, "asc"]],
+                "language": {
+                    "search": "Cari Event:",
+                    "lengthMenu": "Tampilkan _MENU_ entri",
+                    "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ event",
+                    "paginate": {
+                        "previous": "&larr;",
+                        "next": "&rarr;"
+                    },
+                    "zeroRecords": "Tidak ada data event yang cocok."
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

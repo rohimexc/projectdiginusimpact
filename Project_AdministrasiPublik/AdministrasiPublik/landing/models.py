@@ -400,3 +400,46 @@ class PengunjungWeb(models.Model):
 
     def __str__(self):
         return f"{self.tanggal} - {self.session_key or self.ip_address}"
+
+
+class EventTerdekat(models.Model):
+    nama_mahasiswa = models.CharField(max_length=200, verbose_name="Nama Mahasiswa / Judul Event")
+    nim = models.CharField(max_length=50, blank=True, null=True, verbose_name="NIM (Opsional)", help_text="Contoh: G81122014")
+    kategori = models.CharField(max_length=100, default="Komprehensif", verbose_name="Kategori / Jenis Event", help_text="Contoh: Komprehensif, Seminar Proposal, Seminar Hasil, Yudisium, dll.")
+    tanggal_event = models.DateField(verbose_name="Tanggal Event", help_text="Pilih tanggal pelaksanaan event")
+    hari_tanggal_manual = models.CharField(max_length=150, blank=True, null=True, verbose_name="Teks Tanggal Manual (Opsional)", help_text="Biarkan kosong jika ingin otomatis diformat, misal: 'Rabu 24 Juni 2026'")
+    waktu = models.CharField(max_length=100, blank=True, null=True, verbose_name="Waktu Pelaksanaan (Opsional)", help_text="Contoh: 09:00 WITA - Selesai")
+    lokasi = models.CharField(max_length=200, blank=True, null=True, verbose_name="Lokasi / Ruangan (Opsional)", help_text="Contoh: Ruang Ujian Jurusan / Daring")
+    poster = models.ImageField(upload_to='event_terdekat/', verbose_name="Poster Flyer (Format Gambar)", validators=[validate_image_file_size])
+    urutan = models.PositiveIntegerField(default=1, verbose_name="Nomor Urut Tampil")
+    is_active = models.BooleanField(default=True, verbose_name="Aktif / Tampilkan di Beranda")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Event Terdekat"
+        verbose_name_plural = "Daftar Event Terdekat"
+        ordering = ['urutan', 'tanggal_event', 'id']
+
+    def __str__(self):
+        if self.nim:
+            return f"{self.nama_mahasiswa} ({self.nim}) - {self.kategori}"
+        return f"{self.nama_mahasiswa} - {self.kategori}"
+
+    @property
+    def label_peserta(self):
+        if self.nim:
+            return f"{self.nama_mahasiswa} ({self.nim})"
+        return self.nama_mahasiswa
+
+    @property
+    def display_tanggal(self):
+        if self.hari_tanggal_manual:
+            return self.hari_tanggal_manual
+        if self.tanggal_event:
+            hari_list = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
+            bulan_list = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+            nama_hari = hari_list[self.tanggal_event.weekday()]
+            nama_bulan = bulan_list[self.tanggal_event.month]
+            return f"{nama_hari} {self.tanggal_event.day} {nama_bulan} {self.tanggal_event.year}"
+        return "-"

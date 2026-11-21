@@ -10,14 +10,14 @@ from django.contrib.auth.models import User
 from .models import (
     Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog, Dosen,
     TentangPage, VisiMisiTujuan, MisiItem, TujuanItem,
-    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita, Hero
+    AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita, Hero, EventTerdekat
 )
 from django.db.models import Q, F
 from .forms import (
     BeritaForm, LoginForm, TenagaPendidikForm, AdminUserCreateForm, AdminUserUpdateForm, 
     CustomAuthenticationForm, DosenForm, TentangPageForm,
     VisiMisiTujuanForm, MisiItemForm, TujuanItemForm,
-    AkademikPageForm, DokumenAkademikForm, GaleriForm, HeroForm
+    AkademikPageForm, DokumenAkademikForm, GaleriForm, HeroForm, EventTerdekatForm
 )
 from django.core.paginator import Paginator
 from akun.views import catat_riwayat_login
@@ -36,10 +36,12 @@ def index(request):
     akreditasi = Akreditasi.objects.first()
     kontak = Kontak.objects.first()
     sambutan = Sambutan.objects.first()
+    event_list = EventTerdekat.objects.filter(is_active=True).order_by('urutan', 'tanggal_event', 'id')
 
     context = {
         'berita_list': berita_list,
         'galeri_list': galeri_list,
+        'event_list': event_list,
         'hero': hero,
         'akademik_list': akademik_list,
         'staf_list': staf_list,
@@ -663,6 +665,8 @@ def dashboard_admin_khusus(request):
     
     jml_berita_aktif = Berita.objects.filter(status='A').count() if hasattr(Berita, 'status') else total_berita
     jml_berita_draft = Berita.objects.filter(status='D').count() if hasattr(Berita, 'status') else 0
+    total_event = EventTerdekat.objects.count()
+    jml_event_aktif = EventTerdekat.objects.filter(is_active=True).count()
     
     log_aktivitas = AuditLog.objects.all().order_by('-waktu')
 
@@ -676,6 +680,8 @@ def dashboard_admin_khusus(request):
         'total_berita': total_berita,
         'jml_berita_aktif': jml_berita_aktif,
         'jml_berita_draft': jml_berita_draft,
+        'total_event': total_event,
+        'jml_event_aktif': jml_event_aktif,
         'log_aktivitas': log_aktivitas,
     }
     return render(request, 'landing/admin/dashboard.html', context)
@@ -1407,3 +1413,76 @@ def hero_update(request, pk):
 def hero_delete(request, pk):
     messages.warning(request, "Hero Banner utama tidak dapat dihapus karena hanya ada 1.")
     return redirect('landing:dashboard_hero')
+
+
+# ==========================================
+# MANAJEMEN EVENT TERDEKAT (ADMIN PORTAL)
+# ==========================================
+@login_required(login_url='landing:login')
+def dashboard_event(request):
+    event_list = EventTerdekat.objects.all().order_by('urutan', 'tanggal_event', 'id')
+    form = EventTerdekatForm()
+
+    # Modal hapus via ?hapus=ID
+    delete_event = None
+    hapus_id = request.GET.get('hapus')
+    if hapus_id:
+        delete_event = get_object_or_404(EventTerdekat, id=hapus_id)
+
+    # Modal edit via ?edit=ID
+    edit_event = None
+    edit_form = None
+    edit_id = request.GET.get('edit')
+    if edit_id:
+        edit_event = get_object_or_404(EventTerdekat, id=edit_id)
+        edit_form = EventTerdekatForm(instance=edit_event)
+
+    context = {
+        'event_list': event_list,
+        'form': form,
+        'delete_event': delete_event,
+        'edit_event': edit_event,
+        'edit_form': edit_form,
+        'total_event': event_list.count(),
+        'total_aktif': event_list.filter(is_active=True).count(),
+    }
+    return render(request, 'landing/admin/dashboard_event.html', context)
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def event_create(request):
+    form = EventTerdekatForm(request.POST, request.FILES)
+    if form.is_valid():
+        event = form.save()
+        catat_log(request, request.user, f"Menambahkan Event Terdekat: '{event.nama_mahasiswa} ({event.kategori})'", "Data event berhasil ditambahkan")
+        messages.success(request, f"Event '{event.nama_mahasiswa}' berhasil ditambahkan!")
+    else:
+        messages.error(request, "Gagal menambahkan event. Periksa isian form dan ukuran poster flyer (maksimal 5 MB).")
+    return redirect('landing:dashboard_event')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def event_update(request, pk):
+    event = get_object_or_404(EventTerdekat, pk=pk)
+    form = EventTerdekatForm(request.POST, request.FILES, instance=event)
+    if form.is_valid():
+        event = form.save()
+        catat_log(request, request.user, f"Memperbarui Event Terdekat: '{event.nama_mahasiswa}'", "Data event diperbarui")
+        messages.success(request, f"Event '{event.nama_mahasiswa}' berhasil diperbarui!")
+    else:
+        messages.error(request, "Gagal memperbarui event. Periksa isian form dan ukuran poster flyer.")
+    return redirect('landing:dashboard_event')
+
+
+@login_required(login_url='landing:login')
+@require_POST
+def event_delete(request, pk):
+    event = get_object_or_404(EventTerdekat, pk=pk)
+    nama = event.nama_mahasiswa
+    event.delete()
+    catat_log(request, request.user, f"Menghapus Event Terdekat: '{nama}'", "Data event dihapus")
+    messages.success(request, f"Event '{nama}' berhasil dihapus!")
+    return redirect('landing:dashboard_event')
+

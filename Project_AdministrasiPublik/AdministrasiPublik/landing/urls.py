@@ -104,4 +104,10 @@ path('admin-portal/password-reset/',
     path('admin-portal/akademik/<int:pk>/hapus/', views.akademik_delete, name='akademik_delete'),
     path('admin-portal/akademik/<int:pk>/dokumen/tambah/', views.akademik_dokumen_add, name='akademik_dokumen_add'),
     path('admin-portal/akademik/dokumen/<int:pk>/hapus/', views.akademik_dokumen_delete, name='akademik_dokumen_delete'),
+
+    # Rute Manajemen Event Terdekat
+    path('admin-portal/event/', views.dashboard_event, name='dashboard_event'),
+    path('admin-portal/event/tambah/', views.event_create, name='event_create'),
+    path('admin-portal/event/<int:pk>/ubah/', views.event_update, name='event_update'),
+    path('admin-portal/event/<int:pk>/hapus/', views.event_delete, name='event_delete'),
 ]

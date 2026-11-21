@@ -86,6 +86,12 @@
                 <i class="fa-solid fa-images text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_galeri' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
                 <span>Kelola Galeri</span>
             </a>
+
+            <a href="{% url 'landing:dashboard_event' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_event' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-calendar-days text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_event' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Event</span>
+            </a>
         </nav>
     </div>
 

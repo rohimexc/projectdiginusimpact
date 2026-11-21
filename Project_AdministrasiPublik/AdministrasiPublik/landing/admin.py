@@ -5,7 +5,7 @@ from .models import (
     TenagaPendidik, Dosen, Akreditasi, Kontak, TentangPage,
     VisiMisiTujuan, MisiItem, TujuanItem,
     AkademikPage, DokumenAkademik, LikeBerita, KomentarBerita,
-    Hero
+    Hero, EventTerdekat
 )
 
 
@@ -173,3 +173,19 @@ class AkreditasiAdmin(admin.ModelAdmin):
 @admin.register(Kontak)
 class KontakAdmin(admin.ModelAdmin):
     list_display = ('email', 'telepon')
+
+
+@admin.register(EventTerdekat)
+class EventTerdekatAdmin(admin.ModelAdmin):
+    list_display = ('urutan', 'nama_mahasiswa', 'nim', 'kategori', 'tanggal_event', 'is_active', 'poster_preview')
+    list_display_links = ('nama_mahasiswa',)
+    list_editable = ('urutan', 'is_active')
+    list_filter = ('is_active', 'kategori', 'tanggal_event')
+    search_fields = ('nama_mahasiswa', 'nim', 'kategori', 'lokasi')
+    date_hierarchy = 'tanggal_event'
+
+    def poster_preview(self, obj):
+        if obj.poster:
+            return mark_safe(f'<img src="{obj.poster.url}" style="height: 48px; width: 36px; object-fit: cover; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);" />')
+        return mark_safe('<span style="color:#94a3b8; font-style:italic;">Tidak ada poster</span>')
+    poster_preview.short_description = "Poster Flyer"

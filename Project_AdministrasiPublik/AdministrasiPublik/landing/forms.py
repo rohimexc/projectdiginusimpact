@@ -3,7 +3,7 @@ from django import forms
 from .models import (
     Sambutan, Galeri, Berita, Dosen, TenagaPendidik, TentangPage,
     VisiMisiTujuan, MisiItem, TujuanItem,
-    AkademikPage, DokumenAkademik, Hero
+    AkademikPage, DokumenAkademik, Hero, EventTerdekat
 )
 from django.core.exceptions import ValidationError
 import re
@@ -469,3 +469,68 @@ class HeroForm(forms.ModelForm):
             if foto.size > 5 * 1024 * 1024:
                 raise forms.ValidationError(f"Ukuran gambar ({foto.size / (1024*1024):.1f} MB) melebihi batas maksimal 5 MB.")
         return foto
+
+
+class EventTerdekatForm(forms.ModelForm):
+    class Meta:
+        model = EventTerdekat
+        fields = [
+            'nama_mahasiswa', 'nim', 'kategori', 'tanggal_event',
+            'hari_tanggal_manual', 'waktu', 'lokasi', 'poster',
+            'urutan', 'is_active'
+        ]
+        widgets = {
+            'nama_mahasiswa': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Nama mahasiswa / peserta (misal: Ririn Puspita)',
+                'required': True
+            }),
+            'nim': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'NIM (misal: G81122014) - opsional'
+            }),
+            'kategori': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Komprehensif, Seminar Proposal, Seminar Hasil, dll.',
+                'required': True
+            }),
+            'tanggal_event': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'required': True
+            }),
+            'hari_tanggal_manual': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Opsional (misal: Rabu 24 Juni 2026)'
+            }),
+            'waktu': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Opsional (misal: 09:00 WITA - Selesai)'
+            }),
+            'lokasi': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'placeholder': 'Opsional (misal: Ruang Ujian Jurusan / Daring)'
+            }),
+            'poster': forms.FileInput(attrs={
+                'class': 'w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100',
+                'accept': '.jpg,.jpeg,.png,.webp'
+            }),
+            'urutan': forms.NumberInput(attrs={
+                'class': 'w-full px-4 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none',
+                'min': 1
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500'
+            }),
+        }
+
+    def clean_poster(self):
+        poster = self.cleaned_data.get('poster')
+        if poster and hasattr(poster, 'size'):
+            ext = os.path.splitext(poster.name)[1].lower()
+            if ext not in ['.jpg', '.jpeg', '.png', '.webp']:
+                raise forms.ValidationError("Format flyer tidak didukung! Hanya file .jpg, .jpeg, .png, dan .webp yang diperbolehkan.")
+            if poster.size > 5 * 1024 * 1024:
+                raise forms.ValidationError(f"Ukuran file flyer ({poster.size / (1024*1024):.1f} MB) melebihi batas maksimal 5 MB.")
+        return poster
+
