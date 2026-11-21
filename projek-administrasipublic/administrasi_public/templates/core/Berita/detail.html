@@ -1090,6 +1090,7 @@
       const backdrop = document.getElementById('mobile-menu-backdrop');
       const iconBars = document.getElementById('menu-icon-bars');
       const iconClose = document.getElementById('menu-icon-close');
+      if (!drawer) return;
       if (drawer.classList.contains('hidden')) {
         drawer.classList.remove('hidden');
         if (backdrop) backdrop.classList.remove('hidden');
@@ -1118,8 +1119,10 @@
 
     function toggleMobileAccordion(id) {
       const el = document.getElementById(id);
+      const icon = document.getElementById(id.replace('-menu', '-icon'));
       if (el) {
         el.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
       }
     }
   </script>
