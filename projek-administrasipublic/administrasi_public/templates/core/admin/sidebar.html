@@ -1,0 +1,158 @@
+{% load static %}
+<!-- OVERLAY BACKDROP UNTUK MOBILE & TABLET -->
+<div id="admin-sidebar-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 hidden lg:hidden transition-opacity duration-300" onclick="toggleAdminSidebar()"></div>
+
+<!-- SIDEBAR ADMIN TERPUSAT - RESPONSIF 3 DEVICE (MOBILE, TAB, DESKTOP) -->
+<aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#084c5a] text-slate-100 flex flex-col justify-between -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen lg:shrink-0 lg:shadow-xl border-r border-[#05313a] overflow-y-auto">
+  <div>
+    <!-- Logo & Nama Portal -->
+    <div class="p-5 sm:p-6 flex items-center justify-between border-b border-white/10 bg-[#05313a]/50">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold shadow-inner border border-white/15">
+          <i class="bi bi-bank text-lg text-brand-gold"></i>
+        </div>
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-white">Admin Portal</h2>
+          <p class="text-[10px] text-teal-200/80 font-medium">FISIP UNTAD</p>
+        </div>
+      </div>
+      <!-- Tombol Tutup X Khusus Layar HP & Tablet -->
+      <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden text-teal-200 hover:text-white p-1.5 rounded-lg hover:bg-white/10 focus:outline-none transition" aria-label="Tutup Sidebar">
+        <i class="bi bi-x-lg text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Navigasi Menu Sidebar -->
+    <nav class="p-4 space-y-1.5 text-xs font-medium">
+      <!-- 1. Ringkasan Dashboard -->
+      <a href="{% url 'admin_dashboard' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if request.resolver_match.url_name == 'admin_dashboard' %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-speedometer2 text-base transition-colors duration-200 {% if request.resolver_match.url_name == 'admin_dashboard' %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Ringkasan Dashboard</span>
+      </a>
+
+      <!-- 1b. Manajemen Hero (Link Video & Foto) -->
+      <a href="{% url 'admin_kelola_hero' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'hero' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-camera-reels text-base transition-colors duration-200 {% if 'hero' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Manajemen Hero</span>
+      </a>
+
+      <!-- 2. Kelola Halaman Tentang (Profil, Sejarah, dsb) -->
+      <a href="{% url 'admin_kelola_tentang' 'profil' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'tentang' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-info-circle text-base transition-colors duration-200 {% if 'tentang' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Menu Tentang</span>
+      </a>
+
+      <!-- 2b. Kelola Visi, Misi & Tujuan -->
+      <a href="{% url 'admin_kelola_visi_misi' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'visi_misi' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-compass text-base transition-colors duration-200 {% if 'visi_misi' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Visi, Misi & Tujuan</span>
+      </a>
+
+      <!-- 3. Kelola Sambutan (CKEditor 5) -->
+      <a href="{% url 'admin_kelola_sambutan' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if request.resolver_match.url_name == 'admin_kelola_sambutan' %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-chat-square-quote text-base transition-colors duration-200 {% if request.resolver_match.url_name == 'admin_kelola_sambutan' %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Sambutan</span>
+      </a>
+
+      <!-- 4. Kelola Berita -->
+      <a href="{% url 'admin_kelola_berita' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'berita' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-newspaper text-base transition-colors duration-200 {% if 'berita' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Berita</span>
+      </a>
+
+      <!-- 4a. Kelola Event & Agenda (Poster 4:5) -->
+      <a href="{% url 'admin_kelola_event' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'event' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-calendar-event text-base transition-colors duration-200 {% if 'event' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Event</span>
+      </a>
+
+      <!-- 4b. Manajemen Galeri Foto -->
+      <a href="{% url 'admin_kelola_galeri' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'galeri' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-images text-base transition-colors duration-200 {% if 'galeri' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Manajemen Galeri</span>
+      </a>
+
+      <!-- 4b. Kelola Akademik (SIGA-8, Kurikulum, Jadwal, RPS, Panduan) -->
+      <a href="{% url 'admin_kelola_akademik' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'akademik' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-mortarboard text-base transition-colors duration-200 {% if 'akademik' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Akademik</span>
+      </a>
+
+      <!-- 5. Kelola Dosen -->
+      <a href="{% url 'admin_kelola_dosen' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'dosen' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-person-video3 text-base transition-colors duration-200 {% if 'dosen' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Dosen</span>
+      </a>
+
+      <!-- 6. Kelola Tendik -->
+      <a href="{% url 'admin_kelola_tendik' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'tendik' in request.resolver_match.url_name %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-people text-base transition-colors duration-200 {% if 'tendik' in request.resolver_match.url_name %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Kelola Tendik</span>
+      </a>
+
+      <!-- 7. Manajemen User -->
+      <a href="{% url 'admin_kelola_user' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'user' in request.resolver_match.url_name and request.resolver_match.url_name != 'user_login' and request.resolver_match.url_name != 'user_logout' %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-person-gear text-base transition-colors duration-200 {% if 'user' in request.resolver_match.url_name and request.resolver_match.url_name != 'user_login' and request.resolver_match.url_name != 'user_logout' %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Manajemen User</span>
+      </a>
+
+      <!-- 8. Lihat Website Utama -->
+      <div class="pt-3">
+        <a href="{% url 'home' %}" target="_blank" 
+           class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 transition-all duration-200 font-medium border border-white/10 hover:border-brand-gold shadow-sm">
+          <i class="bi bi-box-arrow-up-right text-xs text-brand-gold group-hover:text-slate-900 transition-colors"></i>
+          <span>Lihat Website Utama</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Profil Ringkas Admin & Logout Bagian Bawah -->
+  <div class="p-4 border-t border-white/10 bg-[#05313a]/60">
+    <div class="flex items-center gap-3 mb-3 px-2">
+      <div class="w-8 h-8 rounded-full bg-brand-gold text-slate-900 font-bold flex items-center justify-center text-xs shadow">
+        {{ request.user.username|make_list|first|upper }}
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="text-xs font-semibold text-white truncate">{{ request.user.email|default:request.user.username }}</p>
+        <span class="text-[9px] uppercase tracking-wider text-brand-gold font-bold">ADMINISTRATOR</span>
+      </div>
+    </div>
+    <a href="{% url 'user_logout' %}" 
+       class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white/10 hover:bg-rose-600 text-teal-100 hover:text-white rounded-xl text-xs font-semibold transition-all duration-200 border border-white/10 shadow-sm">
+      <i class="bi bi-box-arrow-left"></i>
+      <span>Keluar (Logout)</span>
+    </a>
+  </div>
+</aside>
+
+<!-- SCRIPT TOGGLE SIDEBAR MOBILE & TABLET -->
+<script>
+  function toggleAdminSidebar() {
+    const sidebar = document.getElementById('admin-sidebar');
+    const backdrop = document.getElementById('admin-sidebar-backdrop');
+    if (!sidebar) return;
+    const isClosed = sidebar.classList.contains('-translate-x-full');
+    if (isClosed) {
+      sidebar.classList.remove('-translate-x-full');
+      if (backdrop) backdrop.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden', 'lg:overflow-auto');
+    } else {
+      sidebar.classList.add('-translate-x-full');
+      if (backdrop) backdrop.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden', 'lg:overflow-auto');
+    }
+  }
+</script>

@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN FORM DI DALAM DASHBOARD -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 -ml-1 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition flex items-center justify-center" aria-label="Buka Menu Admin">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+        <a href="{% url 'admin_kelola_galeri' %}" class="hidden sm:inline-flex text-xs text-brand-teal hover:underline items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Manajemen Galeri
+        </a>
+        <span class="hidden sm:inline text-slate-300">/</span>
+        <h1 class="text-sm sm:text-base font-bold text-slate-800">{{ title }}</h1>
+      </div>
+      <a href="{% url 'galeri_list' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+        <i class="bi bi-box-arrow-up-right text-[10px]"></i> Halaman Galeri
+      </a>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      <div class="max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">{{ title }}</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Unggah foto kegiatan dan atur urutan penampilannya</p>
+          </div>
+          <a href="{% url 'admin_kelola_galeri' %}" class="text-slate-400 hover:text-slate-600 transition text-lg">
+            <i class="bi bi-x-lg"></i>
+          </a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-5 text-xs font-medium text-slate-700">
+          {% csrf_token %}
+
+          <!-- Field Urutan -->
+          <div>
+            <label class="block mb-1.5 font-semibold text-slate-700">
+              Urutan Penampilan di Beranda <span class="text-rose-500">*</span>
+            </label>
+            {{ form.urutan }}
+            <p class="text-[11px] text-slate-400 mt-1">Nomor urut posisi gambar (misal: 1, 2, 3...). Angka lebih kecil akan tampil lebih dulu.</p>
+            {% for error in form.urutan.errors %}
+              <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <!-- Field Foto -->
+          <div>
+            <label class="block mb-1.5 font-semibold text-slate-700">
+              Unggah Foto Kegiatan <span class="text-rose-500">*</span>
+            </label>
+            {% if galeri and galeri.gambar %}
+              <div class="mb-3 p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3">
+                <img src="{{ galeri.gambar.url }}" alt="Preview" class="w-16 h-12 object-cover rounded-lg border border-slate-200">
+                <div class="text-[11px] text-slate-500">
+                  <p class="font-semibold text-slate-700">Foto saat ini terpasang</p>
+                  <p class="text-[10px] text-slate-400">Pilih berkas baru di bawah jika ingin menggantinya</p>
+                </div>
+              </div>
+            {% endif %}
+            {{ form.gambar }}
+            <p class="text-[11px] text-slate-400 mt-1">Format gambar: JPG, PNG, WEBP (disarankan rasio horizontal / lanskap).</p>
+            {% for error in form.gambar.errors %}
+              <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <!-- Field Judul / Keterangan -->
+          <div>
+            <label class="block mb-1.5 font-semibold text-slate-700">
+              Judul / Keterangan Foto Kegiatan
+            </label>
+            {{ form.judul }}
+            <p class="text-[11px] text-slate-400 mt-1">Nama agenda atau keterangan singkat kegiatan yang didokumentasikan.</p>
+            {% for error in form.judul.errors %}
+              <p class="text-xs text-rose-600 mt-1">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-5 border-t border-slate-100 mt-6">
+            <a href="{% url 'admin_kelola_galeri' %}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              Batal
+            </a>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow transition">
+              Simpan Foto Galeri
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="{% static 'js/upload-validator.js' %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,410 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda & Event - Administrasi Publik UNTAD</title>
+  
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media (max-width: 768px) {
+      body, html {
+        overflow-x: hidden !important;
+      }
+      [data-aos] {
+        transition-duration: 450ms !important;
+        transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+      }
+      [data-aos="fade-left"],
+      [data-aos="fade-right"] {
+        transform: translate3d(0, 20px, 0) !important;
+      }
+      [data-aos="fade-left"].aos-animate,
+      [data-aos="fade-right"].aos-animate {
+        transform: translate3d(0, 0, 0) !important;
+      }
+      [data-aos][data-aos-delay] {
+        transition-delay: 50ms !important;
+      }
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-brand-teal selection:text-white">
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/6285330144401" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Header / Navbar Konsisten -->
+  <nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-4 sm:px-6 lg:px-8 z-50 shadow-md">
+    <a href="{% url 'home' %}" class="flex items-center gap-3 text-white">
+      <i class="fas fa-graduation-cap text-3xl text-[#ffd43b]"></i>
+      <div>
+        <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
+        <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      </div>
+    </a>
+
+    <!-- Menu Desktop -->
+    <ul class="hidden lg:flex list-none items-center gap-4">
+      <li><a href="{% url 'home' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Beranda</a></li>
+      
+      <!-- Dropdown Menu Tentang -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Tentang <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-64 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tentang_detail' 'profil' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-university text-[#fab005] w-4"></i> Profil Program Studi
+            </a>
+            <a href="{% url 'tentang_detail' 'sejarah' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-scale-balanced text-[#fab005] w-4"></i> Sejarah & Dasar Hukum
+            </a>
+            <a href="{% url 'tentang_detail' 'visi_misi' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-bullseye text-[#fab005] w-4"></i> Visi, Misi & Tujuan
+            </a>
+            <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-user-graduate text-[#fab005] w-4"></i> Profil Lulusan
+            </a>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-award text-[#fab005] w-4"></i> Sertifikat Akreditasi
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="{% url 'galeri_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a></li>
+      <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a></li>
+      
+      <!-- Event Aktif -->
+      <li>
+        <a href="{% url 'event_list' %}" class="text-white text-xs font-semibold py-2 px-3 rounded-md bg-white/15 text-[#ffd43b] transition">
+          Event
+        </a>
+      </li>
+
+      <!-- Dropdown Menu Akademik -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Akademik <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8
+            </a>
+            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-book-open text-[#fab005] w-4"></i> Kurikulum
+            </a>
+            <a href="{% url 'akademik_detail' 'jadwal' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-calendar-alt text-[#fab005] w-4"></i> Jadwal Perkuliahan
+            </a>
+            <a href="{% url 'akademik_detail' 'rps' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-file-signature text-[#fab005] w-4"></i> RPS
+            </a>
+            <a href="{% url 'akademik_detail' 'panduan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-book-bookmark text-[#fab005] w-4"></i> Panduan Akademik
+            </a>
+          </div>
+        </div>
+      </li>
+      
+      <!-- Dropdown Staf -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Staf <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute right-0 top-full pt-2 w-56 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tenaga_pendidik_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-chalkboard-teacher text-[#fab005] w-4"></i> Tenaga Pengajar (Dosen)
+            </a>
+            <a href="{% url 'tenaga_kependidikan_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-user-tie text-[#fab005] w-4"></i> Tenaga Kependidikan
+            </a>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Tombol Menu Mobile Hamburger -->
+    <div class="lg:hidden">
+      <button type="button" onclick="toggleMenu()" class="text-white text-xs font-semibold py-2 px-3 rounded-lg border border-white/20 hover:bg-white/10 flex items-center gap-2">
+        <i class="fas fa-bars"></i> Menu
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="fixed top-[70px] left-0 w-full h-[calc(100vh-70px)] bg-[#0b7285]/98 text-white z-40 hidden flex-col p-6 overflow-y-auto">
+    <div class="flex flex-col gap-3 text-xs">
+      <a href="{% url 'home' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-home w-5 text-brand-gold"></i> Beranda
+      </a>
+      <a href="{% url 'galeri_list' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-images w-5 text-brand-gold"></i> Galeri
+      </a>
+      <a href="{% url 'berita_list' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-newspaper w-5 text-brand-gold"></i> Berita
+      </a>
+      <a href="{% url 'event_list' %}" class="py-2 px-3 rounded-lg bg-white/15 font-semibold flex items-center gap-2.5 text-[#ffd43b]">
+        <i class="fas fa-calendar-alt w-5 text-[#ffd43b]"></i> Event & Agenda
+      </a>
+      <a href="{% url 'tenaga_pendidik_list' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-chalkboard-teacher w-5 text-brand-gold"></i> Tenaga Pengajar
+      </a>
+      <a href="{% url 'tenaga_kependidikan_list' %}" class="py-2 px-3 rounded-lg hover:bg-white/15 font-semibold flex items-center gap-2.5">
+        <i class="fas fa-user-tie w-5 text-brand-gold"></i> Tenaga Kependidikan
+      </a>
+    </div>
+  </div>
+
+  <!-- KONTEN UTAMA -->
+  <main class="flex-grow pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    
+    <!-- Header Halaman & Eyebrow -->
+    <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-10" data-aos="fade-up">
+      <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+      <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+        <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+        <span class="text-slate-400">›</span>
+        <span class="font-medium text-teal-800">Agenda & Event Terdekat</span>
+      </nav>
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0D636D] tracking-tight mb-2">
+        Agenda & Event Terdekat
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
+        Jadwal kegiatan akademik, seminar nasional, kuliah umum, workshop, dan agenda kemahasiswaan Program Studi Administrasi Publik FISIP Universitas Tadulako.
+      </p>
+    </div>
+
+    <!-- Kotak Pencarian & Filter Kapsul (Pill-Shaped Modern) -->
+    <div class="max-w-4xl mx-auto mb-8 sm:mb-10" data-aos="fade-up" data-aos-delay="100">
+      <div class="bg-white rounded-3xl md:rounded-full border border-slate-200 p-2 sm:p-2.5 shadow-xs">
+        <form method="GET" action="{% url 'event_list' %}" class="flex flex-col md:flex-row items-center gap-2">
+          {% if kategori_selected %}
+            <input type="hidden" name="kategori" value="{{ kategori_selected }}">
+          {% endif %}
+          <div class="relative flex-1 w-full">
+            <input type="text" 
+                   name="q" 
+                   value="{{ q }}" 
+                   placeholder="Cari judul agenda, narasumber, atau tempat kegiatan..." 
+                   class="w-full px-5 py-3 rounded-full border border-slate-200 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0D636D] focus:ring-1 focus:ring-[#0D636D] transition">
+          </div>
+          <button type="submit" class="w-full md:w-auto px-7 py-3 rounded-full bg-[#0D636D] hover:bg-teal-900 text-white font-semibold text-xs transition duration-200 flex items-center justify-center gap-2 shadow-xs">
+            <i class="fas fa-search"></i>
+            <span>Cari Event</span>
+          </button>
+          {% if q or kategori_selected %}
+            <a href="{% url 'event_list' %}" class="w-full md:w-auto px-4 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium text-xs transition text-center">
+              Reset
+            </a>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Filter Kategori Horizontal Scrollable Pills -->
+      <div class="mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+        <span class="text-xs font-semibold text-slate-400 whitespace-nowrap shrink-0 flex items-center gap-1.5 mr-1">
+          <i class="fas fa-sliders text-[#0D636D]"></i> Kategori:
+        </span>
+        <a href="?{% if q %}q={{ q }}&{% endif %}" 
+           class="px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition {% if not kategori_selected %}bg-[#0D636D] text-white shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+          Semua Agenda
+        </a>
+        {% for kat in kategori_list %}
+          <a href="?kategori={{ kat }}{% if q %}&q={{ q }}{% endif %}" 
+             class="px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition {% if kategori_selected == kat %}bg-[#0D636D] text-white shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+            {{ kat }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Status Hasil Pencarian -->
+    <div class="flex items-center justify-between text-xs text-slate-500 mb-6">
+      <div class="flex items-center gap-2 font-medium">
+        <span class="w-2 h-2 rounded-full bg-[#0D636D]"></span>
+        <span>Total <strong>{{ total_event }}</strong> Agenda Kegiatan</span>
+        {% if kategori_selected %}
+          <span class="text-slate-400">• Kategori: <strong>{{ kategori_selected }}</strong></span>
+        {% endif %}
+        {% if q %}
+          <span class="text-slate-400">• Kata kunci: "<strong>{{ q }}</strong>"</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Grid Kartu Event (Rasio Aspek 4:5) -->
+    {% if events %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for event in events %}
+          <div data-aos="fade-up" data-aos-delay="{{ forloop.counter }}0" class="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+            
+            <!-- Poster Wadah Rasio 4:5 -->
+            <a href="{% url 'event_detail' event.slug %}" class="relative block w-full overflow-hidden bg-slate-100 aspect-[4/5]">
+              {% if event.poster %}
+                <img src="{{ event.poster.url }}" alt="{{ event.judul }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+              {% else %}
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#084c5a] to-[#0D636D] text-white p-6 text-center">
+                  <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-3 text-brand-gold">
+                    <i class="fas fa-calendar-check text-2xl"></i>
+                  </div>
+                  <span class="text-[10px] font-bold text-teal-200 uppercase tracking-wider mb-1.5">{{ event.kategori }}</span>
+                  <span class="text-xs font-bold line-clamp-3 leading-snug">{{ event.judul }}</span>
+                </div>
+              {% endif %}
+
+              <!-- Badge Tanggal Minimalis di Pojok Atas Poster -->
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-xs rounded-xl shadow-md border border-slate-100 px-3 py-1.5 text-center min-w-[50px]">
+                <span class="block text-base font-extrabold text-[#0D636D] leading-none">{{ event.hari_mulai }}</span>
+                <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">{{ event.bulan_mulai_singkat }}</span>
+              </div>
+
+              <!-- Badge Kategori Pojok Kanan Atas -->
+              <div class="absolute top-3 right-3 bg-[#0D636D]/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow">
+                {{ event.kategori }}
+              </div>
+            </a>
+
+            <!-- Konten Kartu di Bawah Poster -->
+            <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-[11px] font-semibold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full inline-block">
+                    {{ event.kategori }}
+                  </span>
+                  {% if event.waktu %}
+                    <span class="text-[11px] text-slate-400 flex items-center gap-1">
+                      <i class="far fa-clock text-[10px]"></i> {{ event.waktu }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <h3 class="text-sm font-bold text-slate-800 group-hover:text-[#0D636D] transition line-clamp-2 leading-snug mb-3">
+                  <a href="{% url 'event_detail' event.slug %}">{{ event.judul }}</a>
+                </h3>
+
+                <!-- Info Tanggal & Lokasi -->
+                <div class="space-y-1.5 text-xs text-slate-500 mb-4">
+                  <div class="flex items-center gap-2">
+                    <i class="far fa-calendar-alt text-[#0D636D] w-3.5 shrink-0"></i>
+                    <span class="font-medium text-slate-700 truncate">{{ event.tanggal_display }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt text-rose-500 w-3.5 shrink-0"></i>
+                    <span class="truncate" title="{{ event.lokasi }}">{{ event.lokasi }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer Kartu -->
+              <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <a href="{% url 'event_detail' event.slug %}" class="text-xs font-bold text-[#0D636D] hover:underline inline-flex items-center gap-1">
+                  Detail Acara <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
+                {% if event.link_pendaftaran %}
+                  <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold px-3 py-1 rounded-full bg-teal-50 text-[#0D636D] hover:bg-[#0D636D] hover:text-white transition inline-flex items-center gap-1">
+                    <span>Daftar</span>
+                    <i class="fas fa-external-link-alt text-[9px]"></i>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if page_obj.has_other_pages %}
+        <div class="mt-12 flex justify-center items-center gap-2">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}{% if kategori_selected %}&kategori={{ kategori_selected }}{% endif %}" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition">
+              &larr; Sebelumnya
+            </a>
+          {% endif %}
+
+          <span class="px-4 py-2 bg-[#0D636D] text-white rounded-xl text-xs font-bold">
+            Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}{% if kategori_selected %}&kategori={{ kategori_selected }}{% endif %}" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition">
+              Selanjutnya &rarr;
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    {% else %}
+      <div class="bg-white rounded-3xl border border-slate-200 p-12 text-center max-w-md mx-auto shadow-xs my-8">
+        <div class="w-16 h-16 rounded-2xl bg-teal-50 text-[#0D636D] flex items-center justify-center text-2xl mx-auto mb-4">
+          <i class="far fa-calendar-xmark"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-800 mb-1">Tidak Ada Event Ditemukan</h3>
+        <p class="text-xs text-slate-500 leading-relaxed mb-6">
+          Tidak ada kegiatan atau agenda yang sesuai dengan kriteria pencarian Anda.
+        </p>
+        <a href="{% url 'event_list' %}" class="inline-block px-5 py-2.5 rounded-full bg-[#0D636D] text-white text-xs font-semibold hover:bg-teal-900 transition">
+          Lihat Semua Agenda
+        </a>
+      </div>
+    {% endif %}
+
+  </main>
+
+  <!-- Include Footer Terpadu -->
+  {% include 'core/footer.html' %}
+
+  <!-- AOS Animation Scripts -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ once: true });
+
+    function toggleMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>

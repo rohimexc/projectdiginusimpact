@@ -1,0 +1,749 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenaga Pengajar - Administrasi Publik UNTAD</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              hovergold: '#e59900',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Animasi AOS Mobile Cepat, Ringan & Friendly */
+    @media (max-width: 768px) {
+      body, html {
+        overflow-x: hidden !important;
+      }
+      [data-aos] {
+        transition-duration: 450ms !important;
+        transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+      }
+      [data-aos="fade-left"],
+      [data-aos="fade-right"] {
+        transform: translate3d(0, 20px, 0) !important;
+      }
+      [data-aos="fade-left"].aos-animate,
+      [data-aos="fade-right"].aos-animate {
+        transform: translate3d(0, 0, 0) !important;
+      }
+      [data-aos][data-aos-delay] {
+        transition-delay: 50ms !important;
+      }
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+  </style>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/6285330144401" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Header / Navbar -->
+  <nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-4 sm:px-6 lg:px-8 z-50 shadow-md">
+    <div class="flex items-center gap-3 text-white">
+      <i class="fas fa-graduation-cap text-3xl text-[#ffd43b]"></i>
+      <div>
+        <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
+        <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      </div>
+    </div>
+
+    <ul class="hidden lg:flex list-none items-center gap-4">
+      <li><a href="{% url 'home' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Beranda</a></li>
+      
+      <!-- Dropdown Menu Tentang -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Tentang <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-64 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tentang_detail' 'profil' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-university text-[#fab005] w-4"></i> Profil Program Studi
+            </a>
+            <a href="{% url 'tentang_detail' 'sejarah' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-scale-balanced text-[#fab005] w-4"></i> Sejarah & Dasar Hukum
+            </a>
+            <a href="{% url 'tentang_detail' 'visi_misi' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-bullseye text-[#fab005] w-4"></i> Visi, Misi & Tujuan
+            </a>
+            <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-user-graduate text-[#fab005] w-4"></i> Profil Lulusan
+            </a>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-award text-[#fab005] w-4"></i> Sertifikat Akreditasi
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="{% url 'galeri_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a></li>
+      <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a></li>
+      
+      <!-- Dropdown Menu Akademik -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Akademik <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8
+            </a>
+            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-book-open text-[#fab005] w-4"></i> Kurikulum
+            </a>
+            <a href="{% url 'akademik_detail' 'jadwal' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-calendar-alt text-[#fab005] w-4"></i> Jadwal Perkuliahan
+            </a>
+            <a href="{% url 'akademik_detail' 'rps' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-file-signature text-[#fab005] w-4"></i> RPS
+            </a>
+            <a href="{% url 'akademik_detail' 'panduan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-book-bookmark text-[#fab005] w-4"></i> Panduan Akademik
+            </a>
+          </div>
+        </div>
+      </li>
+      
+      <!-- Dropdown Staf -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-semibold py-2 px-3 rounded-md bg-white/15 text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Staf <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-2 w-52 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="{% url 'tenaga_pendidik_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition bg-teal-50 text-[#0b7285] font-semibold">
+              <i class="fas fa-chalkboard-teacher text-[#fab005] w-4"></i> Tenaga Pengajar
+            </a>
+            <a href="{% url 'tenaga_kependidikan_list' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-user-gear text-[#fab005] w-4"></i> Tenaga Kependidikan
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
+
+      <!-- Status Pengguna / Admin -->
+      {% if request.user.is_authenticated %}
+        <li class="flex items-center gap-2 pl-3 border-l border-white/20">
+          <div class="w-7 h-7 rounded-full bg-[#fcc419] text-slate-900 flex items-center justify-center text-xs font-bold shadow-xs">
+            {{ request.user.first_name|default:request.user.username|slice:":2"|upper }}
+          </div>
+          <span class="text-white text-xs font-semibold">{{ request.user.first_name|default:request.user.username }}</span>
+          <a href="{% url 'user_logout' %}?next={{ request.path }}" title="Keluar dari akun" class="text-xs text-rose-300 hover:text-white ml-1 p-1">
+            <i class="fas fa-arrow-right-from-bracket"></i>
+          </a>
+        </li>
+      {% else %}
+        <li class="pl-2 flex items-center gap-2">
+          <a href="{% url 'user_login' %}?next={{ request.path }}" class="bg-[#fcc419] hover:bg-[#fab005] text-slate-900 text-xs font-bold py-1.5 px-3.5 rounded-full transition shadow-sm">
+            Masuk
+          </a>
+          <a href="{% url 'user_register' %}?next={{ request.path }}" class="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold py-1.5 px-3.5 rounded-full transition border border-white/20">
+            Daftar
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+
+    <!-- Tombol Menu Mobile & Tablet -->
+    <button type="button" id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="lg:hidden text-white px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 focus:outline-none transition flex items-center gap-1.5 text-xs font-bold shadow-sm" aria-label="Buka Menu">
+      <i class="fas fa-bars text-sm" id="menu-icon-bars"></i>
+      <i class="fas fa-times text-sm hidden" id="menu-icon-close"></i>
+      <span>Menu</span>
+    </button>
+  </nav>
+
+  <!-- Overlay Backdrop Menu Mobile & Tablet -->
+  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[48] hidden lg:hidden" onclick="closeMobileMenu()"></div>
+
+  <!-- Drawer Menu Mobile (Dropdown) -->
+  <div id="mobile-menu-drawer" class="fixed top-[70px] left-0 w-full bg-[#084c5a]/98 backdrop-blur-md text-white border-b border-white/10 shadow-2xl z-50 hidden max-h-[calc(100dvh-70px)] overflow-y-auto transition-all duration-300">
+    <div class="px-5 py-4 space-y-2.5 text-xs">
+      <a href="{% url 'home' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-home w-5 text-[#fab005]"></i> Beranda
+      </a>
+
+      <!-- Mobile Dropdown: Tentang -->
+      <div class="border-t border-white/10 pt-2">
+        <button type="button" onclick="toggleMobileAccordion('mobile-tentang-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+          <span class="flex items-center gap-2.5"><i class="fas fa-info-circle w-5 text-[#fab005]"></i> Tentang</span>
+          <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-tentang-icon"></i>
+        </button>
+        <div id="mobile-tentang-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="{% url 'tentang_detail' 'profil' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil Program Studi</a>
+          <a href="{% url 'tentang_detail' 'sejarah' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sejarah & Dasar Hukum</a>
+          <a href="{% url 'tentang_detail' 'visi_misi' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Visi, Misi & Tujuan</a>
+          <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Profil Lulusan</a>
+          <a href="{% url 'tentang_detail' 'akreditasi' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Sertifikat Akreditasi</a>
+        </div>
+      </div>
+
+      <a href="{% url 'galeri_list' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-images w-5 text-[#fab005]"></i> Galeri
+      </a>
+      <a href="{% url 'berita_list' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-newspaper w-5 text-[#fab005]"></i> Berita
+      </a>
+
+      <!-- Mobile Dropdown: Akademik -->
+      <div class="border-t border-white/10 pt-2">
+        <button type="button" onclick="toggleMobileAccordion('mobile-akademik-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+          <span class="flex items-center gap-2.5"><i class="fas fa-graduation-cap w-5 text-[#fab005]"></i> Akademik</span>
+          <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-akademik-icon"></i>
+        </button>
+        <div id="mobile-akademik-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="{% url 'akademik_detail' 'siga8' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">SIGA-8</a>
+          <a href="{% url 'akademik_detail' 'kurikulum' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Kurikulum</a>
+          <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Jadwal Perkuliahan</a>
+          <a href="{% url 'akademik_detail' 'rps' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">RPS</a>
+          <a href="{% url 'akademik_detail' 'panduan' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Panduan Akademik</a>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown: Staf -->
+      <div class="border-t border-white/10 pt-2">
+        <button type="button" onclick="toggleMobileAccordion('mobile-staf-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold text-[#ffd43b]">
+          <span class="flex items-center gap-2.5"><i class="fas fa-users w-5 text-[#fab005]"></i> Staf</span>
+          <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-staf-icon"></i>
+        </button>
+        <div id="mobile-staf-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="{% url 'tenaga_pendidik_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Pengajar</a>
+          <a href="{% url 'tenaga_kependidikan_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Kependidikan</a>
+        </div>
+      </div>
+
+      <!-- Auth Mobile -->
+      <div class="pt-3 border-t border-white/15">
+        {% if request.user.is_authenticated %}
+          <div class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-xl mb-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-[#fab005] text-slate-900 font-bold flex items-center justify-center text-xs">
+                {{ request.user.username|slice:":2"|upper }}
+              </div>
+              <div>
+                <p class="font-bold leading-tight">{{ request.user.first_name|default:request.user.username }}</p>
+                <p class="text-[10px] text-white/70">{{ request.user.email|default:"Pengguna" }}</p>
+              </div>
+            </div>
+            <a href="{% url 'user_logout' %}?next={{ request.path }}" class="text-xs bg-rose-500/80 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg font-semibold">
+              Logout
+            </a>
+          </div>
+          {% if request.user.is_staff or request.user.is_superuser %}
+            <a href="{% url 'admin_dashboard' %}" class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl mb-1 shadow-sm">
+              <i class="fas fa-gauge-high mr-1.5"></i> Dashboard Admin
+            </a>
+          {% endif %}
+        {% else %}
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="{% url 'user_login' %}?next={{ request.path }}" class="block text-center py-2.5 bg-[#fab005] text-slate-900 font-bold rounded-xl shadow-sm">
+              Masuk
+            </a>
+            <a href="{% url 'user_register' %}?next={{ request.path }}" class="block text-center py-2.5 bg-white/15 text-white font-semibold rounded-xl border border-white/20">
+              Daftar
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Konten Utama -->
+  <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- BLOK 1 AOS: Header Halaman -->
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
+        <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+          <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+          <span class="text-slate-400">›</span>
+          <span class="text-slate-500">Staf</span>
+          <span class="text-slate-400">›</span>
+          <span class="font-medium text-teal-800">Tenaga Pengajar (Dosen)</span>
+        </nav>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+          Tenaga Pengajar (Dosen)
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-normal">
+          Daftar staf pengajar dan dosen Program Studi Administrasi Publik FISIP Universitas Tadulako
+        </p>
+      </header>
+
+      <!-- ================= KARTU PENCARIAN & FILTER DOSEN (2 BARIS KAPSUL) ================= -->
+      <div data-aos="fade-down" data-aos-duration="600" class="mb-8 sm:mb-10 w-full">
+        <form method="GET" action="{% url 'tenaga_pendidik_list' %}" id="dosen-filter-form" class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-sm transition hover:shadow-md">
+          <!-- Hidden Input untuk Jabatan Fungsional -->
+          <input type="hidden" name="jabatan" id="jabatan-input" value="{{ selected_jabatan }}">
+
+          <!-- BARIS 1: Input Pencarian & Tombol Submit Cari -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+            <!-- Input Teks (Pill Kapsul) -->
+            <div class="flex-1 relative flex items-center">
+              <input 
+                type="text" 
+                name="q" 
+                id="dosen-search-input"
+                value="{{ query }}" 
+                placeholder="Cari Nama Dosen, NIP, NIDN, Bidang Keahlian..." 
+                autocomplete="off"
+                class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-4 sm:px-5 py-2.5 sm:py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+              >
+              {% if query %}
+                <button 
+                  type="button" 
+                  onclick="clearSearchInput()"
+                  class="absolute right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition cursor-pointer" 
+                  title="Hapus pencarian"
+                >
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              {% endif %}
+            </div>
+
+            <!-- Tombol Submit Cari (Pill Kapsul #0D636D) -->
+            <button 
+              type="submit" 
+              class="w-full sm:w-auto rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-7 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
+            >
+              <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
+              <span>Cari</span>
+            </button>
+          </div>
+
+          <!-- BARIS 2: Filter Jabatan Fungsional & Tombol Reset -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 pt-3 mt-2 border-t border-slate-100">
+            <!-- Sisi Kiri: Label & Deretan Tombol Jabatan (Scroll Horizontal di Layar HP) -->
+            <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 min-w-0">
+              <span class="text-xs font-medium text-slate-500 sm:font-semibold sm:text-slate-600 flex items-center gap-1.5 shrink-0 select-none">
+                <i class="fa-solid fa-sliders text-[#0D636D]"></i> Jabatan Fungsional:
+              </span>
+
+              <!-- Deretan Tombol Pill (Horizontal Scroll di Layar HP) -->
+              <div class="flex items-center overflow-x-auto no-scrollbar gap-2 pb-1 sm:pb-0 -mx-1 px-1 sm:mx-0 sm:px-0">
+                <!-- Preset Semua Dosen -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('')" 
+                  data-jabatan=""
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if not selected_jabatan %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Semua Dosen ({{ jabatan_counts.all|default:0 }})
+                </button>
+
+                <!-- Guru Besar -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Guru Besar')" 
+                  data-jabatan="guru besar"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'guru besar' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Guru Besar ({{ jabatan_counts.guru_besar|default:0 }})
+                </button>
+
+                <!-- Lektor Kepala -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Lektor Kepala')" 
+                  data-jabatan="lektor kepala"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'lektor kepala' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Lektor Kepala ({{ jabatan_counts.lektor_kepala|default:0 }})
+                </button>
+
+                <!-- Lektor -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Lektor')" 
+                  data-jabatan="lektor"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'lektor' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Lektor ({{ jabatan_counts.lektor|default:0 }})
+                </button>
+
+                <!-- Asisten Ahli -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Asisten Ahli')" 
+                  data-jabatan="asisten ahli"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'asisten ahli' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Asisten Ahli ({{ jabatan_counts.asisten_ahli|default:0 }})
+                </button>
+              </div>
+            </div>
+
+            <!-- Sisi Kanan: Tombol Reset (Selalu Tampil) -->
+            <div class="flex justify-end pt-1 sm:pt-0 shrink-0">
+              <a 
+                href="{% url 'tenaga_pendidik_list' %}" 
+                onclick="resetAllDosenFilter(event)"
+                class="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-semibold bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-600 border border-rose-100/80 transition cursor-pointer shadow-2xs whitespace-nowrap"
+                title="Kembalikan semua filter ke kondisi awal"
+              >
+                <i class="fas fa-arrows-rotate text-[11px]"></i>
+                <span>Reset</span>
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- BLOK 2 AOS: Grid Kartu Dosen -->
+      <section data-aos="fade-up" data-aos-duration="700">
+        <div id="dosen-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+          {% for dosen in daftar_dosen %}
+            <div 
+              class="dosen-card bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between"
+              data-nama="{{ dosen.nama|lower }}"
+              data-nip="{{ dosen.nip|default:''|lower }}"
+              data-nidn="{{ dosen.nidn|default:''|lower }}"
+              data-bidang="{{ dosen.bidang_ilmu|default:''|lower }} {{ dosen.bidang_keahlian|default:''|lower }}"
+              data-jabatan="{{ dosen.jabatan_fungsional|default:dosen.jabatan|default:''|lower }}"
+            >
+              <div>
+                <!-- Wadah Foto Rasio 4:5 -->
+                <div class="w-full overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 5;">
+                  {% if dosen.foto %}
+                    <img src="{{ dosen.foto.url }}" alt="{{ dosen.nama }}" class="w-full h-full object-cover">
+                  {% else %}
+                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                      <i class="fas fa-chalkboard-user text-5xl mb-2"></i>
+                      <span class="text-xs text-slate-400">Tidak ada foto</span>
+                    </div>
+                  {% endif %}
+                </div>
+
+                <div class="p-4">
+                  <span class="text-[10px] font-semibold text-[#0b7285] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full inline-block mb-2">
+                    {{ dosen.jabatan|default:"Dosen Tetap" }}
+                  </span>
+                  <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1">
+                    {{ dosen.nama }}
+                  </h3>
+                  <p class="text-xs text-slate-500 line-clamp-2">
+                    {{ dosen.bidang_keahlian|default:dosen.bidang_ilmu|default:"Ilmu Administrasi Publik" }}
+                  </p>
+                </div>
+              </div>
+
+              {% if dosen.pk %}
+              <div class="p-4 pt-0">
+                <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}" class="text-xs font-semibold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
+                  Lihat Profil &rarr;
+                </a>
+              </div>
+              {% endif %}
+            </div>
+          {% empty %}
+            <div class="col-span-full text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200">
+              <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+              <p class="text-sm font-medium">Belum ada data tenaga pengajar yang sesuai kriteria.</p>
+              {% if has_active_filter %}
+              <a href="{% url 'tenaga_pendidik_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
+                Reset Filter
+              </a>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <!-- Pesan jika live filter tidak menemukan data -->
+          <div id="dosen-no-results" class="col-span-full text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200 hidden">
+            <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+            <p class="text-sm font-medium">Tidak ada tenaga pengajar yang sesuai dengan pencarian atau filter.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-brand-darkteal text-white pt-12 mt-20" data-aos="fade-up" data-aos-duration="600">
+    <div class="max-w-6xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-white/10 text-xs">
+      
+      <!-- Kolom 1 -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2.5">
+          <i class="fas fa-graduation-cap text-2xl text-brand-gold"></i>
+          <div>
+            <h4 class="text-sm font-bold text-brand-gold leading-tight">Administrasi Publik</h4>
+            <p class="text-[10px] text-teal-200">FISIP Universitas Tadulako</p>
+          </div>
+        </div>
+        <p class="text-slate-300 text-[11px] leading-relaxed text-justify">
+          Mencetak sarjana yang unggul, berintegritas, serta berwawasan lingkungan dalam perumusan kebijakan dan pelayanan publik.
+        </p>
+        <p class="text-[11px] text-teal-200 flex items-center gap-2 pt-1">
+          <i class="fa-solid fa-building-columns text-brand-gold"></i> Kampus Bumi Tadulako, Palu
+        </p>
+      </div>
+
+      <!-- Kolom 2 -->
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold uppercase tracking-wider mb-4 border-l-2 border-brand-gold pl-2">
+          Tentang Prodi
+        </h4>
+        <ul class="space-y-2.5 text-slate-300">
+          <li>
+            <a href="{% url 'tentang_detail' 'profil' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Profil Program Studi
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'sejarah' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Sejarah & Dasar Hukum
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'visi_misi' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Visi, Misi & Tujuan
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'profil_lulusan' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Profil Lulusan
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-angle-right text-[10px] text-teal-400"></i> Sertifikat Akreditasi
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 3 -->
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold uppercase tracking-wider mb-4 border-l-2 border-brand-gold pl-2">
+          Tautan Cepat
+        </h4>
+        <ul class="space-y-2.5 text-slate-300">
+          <li>
+            <a href="https://untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Website UNTAD
+            </a>
+          </li>
+          <li>
+            <a href="https://fisip.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Website FISIP
+            </a>
+          </li>
+          <li>
+            <a href="https://kepegawaian.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Website Kepegawaian
+            </a>
+          </li>
+          <li>
+            <a href="https://siaga.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal Siaga 8
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'tentang_detail' 'akreditasi' %}" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-file-pdf text-[10px] text-brand-gold"></i> Unduh Akreditasi
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 4 -->
+      <div>
+        <h4 class="text-sm font-semibold text-brand-gold uppercase tracking-wider mb-4 border-l-2 border-brand-gold pl-2">
+          Follow Us
+        </h4>
+        <div class="flex gap-2.5 mb-4">
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition">
+            <i class="fab fa-instagram text-xs"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition">
+            <i class="fab fa-facebook-f text-xs"></i>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-brand-gold hover:text-slate-900 transition">
+            <i class="fab fa-youtube text-xs"></i>
+          </a>
+        </div>
+
+        <div class="bg-black/25 border border-white/10 p-3.5 rounded-xl text-xs space-y-1.5 shadow-inner">
+          <div class="flex items-center justify-between pb-1.5 border-b border-white/10 text-teal-200 font-medium text-[11px]">
+            <span><i class="fa-solid fa-chart-simple text-brand-gold mr-1"></i> Pengunjung</span>
+            <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-bold">Online</span>
+          </div>
+          <div class="flex justify-between items-center text-[11px] pt-1 text-slate-300">
+            <span>Hari ini:</span>
+            <span class="font-mono font-bold text-white bg-slate-900/60 px-2 py-0.5 rounded">{{ pengunjung_hari_ini }}</span>
+          </div>
+          <div class="flex justify-between items-center text-[11px] text-slate-300">
+            <span>Total:</span>
+            <span class="font-mono font-bold text-brand-gold bg-slate-900/60 px-2 py-0.5 rounded">{{ pengunjung_total }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Baris Copyright -->
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <p class="w-full md:w-auto text-center md:text-left">&copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako. All rights reserved.</p>
+      <p class="w-full md:w-auto text-center md:text-right">Crafted by <a href="https://diginus.web.id" target="_blank" rel="noopener noreferrer" class="text-brand-gold font-medium hover:underline transition-colors">Diginus</a></p>
+    </div>
+  </footer>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: window.innerWidth < 768 ? 450 : 650,
+      offset: window.innerWidth < 768 ? 25 : 60,
+      once: true,
+      easing: 'ease-out-cubic'
+    });
+
+    // Mobile Navbar Drawer & Accordion
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (!drawer) return;
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (drawer) {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function toggleMobileAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id.replace('-menu', '-icon'));
+      if (el) {
+        el.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
+      }
+    }
+
+    // ================= LOGIKA FILTER & PENCARIAN DOSEN =================
+    function setJabatanFilter(val) {
+      document.getElementById('jabatan-input').value = val;
+      document.getElementById('dosen-filter-form').submit();
+    }
+
+    function clearSearchInput() {
+      const input = document.getElementById('dosen-search-input');
+      if (input) input.value = '';
+      document.getElementById('dosen-filter-form').submit();
+    }
+
+    function resetAllDosenFilter(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('dosen-search-input');
+      const jabatan = document.getElementById('jabatan-input');
+      if (input) input.value = '';
+      if (jabatan) jabatan.value = '';
+
+      // Bersihkan live filter di DOM jika ada
+      const cards = document.querySelectorAll('.dosen-card');
+      cards.forEach(card => card.style.display = '');
+      const noResults = document.getElementById('dosen-no-results');
+      if (noResults) noResults.classList.add('hidden');
+
+      // Selalu muat ulang ke URL awal tanpa filter
+      window.location.href = "{% url 'tenaga_pendidik_list' %}";
+    }
+
+    // Live Instant Search Filter untuk Dosen
+    const dosenSearchInput = document.getElementById('dosen-search-input');
+    const dosenCards = document.querySelectorAll('.dosen-card');
+    const dosenNoResults = document.getElementById('dosen-no-results');
+
+    if (dosenSearchInput && dosenCards.length > 0) {
+      dosenSearchInput.addEventListener('input', function() {
+        const val = this.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        dosenCards.forEach(card => {
+          const nama = card.getAttribute('data-nama') || '';
+          const nip = card.getAttribute('data-nip') || '';
+          const nidn = card.getAttribute('data-nidn') || '';
+          const bidang = card.getAttribute('data-bidang') || '';
+
+          if (!val || nama.includes(val) || nip.includes(val) || nidn.includes(val) || bidang.includes(val)) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (dosenNoResults) {
+          if (visibleCount === 0) {
+            dosenNoResults.classList.remove('hidden');
+          } else {
+            dosenNoResults.classList.add('hidden');
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
