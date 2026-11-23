@@ -4,6 +4,7 @@ set -e
 echo "=== 0. TARIK UPDATE TERBARU DARI GITHUB ==="
 if [ -d "$HOME/projectdiginusimpact/.git" ]; then
   cd "$HOME/projectdiginusimpact"
+  git stash 2>/dev/null || true
   git pull origin dev-anggitamaharani
   cd "$HOME/projectdiginusimpact/projek-administrasipublic/administrasi_public"
 fi
