@@ -462,22 +462,14 @@
   <section class="py-16 px-6 bg-white border-t border-slate-200/60 relative overflow-hidden" id="event-terdekat">
     <div class="max-w-7xl mx-auto relative z-10">
       
-      <!-- Header Section: Samakan persis dengan judul Berita & Sambutan agar 100% konsisten -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10" data-aos="fade-up">
-        <div>
-          <h2 class="text-2xl font-bold text-brand-teal mb-2">
-            Event Terdekat
-          </h2>
-          <p class="text-xs text-slate-500" data-aos="fade-up" data-aos-delay="100">
-            Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik
-          </p>
-        </div>
-
-        <div class="flex items-center gap-3" data-aos="fade-up" data-aos-delay="100">
-          <a href="{% url 'event_list' %}" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold shadow-sm transition duration-200">
-            <span>Lihat Semua Event &rarr;</span>
-          </a>
-        </div>
+      <!-- Header Section: Centered persis Berita Terbaru & Sistem Informasi -->
+      <div class="text-center max-w-3xl mx-auto mb-10" data-aos="fade-up">
+        <h2 class="text-2xl font-bold text-brand-teal mb-2">
+          Event Terdekat
+        </h2>
+        <p class="text-xs text-slate-500" data-aos="fade-up" data-aos-delay="100">
+          Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik
+        </p>
       </div>
 
       {% if daftar_event %}
@@ -661,6 +653,13 @@
             }, { passive: true });
           })();
         </script>
+
+        <!-- Tombol Lihat Semua Event di Bawah Slider (Centered persis Berita Terbaru) -->
+        <div class="mt-10 text-center" data-aos="zoom-in">
+          <a href="{% url 'event_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow-sm transition duration-200">
+            Lihat Semua Event &rarr;
+          </a>
+        </div>
 
       {% else %}
         <div class="bg-slate-50 rounded-2xl border border-slate-200 p-8 sm:p-12 text-center max-w-lg mx-auto" data-aos="fade-up">
