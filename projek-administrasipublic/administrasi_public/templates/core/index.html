@@ -459,8 +459,8 @@
   </section>
 
   <!-- ================= EVENT TERDEKAT (HORIZONTAL TIMELINE SLIDER PERSIS REFERENSI) ================= -->
-  <section class="py-14 sm:py-16 px-4 sm:px-6 md:px-10 text-white relative overflow-hidden" id="event-terdekat" style="background-color: #084c5a !important;">
-    <div class="max-w-7xl mx-auto relative z-10">
+  <section class="py-14 sm:py-16 px-4 sm:px-6 lg:px-8 text-white relative overflow-hidden" id="event-terdekat" style="background-color: #084c5a !important;">
+    <div class="w-full max-w-[96%] xl:max-w-[94%] 2xl:max-w-[1520px] mx-auto relative z-10">
       
       <!-- Header Section: Title on the left with white underline, 'Lihat Semua' on the right -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10 pb-2" data-aos="fade-up">
@@ -483,15 +483,18 @@
         <!-- Horizontal Timeline Slider Container -->
         <div class="relative w-full" data-aos="fade-up" data-aos-delay="100">
           
+          <!-- Garis Horizontal Melintang Penuh dari Panah Kiri ke Panah Kanan -->
+          <div class="absolute left-0 right-0 top-[82px] -translate-y-1/2 h-0.5 bg-white/70 z-0 pointer-events-none"></div>
+
           <!-- Tombol Navigasi Panah Kiri (<) dan Kanan (>) Timeline Persis Referensi (Tanpa Lingkaran Putih) -->
           <button type="button" onclick="scrollEventTimeline(-1)" 
-                  class="absolute -left-3 sm:-left-6 lg:-left-8 top-[82px] -translate-y-1/2 text-white hover:text-[#ffd43b] text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
+                  class="absolute -left-3 sm:-left-5 lg:-left-7 top-[82px] -translate-y-1/2 text-white hover:text-[#ffd43b] text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
                   aria-label="Event Sebelumnya">
             <i class="fas fa-chevron-left font-bold"></i>
           </button>
           
           <button type="button" onclick="scrollEventTimeline(1)" 
-                  class="absolute -right-3 sm:-right-6 lg:-right-8 top-[82px] -translate-y-1/2 text-white hover:text-[#ffd43b] text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
+                  class="absolute -right-3 sm:-right-5 lg:-right-7 top-[82px] -translate-y-1/2 text-white hover:text-[#ffd43b] text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
                   aria-label="Event Selanjutnya">
             <i class="fas fa-chevron-right font-bold"></i>
           </button>
