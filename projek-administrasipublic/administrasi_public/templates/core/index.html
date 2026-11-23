@@ -459,7 +459,7 @@
   </section>
 
   <!-- ================= EVENT TERDEKAT (HORIZONTAL TIMELINE SLIDER PERSIS REFERENSI) ================= -->
-  <section class="py-14 sm:py-16 px-4 sm:px-6 md:px-10 text-white relative overflow-hidden" id="event-terdekat" style="background-color: #851111 !important;">
+  <section class="py-14 sm:py-16 px-4 sm:px-6 md:px-10 text-white relative overflow-hidden" id="event-terdekat" style="background-color: #084c5a !important;">
     <div class="max-w-7xl mx-auto relative z-10">
       
       <!-- Header Section: Title on the left with white underline, 'Lihat Semua' on the right -->
@@ -468,7 +468,7 @@
           <h2 class="text-xl sm:text-2xl font-bold text-white tracking-wide border-b-2 border-white/90 pb-1.5 inline-block">
             Event Terdekat
           </h2>
-          <p class="text-xs text-rose-100/80 mt-2">Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik</p>
+          <p class="text-xs text-teal-100/90 mt-2">Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik</p>
         </div>
 
         <div class="flex items-center gap-3">
@@ -518,7 +518,7 @@
                   <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-white/70"></div>
                   
                   <!-- Lingkaran Node dengan Ikon Jam Persis Referensi -->
-                  <div class="relative z-10 w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-xs shadow-md" style="background-color: #851111;">
+                  <div class="relative z-10 w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-xs shadow-md" style="background-color: #084c5a;">
                     <i class="far fa-clock text-xs text-white"></i>
                   </div>
                 </div>
@@ -534,7 +534,7 @@
                     {% if event.poster %}
                       <img src="{{ event.poster.url }}" alt="{{ event.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                     {% else %}
-                      <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#851111] to-[#600d11] text-white p-5 text-center">
+                      <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#084c5a] to-[#0b7285] text-white p-5 text-center">
                         <i class="fas fa-calendar-check text-3xl text-[#fab005] mb-2"></i>
                         <span class="text-[10px] font-bold text-amber-200 uppercase tracking-wider mb-1">{{ event.kategori }}</span>
                         <span class="text-xs font-bold line-clamp-3 leading-snug">{{ event.judul }}</span>
@@ -545,23 +545,23 @@
                   <!-- Judul & Info di Bawah Poster -->
                   <div class="p-3.5 bg-white flex flex-col justify-between flex-1">
                     <div>
-                      <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#851111] transition" title="{{ event.judul }}">
+                      <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#0b7285] transition" title="{{ event.judul }}">
                         <a href="{% url 'event_detail' event.slug %}">{{ event.judul }}</a>
                       </h4>
                       {% if event.lokasi %}
                         <p class="text-[11px] text-slate-500 mt-1.5 flex items-center gap-1.5 truncate" title="{{ event.lokasi }}">
-                          <i class="fas fa-map-marker-alt text-rose-600 text-[10px] shrink-0"></i>
+                          <i class="fas fa-map-marker-alt text-rose-500 text-[10px] shrink-0"></i>
                           <span class="truncate">{{ event.lokasi }}</span>
                         </p>
                       {% endif %}
                     </div>
 
                     <div class="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                      <a href="{% url 'event_detail' event.slug %}" class="font-bold text-[#851111] hover:text-[#5c0b0e] inline-flex items-center gap-1">
+                      <a href="{% url 'event_detail' event.slug %}" class="font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
                         Detail <i class="fas fa-arrow-right text-[9px]"></i>
                       </a>
                       {% if event.link_pendaftaran %}
-                        <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="font-semibold text-rose-700 hover:underline inline-flex items-center gap-0.5">
+                        <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="font-semibold text-teal-700 hover:underline inline-flex items-center gap-0.5">
                           Daftar <i class="fas fa-external-link-alt text-[8px]"></i>
                         </a>
                       {% endif %}
@@ -596,7 +596,7 @@
             <i class="far fa-calendar-check"></i>
           </div>
           <h3 class="text-base font-bold text-white mb-1">Belum Ada Event Terdekat</h3>
-          <p class="text-xs text-rose-100/80 leading-relaxed">Saat ini belum ada agenda akademik mendatang yang aktif. Pantau terus halaman ini untuk update kegiatan selanjutnya.</p>
+          <p class="text-xs text-teal-100/90 leading-relaxed">Saat ini belum ada agenda akademik mendatang yang aktif. Pantau terus halaman ini untuk update kegiatan selanjutnya.</p>
         </div>
       {% endif %}
 
