@@ -624,6 +624,10 @@ def admin_dashboard(request):
     tendik_l = tendik_qs.filter(jenis_kelamin='L').count()
     tendik_p = tendik_qs.filter(jenis_kelamin='P').count()
 
+    total_event = Event.objects.count()
+    event_aktif = Event.objects.filter(is_active=True).count()
+    daftar_event_terdekat = Event.objects.all().order_by('tanggal_mulai', '-created_at')[:4]
+
     total_user = User.objects.count()
     total_galeri = Galeri.objects.count()
     hero_obj = Hero.objects.filter(is_active=True).first() or Hero.objects.first()
@@ -637,6 +641,9 @@ def admin_dashboard(request):
         'total_tendik': total_tendik,
         'tendik_l': tendik_l,
         'tendik_p': tendik_p,
+        'total_event': total_event,
+        'event_aktif': event_aktif,
+        'daftar_event_terdekat': daftar_event_terdekat,
         'total_user': total_user,
         'total_galeri': total_galeri,
         'hero_obj': hero_obj,

@@ -122,8 +122,8 @@
 
     <main class="flex-1 p-6 md:p-8 space-y-8">
       
-      <!-- 5 KARTU STATISTIK RINGKASAN PORTAL -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <!-- 6 KARTU STATISTIK RINGKASAN PORTAL -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
 
         <!-- 1. TOTAL DOSEN DENGAN RINCIAN L & P -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
@@ -230,6 +230,95 @@
           </div>
         </div>
 
+        <!-- 6. TOTAL EVENT TERDEKAT (RASIO 4:5) -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Event</p>
+              <h3 class="text-2xl font-extrabold text-slate-800 mt-1">{{ total_event|default:0 }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center text-lg">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-teal-700 font-semibold">{{ event_aktif|default:0 }} Aktif</span>
+            <a href="{% url 'admin_kelola_event' %}" class="text-[10px] text-teal-700 font-semibold hover:underline">
+              Kelola &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- KARTU PREVIEW EVENT TERDEKAT MENDATANG DI DASHBOARD -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-5 sm:p-6 w-full">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
+              <i class="bi bi-calendar-check text-[#0b7285]"></i>
+              <span>Event &amp; Agenda Terdekat (Rasio 4:5)</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Daftar seminar, kuliah tamu, dan workshop yang ditampilkan di Halaman Beranda</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="{% url 'event_create' %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0b7285] hover:bg-[#084c5a] text-white text-xs font-semibold shadow-xs transition">
+              <i class="bi bi-plus-lg"></i> Tambah Event
+            </a>
+            <a href="{% url 'admin_kelola_event' %}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition">
+              Kelola Semua &rarr;
+            </a>
+          </div>
+        </div>
+
+        {% if daftar_event_terdekat %}
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {% for ev in daftar_event_terdekat %}
+              <div class="group bg-slate-50 hover:bg-white rounded-xl border border-slate-200/80 p-3.5 transition-all duration-200 hover:shadow-md flex flex-col justify-between">
+                <div class="flex gap-3 items-start">
+                  <!-- Thumbnail Poster Rasio 4:5 -->
+                  <div class="w-16 shrink-0 aspect-[4/5] rounded-lg overflow-hidden bg-slate-200 border border-slate-200 relative">
+                    {% if ev.poster %}
+                      <img src="{{ ev.poster.url }}" alt="{{ ev.judul }}" class="w-full h-full object-cover">
+                    {% else %}
+                      <div class="w-full h-full flex flex-col items-center justify-center bg-teal-800 text-amber-300 text-[10px] font-bold">
+                        <span>4:5</span>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-teal-100 text-teal-800 mb-1">
+                      {{ ev.kategori }}
+                    </span>
+                    <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#0b7285] transition" title="{{ ev.judul }}">
+                      {{ ev.judul }}
+                    </h4>
+                    <p class="text-[11px] text-slate-500 mt-1 flex items-center gap-1 truncate">
+                      <i class="bi bi-calendar3 text-[10px]"></i> {{ ev.tanggal_display }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="pt-3 mt-3 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                  <span class="inline-flex items-center gap-1 text-[11px] font-medium {% if ev.is_active %}text-emerald-600{% else %}text-slate-400{% endif %}">
+                    <span class="w-1.5 h-1.5 rounded-full {% if ev.is_active %}bg-emerald-500{% else %}bg-slate-300{% endif %}"></span>
+                    {% if ev.is_active %}Aktif di Beranda{% else %}Draft{% endif %}
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <a href="{% url 'event_update' ev.pk %}" class="text-[11px] text-teal-700 hover:underline font-semibold">
+                      Edit
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-center py-8 text-xs text-slate-400">
+            <i class="bi bi-calendar-x text-2xl block mb-2 text-slate-300"></i>
+            Belum ada event terdaftar. Klik <strong>Tambah Event</strong> untuk menambahkan agenda baru.
+          </div>
+        {% endif %}
       </div>
 
       <!-- KARTU TABEL AUDIT LOG DENGAN DATATABLES -->
