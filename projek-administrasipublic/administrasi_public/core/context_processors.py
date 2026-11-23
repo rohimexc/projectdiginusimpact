@@ -15,34 +15,39 @@ def get_client_ip(request):
 def statistik_pengunjung(request):
     """
     Context processor otomatis untuk:
-    1. Mencatat kunjungan unik pengunjung ke database setiap hari.
+    1. Mencatat kunjungan pengunjung ke database setiap kali halaman dimuat / direfresh.
     2. Menyediakan variabel 'pengunjung_hari_ini' dan 'pengunjung_total' ke seluruh template secara global.
     """
     today = timezone.localdate()
     path = request.path_info or ''
 
-    # Abaikan request internal: admin, static, media, ckeditor, favicon
+    # Abaikan request internal / aset
     is_asset_or_admin = any(
         path.startswith(prefix) for prefix in (
-            '/admin/', '/static/', '/media/', '/ckeditor5/', '/favicon.ico'
+            '/admin/', '/dashboard/', '/static/', '/media/', '/ckeditor5/', '/favicon.ico'
         )
     )
 
-    if not is_asset_or_admin:
-        try:
-            # Pastikan sesi aktif tersedia
-            if not request.session.session_key:
-                request.session.save()
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
 
-            session_key = request.session.session_key
-            today_str = str(today)
+    if not is_asset_or_admin and request.method == 'GET' and not is_ajax:
+        # Pastikan hanya tercatat 1 kali per HTTP request cycle
+        if not getattr(request, '_pengunjung_recorded', False):
+            request._pengunjung_recorded = True
+            try:
+                session_key = None
+                if hasattr(request, 'session'):
+                    if not request.session.session_key:
+                        try:
+                            request.session.save()
+                        except Exception:
+                            pass
+                    session_key = request.session.session_key
 
-            # Cek apakah sesi ini sudah tercatat hari ini
-            if request.session.get('visited_today') != today_str:
                 ip = get_client_ip(request)
                 ua = request.META.get('HTTP_USER_AGENT', '')[:250]
 
-                # Catat ke database
+                # Catat setiap refresh / kunjungan baru ke database
                 Pengunjung.objects.create(
                     ip_address=ip,
                     session_key=session_key,
@@ -50,11 +55,10 @@ def statistik_pengunjung(request):
                     path=path[:250],
                     tanggal=today
                 )
-                request.session['visited_today'] = today_str
-        except Exception:
-            pass
+            except Exception:
+                pass
 
-    # Hitung total kunjungan dan pengunjung hari ini
+    # Hitung total kunjungan dan pengunjung hari ini (langsung mengikutsertakan kunjungan saat ini)
     try:
         config = PengunjungTotal.objects.first()
         base_total = config.total_awal if config else 6320
