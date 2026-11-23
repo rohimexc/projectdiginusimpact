@@ -459,22 +459,23 @@
   </section>
 
   <!-- ================= EVENT TERDEKAT (HORIZONTAL TIMELINE SLIDER PERSIS REFERENSI) ================= -->
-  <section class="py-14 sm:py-16 px-4 sm:px-6 md:px-10 text-white relative overflow-hidden" id="event-terdekat" style="background-color: #084c5a !important;">
+  <section class="py-16 px-6 bg-white border-t border-slate-200/60 relative overflow-hidden" id="event-terdekat">
     <div class="max-w-7xl mx-auto relative z-10">
       
-      <!-- Header Section: Title on the left with white underline, 'Lihat Semua' on the right -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10 pb-2" data-aos="fade-up">
+      <!-- Header Section: Samakan persis dengan judul Berita & Sambutan agar 100% konsisten -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10" data-aos="fade-up">
         <div>
-          <h2 class="text-xl sm:text-2xl font-bold text-white tracking-wide border-b-2 border-white/90 pb-1.5 inline-block">
+          <h2 class="text-2xl font-bold text-brand-teal mb-2">
             Event Terdekat
           </h2>
-          <p class="text-xs text-teal-100/90 mt-2">Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik</p>
+          <p class="text-xs text-slate-500" data-aos="fade-up" data-aos-delay="100">
+            Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik
+          </p>
         </div>
 
-        <div class="flex items-center gap-3">
-          <a href="{% url 'event_list' %}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/15 hover:bg-[#fab005] text-white hover:text-slate-900 border border-white/25 text-xs font-semibold transition duration-200">
-            <span>Lihat Semua Event</span>
-            <i class="fas fa-arrow-right text-[10px]"></i>
+        <div class="flex items-center gap-3" data-aos="fade-up" data-aos-delay="100">
+          <a href="{% url 'event_list' %}" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold shadow-sm transition duration-200">
+            <span>Lihat Semua Event &rarr;</span>
           </a>
         </div>
       </div>
@@ -485,13 +486,13 @@
           
           <!-- Tombol Navigasi Panah Kiri (<) dan Kanan (>) Timeline Persis Referensi (Tanpa Lingkaran Putih) -->
           <button type="button" onclick="scrollEventTimeline(-1)" 
-                  class="absolute -left-3 sm:-left-6 lg:-left-8 top-[82px] -translate-y-1/2 text-white hover:text-[#ffd43b] text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
+                  class="absolute -left-3 sm:-left-6 lg:-left-8 top-[82px] -translate-y-1/2 text-slate-400 hover:text-brand-teal text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
                   aria-label="Event Sebelumnya">
             <i class="fas fa-chevron-left font-bold"></i>
           </button>
           
           <button type="button" onclick="scrollEventTimeline(1)" 
-                  class="absolute -right-3 sm:-right-6 lg:-right-8 top-[82px] -translate-y-1/2 text-white hover:text-[#ffd43b] text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
+                  class="absolute -right-3 sm:-right-6 lg:-right-8 top-[82px] -translate-y-1/2 text-slate-400 hover:text-brand-teal text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
                   aria-label="Event Selanjutnya">
             <i class="fas fa-chevron-right font-bold"></i>
           </button>
@@ -503,32 +504,32 @@
               {% for event in daftar_event %}
                 <div class="event-timeline-card w-[275px] sm:w-[290px] lg:w-[calc(25%-18px)] shrink-0 flex flex-col items-center">
                   
-                  <!-- 1. Label Atas: Tanggal (Gold) & Kategori (White) -->
+                  <!-- 1. Label Atas: Tanggal (Teal Konsisten) & Kategori -->
                   <div class="text-center mb-3 min-h-[46px] flex flex-col justify-end w-full px-2">
-                    <div class="text-xs sm:text-sm font-bold text-[#ffd43b] tracking-wide">
+                    <div class="text-xs sm:text-sm font-bold text-brand-teal tracking-wide">
                       {{ event.tanggal_timeline }}
                     </div>
-                    <div class="text-[11px] font-medium text-white/90 uppercase tracking-wider mt-0.5">
+                    <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mt-0.5">
                       {{ event.kategori }}
                     </div>
                   </div>
 
                   <!-- 2. Sumbu Garis Horizontal & Node Jam + Panah Bawah -->
                   <div class="relative w-full flex items-center justify-center my-1">
-                    <!-- Garis horizontal putih melintang menghubungkan antar node -->
-                    <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-white/70"></div>
+                    <!-- Garis horizontal melintang menghubungkan antar node -->
+                    <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-slate-200"></div>
                     
                     <!-- Lingkaran Node dengan Ikon Jam Persis Referensi -->
-                    <div class="relative z-10 w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-xs shadow-md" style="background-color: #084c5a;">
+                    <div class="relative z-10 w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-xs shadow-md bg-brand-teal">
                       <i class="far fa-clock text-xs text-white"></i>
                     </div>
                   </div>
 
                   <!-- Panah Segitiga Menunjuk ke Kartu -->
-                  <div class="w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[8px] border-t-white mx-auto mb-2.5"></div>
+                  <div class="w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[8px] border-t-brand-teal mx-auto mb-2.5"></div>
 
                   <!-- 3. Kartu Poster 4:5 Sesuai Sketsa Portal UNTAD -->
-                  <div class="w-full bg-white rounded-xl border-2 border-[#fab005] overflow-hidden shadow-2xl flex flex-col justify-between group hover:-translate-y-1.5 transition-all duration-300">
+                  <div class="w-full bg-white rounded-xl border-2 border-[#fab005] overflow-hidden shadow-md flex flex-col justify-between group hover:-translate-y-1.5 transition-all duration-300">
                     
                     <!-- Wadah Poster Rasio 4:5 -->
                     <a href="{% url 'event_detail' event.slug %}" class="relative block w-full aspect-[4/5] overflow-hidden bg-slate-100">
@@ -546,7 +547,7 @@
                     <!-- Judul & Info di Bawah Poster -->
                     <div class="p-3.5 bg-white flex flex-col justify-between flex-1">
                       <div>
-                        <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-[#0b7285] transition" title="{{ event.judul }}">
+                        <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-brand-teal transition" title="{{ event.judul }}">
                           <a href="{% url 'event_detail' event.slug %}">{{ event.judul }}</a>
                         </h4>
                         {% if event.lokasi %}
@@ -558,7 +559,7 @@
                       </div>
 
                       <div class="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                        <a href="{% url 'event_detail' event.slug %}" class="font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
+                        <a href="{% url 'event_detail' event.slug %}" class="font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
                           Detail <i class="fas fa-arrow-right text-[9px]"></i>
                         </a>
                         {% if event.link_pendaftaran %}
@@ -662,12 +663,12 @@
         </script>
 
       {% else %}
-        <div class="bg-white/10 backdrop-blur-xs rounded-2xl border border-white/20 p-8 sm:p-12 text-center max-w-lg mx-auto" data-aos="fade-up">
-          <div class="w-16 h-16 rounded-2xl bg-white/10 text-[#fab005] flex items-center justify-center text-2xl mx-auto mb-4">
+        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-8 sm:p-12 text-center max-w-lg mx-auto" data-aos="fade-up">
+          <div class="w-16 h-16 rounded-2xl bg-teal-50 text-brand-teal flex items-center justify-center text-2xl mx-auto mb-4">
             <i class="far fa-calendar-check"></i>
           </div>
-          <h3 class="text-base font-bold text-white mb-1">Belum Ada Event Terdekat</h3>
-          <p class="text-xs text-teal-100/90 leading-relaxed">Saat ini belum ada agenda akademik mendatang yang aktif. Pantau terus halaman ini untuk update kegiatan selanjutnya.</p>
+          <h3 class="text-base font-bold text-slate-800 mb-1">Belum Ada Event Terdekat</h3>
+          <p class="text-xs text-slate-500 leading-relaxed">Saat ini belum ada agenda akademik mendatang yang aktif. Pantau terus halaman ini untuk update kegiatan selanjutnya.</p>
         </div>
       {% endif %}
 
