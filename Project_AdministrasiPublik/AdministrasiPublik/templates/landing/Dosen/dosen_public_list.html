@@ -8,10 +8,18 @@
 <div class="bg-slate-50 min-h-screen pb-16">
     <div class="max-w-6xl mx-auto py-10 px-4 sm:px-6 space-y-10">
         
-        <!-- Tombol Kembali ke Beranda -->
-        <div data-aos="fade-right" data-aos-duration="600">
-            <a href="{% url 'landing:landing_home' %}#beranda" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-xl transition border border-teal-100 shadow-2xs">
-                <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
+        <!-- Breadcrumbs Navigation & Tombol Kembali -->
+        <div class="flex items-center justify-between gap-4 flex-wrap" data-aos="fade-right" data-aos-duration="600">
+            <nav class="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
+                <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                    <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                    <span>Beranda</span>
+                </a>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+                <span class="text-teal-800 font-semibold">Tenaga Pengajar (Dosen)</span>
+            </nav>
+            <a href="{% url 'landing:landing_home' %}#beranda" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 px-3.5 py-1.5 rounded-xl transition border border-teal-100 shadow-2xs">
+                <i class="fa-solid fa-arrow-left text-[11px]"></i> Kembali ke Beranda
             </a>
         </div>
 
@@ -86,7 +94,7 @@
 
         <!-- Grid Kartu Dosen -->
         {% if dosen_list %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
             {% for d in dosen_list %}
             <!-- Container Kartu -->
             <div class="group relative h-[420px] w-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">

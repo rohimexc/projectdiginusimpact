@@ -95,16 +95,26 @@
 
 <div class="max-w-4xl mx-auto py-10 px-4 sm:px-6 space-y-8 min-h-screen">
 
-    <!-- Tombol Navigasi Kembali -->
-    <div class="flex items-center gap-2" data-aos="fade-right" data-aos-duration="600">
-        <a href="{% url 'landing:berita_list' %}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 px-3.5 py-2 rounded-xl transition border border-teal-200 shadow-2xs">
-            <i class="fa-solid fa-arrow-left text-[11px]"></i>
-            <span>Semua Berita</span>
-        </a>
-        <a href="{% url 'landing:landing_home' %}#berita" class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 px-3.5 py-2 rounded-xl transition border border-slate-200">
-            <i class="fa-solid fa-house text-[11px]"></i>
-            <span>Beranda</span>
-        </a>
+    <!-- Breadcrumbs Navigation & Tombol Navigasi -->
+    <div class="flex items-center justify-between gap-4 flex-wrap" data-aos="fade-right" data-aos-duration="600">
+        <nav class="flex items-center gap-2 text-xs text-slate-500 flex-wrap" aria-label="Breadcrumb">
+            <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                <span>Beranda</span>
+            </a>
+            <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+            <a href="{% url 'landing:berita_list' %}" class="hover:text-teal-700 font-medium transition text-slate-600">
+                <span>Berita</span>
+            </a>
+            <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+            <span class="text-teal-800 font-semibold truncate max-w-[200px] sm:max-w-xs">{{ berita.judul }}</span>
+        </nav>
+        <div class="flex items-center gap-2">
+            <a href="{% url 'landing:berita_list' %}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 px-3.5 py-1.5 rounded-xl transition border border-teal-200 shadow-2xs">
+                <i class="fa-solid fa-arrow-left text-[11px]"></i>
+                <span>Semua Berita</span>
+            </a>
+        </div>
     </div>
 
     <!-- Alert Messages (jika ada feedback dari sistem) -->
