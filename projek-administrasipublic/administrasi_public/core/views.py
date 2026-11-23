@@ -53,7 +53,7 @@ def home(request):
     hero = Hero.objects.filter(is_active=True).first()
     sambutan = Sambutan.objects.first()
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
-    daftar_event = Event.objects.filter(is_active=True).order_by('tanggal_mulai', '-created_at')[:4]
+    daftar_event = Event.objects.filter(is_active=True).order_by('tanggal_mulai', '-created_at')[:10]
 
     context = {
         'hero': hero,

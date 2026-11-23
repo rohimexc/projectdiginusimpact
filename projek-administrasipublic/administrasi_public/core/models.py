@@ -557,3 +557,18 @@ class Event(models.Model):
                 return f"{self.tanggal_mulai.day} - {self.tanggal_selesai.day} {BULAN_NAMA.get(self.tanggal_selesai.month, '')} {self.tanggal_selesai.year}"
             return f"{tgl_mulai_str} s/d {self.tanggal_selesai.day} {BULAN_NAMA.get(self.tanggal_selesai.month, '')} {self.tanggal_selesai.year}"
         return tgl_mulai_str
+
+    @property
+    def tanggal_timeline(self):
+        if not self.tanggal_mulai:
+            return ""
+        HARI_NAMA = {
+            0: "Senin", 1: "Selasa", 2: "Rabu", 3: "Kamis", 4: "Jumat", 5: "Sabtu", 6: "Minggu"
+        }
+        BULAN_NAMA = {
+            1: "Januari", 2: "Februari", 3: "Maret", 4: "April", 5: "Mei", 6: "Juni",
+            7: "Juli", 8: "Agustus", 9: "September", 10: "Oktober", 11: "November", 12: "Desember"
+        }
+        hari = HARI_NAMA.get(self.tanggal_mulai.weekday(), "")
+        bulan = BULAN_NAMA.get(self.tanggal_mulai.month, "")
+        return f"{hari} {self.tanggal_mulai.day} {bulan} {self.tanggal_mulai.year}"
