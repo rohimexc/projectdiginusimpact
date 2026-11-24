@@ -23,8 +23,8 @@
 </style>
 
 <div class="max-w-6xl mx-auto py-16 px-4 sm:px-6">
-    <!-- Breadcrumbs Navigation & Tombol Kembali -->
-    <div class="mb-6 flex items-center justify-between gap-4 flex-wrap" data-aos="fade-right" data-aos-duration="600">
+    <!-- Breadcrumbs Navigation -->
+    <div class="mb-6" data-aos="fade-right" data-aos-duration="600">
         <nav class="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
             <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
                 <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
@@ -33,9 +33,6 @@
             <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
             <span class="text-teal-800 font-semibold">Berita & Informasi</span>
         </nav>
-        <a href="{% url 'landing:landing_home' %}#beranda" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 px-3.5 py-1.5 rounded-xl transition border border-teal-100 shadow-2xs">
-            <i class="fa-solid fa-arrow-left text-[11px]"></i> Kembali ke Beranda
-        </a>
     </div>
     <div class="text-center mb-10 space-y-3 max-w-2xl mx-auto" data-aos="fade-up" data-aos-duration="700">
         <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">

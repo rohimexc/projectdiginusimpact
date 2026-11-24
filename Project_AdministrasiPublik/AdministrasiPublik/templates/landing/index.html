@@ -108,7 +108,7 @@
     <!-- Grid Responsif: 3 Card di Laptop, 2 Card di Tab, 1 Card di Mobile -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for item in event_list|slice:":3" %}
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 hover:border-teal-500 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group/card {% if forloop.counter == 3 %}md:col-span-2 lg:col-span-1 md:max-w-md md:mx-auto lg:max-w-none w-full{% endif %}"
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 hover:border-teal-500 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group/card {% if forloop.counter == 3 %}hidden lg:flex{% elif forloop.counter == 2 %}hidden md:flex{% endif %}"
              data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
             <div>
                 <!-- Header Card: Kategori & Tanggal -->
@@ -216,7 +216,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for b in berita_list|slice:":3" %}
         <div
-            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-3 flex flex-col justify-between {% if forloop.counter == 3 %}md:col-span-2 lg:col-span-1 md:max-w-md md:mx-auto lg:max-w-none w-full{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-3 flex flex-col justify-between {% if forloop.counter == 3 %}hidden lg:flex{% elif forloop.counter == 2 %}hidden md:flex{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
             <div>
                 {% if b.gambar %}
                 <!-- Menggunakan aspect-[4/5] agar rasionya selalu konsisten portrait 4:5 -->
