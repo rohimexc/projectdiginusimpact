@@ -1,11 +1,12 @@
+import uuid
 from django.utils import timezone
 
 
 def visitor_count_processor(request):
     """
     Context processor otomatis untuk mencatat dan menghitung jumlah pengunjung web:
-    - Hari ini: Dihitung berdasarkan sesi unik per tanggal hari ini
-    - Total: Dihitung secara kumulatif dengan baseline 6320
+    - Hari ini: Dihitung dengan baseline 20 + jumlah kunjungan aktif
+    - Total: Dihitung secara kumulatif dengan baseline 6320 + jumlah kunjungan
     """
     try:
         from .models import PengunjungWeb
@@ -13,7 +14,7 @@ def visitor_count_processor(request):
         # Pastikan sesi aktif untuk pengunjung
         if not request.session.session_key:
             request.session.save()
-        session_key = request.session.session_key
+        session_key = request.session.session_key or 'anon'
 
         today = timezone.localdate()
 
@@ -24,17 +25,21 @@ def visitor_count_processor(request):
         else:
             ip = request.META.get('REMOTE_ADDR')
 
-        # Catat pengunjung unik per hari
-        if session_key:
-            PengunjungWeb.objects.get_or_create(
-                tanggal=today,
-                session_key=session_key,
-                defaults={'ip_address': ip}
-            )
+        # Catat setiap kunjungan ke database agar selalu bertambah dinamis
+        # Menggunakan suffix unik agar setiap kunjungan / refresh tercatat tanpa bentrok unique_together
+        visit_key = f"{session_key}_{uuid.uuid4().hex[:8]}"
+        PengunjungWeb.objects.create(
+            tanggal=today,
+            session_key=visit_key,
+            ip_address=ip
+        )
 
-        # Hitung statistik pengunjung
-        count_hari_ini = PengunjungWeb.objects.filter(tanggal=today).count()
-        total_count = 6320 + PengunjungWeb.objects.count()
+        # Baseline: jika baru/reset, minimal langsung 20
+        BASE_HARI_INI = 20
+        BASE_TOTAL = 6320
+
+        count_hari_ini = BASE_HARI_INI + PengunjungWeb.objects.filter(tanggal=today).count()
+        total_count = BASE_TOTAL + PengunjungWeb.objects.count()
 
         return {
             'pengunjung_hari_ini': f"{count_hari_ini:04d}",
@@ -42,7 +47,7 @@ def visitor_count_processor(request):
         }
     except Exception:
         return {
-            'pengunjung_hari_ini': '0001',
-            'total_pengunjung': '006321'
+            'pengunjung_hari_ini': '0020',
+            'total_pengunjung': '006340'
         }
 

@@ -172,6 +172,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "7tgoerputfdyiere3otcpa3294j8nfrf",
+  "fields": {
+    "session_data": "e30:1xVoGl:Ikz2Xd2TcAlQWjW76rfOp7URKwjLfTscNzUw0AhdTmg",
+    "expire_date": "2026-12-08T11:01:03.420Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "9mec8afedx1lpac5q5lkas42uiuzz12m",
   "fields": {
     "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0h3:-B_eHyRy0V5tim1ZQha99A2imJrJq1rSeYdP-QkBdtU",
@@ -232,6 +240,14 @@
   "fields": {
     "session_data": "e30:1xUiC7:5jJpYEn6uFKP5XY97JM1W1DsiRBG33j392AWJxMhRw0",
     "expire_date": "2026-12-05T10:19:43.418Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "hr1u88qi3wqzjh72dqy82tec60wdryk9",
+  "fields": {
+    "session_data": "e30:1xVoFv:yB4tO2g6yKn0Tv_Mmm_IXamZ_3oGlM5RDti-yY7awMg",
+    "expire_date": "2026-12-08T11:00:11.470Z"
   }
 },
 {
@@ -1632,6 +1648,46 @@
     "ip_address": "127.0.0.1",
     "session_key": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
     "created_at": "2026-11-24T10:23:56.359Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 11,
+  "fields": {
+    "tanggal": "2026-11-24",
+    "ip_address": "127.0.0.1",
+    "session_key": "hr1u88qi3wqzjh72dqy82tec60wdryk9",
+    "created_at": "2026-11-24T11:00:11.491Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 12,
+  "fields": {
+    "tanggal": "2026-11-24",
+    "ip_address": "127.0.0.1",
+    "session_key": "7tgoerputfdyiere3otcpa3294j8nfrf_24acd476",
+    "created_at": "2026-11-24T11:01:03.438Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 13,
+  "fields": {
+    "tanggal": "2026-11-24",
+    "ip_address": "127.0.0.1",
+    "session_key": "7tgoerputfdyiere3otcpa3294j8nfrf_e9aa618d",
+    "created_at": "2026-11-24T11:01:03.448Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 14,
+  "fields": {
+    "tanggal": "2026-11-24",
+    "ip_address": "127.0.0.1",
+    "session_key": "7tgoerputfdyiere3otcpa3294j8nfrf_91c5d282",
+    "created_at": "2026-11-24T11:01:03.456Z"
   }
 },
 {
