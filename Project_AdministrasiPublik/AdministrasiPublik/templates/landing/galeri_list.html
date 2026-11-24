@@ -31,54 +31,72 @@
             </p>
         </div>
 
-        <!-- Grid Foto Galeri -->
+        <!-- Slider Foto Galeri: 3 Foto di Laptop, 2 di Tab, 1 di Mobile -->
         {% if galeri_list %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-            {% for g in galeri_list %}
-            <div class="group bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between"
-                 data-aos="fade-up" data-aos-delay="{{ forloop.counter|default:1 }}0">
-                
-                <!-- Foto Container with Click to Preview -->
-                <div class="relative overflow-hidden cursor-pointer aspect-4/3 bg-slate-100"
-                     onclick="openGalleryModal('{{ g.foto.url }}', '{{ g.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ g.tanggal|date:'d F Y'|default:'' }}')">
-                    {% if g.foto %}
-                        <img src="{{ g.foto.url }}" alt="{{ g.judul|default:'Foto Kegiatan' }}" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500">
-                    {% else %}
-                        <div class="w-full h-full flex items-center justify-center text-slate-400">
-                            <i class="fa-solid fa-image text-3xl"></i>
-                        </div>
-                    {% endif %}
+        <div class="relative" data-aos="fade-up">
+            <style>
+                #galeriSlider::-webkit-scrollbar {
+                    display: none;
+                }
+            </style>
+
+            <div id="galeriSlider"
+                 class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
+                 style="scrollbar-width: none; -ms-overflow-style: none;">
+                {% for g in galeri_list %}
+                <div class="galeri-item group w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
                     
-                    <!-- Overlay Hover Icon -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <span class="w-11 h-11 rounded-full bg-white/90 text-teal-800 flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                            <i class="fa-solid fa-magnifying-glass-plus text-base"></i>
+                    <!-- Foto Container with Click to Preview -->
+                    <div class="relative overflow-hidden cursor-pointer aspect-4/3 bg-slate-100"
+                         onclick="openGalleryModal('{{ g.foto.url }}', '{{ g.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ g.tanggal|date:'d F Y'|default:'' }}')">
+                        {% if g.foto %}
+                            <img src="{{ g.foto.url }}" alt="{{ g.judul|default:'Foto Kegiatan' }}" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-slate-400">
+                                <i class="fa-solid fa-image text-3xl"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Overlay Hover Icon -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover/opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="w-11 h-11 rounded-full bg-white/90 text-teal-800 flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-base"></i>
+                            </span>
+                        </div>
+
+                        {% if g.urutan %}
+                        <span class="absolute top-3 left-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-900/70 backdrop-blur-xs text-amber-300 shadow-xs">
+                            #{{ g.urutan }}
                         </span>
+                        {% endif %}
                     </div>
 
-                    {% if g.urutan %}
-                    <span class="absolute top-3 left-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-900/70 backdrop-blur-xs text-amber-300 shadow-xs">
-                        #{{ g.urutan }}
-                    </span>
-                    {% endif %}
-                </div>
-
-                <!-- Keterangan & Judul -->
-                <div class="p-4 space-y-2 flex-1 flex flex-col justify-between text-center">
-                    <div>
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-tealBrand transition line-clamp-2 leading-snug">
-                            {{ g.judul|default:"Dokumentasi Kegiatan" }}
-                        </h3>
+                    <!-- Keterangan & Judul -->
+                    <div class="p-4 space-y-2 flex-1 flex flex-col justify-between text-center">
+                        <div>
+                            <h3 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-tealBrand transition line-clamp-2 leading-snug">
+                                {{ g.judul|default:"Dokumentasi Kegiatan" }}
+                            </h3>
+                        </div>
+                        {% if g.tanggal %}
+                        <div class="pt-2 border-t border-slate-100 flex items-center justify-center text-[11px] text-slate-400 gap-1.5">
+                            <i class="fa-regular fa-calendar text-teal-600"></i>
+                            <span>{{ g.tanggal|date:"d M Y" }}</span>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% if g.tanggal %}
-                    <div class="pt-2 border-t border-slate-100 flex items-center justify-center text-[11px] text-slate-400 gap-1.5">
-                        <i class="fa-regular fa-calendar text-teal-600"></i>
-                        <span>{{ g.tanggal|date:"d M Y" }}</span>
-                    </div>
-                    {% endif %}
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+
+            <!-- Dots Pagination di Bawah Gambar -->
+            <div id="galeriDots" class="flex items-center justify-center gap-2 pt-6 flex-wrap"></div>
+
+            <!-- Petunjuk Geser untuk Mobile -->
+            <div class="flex sm:hidden items-center justify-center gap-1.5 mt-2.5 text-slate-400 text-[11px]">
+                <i class="fa-solid fa-arrows-left-right text-teal-600"></i>
+                <span>Geser ke samping untuk melihat foto lainnya</span>
+            </div>
         </div>
         {% else %}
         <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-xs" data-aos="fade-up">
@@ -153,6 +171,72 @@
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeGalleryModal();
     });
+
+    // Kontrol Navigasi Titik-Titik Slider Galeri
+    function initGaleriSlider() {
+        const slider = document.getElementById("galeriSlider");
+        const dotsContainer = document.getElementById("galeriDots");
+        if (!slider || !dotsContainer) return;
+
+        const items = slider.querySelectorAll(".galeri-item");
+        if (items.length <= 1) {
+            dotsContainer.style.display = "none";
+            return;
+        }
+
+        dotsContainer.innerHTML = "";
+        items.forEach((item, index) => {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.setAttribute("aria-label", "Lihat foto ke-" + (index + 1));
+            dot.className = index === 0 
+                ? "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs" 
+                : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
+            
+            dot.addEventListener("click", function() {
+                slider.scrollTo({
+                    left: item.offsetLeft - slider.offsetLeft,
+                    behavior: "smooth"
+                });
+            });
+            dotsContainer.appendChild(dot);
+        });
+
+        function updateActiveDot() {
+            const dots = dotsContainer.querySelectorAll("button");
+            if (!dots.length) return;
+
+            const scrollLeft = slider.scrollLeft;
+            let closestIndex = 0;
+            let minDiff = Infinity;
+
+            items.forEach((item, idx) => {
+                const diff = Math.abs(item.offsetLeft - slider.offsetLeft - scrollLeft);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestIndex = idx;
+                }
+            });
+
+            dots.forEach((dot, idx) => {
+                if (idx === closestIndex) {
+                    dot.className = "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs";
+                } else {
+                    dot.className = "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
+                }
+            });
+        }
+
+        slider.addEventListener("scroll", updateActiveDot, { passive: true });
+        window.addEventListener("resize", updateActiveDot);
+        setTimeout(updateActiveDot, 250);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initGaleriSlider);
+    } else {
+        initGaleriSlider();
+    }
 </script>
 {% endblock %}
 
