@@ -1,0 +1,2184 @@
+[
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Admin Prodi",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Editor",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Contributor",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$CwaeZtYeKCSvCmxtm9lepZ$vK6QeyMyQw7/U42xbWfIZrGv7kDp04PTtkF8Q3+1oB0=",
+    "last_login": "2026-11-21T10:20:12.718Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Admin",
+    "last_name": "Admin",
+    "email": "admin123@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-12T09:06:36.512Z",
+    "groups": [
+      [
+        "Admin Prodi"
+      ],
+      [
+        "Editor"
+      ],
+      [
+        "Contributor"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$NvrlJchKsekxxMF9rjLt0M$saeYmJ4Z+z03WziltK5/pbkKGfr7BPrLkXQo7Xvi8pM=",
+    "last_login": "2026-10-20T13:01:04.202Z",
+    "is_superuser": false,
+    "username": "Cenmoree",
+    "first_name": "cen",
+    "last_name": "more",
+    "email": "cen@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-20T03:55:06.238Z",
+    "groups": [
+      [
+        "Editor"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$xTLZngK3F1m2jfJUW5iYKw$wOGgs9gjUJztyKDppkHrhdZDpUMZU//+ILI5d+sIX4U=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "apriana",
+    "first_name": "Apri",
+    "last_name": "Admin Prodi",
+    "email": "imadeapriana65@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-21T07:39:01.658Z",
+    "groups": [
+      [
+        "Admin Prodi"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$6qu9TL8K65W6G51tqe5bzH$7FGJBq6Hi6a8Q4lb+zVJWa5TTegn3RLOwYzwaeYnpIM=",
+    "last_login": "2026-11-07T06:38:50.927Z",
+    "is_superuser": false,
+    "username": "muhh",
+    "first_name": "Muhmuh",
+    "last_name": "",
+    "email": "muh123@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-07T06:38:50.637Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "0se6qhzhzetuz476thb5dnttkum38gyv",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0hC:caRsCaOcKjwYnb5r8W2S9HaiF9foFdLSst0SYHjmoTY",
+    "expire_date": "2026-11-11T10:15:50.442Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "28sumxqprxt931shteykzw4zu5l3ba3i",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0bM:fGNkuarx2_2M6aWHS0dm8Q3auTBOcbr2ppfgL0vuRAM",
+    "expire_date": "2026-11-11T10:09:48.748Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3ml3f4elar4ukrugf9hyw6ti5z9r0f81",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Bq:1scddvI6UEfX0FDYY0h54oX5kH0L5BlWr1VrVpRVTVo",
+    "expire_date": "2026-11-11T09:43:26.779Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3r3za2b9qqkrknewyb5p0yblezeftg0s",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xUiCa:mK0_KREPfeP3A8yF1FCltP8Xzkut74uDJmb1kba_8wo",
+    "expire_date": "2026-12-05T10:20:12.731Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "55843zvaaauy23f6cc9d9r1ra6kgo49g",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Sh:vceXD1CMIPhIsE5YbrY2Rxmou8tWkXX2tQiL5WW3GJI",
+    "expire_date": "2026-11-11T10:00:51.025Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5go1l3zaecaxf5u8xnuz693tviw83xjf",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLLKX:mzSyPYUeSMTYiGY2CUGClvT7f0gT3oipipu5jZzoan0",
+    "expire_date": "2026-11-09T14:05:41.702Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6pt6ynhigrh04m9s5f8pyy29yv6763vf",
+  "fields": {
+    "session_data": "e30:1xODSK:DefrmasyeEZevMEK_LQr7iYtMjSMA8XDYZZ5aKxfJNs",
+    "expire_date": "2026-11-17T12:17:36.028Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7f27zrfw8syg9u1c87jj5sapa75wtliw",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hCmU0C6dO8ZCAODRU2bUKoL4921STfd_vfe_4hX4TcnT1xLCx7F0OrKJ-HD2ka_Llx9SWIQWhw2CvHB0wbSPUy3WcZ5arWQ3BS500Ve58TPy-4eDsawjP9aGUC0FMmBIWXP6DT3iAFVD8aqbAE460yOAFzuYiRNnWEA6FRiQ-L7A7PIP4A:1xPB0S:B-cRozbHkTQcyzUZvcjceyQrXQAz0n7mnTse5nawj5A",
+    "expire_date": "2026-11-20T03:52:48.993Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "9mec8afedx1lpac5q5lkas42uiuzz12m",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0h3:-B_eHyRy0V5tim1ZQha99A2imJrJq1rSeYdP-QkBdtU",
+    "expire_date": "2026-11-11T10:15:41.493Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "aeryk7zlamakfo6pnj44r2sd55l1nj97",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLKnX:axBSU_j3hI3KCLRXc0VZ3RR1Ca7M2BNyI2mJeqSwpK4",
+    "expire_date": "2026-11-09T13:31:35.056Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "agd9tw9ebf08kvkk7fnia6linoa30263",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLx02:g4HPy_WvlSNvwWYOFMXxoalIQCQSODTELPPrOjIHzCE",
+    "expire_date": "2026-11-11T06:19:02.871Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "biswpvgiz5eg6a2hjsj8up1ajxy5hz7b",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Gw:kLEeofjQphzAkAA6sL8_7WVQNxSZ0dMtntK2QhRr-to",
+    "expire_date": "2026-11-11T09:48:42.587Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ccwxm81e0pjczsdj3t06rjzdqw7rbwt3",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLwz6:T3qpjh0EvfQFzwRXdhfxKSncyYpbD4VJSeldl3SAcks",
+    "expire_date": "2026-11-11T06:18:04.078Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fxlan996wr14fa04hsheapgkqsufaajm",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xRS3J:-Q3srpU8Vg9GZbqud0oxMqVTCj5pcMj_RCh2XEjWeC8",
+    "expire_date": "2026-11-26T10:29:09.099Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "grtrhg7t64qho78mo1lvqqxxwupn7c84",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xMiRb:pq8OqWwLl37skykJkQIGRydsU2YMj7EN3_YfX1DlBFo",
+    "expire_date": "2026-11-13T08:58:39.070Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gtm3o1m9f6sjfg0eiqj8j7ion59hg9on",
+  "fields": {
+    "session_data": "e30:1xUiC7:5jJpYEn6uFKP5XY97JM1W1DsiRBG33j392AWJxMhRw0",
+    "expire_date": "2026-12-05T10:19:43.418Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "kyoee0noc573z742i41mekmtwxrto8oy",
+  "fields": {
+    "session_data": "e30:1xUiBr:plg-kvi46PTTYycMAWF-xeeMVSSZTRn5_PuVkZ5TqBM",
+    "expire_date": "2026-12-05T10:19:27.966Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nbscaroc9rprlonmvswjbt84oi9k1bhl",
+  "fields": {
+    "session_data": "eyJ2aWV3ZWRfYmVyaXRhXzMiOnRydWV9:1xODTz:LDePYMVuIWzem5mCJsts66kmm4miSJMefC4xU-mYIA4",
+    "expire_date": "2026-11-17T12:19:19.371Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nheo6luk8bcv8cpm78acrdm5gqc74voj",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xR2U7:7tvMsNILxHF6Xyk4b_trx0dvSUpSkDTdYOPLwJcNK2I",
+    "expire_date": "2026-11-25T07:11:07.573Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nneaovmwple8axvg79e4dv47eouc075z",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xUiCL:MYj4Kce4fN6ZumD2501JS7vQdTV0OhBMiqJgzrobEXo",
+    "expire_date": "2026-12-05T10:19:57.723Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pdkivm0oiu2w6mt9fazoqg9h8vm5zd7b",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Sp:0I_Qu-Fdbw5gwwLbT7ZVjNwhiH1WDS3y4aFZN8HPrc0",
+    "expire_date": "2026-11-11T10:00:59.999Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pj2210g831x8jh5a6ybusrxdtvfwtt5p",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0T9:6jjhzsxob3AoDKciIiVwVFOMFdCdvhb1oMFu-_s6p-A",
+    "expire_date": "2026-11-11T10:01:19.588Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "poselp02amzi8fvve79dw7xp26ci22vn",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLLKj:OwfqbXvCg9gA6nHv_TLVPKn6uX2sHaY_xZuxMthNOVM",
+    "expire_date": "2026-11-09T14:05:53.363Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pqpor1genfvhsjarn32ppqadrlbtvyc5",
+  "fields": {
+    "session_data": "e30:1xUiWL:ZaanNexskwNqx0aCuPt9Wgsnyv8lA-zPjWtOm6-nWyE",
+    "expire_date": "2026-12-05T10:40:37.507Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "q2tz5awt41ghzsexc8yacn7rtne7606x",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0RC:dAnkCvdWS7CFBmS37JUtZP-G9FrENBTQqVeS2BoWoWs",
+    "expire_date": "2026-11-11T09:59:18.769Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "renh3ko0to7o64mpqcrg9dis7c5n9ilc",
+  "fields": {
+    "session_data": "e30:1xVRMJ:C-0yqie0Co4TWYKRNIdBkWFjbTGAnIU87T_kucp7WAY",
+    "expire_date": "2026-12-07T10:33:15.887Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "tk7k52qgywp918aetaidsra7mrbinjwa",
+  "fields": {
+    "session_data": "eyJ2aWV3ZWRfYmVyaXRhXzMiOnRydWV9:1xOZpK:U3nLmyO8H08gvbQFm7HJZOmlYY4c3facPSlw4pvZ-vQ",
+    "expire_date": "2026-11-18T12:10:50.496Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe-yNbJiB3-Skp4zWLv2mhhQItkOFIi7Q6Q0ad_MvA-8Mr85euKSG3oJYysrn8Dj2ia_Vi4-RxhBwmEjDA-eNxDvON8WEZa5lUxiU8ROq7gukZ-X3T0cTFinf01KO7Yx9RTYaIyDMkGi00lLrXQX7dAb6iyRxERmOLteJZmkcRYNKWXg-wPmBT_6:1xRSQA:uG0X2sX34GdMnaznA_VGvWGGI9folbF2mBihgU-6VXY",
+    "expire_date": "2026-11-26T10:52:46.337Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vrk0lssfirp9etpity7rmw8l71ubowvp",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xTCHy:4ELrskKnNcBOvCk7cYUZBJjMoxlAz4hY4J_qa_27XzU",
+    "expire_date": "2026-12-01T06:03:30.006Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ywdauw6ex6pb2vq6uagrxug8vrcfxght",
+  "fields": {
+    "session_data": "e30:1xODUc:eJvqDCj9PExHrAUQ6pPu8tlHEK-xNvHfrngttwEpRVU",
+    "expire_date": "2026-11-17T12:19:58.274Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "zj8kzo8oaesvigp90z7d2ad0bgtabuo0",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0bD:tnBgeMM7RsARaAuebGnU2xppljgqwKlWk3Jf_mvQ4bU",
+    "expire_date": "2026-11-11T10:09:39.269Z"
+  }
+},
+{
+  "model": "landing.tentangpage",
+  "pk": 1,
+  "fields": {
+    "judul": "Profil Program Studi",
+    "slug": "profil",
+    "file_dokumen": "",
+    "konten": "<p>Konten profil terpadu</p>",
+    "updated_at": "2026-10-28T10:15:50.492Z"
+  }
+},
+{
+  "model": "landing.tentangpage",
+  "pk": 2,
+  "fields": {
+    "judul": "Sejarah & Dasar Hukum",
+    "slug": "sejarah",
+    "file_dokumen": "",
+    "konten": "<p>Program Studi Administrasi Publik didirikan sebagai wujud dedikasi dalam mencetak aparatur negara dan praktisi administrasi publik yang handal di wilayah Sulawesi Tengah dan Indonesia pada umumnya berdasarkan landasan hukum dan SK pendirian resmi universitas.</p>",
+    "updated_at": "2026-10-26T14:01:55.008Z"
+  }
+},
+{
+  "model": "landing.tentangpage",
+  "pk": 3,
+  "fields": {
+    "judul": "Visi & Misi",
+    "slug": "visi",
+    "file_dokumen": "",
+    "konten": "<h3>Visi</h3><p>Menjadi Program Studi Administrasi Publik yang unggul dalam pengembangan ilmu administrasi publik dan tata kelola pemerintahan yang adaptif bereputasi nasional pada tahun 2030.</p><h3>Misi</h3><ol><li>Menyelenggarakan pendidikan sarjana yang berkualitas dan berkarakter di bidang administrasi publik.</li><li>Melaksanakan penelitian inovatif yang berorientasi pada penyelesaian masalah-masalah kebijakan dan tata kelola publik.</li><li>Mendarmabaktikan ilmu pengetahuan melalui pengabdian kepada masyarakat secara berkelanjutan.</li></ol>",
+    "updated_at": "2026-10-26T14:01:55.015Z"
+  }
+},
+{
+  "model": "landing.tentangpage",
+  "pk": 4,
+  "fields": {
+    "judul": "Tujuan",
+    "slug": "tujuan",
+    "file_dokumen": "",
+    "konten": "<p>Tujuan Program Studi Administrasi Publik:</p><ul><li>Menghasilkan lulusan yang menguasai konsep teoretis dan praktis administrasi publik.</li><li>Mengembangkan riset kebijakan dan tata kelola pemerintahan daerah maupun nasional.</li><li>Menjalin kemitraan strategis dengan instansi pemerintah, swasta, dan organisasi masyarakat sipil.</li></ul>",
+    "updated_at": "2026-10-26T14:01:55.023Z"
+  }
+},
+{
+  "model": "landing.tentangpage",
+  "pk": 5,
+  "fields": {
+    "judul": "Profil Lulusan",
+    "slug": "profil-lulusan",
+    "file_dokumen": "",
+    "konten": "<p>Lulusan Program Studi Administrasi Publik disiapkan untuk berkarir sebagai:</p><ul><li><strong>Birokrat / Aparatur Sipil Negara (ASN):</strong> Pengelola administrasi dan pelayanan publik di kementerian, lembaga, maupun pemerintah daerah.</li><li><strong>Analis Kebijakan Publik:</strong> Mengkaji, mengevaluasi, dan merumuskan kebijakan publik.</li><li><strong>Manajer Sektor Publik & Nirlaba:</strong> Pimpinan organisasi publik, LSM, atau lembaga non-pemerintah.</li><li><strong>Peneliti & Konsultan Administrasi:</strong> Ahli tata kelola pemerintahan dan organisasi publik.</li></ul>",
+    "updated_at": "2026-10-26T14:01:55.030Z"
+  }
+},
+{
+  "model": "landing.tentangpage",
+  "pk": 6,
+  "fields": {
+    "judul": "Sertifikat Akreditasi",
+    "slug": "sertifikat",
+    "file_dokumen": "documents/tentang/CV_I_Made_Apriana.pdf",
+    "konten": "<p>Program Studi Administrasi Publik FISIP Universitas Tadulako telah meraih predikat akreditasi dari Badan Akreditasi Nasional Perguruan Tinggi (BAN-PT) sebagai bukti pemenuhan standar penjaminan mutu pendidikan tinggi nasional.</p>",
+    "updated_at": "2026-10-30T09:33:56.445Z"
+  }
+},
+{
+  "model": "landing.visimisitujuan",
+  "pk": 1,
+  "fields": {
+    "visi": "Menjadi Program Studi Administrasi Publik yang unggul secara global dan bereputasi nasional dalam pengembangan ilmu administrasi publik dan tata kelola pemerintahan yang adaptif, berintegritas, dan berwawasan lingkungan.",
+    "pengantar_misi": "Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki misi sebagai berikut:",
+    "pengantar_tujuan": "Program Studi Administrasi Publik FISIP Universitas Tadulako memiliki tujuan Pendidikan berupa:",
+    "updated_at": "2026-10-28T10:02:08.089Z"
+  }
+},
+{
+  "model": "landing.misiitem",
+  "pk": 1,
+  "fields": {
+    "visi_misi": 1,
+    "urutan": 1,
+    "deskripsi": "Menyelenggarakan pembelajaran, penelitian, dan inovasi tata kelola kebijakan publik secara terpadu, berkelanjutan, dan berdampak nyata untuk mencetak pemimpin transformatif di bidang administrasi publik bagi masa depan yang berkeadilan."
+  }
+},
+{
+  "model": "landing.misiitem",
+  "pk": 2,
+  "fields": {
+    "visi_misi": 1,
+    "urutan": 2,
+    "deskripsi": "Meningkatkan kualitas dan kuantitas pengabdian kepada masyarakat, pelayanan publik, dan kerja sama strategis sebagai wujud kontribusi keilmuan administrasi publik bagi bangsa dan kemanusiaan."
+  }
+},
+{
+  "model": "landing.misiitem",
+  "pk": 3,
+  "fields": {
+    "visi_misi": 1,
+    "urutan": 3,
+    "deskripsi": "Menguatkan kemampuan bersaing lulusan di pasar kerja global maupun nasional melalui penguasaan ilmu pengetahuan, teknologi administrasi terdepan, serta pengembangan karakter profesional yang berintegritas."
+  }
+},
+{
+  "model": "landing.tujuanitem",
+  "pk": 1,
+  "fields": {
+    "visi_misi": 1,
+    "urutan": 1,
+    "judul": "Employabilitas",
+    "subjudul": "Employability",
+    "deskripsi": "Menghasilkan lulusan yang menguasai ilmu pengetahuan dan teknologi terdepan di bidang administrasi publik serta memiliki kemampuan bersaing di pasar kerja global, baik sebagai profesional di birokrasi pemerintahan, analis kebijakan, peneliti, akademisi, maupun wirausahawan sektor publik."
+  }
+},
+{
+  "model": "landing.tujuanitem",
+  "pk": 2,
+  "fields": {
+    "visi_misi": 1,
+    "urutan": 2,
+    "judul": "Reputasi Akademik",
+    "subjudul": "Academic Reputation",
+    "deskripsi": "Mewujudkan sivitas akademika dan lulusan yang unggul secara intelektual dan anggun secara moral melalui penyelenggaraan pendidikan, penelitian, dan publikasi ilmiah bereputasi yang diakui di tingkat nasional dan internasional."
+  }
+},
+{
+  "model": "landing.tujuanitem",
+  "pk": 3,
+  "fields": {
+    "visi_misi": 1,
+    "urutan": 3,
+    "judul": "Kontribusi kepada Masyarakat",
+    "subjudul": "Contributions to Society",
+    "deskripsi": "Mewujudkan masyarakat berpengetahuan tata kelola publik (good governance) yang berpartisipasi aktif dalam masyarakat madani, serta menumbuhkan komitmen tinggi pada pemecahan persoalan bangsa melalui advokasi kebijakan dan pelayanan publik inklusif."
+  }
+},
+{
+  "model": "landing.tujuanitem",
+  "pk": 4,
+  "fields": {
+    "visi_misi": 1,
+    "urutan": 4,
+    "judul": "Kesejahteraan & Lingkungan Akademik",
+    "subjudul": "Welfare & Academic Environment",
+    "deskripsi": "Membangun lingkungan akademik yang sehat, aman, nyaman, dan kolaboratif untuk mendukung kesejahteraan, integritas, dan produktivitas sivitas akademika Program Studi Administrasi Publik."
+  }
+},
+{
+  "model": "landing.galeri",
+  "pk": 1,
+  "fields": {
+    "judul": "Logo DIGINUS",
+    "foto": "images/galeri/LOGOONLY.jpeg",
+    "urutan": 1,
+    "tanggal": "2026-11-11"
+  }
+},
+{
+  "model": "landing.galeri",
+  "pk": 2,
+  "fields": {
+    "judul": null,
+    "foto": "images/galeri/nike_nike-air-force-1--07-sepatu-olahraga---putih-315122-111_full01-remove_MfGK5h8.png",
+    "urutan": 2,
+    "tanggal": "2026-11-24"
+  }
+},
+{
+  "model": "landing.galeri",
+  "pk": 3,
+  "fields": {
+    "judul": null,
+    "foto": "images/galeri/SUN_PRELOVED.png",
+    "urutan": 3,
+    "tanggal": "2026-11-24"
+  }
+},
+{
+  "model": "landing.galeri",
+  "pk": 4,
+  "fields": {
+    "judul": null,
+    "foto": "images/galeri/Screenshot_2026-06-06_191428.png",
+    "urutan": 4,
+    "tanggal": "2026-11-24"
+  }
+},
+{
+  "model": "landing.hero",
+  "pk": 1,
+  "fields": {
+    "video_url": "/static/video/banner.mp4",
+    "video_file": "hero/videos/banner.mp4",
+    "foto": "hero/LOGOONLY.jpeg",
+    "judul": "Administrasi Publik FISIP Untad",
+    "subjudul": "Selamat Datang di Portal",
+    "deskripsi": "Fakultas Ilmu Sosial dan Ilmu Politik\\nUniversitas Tadulako",
+    "is_active": true,
+    "created_at": "2026-11-11T07:11:34.465Z",
+    "updated_at": "2026-11-24T10:27:46.266Z"
+  }
+},
+{
+  "model": "landing.berita",
+  "pk": 1,
+  "fields": {
+    "judul": "ANJAY DJANGO",
+    "slug": "DJANGO",
+    "gambar": "images/berita/LOGO_DIGINUS_NO_BG_1.png",
+    "konten": "Belajar DJANGO",
+    "created_at": "2026-10-12T09:08:36.486Z",
+    "updated_at": "2026-10-12T09:08:39.582Z",
+    "post_date": "2026-10-01T09:08:32Z",
+    "views_count": 3,
+    "shares_count": 1
+  }
+},
+{
+  "model": "landing.berita",
+  "pk": 3,
+  "fields": {
+    "judul": "Sambutan Koordinator Prodi",
+    "slug": "SAMBUTAN",
+    "gambar": "berita/SUN_PRELOVED_0LPv4Me.png",
+    "konten": "<p>asADADAADADADAADADDADADADADADAD</p>",
+    "created_at": "2026-10-20T03:45:26.060Z",
+    "updated_at": "2026-10-21T09:44:53.173Z",
+    "post_date": "2026-10-20T03:45:26.060Z",
+    "views_count": 4,
+    "shares_count": 1
+  }
+},
+{
+  "model": "landing.berita",
+  "pk": 4,
+  "fields": {
+    "judul": "ANjayyyy",
+    "slug": "asas",
+    "gambar": "berita/LOGOONLY.jpeg",
+    "konten": "<p>aodjoajdoajfojoajfoa</p>",
+    "created_at": "2026-11-24T10:26:48.041Z",
+    "updated_at": "2026-11-24T10:26:48.041Z",
+    "post_date": "2026-11-24T10:26:48.040Z",
+    "views_count": 0,
+    "shares_count": 0
+  }
+},
+{
+  "model": "landing.berita",
+  "pk": 5,
+  "fields": {
+    "judul": "MAjuuuuuuuuuu",
+    "slug": "aadju",
+    "gambar": "berita/nike_nike-air-force-1--07-sepatu-olahraga---putih-315122-111_full01.webp",
+    "konten": "<p>anadoijapjfoajfoaf</p>",
+    "created_at": "2026-11-24T10:27:05.209Z",
+    "updated_at": "2026-11-24T10:27:05.209Z",
+    "post_date": "2026-11-24T10:27:05.207Z",
+    "views_count": 0,
+    "shares_count": 0
+  }
+},
+{
+  "model": "landing.likeberita",
+  "pk": 7,
+  "fields": {
+    "berita": 3,
+    "session_key": "1os97vzqvoq1bt3757w5qk7n2oceb33t",
+    "ip_address": "127.0.0.1",
+    "created_at": "2026-11-04T12:21:13.045Z"
+  }
+},
+{
+  "model": "landing.likeberita",
+  "pk": 9,
+  "fields": {
+    "berita": 1,
+    "session_key": "1os97vzqvoq1bt3757w5qk7n2oceb33t",
+    "ip_address": "127.0.0.1",
+    "created_at": "2026-11-04T13:04:53.979Z"
+  }
+},
+{
+  "model": "landing.likeberita",
+  "pk": 10,
+  "fields": {
+    "berita": 3,
+    "session_key": "ym1o81mq8mkqdssvw9ycb3bnjtyr3ru8",
+    "ip_address": "127.0.0.1",
+    "created_at": "2026-11-06T03:54:35.452Z"
+  }
+},
+{
+  "model": "landing.likeberita",
+  "pk": 11,
+  "fields": {
+    "berita": 1,
+    "session_key": "ym1o81mq8mkqdssvw9ycb3bnjtyr3ru8",
+    "ip_address": "127.0.0.1",
+    "created_at": "2026-11-06T14:39:03.789Z"
+  }
+},
+{
+  "model": "landing.komentarberita",
+  "pk": 2,
+  "fields": {
+    "berita": 1,
+    "user": null,
+    "nama": "IMADE APRIANA",
+    "email": "imadeapriana08@gmail.com",
+    "isi": "asasasasa",
+    "created_at": "2026-11-03T12:39:12.377Z",
+    "is_active": true
+  }
+},
+{
+  "model": "landing.komentarberita",
+  "pk": 3,
+  "fields": {
+    "berita": 1,
+    "user": null,
+    "nama": "asasasa",
+    "email": null,
+    "isi": "dafasdgadgdaadsgd",
+    "created_at": "2026-11-04T12:37:48.231Z",
+    "is_active": true
+  }
+},
+{
+  "model": "landing.komentarberita",
+  "pk": 4,
+  "fields": {
+    "berita": 1,
+    "user": null,
+    "nama": "aadadadaddas",
+    "email": null,
+    "isi": "sdgsdgsdgsdgsdgdsg",
+    "created_at": "2026-11-04T13:05:10.847Z",
+    "is_active": true
+  }
+},
+{
+  "model": "landing.komentarberita",
+  "pk": 5,
+  "fields": {
+    "berita": 3,
+    "user": null,
+    "nama": "asasasas",
+    "email": null,
+    "isi": "dfsdgsdgsdgdsg",
+    "created_at": "2026-11-04T13:05:26.068Z",
+    "is_active": true
+  }
+},
+{
+  "model": "landing.komentarberita",
+  "pk": 7,
+  "fields": {
+    "berita": 1,
+    "user": [
+      "muhh"
+    ],
+    "nama": "Muhmuh",
+    "email": "muh123@gmail.com",
+    "isi": "anjayy",
+    "created_at": "2026-11-07T06:39:04.161Z",
+    "is_active": true
+  }
+},
+{
+  "model": "landing.akademikpage",
+  "pk": 1,
+  "fields": {
+    "judul": "SIGA-8",
+    "slug": "siga-8",
+    "subjudul": "Sistem Informasi Akademik Generasi ke-8 Universitas Tadulako",
+    "link_eksternal": null,
+    "file_utama": "",
+    "konten": "",
+    "urutan": 1,
+    "is_active": true,
+    "updated_at": "2026-10-28T10:09:48.794Z"
+  }
+},
+{
+  "model": "landing.akademikpage",
+  "pk": 2,
+  "fields": {
+    "judul": "Kurikulum",
+    "slug": "kurikulum",
+    "subjudul": "Struktur Kurikulum dan Sebaran Mata Kuliah Program Studi",
+    "link_eksternal": null,
+    "file_utama": "",
+    "konten": "<p>Program Studi Administrasi Publik FISIP Universitas Tadulako menerapkan kurikulum berbasis Outcome-Based Education (OBE) dan Merdeka Belajar Kampus Merdeka (MBKM) yang dirancang untuk menghasilkan lulusan yang adaptif, profesional, dan berdaya saing global.</p>",
+    "urutan": 2,
+    "is_active": true,
+    "updated_at": "2026-10-28T09:24:06.338Z"
+  }
+},
+{
+  "model": "landing.akademikpage",
+  "pk": 3,
+  "fields": {
+    "judul": "Jadwal Perkuliahan",
+    "slug": "jadwal-perkuliahan",
+    "subjudul": "Informasi Jadwal Kuliah dan Ujian Semester",
+    "link_eksternal": null,
+    "file_utama": "",
+    "konten": "<p>Berikut adalah jadwal perkuliahan semester ganjil dan genap untuk Program Studi Administrasi Publik. Silakan unduh dokumen jadwal atau periksa pembaruan kelas secara berkala.</p>",
+    "urutan": 3,
+    "is_active": true,
+    "updated_at": "2026-10-28T09:24:06.348Z"
+  }
+},
+{
+  "model": "landing.akademikpage",
+  "pk": 4,
+  "fields": {
+    "judul": "RPS",
+    "slug": "rps",
+    "subjudul": "Rencana Pembelajaran Semester Mata Kuliah",
+    "link_eksternal": null,
+    "file_utama": "",
+    "konten": "<p>Rencana Pembelajaran Semester (RPS) memuat capaian pembelajaran mata kuliah, bahan kajian, metode pembelajaran, dan evaluasi penilaian untuk seluruh mata kuliah di Program Studi Administrasi Publik.</p>",
+    "urutan": 4,
+    "is_active": true,
+    "updated_at": "2026-10-28T09:24:06.357Z"
+  }
+},
+{
+  "model": "landing.akademikpage",
+  "pk": 5,
+  "fields": {
+    "judul": "Panduan Akademik",
+    "slug": "panduan-akademik",
+    "subjudul": "Buku Pedoman dan Panduan Akademik Mahasiswa",
+    "link_eksternal": null,
+    "file_utama": "documents/akademik/CV_I_Made_Apriana.pdf",
+    "konten": "<p>Buku Panduan Akademik berisi tata tertib, prosedur penyusunan skripsi/tugas akhir, magang, cuti akademik, dan alur administrasi kemahasiswaan lainnya.</p>",
+    "urutan": 5,
+    "is_active": true,
+    "updated_at": "2026-10-29T12:13:51.529Z"
+  }
+},
+{
+  "model": "landing.tenagapendidik",
+  "pk": 1,
+  "fields": {
+    "nama": "Ni MADE ANJAY",
+    "jk": "P",
+    "kategori": "Pertanian",
+    "status": "STAF ADMINISTRASI",
+    "pangkat": "Pembina Utama Madya / IV.c",
+    "email": "apri@gmail.com",
+    "nip": "13245352223",
+    "nidn": "-",
+    "telepon": "081617038542",
+    "foto": "tenaga_tendik/LOGOONLY.jpeg"
+  }
+},
+{
+  "model": "landing.tenagapendidik",
+  "pk": 2,
+  "fields": {
+    "nama": "IMADE APRIANA",
+    "jk": "L",
+    "kategori": "Perikanan",
+    "status": "TENAGA KEPENDIDIKAN",
+    "pangkat": "Pembina Utama Madya / IV.c",
+    "email": "apri@gmail.com",
+    "nip": "13245352223",
+    "nidn": "-",
+    "telepon": "09999999973",
+    "foto": "tenaga_tendik/nike_nike-air-force-1--07-sepatu-olahraga---putih-315122-111_full01-remove_ejo0fG7.png"
+  }
+},
+{
+  "model": "landing.dosen",
+  "pk": 1,
+  "fields": {
+    "nama": "IMADE APRIANA",
+    "nip": "1234422424",
+    "nidn": "2342442",
+    "nuptk": "213131",
+    "jenis_kelamin": "L",
+    "bidang_ilmu": "Ekonomi",
+    "jabatan": "DOSEN TETAP",
+    "pangkat_golongan": "Profesor",
+    "status": "Aktif",
+    "email": "aprianaimade08@gmail.com",
+    "no_hp": "09999999973",
+    "foto": "dosen/LOGO_DIGINUS_NO_BG_1.png"
+  }
+},
+{
+  "model": "landing.akreditasi",
+  "pk": 1,
+  "fields": {
+    "status_akreditasi": "Unggul (A)",
+    "nomor_sk": "No. 4231/SK/BAN-PT/Akred/S/VII/2022",
+    "tanggal_kadaluarsa": null,
+    "sertifikat": "documents/akreditasi/CV_I_Made_Apriana_zVbRKn9.pdf"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Mengubah berita berjudul: 'Berita Tentang Siapa Hayooo'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T03:43:31.270Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menghapus berita: 'Berita Tentang Siapa Hayooo'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T03:44:43.511Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan berita baru berjudul: 'Sambutan Koordinator Prodi'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T03:45:26.075Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Membuat akun administrator baru: 'Cenmoree'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T03:55:06.571Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T03:55:26.088Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menghapus akun administrator: 'Admin123'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:21:35.757Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:21:44.788Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:22:57.327Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:25:09.570Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:27:01.721Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:31:56.075Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:33:15.755Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T04:36:26.050Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Mengubah berita berjudul: 'Sambutan Koordinator Prodi'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-20T12:48:29.126Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'apriana'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-21T07:48:39.144Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'apriana'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-21T07:50:27.453Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'apriana'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-21T08:14:56.098Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'apriana'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-21T08:15:02.913Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'apriana'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-21T08:15:10.966Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'Cenmoree'",
+    "keterangan": "-",
+    "ip_address": "-",
+    "waktu": "2026-10-21T08:24:54.102Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Mengubah berita berjudul: 'Sambutan Koordinator Prodi'",
+    "keterangan": "Berita berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-21T09:44:53.183Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan data tendik baru: 'IMADE APRIANA'",
+    "keterangan": "Data tendik ditambahkan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-21T10:10:48.282Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui data tendik: 'IMADE ANJAY'",
+    "keterangan": "Data tendik diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-21T10:12:42.860Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui data tendik: 'IMADE ANJAY'",
+    "keterangan": "Data tendik diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-21T10:22:49.756Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui data tendik: 'IMADE APRIANA'",
+    "keterangan": "Data tendik diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-21T10:22:54.550Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui data tendik: 'Ni MADE ANJAY'",
+    "keterangan": "Data tendik diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-21T10:23:13.419Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'admin'",
+    "keterangan": "Berhasil memperbarui data user",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-22T09:38:55.511Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Konten Menu Tentang",
+    "keterangan": "Konten profil, visi, misi, dan laman tentang berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-26T13:31:35.086Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Rumusan Visi & Kalimat Pengantar",
+    "keterangan": "Data Visi & Pengantar berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T06:19:02.936Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 30,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan Poin Misi Baru (Urutan 99)",
+    "keterangan": "Item misi berhasil ditambahkan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T06:19:02.970Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 31,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Poin Misi (Urutan 99)",
+    "keterangan": "Item misi berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T06:19:02.991Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 32,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menghapus Poin Misi (Urutan 99)",
+    "keterangan": "Item misi telah dihapus",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T06:19:03.014Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan Poin Tujuan Baru: 'Tujuan Testing 99'",
+    "keterangan": "Item tujuan berhasil ditambahkan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T06:19:03.034Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Poin Tujuan: 'Tujuan Testing 99 Updated'",
+    "keterangan": "Item tujuan berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T06:19:03.056Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 35,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menghapus Poin Tujuan: 'Tujuan Testing 99 Updated'",
+    "keterangan": "Item tujuan telah dihapus",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T06:19:03.074Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 36,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Rumusan Visi & Kalimat Pengantar",
+    "keterangan": "Data Visi & Pengantar berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T10:01:30.885Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 37,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Rumusan Visi & Kalimat Pengantar",
+    "keterangan": "Data Visi & Pengantar berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T10:02:08.095Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 38,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Poin Misi (Urutan 1)",
+    "keterangan": "Item misi berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T10:02:36.335Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 39,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Poin Misi (Urutan 1)",
+    "keterangan": "Item misi berhasil diperbarui",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T10:02:47.437Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 40,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Konten Sub-Menu Akademik: 'SIGA-8'",
+    "keterangan": "Konten akademik berhasil disimpan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T10:09:48.800Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 41,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Konten Sub-Menu: 'Profil Program Studi'",
+    "keterangan": "Konten berhasil disimpan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-28T10:15:50.499Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 42,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Konten Sub-Menu Akademik: 'Panduan Akademik'",
+    "keterangan": "Konten akademik berhasil disimpan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-29T12:13:51.538Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 43,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Konten Sub-Menu: 'Sertifikat Akreditasi'",
+    "keterangan": "Konten berhasil disimpan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-30T09:33:39.968Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 44,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Konten Sub-Menu: 'Sertifikat Akreditasi'",
+    "keterangan": "Konten berhasil disimpan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-10-30T09:33:56.459Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 45,
+  "fields": {
+    "user": [
+      "muhh"
+    ],
+    "aktivitas": "Menambahkan Foto Galeri: 'Logo DIGINUS'",
+    "keterangan": "Foto galeri baru ditambahkan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-11T07:30:53.172Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 46,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Pengaturan Hero Banner: 'Administrasi Publik FISIP Untad'",
+    "keterangan": "Pengaturan Hero Banner berhasil disimpan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-12T10:29:09.243Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 47,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan berita baru berjudul: 'ANjayyyy'",
+    "keterangan": "Berita berhasil dipublikasikan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-24T10:26:48.049Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 48,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan berita baru berjudul: 'MAjuuuuuuuuuu'",
+    "keterangan": "Berita berhasil dipublikasikan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-24T10:27:05.217Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 49,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui Pengaturan Hero Banner: 'Administrasi Publik FISIP Untad'",
+    "keterangan": "Pengaturan Hero Banner berhasil disimpan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-24T10:27:46.275Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 50,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan Foto Galeri: '2'",
+    "keterangan": "Foto galeri baru ditambahkan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-24T10:27:55.351Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 51,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan Foto Galeri: '3'",
+    "keterangan": "Foto galeri baru ditambahkan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-24T10:28:05.519Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 52,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan Foto Galeri: '4'",
+    "keterangan": "Foto galeri baru ditambahkan",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-24T10:28:31.822Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 1,
+  "fields": {
+    "tanggal": "2026-11-20",
+    "ip_address": "127.0.0.1",
+    "session_key": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
+    "created_at": "2026-11-20T05:57:45.165Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 2,
+  "fields": {
+    "tanggal": "2026-11-21",
+    "ip_address": "127.0.0.1",
+    "session_key": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
+    "created_at": "2026-11-21T09:50:33.578Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 3,
+  "fields": {
+    "tanggal": "2026-11-21",
+    "ip_address": "127.0.0.1",
+    "session_key": "kyoee0noc573z742i41mekmtwxrto8oy",
+    "created_at": "2026-11-21T10:19:27.795Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 4,
+  "fields": {
+    "tanggal": "2026-11-21",
+    "ip_address": "127.0.0.1",
+    "session_key": "gtm3o1m9f6sjfg0eiqj8j7ion59hg9on",
+    "created_at": "2026-11-21T10:19:43.263Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 5,
+  "fields": {
+    "tanggal": "2026-11-21",
+    "ip_address": "127.0.0.1",
+    "session_key": "nneaovmwple8axvg79e4dv47eouc075z",
+    "created_at": "2026-11-21T10:19:58.018Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 6,
+  "fields": {
+    "tanggal": "2026-11-21",
+    "ip_address": "127.0.0.1",
+    "session_key": "3r3za2b9qqkrknewyb5p0yblezeftg0s",
+    "created_at": "2026-11-21T10:20:13.147Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 7,
+  "fields": {
+    "tanggal": "2026-11-21",
+    "ip_address": "127.0.0.1",
+    "session_key": "pqpor1genfvhsjarn32ppqadrlbtvyc5",
+    "created_at": "2026-11-21T10:40:37.347Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 8,
+  "fields": {
+    "tanggal": "2026-11-23",
+    "ip_address": "127.0.0.1",
+    "session_key": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
+    "created_at": "2026-11-23T10:24:47.382Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 9,
+  "fields": {
+    "tanggal": "2026-11-23",
+    "ip_address": "127.0.0.1",
+    "session_key": "renh3ko0to7o64mpqcrg9dis7c5n9ilc",
+    "created_at": "2026-11-23T10:33:15.735Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 10,
+  "fields": {
+    "tanggal": "2026-11-24",
+    "ip_address": "127.0.0.1",
+    "session_key": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
+    "created_at": "2026-11-24T10:23:56.359Z"
+  }
+},
+{
+  "model": "landing.eventterdekat",
+  "pk": 1,
+  "fields": {
+    "nama_mahasiswa": "Ririn Puspita",
+    "nim": "G81122014",
+    "kategori": "Komprehensif",
+    "tanggal_event": "2026-06-24",
+    "hari_tanggal_manual": "Rabu 24 Juni 2026",
+    "waktu": "09:00 WITA",
+    "lokasi": "Ruang Ujian Jurusan",
+    "poster": "event_terdekat/poster_sample_1.png",
+    "urutan": 1,
+    "is_active": true,
+    "created_at": "2026-11-21T10:19:12.567Z",
+    "updated_at": "2026-11-21T10:19:12.567Z"
+  }
+},
+{
+  "model": "landing.eventterdekat",
+  "pk": 2,
+  "fields": {
+    "nama_mahasiswa": "Dewi Rahayu",
+    "nim": "G81122031",
+    "kategori": "Komprehensif",
+    "tanggal_event": "2026-06-24",
+    "hari_tanggal_manual": "Rabu 24 Juni 2026",
+    "waktu": "10:30 WITA",
+    "lokasi": "Ruang Ujian Jurusan",
+    "poster": "event_terdekat/poster_sample_2.png",
+    "urutan": 2,
+    "is_active": true,
+    "created_at": "2026-11-21T10:19:12.586Z",
+    "updated_at": "2026-11-21T10:19:12.586Z"
+  }
+},
+{
+  "model": "landing.eventterdekat",
+  "pk": 3,
+  "fields": {
+    "nama_mahasiswa": "Miliyanti Putri A mansur",
+    "nim": "G81122007",
+    "kategori": "Komprehensif",
+    "tanggal_event": "2026-06-25",
+    "hari_tanggal_manual": "Kamis 25 Juni 2026",
+    "waktu": "09:00 WITA",
+    "lokasi": "Ruang Ujian Jurusan",
+    "poster": "event_terdekat/poster_sample_3.png",
+    "urutan": 3,
+    "is_active": true,
+    "created_at": "2026-11-21T10:19:12.604Z",
+    "updated_at": "2026-11-21T10:19:12.605Z"
+  }
+},
+{
+  "model": "landing.eventterdekat",
+  "pk": 4,
+  "fields": {
+    "nama_mahasiswa": "Selvia",
+    "nim": "G81122019",
+    "kategori": "Komprehensif",
+    "tanggal_event": "2026-06-24",
+    "hari_tanggal_manual": "Rabu 24 Juni 2026",
+    "waktu": "13:00 WITA",
+    "lokasi": "Ruang Ujian Jurusan",
+    "poster": "event_terdekat/poster_sample_4.png",
+    "urutan": 4,
+    "is_active": true,
+    "created_at": "2026-11-21T10:19:12.621Z",
+    "updated_at": "2026-11-21T10:19:12.621Z"
+  }
+},
+{
+  "model": "akun.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "muhh"
+    ],
+    "role": "USER",
+    "foto": "",
+    "no_telepon": null
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-19T08:14:10.258Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-19T08:14:18.237Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-19T11:05:32.093Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:18:13.763Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:21:53.859Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:24:59.991Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:26:47.999Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:31:38.187Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:32:04.181Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:34:26.922Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T04:36:32.938Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T11:28:21.546Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "Cenmoree"
+    ],
+    "waktu_login": "2026-10-20T11:49:19.082Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T11:49:33.213Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T12:33:21.510Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "Cenmoree"
+    ],
+    "waktu_login": "2026-10-20T12:46:39.614Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T12:46:50.562Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "Cenmoree"
+    ],
+    "waktu_login": "2026-10-20T12:52:43.509Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T12:53:00.414Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "Cenmoree"
+    ],
+    "waktu_login": "2026-10-20T13:01:04.210Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-20T13:01:14.346Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-21T06:56:52.688Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-21T09:09:20.338Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-22T09:28:55.222Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-10-22T09:37:15.778Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-11-02T08:38:39.401Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "muhh"
+    ],
+    "waktu_login": "2026-11-07T06:38:50.933Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-11-12T10:52:46.330Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.auditlog",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Menambahkan berita baru berjudul: 'Berita Tentang Siapa Hayooo'",
+    "waktu": "2026-10-19T10:57:37.131Z"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-10-12T09:08:36.489Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "landing",
+      "berita"
+    ],
+    "object_id": "1",
+    "object_repr": "ANJAY DJANGO",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-10-12T09:08:39.585Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "landing",
+      "berita"
+    ],
+    "object_id": "1",
+    "object_repr": "ANJAY DJANGO",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-10-13T05:18:47.217Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "landing",
+      "tenagapendidik"
+    ],
+    "object_id": "1",
+    "object_repr": "IMADE APRIANA",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-10-13T05:27:12.406Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "landing",
+      "tenagapendidik"
+    ],
+    "object_id": "1",
+    "object_repr": "IMADE APRIANA",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"No hp\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-10-14T10:23:10.256Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "landing",
+      "tenagapendidik"
+    ],
+    "object_id": "1",
+    "object_repr": "IMADE APRIANA",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Foto\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-10-21T07:53:28.084Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "1",
+    "object_repr": "Admin Prodi",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2026-10-21T07:53:32.756Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "2",
+    "object_repr": "Editor",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2026-10-21T07:53:38.074Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "object_id": "3",
+    "object_repr": "Contributor",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+}
+]
