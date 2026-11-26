@@ -138,24 +138,12 @@ def galeri_list(request):
         for judul, gambar, urutan in sample_galeri:
             Galeri.objects.create(judul=judul, gambar=gambar, urutan=urutan)
 
-    query = request.GET.get('q', '').strip()
-    galeri_qs = Galeri.objects.all().order_by('urutan', '-created_at')
-
-    if query:
-        galeri_qs = galeri_qs.filter(judul__icontains=query)
-
-    paginator = Paginator(galeri_qs, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # Foto unggulan untuk carousel slider persis referensi Teknik Geofisika
-    carousel_galeri = Galeri.objects.all().order_by('urutan', '-created_at')[:12]
+    # Ambil seluruh foto kegiatan untuk carousel slider persis referensi Teknik Geofisika
+    carousel_galeri = Galeri.objects.all().order_by('urutan', '-created_at')
 
     context = {
-        'page_obj': page_obj,
         'carousel_galeri': carousel_galeri,
-        'query': query,
-        'total_galeri': galeri_qs.count(),
+        'total_galeri': carousel_galeri.count(),
     }
     return render(request, 'core/galeri/list.html', context)
 
