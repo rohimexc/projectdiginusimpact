@@ -15,6 +15,9 @@
   <!-- AOS Animation CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+  <!-- Swiper Carousel CSS (Persis Teknik Geofisika) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -56,6 +59,23 @@
       [data-aos][data-aos-delay] {
         transition-delay: 50ms !important;
       }
+    }
+
+    /* Swiper Styles Persis Teknik Geofisika */
+    .galeri-swiper {
+      padding-bottom: 46px !important;
+    }
+    .galeri-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .galeri-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
     }
   </style>
 </head>
@@ -337,172 +357,261 @@
     <div class="max-w-6xl mx-auto">
       
       <!-- BLOK 1 AOS: Header Halaman -->
-      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-8 text-center sm:text-left">
         <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
         <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
           <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
           <span class="text-slate-400">›</span>
           <span class="font-medium text-teal-800">Galeri Kegiatan</span>
         </nav>
-        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
-          Galeri Kegiatan
-        </h1>
-        <p class="text-xs sm:text-sm text-slate-500 font-normal">
-          Dokumentasi visual berbagai kegiatan, agenda akademik, dan kemahasiswaan Program Studi Administrasi Publik FISIP Universitas Tadulako
-        </p>
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+              Galeri Kegiatan
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-500 font-normal">
+              Dokumentasi visual berbagai kegiatan, agenda akademik, dan kemahasiswaan Program Studi Administrasi Publik FISIP Universitas Tadulako
+            </p>
+            <!-- Divider Line Khas Teknik Geofisika -->
+            <div class="w-20 h-1 bg-gradient-to-r from-brand-teal via-[#0d8297] to-brand-gold rounded-full mt-3"></div>
+          </div>
+          {% if request.user.is_staff or request.user.is_superuser %}
+            <a href="{% url 'admin_kelola_galeri' %}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-50 text-brand-teal hover:bg-brand-teal hover:text-white border border-teal-200 text-xs font-semibold transition self-start sm:self-auto shrink-0 shadow-xs">
+              <i class="fas fa-cog"></i> Kelola Galeri
+            </a>
+          {% endif %}
+        </div>
       </header>
+
+      <!-- ================= 1. CAROUSEL SLIDER PERSIS TEKNIK GEOFISIKA ================= -->
+      {% if carousel_galeri and not query %}
+        <section class="mb-14 sm:mb-16" data-aos="fade-up" data-aos-duration="600">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-brand-gold"></span>
+              <h2 class="text-base sm:text-lg font-bold text-slate-800 tracking-tight">
+                Sorotan Dokumentasi Terbaru
+              </h2>
+            </div>
+
+            <!-- Tombol Navigasi Panah Kiri (<) & Kanan (>) -->
+            <div class="flex items-center gap-2">
+              <button type="button" class="swiper-btn-prev w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-brand-teal text-slate-700 hover:text-white border border-slate-200 shadow-xs flex items-center justify-center transition-all duration-200 hover:scale-105 cursor-pointer focus:outline-none" aria-label="Foto Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" class="swiper-btn-next w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-brand-teal text-slate-700 hover:text-white border border-slate-200 shadow-xs flex items-center justify-center transition-all duration-200 hover:scale-105 cursor-pointer focus:outline-none" aria-label="Foto Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Swiper Slider Container (3 Kolom Desktop, 2 Tablet, 1 Mobile Sesuai Referensi) -->
+          <div class="swiper galeri-swiper">
+            <div class="swiper-wrapper">
+              {% for item in carousel_galeri %}
+                <div class="swiper-slide">
+                  <figure class="group bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full cursor-pointer m-0"
+                          onclick="bukaLightboxByData('{% if item.gambar %}{{ item.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ item.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ item.urutan|default:forloop.counter }}', '{{ item.created_at|date:'d M Y' }}')">
+                    
+                    <!-- Frame Gambar 4:3 Sesuai Teknik Geofisika -->
+                    <div class="w-full relative overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 3;">
+                      {% if item.gambar %}
+                        <img src="{{ item.gambar.url }}" alt="{{ item.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" loading="lazy">
+                      {% else %}
+                        <img src="{% static 'images/foto1.jpg' %}" alt="{{ item.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" loading="lazy">
+                      {% endif %}
+
+                      <!-- Overlay Zoom -->
+                      <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm border border-white/30 transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                          <i class="fas fa-search-plus"></i>
+                        </span>
+                      </div>
+
+                      <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-white/20">
+                        Foto #{{ item.urutan|default:forloop.counter }}
+                      </span>
+                    </div>
+
+                    <!-- Figcaption Teks Judul Persis Teknik Geofisika -->
+                    <figcaption class="p-4 flex-1 flex flex-col justify-between bg-white">
+                      <p class="font-semibold text-xs sm:text-sm text-slate-800 line-clamp-2 group-hover:text-brand-teal transition-colors leading-snug">
+                        {{ item.judul|default:"Dokumentasi Kegiatan" }}
+                      </p>
+                      <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                        <span><i class="far fa-calendar-alt text-brand-gold mr-1"></i> {{ item.created_at|date:"d M Y" }}</span>
+                        <span class="text-brand-teal font-semibold group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-1 text-[11px]">
+                          Pratinjau <i class="fas fa-arrow-right text-[9px]"></i>
+                        </span>
+                      </div>
+                    </figcaption>
+                  </figure>
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Dots Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      {% endif %}
       
-      <!-- ================= SEARCH BAR KAPSUL (PILL-SHAPED) ================= -->
-      <div data-aos="fade-down" data-aos-duration="600" class="mb-8 sm:mb-10 w-full">
-        <!-- Filter & Pencarian -->
-        <form method="GET" action="{% url 'galeri_list' %}" class="bg-white rounded-3xl md:rounded-full p-3 md:p-2 border border-slate-200/90 shadow-sm flex flex-col md:flex-row items-stretch md:items-center gap-0 md:gap-3 transition hover:shadow-md">
-          <!-- Input Teks (Pill Kapsul) -->
-          <div class="flex-1 relative flex items-center">
+      <!-- ================= 2. SEARCH BAR & SEMUA KOLEKSI FOTO ================= -->
+      <section>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-800 tracking-tight">
+              Semua Foto Kegiatan
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              {% if query %}
+                Hasil pencarian untuk "<strong class="text-slate-800">{{ query }}</strong>" &bull; 
+              {% endif %}
+              Total <strong class="text-[#0b7285] font-bold">{{ total_galeri }}</strong> Foto Tersedia
+            </p>
+          </div>
+
+          <!-- Form Pencarian Kapsul -->
+          <form method="GET" action="{% url 'galeri_list' %}" class="w-full sm:w-80 md:w-96 relative flex items-center">
             <input 
               type="text" 
               name="q" 
               value="{{ query }}" 
-              placeholder="Cari judul dokumentasi atau kegiatan..." 
+              placeholder="Cari dokumentasi kegiatan..." 
               autocomplete="off"
-              class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-5 py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+              class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full pl-4 pr-24 py-2.5 outline-none placeholder:text-slate-400 focus:border-[#0b7285] focus:ring-2 focus:ring-teal-100 transition shadow-2xs"
             >
             {% if query %}
               <a 
                 href="{% url 'galeri_list' %}" 
-                class="absolute right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition cursor-pointer" 
+                class="absolute right-20 text-slate-400 hover:text-rose-500 p-1 text-xs transition cursor-pointer" 
                 title="Hapus filter"
               >
                 <i class="fas fa-times-circle"></i>
               </a>
             {% endif %}
-          </div>
-
-          <!-- Tombol Submit Cari Foto (Pill Kapsul Full-width di Mobile) -->
-          <button 
-            type="submit" 
-            class="w-full md:w-auto mt-2.5 md:mt-0 rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-7 py-3 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
-          >
-            <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
-            <span>Cari Foto</span>
-          </button>
-        </form>
-      </div>
-
-    <!-- Info Bar / Jumlah Foto -->
-    <div class="flex items-center justify-between mb-8 pb-3 border-b border-slate-200/80 text-xs text-slate-500">
-      <div class="flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-brand-teal"></span>
-        <span>
-          {% if query %}
-            Hasil pencarian untuk "<strong class="text-slate-700">{{ query }}</strong>": 
-          {% endif %}
-          Total <strong class="text-[#0b7285] font-bold">{{ total_galeri }}</strong> Foto Dokumentasi
-        </span>
-      </div>
-      {% if request.user.is_staff or request.user.is_superuser %}
-        <a href="{% url 'admin_kelola_galeri' %}" class="text-xs text-brand-teal hover:underline font-semibold flex items-center gap-1.5">
-          <i class="fas fa-cog"></i> Kelola Galeri
-        </a>
-      {% endif %}
-    </div>
-
-    <!-- Grid Kartu Foto Galeri -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
-      {% for galeri in page_obj %}
-        <div data-aos="fade-up" data-aos-duration="600" class="group bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
-          <div>
-            <!-- FRAME GAMBAR DENGAN OVERLAY ZOOM -->
-            <div class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative cursor-pointer" style="aspect-ratio: 4 / 3;"
-                 onclick="bukaLightboxGaleri('{% if galeri.gambar %}{{ galeri.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ galeri.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ galeri.urutan }}')">
-              {% if galeri.gambar %}
-                <img src="{{ galeri.gambar.url }}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              {% else %}
-                <img src="{% static 'images/foto1.jpg' %}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              {% endif %}
-
-              <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity duration-200">
-                <span class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-base">
-                  <i class="fas fa-search-plus"></i>
-                </span>
-              </div>
-            </div>
-
-            <!-- Konten Kartu -->
-            <div class="p-4">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-brand-teal border border-teal-100">
-                  Foto #{{ galeri.urutan }}
-                </span>
-                <span class="text-[10px] text-slate-400">
-                  {{ galeri.created_at|date:"d M Y" }}
-                </span>
-              </div>
-              <h3 class="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug group-hover:text-brand-teal transition-colors">
-                {{ galeri.judul|default:"Dokumentasi Kegiatan" }}
-              </h3>
-            </div>
-          </div>
-
-          <!-- Bar Bawah Kartu -->
-          <div class="px-4 py-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-xs">
-            <button type="button" 
-                    onclick="bukaLightboxGaleri('{% if galeri.gambar %}{{ galeri.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ galeri.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ galeri.urutan }}')"
-                    class="text-[11px] font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1 cursor-pointer">
-              Lihat Foto &rarr;
+            <button 
+              type="submit" 
+              class="absolute right-1 rounded-full bg-[#0b7285] hover:bg-[#084c5a] text-white px-4 py-1.5 flex items-center gap-1.5 font-semibold text-xs transition active:scale-95 cursor-pointer shrink-0 shadow-xs"
+            >
+              <i class="fas fa-magnifying-glass text-[11px]"></i>
+              <span>Cari</span>
             </button>
-            <span class="text-[10px] text-slate-400 font-medium">UNTAD</span>
-          </div>
+          </form>
         </div>
-      {% empty %}
-        <div class="col-span-full text-center py-20 text-slate-400" data-aos="fade-in">
-          <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-300 flex items-center justify-center text-3xl mx-auto mb-3">
-            <i class="far fa-images"></i>
-          </div>
-          <p class="text-sm font-semibold text-slate-700 mb-1">Belum Ada Foto Galeri</p>
-          <p class="text-xs text-slate-400 max-w-sm mx-auto mb-4">
-            {% if query %}
-              Tidak ada dokumentasi kegiatan yang cocok dengan kata kunci "{{ query }}".
-            {% else %}
-              Dokumentasi agenda dan kegiatan akademik akan segera diunggah.
+
+        <!-- Grid Kartu Foto Galeri -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+          {% for galeri in page_obj %}
+            <div data-aos="fade-up" data-aos-duration="500" class="group bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+              <div>
+                <!-- Frame Gambar 4:3 -->
+                <div class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative cursor-pointer" style="aspect-ratio: 4 / 3;"
+                     onclick="bukaLightboxByData('{% if galeri.gambar %}{{ galeri.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ galeri.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ galeri.urutan|default:forloop.counter }}', '{{ galeri.created_at|date:'d M Y' }}')">
+                  {% if galeri.gambar %}
+                    <img src="{{ galeri.gambar.url }}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                  {% else %}
+                    <img src="{% static 'images/foto1.jpg' %}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                  {% endif %}
+
+                  <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity duration-200">
+                    <span class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-base">
+                      <i class="fas fa-search-plus"></i>
+                    </span>
+                  </div>
+
+                  <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-full border border-white/20">
+                    Foto #{{ galeri.urutan|default:forloop.counter }}
+                  </span>
+                </div>
+
+                <!-- Konten Kartu -->
+                <div class="p-4">
+                  <span class="text-[10px] text-slate-400 block mb-1">
+                    <i class="far fa-calendar-alt text-brand-gold mr-1"></i> {{ galeri.created_at|date:"d M Y" }}
+                  </span>
+                  <h3 class="text-sm font-semibold text-slate-800 line-clamp-2 leading-snug group-hover:text-brand-teal transition-colors">
+                    {{ galeri.judul|default:"Dokumentasi Kegiatan" }}
+                  </h3>
+                </div>
+              </div>
+
+              <!-- Bar Bawah Kartu -->
+              <div class="px-4 py-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-xs">
+                <button type="button" 
+                        onclick="bukaLightboxByData('{% if galeri.gambar %}{{ galeri.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ galeri.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ galeri.urutan|default:forloop.counter }}', '{{ galeri.created_at|date:'d M Y' }}')"
+                        class="text-[11px] font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1 cursor-pointer">
+                  Lihat Foto &rarr;
+                </button>
+                <span class="text-[10px] text-slate-400 font-medium">UNTAD</span>
+              </div>
+            </div>
+          {% empty %}
+            <div class="col-span-full text-center py-20 text-slate-400" data-aos="fade-in">
+              <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-300 flex items-center justify-center text-3xl mx-auto mb-3">
+                <i class="far fa-images"></i>
+              </div>
+              <p class="text-sm font-semibold text-slate-700 mb-1">Belum Ada Foto Galeri</p>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto mb-4">
+                {% if query %}
+                  Tidak ada dokumentasi kegiatan yang cocok dengan kata kunci "{{ query }}".
+                {% else %}
+                  Dokumentasi agenda dan kegiatan akademik akan segera diunggah.
+                {% endif %}
+              </p>
+              {% if query %}
+                <a href="{% url 'galeri_list' %}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0b7285] hover:underline">
+                  &larr; Tampilkan Semua Foto
+                </a>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Paginasi -->
+        {% if page_obj.has_other_pages %}
+          <div class="mt-12 flex justify-center items-center gap-2 text-xs font-semibold">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-teal-50 hover:text-brand-teal transition shadow-xs flex items-center gap-1">
+                <i class="fas fa-chevron-left text-[10px]"></i> Sebelumnya
+              </a>
             {% endif %}
-          </p>
-          {% if query %}
-            <a href="{% url 'galeri_list' %}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0b7285] hover:underline">
-              &larr; Tampilkan Semua Foto
-            </a>
-          {% endif %}
-        </div>
-      {% endfor %}
-    </div>
 
-    <!-- Paginasi -->
-    {% if page_obj.has_other_pages %}
-      <div class="mt-12 flex justify-center items-center gap-2 text-xs font-semibold">
-        {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-teal-50 hover:text-brand-teal transition shadow-xs flex items-center gap-1">
-            <i class="fas fa-chevron-left text-[10px]"></i> Sebelumnya
-          </a>
+            <span class="px-4 py-2 rounded-xl bg-[#0b7285] text-white shadow-xs">
+              Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-teal-50 hover:text-brand-teal transition shadow-xs flex items-center gap-1">
+                Selanjutnya <i class="fas fa-chevron-right text-[10px]"></i>
+              </a>
+            {% endif %}
+          </div>
         {% endif %}
-
-        <span class="px-4 py-2 rounded-xl bg-[#0b7285] text-white shadow-xs">
-          Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}
-        </span>
-
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-teal-50 hover:text-brand-teal transition shadow-xs flex items-center gap-1">
-            Selanjutnya <i class="fas fa-chevron-right text-[10px]"></i>
-          </a>
-        {% endif %}
-      </div>
-    {% endif %}
+      </section>
 
     </div>
   </main>
 
-  <!-- MODAL LIGHTBOX FOTO GALERI -->
-  <div id="lightboxGaleri" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-4xl flex flex-col max-h-[95vh]">
-      <!-- Judul & Header Outside (Di Luar Kotak Gambar Sesuai Request) -->
+  <!-- MODAL LIGHTBOX FOTO GALERI DENGAN PREV & NEXT INTERAKTIF -->
+  <div id="lightboxGaleri" class="fixed inset-0 bg-slate-950/92 backdrop-blur-md z-[9999] hidden flex items-center justify-center p-3 sm:p-6" role="dialog" aria-modal="true">
+    
+    <!-- Tombol Prev Melayang di Kiri -->
+    <button type="button" onclick="navigasiLightbox(-1)" 
+            class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition duration-200 border border-white/20 hover:scale-110 focus:outline-none cursor-pointer" 
+            title="Foto Sebelumnya (Panah Kiri)">
+      <i class="fas fa-chevron-left text-sm sm:text-base"></i>
+    </button>
+
+    <!-- Tombol Next Melayang di Kanan -->
+    <button type="button" onclick="navigasiLightbox(1)" 
+            class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition duration-200 border border-white/20 hover:scale-110 focus:outline-none cursor-pointer" 
+            title="Foto Selanjutnya (Panah Kanan)">
+      <i class="fas fa-chevron-right text-sm sm:text-base"></i>
+    </button>
+
+    <div class="w-full max-w-4xl flex flex-col max-h-[92vh] relative z-10">
+      <!-- Judul & Header Outside -->
       <div class="flex items-center justify-between mb-2.5 px-2 text-white shrink-0">
         <div class="flex items-center gap-2.5 min-w-0 pr-3">
           <span id="lbUrutan" class="px-2.5 py-0.5 rounded-md bg-[#fab005] text-slate-900 text-[11px] font-bold shrink-0">Foto #1</span>
@@ -514,20 +623,20 @@
       </div>
 
       <!-- Kotak Gambar Utama -->
-      <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 min-h-0">
-        <!-- Area Gambar (Gambar dalam tanpa radius) -->
-        <div class="p-2 sm:p-4 bg-slate-950 flex items-center justify-center overflow-hidden flex-1 min-h-[260px] sm:min-h-[380px]">
-          <img id="lbImg" src="" alt="Dokumentasi Kegiatan" class="max-w-full max-h-[68vh] object-contain shadow-lg" style="border-radius: 0px !important;">
+      <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 min-h-0 border border-white/10">
+        <!-- Area Gambar -->
+        <div class="p-2 sm:p-4 bg-slate-950 flex items-center justify-center overflow-hidden flex-1 min-h-[260px] sm:min-h-[420px] relative select-none">
+          <img id="lbImg" src="" alt="Dokumentasi Kegiatan" class="max-w-full max-h-[66vh] object-contain shadow-lg transition-opacity duration-200">
         </div>
 
         <!-- Footer Modal -->
         <div class="px-4 sm:px-6 py-3 bg-white border-t border-slate-100 flex items-center justify-between shrink-0">
-          <span class="text-[11px] text-slate-500 truncate mr-2">
-            <i class="fas fa-graduation-cap text-brand-gold mr-1"></i> Administrasi Publik FISIP UNTAD
+          <span id="lbCounter" class="text-[11px] text-slate-500 truncate mr-2">
+            <i class="fas fa-images text-brand-gold mr-1"></i> Administrasi Publik FISIP UNTAD
           </span>
           <div class="flex items-center gap-2 shrink-0">
             <a id="lbDownload" href="" target="_blank" class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-[#0b7285] hover:bg-teal-50 transition flex items-center gap-1.5 cursor-pointer">
-              <i class="fas fa-eye text-xs"></i> Buka
+              <i class="fas fa-eye text-xs"></i> Buka Gambar Penuh
             </a>
             <button type="button" onclick="tutupLightboxGaleri()" class="px-4 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition cursor-pointer">
               Tutup
@@ -736,36 +845,162 @@
         if (icon) icon.classList.toggle('rotate-180');
       }
     }
+  </script>
 
-    // Lightbox Modal Functions
-    function bukaLightboxGaleri(url, judul, urutan) {
-      document.getElementById('lbImg').src = url;
-      document.getElementById('lbJudul').innerText = judul || 'Dokumentasi Kegiatan';
-      document.getElementById('lbUrutan').innerText = 'Foto #' + urutan;
-      document.getElementById('lbDownload').href = url;
+  <!-- Swiper JS CDN (Persis Teknik Geofisika) -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Script Galeri Swiper & Lightbox Navigasi Penuh -->
+  <script>
+    // 1. Inisialisasi Swiper Carousel Persis Teknik Geofisika
+    let galeriSwiper = null;
+    function initGaleriSwiper() {
+      const swiperContainer = document.querySelector('.galeri-swiper');
+      if (swiperContainer && typeof Swiper !== 'undefined') {
+        galeriSwiper = new Swiper('.galeri-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          loop: true,
+          speed: 600,
+          autoplay: {
+            delay: 4500,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-btn-next',
+            prevEl: '.swiper-btn-prev',
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGaleriSwiper);
+    } else {
+      initGaleriSwiper();
+    }
+
+    // 2. Koleksi Seluruh Foto Galeri untuk Navigasi Lightbox
+    const koleksiGaleri = [
+      {% for item in page_obj %}
+      {
+        url: "{% if item.gambar %}{{ item.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}",
+        judul: "{{ item.judul|default:'Dokumentasi Kegiatan'|escapejs }}",
+        urutan: "{{ item.urutan|default:forloop.counter }}",
+        tanggal: "{{ item.created_at|date:'d M Y' }}"
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ];
+
+    let currentLbIndex = 0;
+
+    function renderLightboxContent(index) {
+      if (!koleksiGaleri.length) return;
+      if (index < 0) index = koleksiGaleri.length - 1;
+      if (index >= koleksiGaleri.length) index = 0;
+      currentLbIndex = index;
+
+      const foto = koleksiGaleri[index];
+      if (!foto) return;
+
+      const img = document.getElementById('lbImg');
+      if (img) {
+        img.style.opacity = '0';
+        setTimeout(() => {
+          img.src = foto.url;
+          img.style.opacity = '1';
+        }, 80);
+      }
+
+      const judulEl = document.getElementById('lbJudul');
+      if (judulEl) judulEl.innerText = foto.judul || 'Dokumentasi Kegiatan';
+
+      const urutanEl = document.getElementById('lbUrutan');
+      if (urutanEl) urutanEl.innerText = 'Foto #' + (foto.urutan || (index + 1));
+
+      const downloadEl = document.getElementById('lbDownload');
+      if (downloadEl) downloadEl.href = foto.url;
+
+      const counterEl = document.getElementById('lbCounter');
+      if (counterEl) {
+        counterEl.innerHTML = `<i class="fas fa-images text-brand-gold mr-1"></i> Foto ${index + 1} dari ${koleksiGaleri.length} &bull; Administrasi Publik`;
+      }
+    }
+
+    function bukaLightboxById(index) {
+      renderLightboxContent(index);
       const lb = document.getElementById('lightboxGaleri');
-      lb.classList.remove('hidden');
-      lb.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+      if (lb) {
+        lb.classList.remove('hidden');
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function bukaLightboxByData(url, judul, urutan, tanggal) {
+      let foundIdx = koleksiGaleri.findIndex(f => f.url === url);
+      if (foundIdx === -1) {
+        koleksiGaleri.push({ url, judul, urutan, tanggal });
+        foundIdx = koleksiGaleri.length - 1;
+      }
+      bukaLightboxById(foundIdx);
+    }
+
+    // Fungsi kompatibilitas untuk pemanggilan lama
+    function bukaLightboxGaleri(url, judul, urutan) {
+      bukaLightboxByData(url, judul, urutan, '');
+    }
+
+    function navigasiLightbox(direction) {
+      renderLightboxContent(currentLbIndex + direction);
     }
 
     function tutupLightboxGaleri() {
       const lb = document.getElementById('lightboxGaleri');
-      lb.classList.add('hidden');
-      lb.style.display = 'none';
-      document.getElementById('lbImg').src = '';
-      document.body.style.overflow = 'auto';
+      if (lb) {
+        lb.classList.add('hidden');
+        lb.style.display = 'none';
+        const img = document.getElementById('lbImg');
+        if (img) img.src = '';
+        document.body.style.overflow = 'auto';
+      }
     }
 
-    document.getElementById('lightboxGaleri').addEventListener('click', function(e) {
-      if (e.target === this) {
-        tutupLightboxGaleri();
-      }
-    });
+    // Event Listener Klik Luar & Tombol Keyboard
+    const lbModal = document.getElementById('lightboxGaleri');
+    if (lbModal) {
+      lbModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          tutupLightboxGaleri();
+        }
+      });
+    }
 
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        tutupLightboxGaleri();
+      const lb = document.getElementById('lightboxGaleri');
+      if (lb && !lb.classList.contains('hidden') && lb.style.display !== 'none') {
+        if (e.key === 'Escape') {
+          tutupLightboxGaleri();
+        } else if (e.key === 'ArrowLeft') {
+          navigasiLightbox(-1);
+        } else if (e.key === 'ArrowRight') {
+          navigasiLightbox(1);
+        }
       }
     });
   </script>

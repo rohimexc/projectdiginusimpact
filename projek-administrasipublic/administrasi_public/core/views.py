@@ -148,8 +148,12 @@ def galeri_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # Foto unggulan untuk carousel slider persis referensi Teknik Geofisika
+    carousel_galeri = Galeri.objects.all().order_by('urutan', '-created_at')[:12]
+
     context = {
         'page_obj': page_obj,
+        'carousel_galeri': carousel_galeri,
         'query': query,
         'total_galeri': galeri_qs.count(),
     }
