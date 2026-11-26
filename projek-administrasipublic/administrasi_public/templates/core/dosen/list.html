@@ -163,21 +163,53 @@
         </div>
       </li>
 
-      <li><a href="#" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] ml-1"></i></a></li>
-
-      <!-- Status Pengguna / Admin -->
-      {% if request.user.is_authenticated %}
-        <li class="flex items-center gap-2 pl-3 border-l border-white/20">
-          <div class="w-7 h-7 rounded-full bg-[#fcc419] text-slate-900 flex items-center justify-center text-xs font-bold shadow-xs">
-            {{ request.user.first_name|default:request.user.username|slice:":2"|upper }}
+      <!-- Dropdown Kemahasiswaan & Alumni -->
+      <li class="relative group">
+        <button type="button" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+          Kemahasiswaan & Alumni <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+        </button>
+        <div class="absolute right-0 top-full pt-2 w-64 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <a href="https://kemahasiswaan.untad.ac.id" target="_blank" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-external-link-alt text-[#fab005] w-4"></i> Portal Kemahasiswaan UNTAD
+            </a>
+            <a href="https://alumni.untad.ac.id" target="_blank" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <i class="fas fa-user-tie text-[#fab005] w-4"></i> Ikatan Alumni (IKA) UNTAD
+            </a>
           </div>
-          <span class="text-white text-xs font-semibold">{{ request.user.first_name|default:request.user.username }}</span>
-          <a href="{% url 'user_logout' %}?next={{ request.path }}" title="Keluar dari akun" class="text-xs text-rose-300 hover:text-white ml-1 p-1">
-            <i class="fas fa-arrow-right-from-bracket"></i>
-          </a>
+        </div>
+      </li>
+
+      <!-- Status Login & Profil / Tombol Masuk & Daftar -->
+      {% if request.user.is_authenticated %}
+        <li class="relative group ml-1">
+          <button type="button" class="flex items-center gap-2 text-white bg-white/15 hover:bg-white/25 py-1.5 px-3 rounded-full border border-white/20 transition focus:outline-none">
+            <div class="w-6 h-6 rounded-full bg-[#ffd43b] text-slate-900 font-bold flex items-center justify-center text-[10px]">
+              {{ request.user.username|slice:":2"|upper }}
+            </div>
+            <span class="text-xs font-semibold max-w-[90px] truncate">{{ request.user.username }}</span>
+            <i class="fas fa-chevron-down text-[9px] opacity-70"></i>
+          </button>
+          <div class="absolute right-0 top-full pt-2 w-52 hidden group-hover:block z-50">
+            <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+              <div class="px-4 py-2 border-b border-slate-100">
+                <p class="text-[11px] text-slate-400">Masuk sebagai:</p>
+                <p class="text-xs font-bold text-slate-800 truncate">{{ request.user.first_name|default:request.user.username }}</p>
+                <p class="text-[10px] text-slate-400 truncate">{{ request.user.email|default:"Pengguna" }}</p>
+              </div>
+              {% if request.user.is_staff or request.user.is_superuser %}
+                <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                  <i class="fas fa-gauge-high text-[#fab005] w-4"></i> Dashboard Admin
+                </a>
+              {% endif %}
+              <a href="{% url 'user_logout' %}?next={{ request.path }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium text-rose-600 hover:bg-rose-50 transition border-t border-slate-100">
+                <i class="fas fa-sign-out-alt w-4"></i> Logout
+              </a>
+            </div>
+          </div>
         </li>
       {% else %}
-        <li class="pl-2 flex items-center gap-2">
+        <li class="flex items-center gap-2 ml-1">
           <a href="{% url 'user_login' %}?next={{ request.path }}" class="bg-[#fcc419] hover:bg-[#fab005] text-slate-900 text-xs font-bold py-1.5 px-3.5 rounded-full transition shadow-sm">
             Masuk
           </a>
@@ -258,6 +290,18 @@
         <div id="mobile-staf-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
           <a href="{% url 'tenaga_pendidik_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Pengajar</a>
           <a href="{% url 'tenaga_kependidikan_list' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Tenaga Kependidikan</a>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown: Kemahasiswaan & Alumni -->
+      <div class="border-t border-white/10 pt-2">
+        <button type="button" onclick="toggleMobileAccordion('mobile-alumni-menu')" class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+          <span class="flex items-center gap-2.5"><i class="fas fa-user-graduate w-5 text-brand-gold"></i> Kemahasiswaan & Alumni</span>
+          <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-alumni-icon"></i>
+        </button>
+        <div id="mobile-alumni-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
+          <a href="https://kemahasiswaan.untad.ac.id" target="_blank" class="block py-1 px-2 rounded hover:text-brand-accent">Portal Kemahasiswaan UNTAD</a>
+          <a href="https://alumni.untad.ac.id" target="_blank" class="block py-1 px-2 rounded hover:text-brand-accent">Ikatan Alumni (IKA) UNTAD</a>
         </div>
       </div>
 
