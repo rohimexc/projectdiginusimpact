@@ -361,21 +361,12 @@
           <span class="text-slate-400">›</span>
           <span class="font-medium text-teal-800">Galeri Kegiatan</span>
         </nav>
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
-              Galeri Kegiatan
-            </h1>
-            <p class="text-xs sm:text-sm text-slate-500 font-normal">
-              Informasi dan dokumentasi visual seputar kegiatan Program Studi Administrasi Publik FISIP Universitas Tadulako
-            </p>
-          </div>
-          {% if request.user.is_staff or request.user.is_superuser %}
-            <a href="{% url 'admin_kelola_galeri' %}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-50 text-brand-teal hover:bg-brand-teal hover:text-white border border-teal-200 text-xs font-semibold transition self-start sm:self-auto shrink-0 shadow-xs">
-              <i class="fas fa-cog"></i> Kelola Galeri
-            </a>
-          {% endif %}
-        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+          Galeri Kegiatan
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-normal">
+          Informasi dan dokumentasi visual seputar kegiatan Program Studi Administrasi Publik FISIP Universitas Tadulako
+        </p>
       </header>
 
       <!-- ================= KARTU PENCARIAN & FILTER KAPSUL MODERN (2 BARIS, PERSIS BERITA) ================= -->
