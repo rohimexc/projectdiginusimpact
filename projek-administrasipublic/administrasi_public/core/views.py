@@ -138,12 +138,114 @@ def galeri_list(request):
         for judul, gambar, urutan in sample_galeri:
             Galeri.objects.create(judul=judul, gambar=gambar, urutan=urutan)
 
-    # Ambil seluruh foto kegiatan untuk carousel slider persis referensi Teknik Geofisika
-    carousel_galeri = Galeri.objects.all().order_by('urutan', '-created_at')
+    import datetime
+    from django.utils import timezone
+
+    today = timezone.localdate()
+
+    query = request.GET.get('q', '').strip()
+    start_date_str = (request.GET.get('start_date') or request.GET.get('tanggal_mulai', '')).strip()
+    end_date_str = (request.GET.get('end_date') or request.GET.get('tanggal_akhir', '')).strip()
+    preset = request.GET.get('preset', '').strip()
+    sort = request.GET.get('sort', 'terbaru').strip()
+    if sort not in ('terbaru', 'terlama'):
+        sort = 'terbaru'
+
+    # Tangani Preset Rentang Tanggal Cepat (Konsisten dengan Berita)
+    if preset == '7d':
+        start_date_str = (today - datetime.timedelta(days=7)).strftime('%Y-%m-%d')
+        end_date_str = today.strftime('%Y-%m-%d')
+    elif preset == 'this_month':
+        start_date_str = today.replace(day=1).strftime('%Y-%m-%d')
+        end_date_str = today.strftime('%Y-%m-%d')
+    elif preset == 'this_year':
+        start_date_str = today.replace(month=1, day=1).strftime('%Y-%m-%d')
+        end_date_str = today.strftime('%Y-%m-%d')
+    elif preset == 'all':
+        start_date_str = ''
+        end_date_str = ''
+        preset = 'all'
+
+    # Deteksi preset aktif bila start_date dan end_date cocok
+    if not preset:
+        if not start_date_str and not end_date_str:
+            preset = 'all'
+        elif start_date_str == str(today - datetime.timedelta(days=7)) and end_date_str == str(today):
+            preset = '7d'
+        elif start_date_str == str(today.replace(day=1)) and end_date_str == str(today):
+            preset = 'this_month'
+        elif start_date_str == str(today.replace(month=1, day=1)) and end_date_str == str(today):
+            preset = 'this_year'
+
+    galeri_qs = Galeri.objects.all()
+
+    # Filter Kata Kunci
+    if query:
+        galeri_qs = galeri_qs.filter(Q(judul__icontains=query))
+
+    # Filter Rentang Tanggal
+    if start_date_str:
+        try:
+            sd = datetime.date.fromisoformat(start_date_str)
+            galeri_qs = galeri_qs.filter(created_at__date__gte=sd)
+        except ValueError:
+            pass
+
+    if end_date_str:
+        try:
+            ed = datetime.date.fromisoformat(end_date_str)
+            galeri_qs = galeri_qs.filter(created_at__date__lte=ed)
+        except ValueError:
+            pass
+
+    # Urutkan konsisten dengan Berita
+    if sort == 'terlama':
+        galeri_qs = galeri_qs.order_by('created_at', 'urutan')
+    else:
+        galeri_qs = galeri_qs.order_by('-created_at', 'urutan')
+
+    total_galeri = galeri_qs.count()
+
+    # Label Filter Aktif untuk Bar Status (Format: DD/MM/YYYY – DD/MM/YYYY)
+    active_filter_label = ""
+    has_active_filter = bool(query or (start_date_str and preset != 'all') or (end_date_str and preset != 'all'))
+
+    if start_date_str and end_date_str:
+        try:
+            sd_fmt = datetime.date.fromisoformat(start_date_str).strftime('%d/%m/%Y')
+            ed_fmt = datetime.date.fromisoformat(end_date_str).strftime('%d/%m/%Y')
+            active_filter_label = f"{sd_fmt} – {ed_fmt}"
+        except ValueError:
+            active_filter_label = f"{start_date_str} – {end_date_str}"
+    elif start_date_str:
+        try:
+            sd_fmt = datetime.date.fromisoformat(start_date_str).strftime('%d/%m/%Y')
+            active_filter_label = f"Mulai {sd_fmt}"
+        except ValueError:
+            active_filter_label = f"Mulai {start_date_str}"
+    elif end_date_str:
+        try:
+            ed_fmt = datetime.date.fromisoformat(end_date_str).strftime('%d/%m/%Y')
+            active_filter_label = f"Sampai {ed_fmt}"
+        except ValueError:
+            active_filter_label = f"Sampai {end_date_str}"
+    elif query:
+        active_filter_label = f'"{query}"'
+
+    paginator = Paginator(galeri_qs, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'carousel_galeri': carousel_galeri,
-        'total_galeri': carousel_galeri.count(),
+        'page_obj': page_obj,
+        'query': query,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
+        'preset': preset,
+        'sort': sort,
+        'total_galeri': total_galeri,
+        'active_filter_label': active_filter_label,
+        'has_active_filter': has_active_filter,
     }
     return render(request, 'core/galeri/list.html', context)
 
