@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} - Administrasi Publik UNTAD</title>
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS & Font Awesome -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <style>
+    /* Styling CKEditor Rendered Content */
+    .ck-content {
+      line-height: 1.8;
+      color: #334155;
+    }
+    .ck-content h1, .ck-content h2, .ck-content h3, .ck-content h4 {
+      color: #0f172a;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+    .ck-content h1 { font-size: 1.875rem; }
+    .ck-content h2 { font-size: 1.5rem; }
+    .ck-content h3 { font-size: 1.25rem; }
+    .ck-content p { margin-bottom: 1rem; }
+    .ck-content ul, .ck-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .ck-content ul { list-style-type: disc; }
+    .ck-content ol { list-style-type: decimal; }
+    .ck-content li { margin-bottom: 0.35rem; }
+    .ck-content blockquote {
+      border-left: 4px solid #0D636D;
+      padding-left: 1rem;
+      font-style: italic;
+      color: #475569;
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.25rem 0;
+    }
+    .ck-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+    }
+    .ck-content table th, .ck-content table td {
+      border: 1px solid #cbd5e1;
+      padding: 0.75rem;
+      text-align: left;
+    }
+    .ck-content table th {
+      background-color: #f1f5f9;
+      font-weight: 600;
+    }
+    .ck-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.75rem;
+      margin: 1rem 0;
+    }
+    .ck-content a {
+      color: #0D636D;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- Unified Dynamic Navbar Component -->
+  {% include 'components/navbar.html' %}
+
+  <!-- Preview Mode Floating Banner -->
+  {% if is_preview %}
+    <div class="fixed top-[70px] left-0 w-full bg-amber-500 text-slate-900 py-2 px-4 z-40 text-center font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2">
+      <i class="fas fa-eye text-base"></i>
+      <span>Mode Pratinjau (Draft) &bull; Halaman ini belum dipublikasikan untuk umum.</span>
+      <a href="{% url 'admin:cms_page_change' page.pk %}" target="_blank" class="ml-2 underline text-xs font-semibold hover:text-white">
+        Edit di Admin &rarr;
+      </a>
+    </div>
+  {% endif %}
+
+  <!-- Konten Utama -->
+  <main class="flex-1 pt-24 sm:pt-28 pb-20 px-4 sm:px-6 {% if is_preview %}mt-8{% endif %}">
+    <div class="max-w-5xl mx-auto">
+      
+      <!-- Header Halaman & Breadcrumb -->
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8">
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+          <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+          <span class="text-slate-400">›</span>
+          <span class="font-medium text-teal-800">{{ page.title }}</span>
+        </nav>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0D636D] tracking-tight mb-2">
+          {{ page.title }}
+        </h1>
+        {% if page.meta_description %}
+          <p class="text-xs sm:text-sm text-slate-500 font-normal leading-relaxed">
+            {{ page.meta_description }}
+          </p>
+        {% endif %}
+      </header>
+
+      <!-- Banner Image Jika Ada -->
+      {% if page.banner_image %}
+        <div class="mb-8 rounded-2xl overflow-hidden shadow-sm border border-slate-200" data-aos="fade-up">
+          <img src="{{ page.banner_image.url }}" alt="{{ page.title }}" class="w-full h-auto max-h-[380px] object-cover">
+        </div>
+      {% endif %}
+
+      <!-- Konten Artikel CKEditor -->
+      <article data-aos="fade-up" data-aos-duration="700" class="bg-white rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-200/80 min-h-[350px]">
+        <div class="ck-content">
+          {% if page.html_content %}
+            {{ page.html_content|safe }}
+          {% else %}
+            <p class="text-slate-400 italic">Konten halaman ini belum diisi.</p>
+          {% endif %}
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Footer Website -->
+  {% include 'core/footer.html' %}
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ once: true, duration: 600 });
+  </script>
+</body>
+</html>

@@ -66,6 +66,7 @@ from core.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
+    path('', include('cms.urls')),
 
     # 1. Halaman Publik Utama
     path('', home, name='home'),

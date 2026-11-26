@@ -101,6 +101,13 @@
         <span>Kelola Tendik</span>
       </a>
 
+      <!-- 6b. CMS: Dynamic Menu & Page Management -->
+      <a href="{% url 'admin:app_list' 'cms' %}" target="_blank"
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md">
+        <i class="bi bi-diagram-3 text-base transition-colors duration-200 text-brand-gold group-hover:text-slate-900"></i>
+        <span>CMS: Menu & Halaman</span>
+      </a>
+
       <!-- 7. Manajemen User -->
       <a href="{% url 'admin_kelola_user' %}" 
          class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'user' in request.resolver_match.url_name and request.resolver_match.url_name != 'user_login' and request.resolver_match.url_name != 'user_logout' %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">

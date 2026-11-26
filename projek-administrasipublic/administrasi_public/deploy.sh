@@ -35,9 +35,10 @@ source "$VENV_DIR/bin/activate"
 echo "=== 3. INSTALL REQUIREMENTS (HEMAT DISK) ==="
 pip install --no-cache-dir -r requirements.txt
 
-echo "=== 4. COLLECTSTATIC & MIGRATE ==="
+echo "=== 4. COLLECTSTATIC & MIGRATE & SEED CMS ==="
 python manage.py collectstatic --noinput
 python manage.py migrate
+python manage.py seed_cms_navbar
 
 # Otomatis reload web app jika file WSGI ada
 WSGI_FILE="/var/www/${USER}_pythonanywhere_com_wsgi.py"

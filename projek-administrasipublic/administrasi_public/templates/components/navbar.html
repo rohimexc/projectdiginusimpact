@@ -1,0 +1,319 @@
+{% load static %}
+<!-- ========================================================================= -->
+<!-- UNIFIED DYNAMIC NAVBAR COMPONENT (CMS POWERED)                            -->
+<!-- Mendukung menu dinamis dari database CMS, dropdown & submenu bertingkat,  -->
+<!-- responsif pada Desktop, Tablet, dan Mobile (Drawer).                      -->
+<!-- ========================================================================= -->
+<nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-4 sm:px-6 md:px-10 z-50 shadow-md">
+  
+  <!-- Logo & Identitas Website -->
+  <a href="{% url 'home' %}" class="flex items-center gap-2.5 sm:gap-3 text-white">
+    <i class="fas fa-graduation-cap text-2xl sm:text-3xl text-[#fcc419]"></i>
+    <div>
+      <h2 class="text-sm sm:text-base font-bold leading-tight">Administrasi Publik</h2>
+      <p class="text-[10px] sm:text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+    </div>
+  </a>
+
+  <!-- ================= MENU DESKTOP ================= -->
+  <ul class="hidden lg:flex list-none items-center gap-3 xl:gap-4">
+    {% if cms_menus %}
+      {% for menu in cms_menus %}
+        {% if not menu.children_list %}
+          <!-- Menu Tunggal (Tanpa Submenu) -->
+          <li>
+            <a href="{{ menu.get_url }}" 
+               target="{{ menu.get_target }}" 
+               class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5">
+              {% if menu.icon_class %}<i class="{{ menu.icon_class }} text-[11px]"></i>{% endif %}
+              <span>{{ menu.title }}</span>
+              {% if menu.get_target == '_blank' %}
+                <i class="fas fa-external-link-alt text-[8px] opacity-70"></i>
+              {% endif %}
+            </a>
+          </li>
+        {% else %}
+          <!-- Menu Induk dengan Dropdown Submenu -->
+          <li class="relative group">
+            <button type="button" 
+                    class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
+              {% if menu.icon_class %}<i class="{{ menu.icon_class }} text-[11px]"></i>{% endif %}
+              <span>{{ menu.title }}</span>
+              <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+            </button>
+
+            <!-- Dropdown Tingkat 1 -->
+            <div class="absolute left-0 top-full pt-2 min-w-56 hidden group-hover:block z-50">
+              <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 text-slate-700">
+                {% for child in menu.children_list %}
+                  {% if not child.nested_children_list %}
+                    <!-- Submenu Item Biasa -->
+                    <a href="{{ child.get_url }}" 
+                       target="{{ child.get_target }}" 
+                       class="flex items-center justify-between px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                      <span class="flex items-center gap-2.5">
+                        <i class="{% if child.icon_class %}{{ child.icon_class }}{% else %}fas fa-circle-notch text-[8px]{% endif %} text-[#fab005] w-4"></i>
+                        <span>{{ child.title }}</span>
+                      </span>
+                      {% if child.get_target == '_blank' %}
+                        <i class="fas fa-external-link-alt text-[9px] text-slate-400"></i>
+                      {% endif %}
+                    </a>
+                  {% else %}
+                    <!-- Submenu Bertingkat (Flyout ke Kanan) -->
+                    <div class="relative group/nested">
+                      <button type="button" 
+                              class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition focus:outline-none">
+                        <span class="flex items-center gap-2.5">
+                          <i class="{% if child.icon_class %}{{ child.icon_class }}{% else %}fas fa-folder text-[10px]{% endif %} text-[#fab005] w-4"></i>
+                          <span>{{ child.title }}</span>
+                        </span>
+                        <i class="fas fa-chevron-right text-[9px] text-slate-400"></i>
+                      </button>
+                      <div class="absolute left-full top-0 pl-1 min-w-52 hidden group-hover/nested:block z-50">
+                        <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 text-slate-700">
+                          {% for sub in child.nested_children_list %}
+                            <a href="{{ sub.get_url }}" 
+                               target="{{ sub.get_target }}" 
+                               class="flex items-center justify-between px-4 py-2 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                              <span class="flex items-center gap-2">
+                                <i class="{% if sub.icon_class %}{{ sub.icon_class }}{% else %}fas fa-angle-right text-[10px]{% endif %} text-[#fab005] w-3"></i>
+                                <span>{{ sub.title }}</span>
+                              </span>
+                              {% if sub.get_target == '_blank' %}
+                                <i class="fas fa-external-link-alt text-[8px] text-slate-400"></i>
+                              {% endif %}
+                            </a>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <!-- Fallback Default Menu (Sebelum Database CMS diisi) -->
+      <li><a href="{% url 'home' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Beranda</a></li>
+      <li><a href="{% url 'tentang_detail' 'profil' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Tentang</a></li>
+      <li><a href="{% url 'galeri_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a></li>
+      <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a></li>
+      <li><a href="{% url 'event_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Event</a></li>
+    {% endif %}
+
+    <!-- Status Login & Profil / Tombol Masuk & Daftar -->
+    {% if request.user.is_authenticated %}
+      <li class="relative group ml-1">
+        <button type="button" class="flex items-center gap-2 text-white bg-white/15 hover:bg-white/25 py-1.5 px-3 rounded-full border border-white/20 transition focus:outline-none cursor-pointer">
+          <div class="w-6 h-6 rounded-full bg-[#ffd43b] text-slate-900 font-bold flex items-center justify-center text-[10px]">
+            {{ request.user.username|slice:":2"|upper }}
+          </div>
+          <span class="text-xs font-semibold max-w-[90px] truncate">{{ request.user.username }}</span>
+          <i class="fas fa-chevron-down text-[9px] opacity-70"></i>
+        </button>
+        <div class="absolute right-0 top-full pt-2 w-52 hidden group-hover:block z-50">
+          <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
+            <div class="px-4 py-2 border-b border-slate-100">
+              <p class="text-[11px] text-slate-400">Masuk sebagai:</p>
+              <p class="text-xs font-bold text-slate-800 truncate">{{ request.user.first_name|default:request.user.username }}</p>
+              <p class="text-[10px] text-slate-400 truncate">{{ request.user.email|default:"Pengguna" }}</p>
+            </div>
+            {% if request.user.is_staff or request.user.is_superuser %}
+              <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                <i class="fas fa-gauge-high text-[#fab005] w-4"></i> Dashboard Admin
+              </a>
+              <a href="{% url 'admin:app_list' 'cms' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                <i class="fas fa-sitemap text-[#fab005] w-4"></i> Kelola CMS Navbar
+              </a>
+            {% endif %}
+            <a href="{% url 'user_logout' %}?next={{ request.path }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium text-rose-600 hover:bg-rose-50 transition border-t border-slate-100">
+              <i class="fas fa-sign-out-alt w-4"></i> Logout
+            </a>
+          </div>
+        </div>
+      </li>
+    {% else %}
+      <li class="flex items-center gap-2 ml-1">
+        <a href="{% url 'user_login' %}?next={{ request.path }}" class="text-slate-900 bg-[#ffd43b] hover:bg-[#fcc419] font-bold text-xs py-1.5 px-3.5 rounded-full transition shadow-xs">
+          Masuk
+        </a>
+        <a href="{% url 'user_register' %}?next={{ request.path }}" class="text-white border border-white/30 hover:bg-white/10 font-semibold text-xs py-1.5 px-3.5 rounded-full transition">
+          Daftar
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+
+  <!-- ================= TOMBOL HAMBURGER MOBILE ================= -->
+  <button type="button" 
+          id="mobile-menu-toggle" 
+          onclick="toggleMobileNavbar()" 
+          class="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 focus:outline-none transition cursor-pointer" 
+          aria-label="Toggle Menu Mobile">
+    <i class="fas fa-bars text-xl" id="menu-icon-bars"></i>
+    <i class="fas fa-times text-xl hidden" id="menu-icon-close"></i>
+  </button>
+</nav>
+
+<!-- Overlay Backdrop Mobile & Tablet -->
+<div id="mobile-menu-backdrop" 
+     class="fixed inset-0 bg-black/60 z-[48] hidden lg:hidden" 
+     style="background-color: rgba(0, 0, 0, 0.6) !important;" 
+     onclick="closeMobileNavbar()"></div>
+
+<!-- ================= DRAWER MENU MOBILE ================= -->
+<div id="mobile-menu-drawer" 
+     class="fixed top-[70px] left-0 w-full bg-[#084c5a] text-white border-b border-white/10 shadow-2xl z-50 hidden max-h-[calc(100dvh-70px)] overflow-y-auto transition-all duration-300" 
+     style="background-color: #084c5a !important; opacity: 1 !important;">
+  <div class="px-5 py-4 space-y-2 text-xs">
+    
+    {% if cms_menus %}
+      {% for menu in cms_menus %}
+        {% if not menu.children_list %}
+          <!-- Menu Tunggal Mobile -->
+          <a href="{{ menu.get_url }}" 
+             target="{{ menu.get_target }}" 
+             class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-white/15 font-semibold">
+            <span class="flex items-center gap-2.5">
+              <i class="{% if menu.icon_class %}{{ menu.icon_class }}{% else %}fas fa-link text-[11px]{% endif %} w-5 text-[#fab005]"></i>
+              <span>{{ menu.title }}</span>
+            </span>
+            {% if menu.get_target == '_blank' %}
+              <i class="fas fa-external-link-alt text-[10px] opacity-70"></i>
+            {% endif %}
+          </a>
+        {% else %}
+          <!-- Menu Accordion Mobile -->
+          <div class="border-t border-white/10 pt-1.5">
+            <button type="button" 
+                    onclick="toggleCmsAccordion('mobile-menu-{{ forloop.counter }}', 'mobile-icon-{{ forloop.counter }}')" 
+                    class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold text-left focus:outline-none">
+              <span class="flex items-center gap-2.5">
+                <i class="{% if menu.icon_class %}{{ menu.icon_class }}{% else %}fas fa-layer-group text-[11px]{% endif %} w-5 text-[#fab005]"></i>
+                <span>{{ menu.title }}</span>
+              </span>
+              <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-icon-{{ forloop.counter }}"></i>
+            </button>
+
+            <!-- Isi Submenu Accordion -->
+            <div id="mobile-menu-{{ forloop.counter }}" class="hidden pl-8 pr-2 py-1.5 space-y-1 bg-black/25 rounded-lg mt-1 text-[11px]">
+              {% for child in menu.children_list %}
+                {% if not child.nested_children_list %}
+                  <a href="{{ child.get_url }}" 
+                     target="{{ child.get_target }}" 
+                     class="flex items-center justify-between py-1.5 px-2 rounded hover:text-[#ffd43b] transition">
+                    <span>{{ child.title }}</span>
+                    {% if child.get_target == '_blank' %}
+                      <i class="fas fa-external-link-alt text-[8px] opacity-60"></i>
+                    {% endif %}
+                  </a>
+                {% else %}
+                  <!-- Submenu Bertingkat Mobile -->
+                  <div class="py-1">
+                    <p class="font-bold text-[#ffd43b] text-[10px] uppercase tracking-wider px-2 pt-1">{{ child.title }}</p>
+                    <div class="pl-2 space-y-1 mt-0.5">
+                      {% for sub in child.nested_children_list %}
+                        <a href="{{ sub.get_url }}" target="{{ sub.get_target }}" class="block py-1 px-2 rounded hover:text-[#ffd43b] transition">
+                          - {{ sub.title }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <a href="{% url 'home' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-home w-5 text-[#fab005]"></i> Beranda
+      </a>
+      <a href="{% url 'tentang_detail' 'profil' %}" class="flex items-center gap-2.5 py-2 px-3 rounded-lg hover:bg-white/15 font-semibold">
+        <i class="fas fa-info-circle w-5 text-[#fab005]"></i> Tentang
+      </a>
+    {% endif %}
+
+    <!-- Auth Mobile -->
+    <div class="pt-3 border-t border-white/15">
+      {% if request.user.is_authenticated %}
+        <div class="flex items-center justify-between py-2 px-3 bg-white/10 rounded-xl mb-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-[#ffd43b] text-slate-900 font-bold flex items-center justify-center text-xs">
+              {{ request.user.username|slice:":2"|upper }}
+            </div>
+            <div>
+              <p class="font-bold leading-tight">{{ request.user.first_name|default:request.user.username }}</p>
+              <p class="text-[10px] text-white/70">{{ request.user.email|default:"Pengguna" }}</p>
+            </div>
+          </div>
+          <a href="{% url 'user_logout' %}?next={{ request.path }}" class="text-xs bg-rose-500/80 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg font-semibold">
+            Logout
+          </a>
+        </div>
+        {% if request.user.is_staff or request.user.is_superuser %}
+          <a href="{% url 'admin_dashboard' %}" class="block text-center py-2.5 bg-[#ffd43b] text-slate-900 font-bold rounded-xl mb-1 shadow-sm">
+            <i class="fas fa-gauge-high mr-1.5"></i> Dashboard Admin
+          </a>
+        {% endif %}
+      {% else %}
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <a href="{% url 'user_login' %}?next={{ request.path }}" class="block text-center py-2.5 bg-[#ffd43b] text-slate-900 font-bold rounded-xl shadow-sm">
+            Masuk
+          </a>
+          <a href="{% url 'user_register' %}?next={{ request.path }}" class="block text-center py-2.5 bg-white/15 text-white font-semibold rounded-xl border border-white/20">
+            Daftar
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= JAVASCRIPT NAVBAR MOBILE ================= -->
+<script>
+  function toggleMobileNavbar() {
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
+    const iconBars = document.getElementById('menu-icon-bars');
+    const iconClose = document.getElementById('menu-icon-close');
+    
+    if (drawer && drawer.classList.contains('hidden')) {
+      drawer.classList.remove('hidden');
+      if (backdrop) backdrop.classList.remove('hidden');
+      if (iconBars) iconBars.classList.add('hidden');
+      if (iconClose) iconClose.classList.remove('hidden');
+    } else if (drawer) {
+      drawer.classList.add('hidden');
+      if (backdrop) backdrop.classList.add('hidden');
+      if (iconBars) iconBars.classList.remove('hidden');
+      if (iconClose) iconClose.classList.add('hidden');
+    }
+  }
+
+  function closeMobileNavbar() {
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
+    const iconBars = document.getElementById('menu-icon-bars');
+    const iconClose = document.getElementById('menu-icon-close');
+    if (drawer) drawer.classList.add('hidden');
+    if (backdrop) backdrop.classList.add('hidden');
+    if (iconBars) iconBars.classList.remove('hidden');
+    if (iconClose) iconClose.classList.add('hidden');
+  }
+
+  function toggleCmsAccordion(contentId, iconId) {
+    const content = document.getElementById(contentId);
+    const icon = document.getElementById(iconId);
+    if (content) {
+      content.classList.toggle('hidden');
+    }
+    if (icon) {
+      icon.classList.toggle('rotate-180');
+    }
+  }
+</script>
