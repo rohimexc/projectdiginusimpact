@@ -279,7 +279,7 @@ class HalamanAkademikForm(forms.ModelForm):
             }),
             'link_eksternal': forms.URLInput(attrs={
                 'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
-                'placeholder': 'https://siaga.untad.ac.id/ (opsional)'
+                'placeholder': 'https://siga-8.untad.ac.id/ (opsional)'
             }),
             'nama_file_utama': forms.TextInput(attrs={
                 'class': 'w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs bg-slate-50 focus:bg-white focus:border-teal-700 outline-none transition',
@@ -296,6 +296,19 @@ class HalamanAkademikForm(forms.ModelForm):
                 config_name='extends'
             )
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'isi' in self.fields:
+            self.fields['isi'].required = False
+        if 'link_eksternal' in self.fields:
+            self.fields['link_eksternal'].required = False
+        if 'file_utama' in self.fields:
+            self.fields['file_utama'].required = False
+        if 'nama_file_utama' in self.fields:
+            self.fields['nama_file_utama'].required = False
+        if 'subjudul' in self.fields:
+            self.fields['subjudul'].required = False
 
     def clean_file_utama(self):
         file = self.cleaned_data.get('file_utama')

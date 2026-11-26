@@ -15,6 +15,9 @@
   <!-- AOS Animation CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -59,6 +62,24 @@
         transition-delay: 50ms !important;
       }
     }
+    /* Swiper Styling Konsisten 3-2-1 */
+    .custom-carousel-swiper {
+      padding-bottom: 52px !important;
+      position: relative;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 24px !important;
+      border-radius: 9999px !important;
+    }
+
     .text-justify,
     .text-justify p {
       text-align: justify !important;
@@ -129,8 +150,9 @@
         </button>
         <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
           <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
-            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
-              <i class="fas fa-desktop text-brand-gold w-4"></i> SIGA-8
+            <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
+              <span class="flex items-center gap-2.5"><i class="fas fa-desktop text-brand-gold w-4"></i> SIGA-8</span>
+              <i class="fas fa-external-link-alt text-[9px] text-slate-400"></i>
             </a>
             <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-brand-teal transition">
               <i class="fas fa-book-open text-brand-gold w-4"></i> Kurikulum
@@ -241,7 +263,10 @@
           <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-akademik-icon"></i>
         </button>
         <div id="mobile-akademik-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
-          <a href="{% url 'akademik_detail' 'siga8' %}" class="block py-1 px-2 rounded hover:text-brand-accent">SIGA-8</a>
+          <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="py-1 px-2 rounded hover:text-brand-accent flex items-center justify-between">
+            <span>SIGA-8</span>
+            <i class="fas fa-external-link-alt text-[9px]"></i>
+          </a>
           <a href="{% url 'akademik_detail' 'kurikulum' %}" class="block py-1 px-2 rounded hover:text-brand-accent">Kurikulum</a>
           <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-brand-accent">Jadwal Perkuliahan</a>
           <a href="{% url 'akademik_detail' 'rps' %}" class="block py-1 px-2 rounded hover:text-brand-accent">RPS</a>
@@ -375,79 +400,95 @@
     </div>
   </section>
 
-  <!-- Berita Terbaru -->
-  <section class="py-16 px-6 text-center bg-slate-50 border-t border-slate-200/60" id="akademik">
+  <!-- ================= BERITA TERBARU (CAROUSEL 3-2-1) ================= -->
+  <section class="py-16 px-4 sm:px-6 bg-slate-50 border-t border-slate-200/60" id="berita">
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-2xl font-bold text-brand-teal mb-2" data-aos="fade-up">Berita Terbaru</h2>
-      <p class="text-xs text-slate-500 mb-8" data-aos="fade-up" data-aos-delay="100">Berita terbaru seputar Administrasi Publik</p>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
+        <div class="text-center sm:text-left">
+          <h2 class="text-2xl font-bold text-brand-teal mb-1">Berita Terbaru</h2>
+          <p class="text-xs text-slate-500">Berita dan publikasi terkini seputar Administrasi Publik</p>
+        </div>
+        {% if daftar_berita %}
+          <!-- Tombol Navigasi Swiper Berita -->
+          <div class="flex items-center justify-center sm:justify-end gap-2 shrink-0">
+            <button type="button" id="berita-prev" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Berita Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="berita-next" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Berita Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        {% endif %}
+      </div>
 
       {% if daftar_berita %}
-        <div class="flex flex-wrap justify-center gap-6">
-          {% for berita in daftar_berita %}
-            <div data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00" class="w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col justify-between">
-              <div>
-                <div class="w-full overflow-hidden bg-slate-100 rounded-t-xl" style="aspect-ratio: 4 / 5;">
-                  {% if berita.gambar %}
-                    {% if berita.gambar.url %}
-                      <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
-                    {% else %}
-                      <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
-                    {% endif %}
-                  {% else %}
-                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                      <i class="fas fa-newspaper text-5xl mb-2"></i>
-                      <span class="text-[11px] text-slate-400">Tidak ada gambar</span>
+        <div class="swiper berita-swiper custom-carousel-swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper">
+            {% for berita in daftar_berita %}
+              <div class="swiper-slide h-auto">
+                <div class="h-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:-translate-y-1 hover:shadow-md transition duration-200 text-left flex flex-col justify-between">
+                  <div>
+                    <div class="w-full overflow-hidden bg-slate-100 rounded-t-2xl" style="aspect-ratio: 4 / 5;">
+                      {% if berita.gambar %}
+                        {% if berita.gambar.url %}
+                          <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+                        {% else %}
+                          <img src="{{ berita.gambar }}" alt="{{ berita.judul }}" class="w-full h-full object-cover">
+                        {% endif %}
+                      {% else %}
+                        <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                          <i class="fas fa-newspaper text-5xl mb-2"></i>
+                          <span class="text-[11px] text-slate-400">Tidak ada gambar</span>
+                        </div>
+                      {% endif %}
                     </div>
-                  {% endif %}
-                </div>
 
-                <div class="p-4">
-                  <span class="text-[10px] font-semibold text-brand-teal bg-teal-50 px-2 py-0.5 rounded">
-                    {{ berita.posted_at|date:"d M Y" }}
-                  </span>
-                  <h3 class="text-sm font-bold text-brand-teal mt-2 mb-2 line-clamp-2 hover:underline">
-                    <a href="{% url 'berita_detail' berita.pk %}">{{ berita.judul }}</a>
-                  </h3>
-                  {% if berita.ringkasan %}
-                    <p class="text-xs text-slate-500 line-clamp-3 leading-relaxed">{{ berita.ringkasan }}</p>
-                  {% endif %}
+                    <div class="p-5">
+                      <span class="text-[10px] font-semibold text-brand-teal bg-teal-50 px-2.5 py-1 rounded-md">
+                        {{ berita.posted_at|date:"d M Y" }}
+                      </span>
+                      <h3 class="text-sm font-bold text-slate-800 mt-2.5 mb-2 line-clamp-2 hover:text-brand-teal transition">
+                        <a href="{% url 'berita_detail' berita.pk %}">{{ berita.judul }}</a>
+                      </h3>
+                      {% if berita.ringkasan %}
+                        <p class="text-xs text-slate-500 line-clamp-3 leading-relaxed">{{ berita.ringkasan }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <!-- Bar Interaksi Bawah -->
+                  <div class="px-5 py-3.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <div class="flex items-center gap-3">
+                      <span class="flex items-center gap-1 text-slate-500" title="{{ berita.views }} pembaca">
+                        <i class="far fa-eye text-xs text-brand-teal"></i>
+                        <span class="font-bold text-slate-700 font-mono text-[11px]">{{ berita.views }}</span>
+                      </span>
+                      <a href="{% url 'berita_detail' berita.pk %}" class="flex items-center gap-1 text-slate-500 hover:text-rose-600 transition" title="{{ berita.likes }} Suka">
+                        <i class="far fa-heart text-xs text-slate-400"></i>
+                        <span class="font-bold text-slate-700 font-mono text-[11px]">{{ berita.likes }}</span>
+                      </a>
+                      <a href="{% url 'berita_detail' berita.pk %}#komentar-section" class="flex items-center gap-1 text-slate-500 hover:text-brand-teal transition" title="{{ berita.komentar_list.count }} Komentar">
+                        <i class="far fa-comment-dots text-xs text-slate-400"></i>
+                        <span class="font-bold text-slate-700 font-mono text-[11px]">{{ berita.komentar_list.count }}</span>
+                      </a>
+                      <span class="flex items-center gap-1 text-slate-500" title="{{ berita.shares }} Kali Dibagikan">
+                        <i class="fas fa-share-nodes text-[11px] text-slate-400"></i>
+                        <span class="font-bold text-slate-700 font-mono text-[11px]">{{ berita.shares }}</span>
+                      </span>
+                    </div>
+
+                    <a href="{% url 'berita_detail' berita.pk %}" class="text-[11px] font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
+                      Baca &rarr;
+                    </a>
+                  </div>
                 </div>
               </div>
-
-              <!-- Bar Interaksi Bawah Sesuai Sketsa -->
-              <div class="px-4 py-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-xs">
-                <div class="flex items-center gap-3.5">
-                  <!-- View -->
-                  <span class="flex items-center gap-1 text-slate-500" title="{{ berita.views }} pembaca">
-                    <i class="far fa-eye text-xs text-brand-teal"></i>
-                    <span class="font-bold text-slate-700 font-mono">{{ berita.views }}</span>
-                  </span>
-                  <!-- Like -->
-                  <a href="{% url 'berita_detail' berita.pk %}" class="flex items-center gap-1 text-slate-500 hover:text-rose-600 transition" title="{{ berita.likes }} Suka">
-                    <i class="far fa-heart text-xs text-slate-400"></i>
-                    <span class="font-bold text-slate-700 font-mono">{{ berita.likes }}</span>
-                  </a>
-                  <!-- Komentar -->
-                  <a href="{% url 'berita_detail' berita.pk %}#komentar-section" class="flex items-center gap-1 text-slate-500 hover:text-brand-teal transition" title="{{ berita.komentar_list.count }} Komentar">
-                    <i class="far fa-comment-dots text-xs text-slate-400"></i>
-                    <span class="font-bold text-slate-700 font-mono">{{ berita.komentar_list.count }}</span>
-                  </a>
-                  <!-- Share -->
-                  <span class="flex items-center gap-1 text-slate-500" title="{{ berita.shares }} Kali Dibagikan">
-                    <i class="fas fa-share-nodes text-[11px] text-slate-400"></i>
-                    <span class="font-bold text-slate-700 font-mono">{{ berita.shares }}</span>
-                  </span>
-                </div>
-
-                <a href="{% url 'berita_detail' berita.pk %}" class="text-[11px] font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-0.5">
-                  Baca &rarr;
-                </a>
-              </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
         </div>
 
-        <div class="mt-10" data-aos="zoom-in">
+        <div class="mt-4 text-center" data-aos="zoom-in">
           <a href="{% url 'berita_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
             Lihat Semua Berita &rarr;
           </a>
@@ -458,219 +499,325 @@
     </div>
   </section>
 
-  <!-- ================= EVENT TERDEKAT (HORIZONTAL TIMELINE SLIDER PERSIS REFERENSI) ================= -->
-  <section class="py-16 px-6 bg-white border-t border-slate-200/60 relative overflow-hidden" id="event-terdekat">
-    <div class="max-w-7xl mx-auto relative z-10">
-      
-      <!-- Header Section: Centered persis Berita Terbaru & Sistem Informasi -->
-      <div class="text-center max-w-3xl mx-auto mb-10" data-aos="fade-up">
-        <h2 class="text-2xl font-bold text-brand-teal mb-2">
-          Event Terdekat
-        </h2>
-        <p class="text-xs text-slate-500" data-aos="fade-up" data-aos-delay="100">
-          Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik
-        </p>
+  <!-- ================= EVENT TERDEKAT (CAROUSEL 3-2-1) ================= -->
+  <section class="py-16 px-4 sm:px-6 bg-white border-t border-slate-200/60" id="event-terdekat">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
+        <div class="text-center sm:text-left">
+          <h2 class="text-2xl font-bold text-brand-teal mb-1">Event Terdekat</h2>
+          <p class="text-xs text-slate-500">Jadwal seminar, kuliah tamu, dan agenda kemahasiswaan Program Studi Administrasi Publik</p>
+        </div>
+        {% if daftar_event %}
+          <!-- Tombol Navigasi Swiper Event -->
+          <div class="flex items-center justify-center sm:justify-end gap-2 shrink-0">
+            <button type="button" id="event-prev" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Event Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="event-next" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Event Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        {% endif %}
       </div>
 
       {% if daftar_event %}
-        <!-- Horizontal Timeline Slider Container -->
-        <div class="relative w-full" data-aos="fade-up" data-aos-delay="100">
-          
-          <!-- Tombol Navigasi Panah Kiri (<) dan Kanan (>) Timeline Persis Referensi (Tanpa Lingkaran Putih) -->
-          <button type="button" onclick="scrollEventTimeline(-1)" 
-                  class="absolute -left-3 sm:-left-6 lg:-left-8 top-[82px] -translate-y-1/2 text-slate-400 hover:text-brand-teal text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
-                  aria-label="Event Sebelumnya">
-            <i class="fas fa-chevron-left font-bold"></i>
-          </button>
-          
-          <button type="button" onclick="scrollEventTimeline(1)" 
-                  class="absolute -right-3 sm:-right-6 lg:-right-8 top-[82px] -translate-y-1/2 text-slate-400 hover:text-brand-teal text-xl sm:text-2xl z-30 transition-all duration-200 hover:scale-125 focus:outline-none p-1.5 flex items-center justify-center cursor-pointer" 
-                  aria-label="Event Selanjutnya">
-            <i class="fas fa-chevron-right font-bold"></i>
-          </button>
-
-          <!-- Slider Track Wrapper -->
-          <div id="event-timeline-slider" class="flex overflow-x-auto scroll-smooth no-scrollbar gap-5 sm:gap-6 pb-4 pt-1 -mx-2 px-2 sm:mx-0 sm:px-0" style="scrollbar-width: none; -ms-overflow-style: none;">
-            
-            {% for cycle in "12" %}
-              {% for event in daftar_event %}
-                <div class="event-timeline-card w-[275px] sm:w-[290px] lg:w-[calc(25%-18px)] shrink-0 flex flex-col items-center">
-                  
-                  <!-- 1. Label Atas: Tanggal (Teal Konsisten) & Kategori -->
-                  <div class="text-center mb-3 min-h-[46px] flex flex-col justify-end w-full px-2">
-                    <div class="text-xs sm:text-sm font-bold text-brand-teal tracking-wide">
-                      {{ event.tanggal_timeline }}
+        <div class="swiper event-swiper custom-carousel-swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper">
+            {% for event in daftar_event %}
+              <div class="swiper-slide h-auto">
+                <div class="h-full bg-white rounded-2xl border-2 border-brand-gold overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 flex flex-col justify-between group">
+                  <!-- Poster 4:5 -->
+                  <a href="{% url 'event_detail' event.slug %}" class="relative block w-full aspect-[4/5] overflow-hidden bg-slate-100">
+                    {% if event.poster %}
+                      <img src="{{ event.poster.url }}" alt="{{ event.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    {% else %}
+                      <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#0b6476] to-[#05313a] text-white p-5 text-center">
+                        <i class="fas fa-calendar-check text-3xl text-brand-gold mb-2"></i>
+                        <span class="text-[10px] font-bold text-amber-200 uppercase tracking-wider mb-1">{{ event.kategori }}</span>
+                        <span class="text-xs font-bold line-clamp-3 leading-snug">{{ event.judul }}</span>
+                      </div>
+                    {% endif %}
+                    <div class="absolute top-3 left-3 bg-white/95 rounded-xl shadow px-2.5 py-1 text-center min-w-[48px]">
+                      <span class="block text-sm font-bold text-brand-teal leading-none">{{ event.hari_mulai }}</span>
+                      <span class="block text-[9px] font-bold text-slate-500 uppercase">{{ event.bulan_mulai_singkat }}</span>
                     </div>
-                    <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mt-0.5">
-                      {{ event.kategori }}
-                    </div>
-                  </div>
+                  </a>
 
-                  <!-- 2. Sumbu Garis Horizontal & Node Jam + Panah Bawah -->
-                  <div class="relative w-full flex items-center justify-center my-1">
-                    <!-- Garis horizontal melintang menghubungkan antar node -->
-                    <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-slate-200"></div>
-                    
-                    <!-- Lingkaran Node dengan Ikon Jam Persis Referensi -->
-                    <div class="relative z-10 w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-white text-xs shadow-md bg-brand-teal">
-                      <i class="far fa-clock text-xs text-white"></i>
-                    </div>
-                  </div>
-
-                  <!-- Panah Segitiga Menunjuk ke Kartu -->
-                  <div class="w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[8px] border-t-brand-teal mx-auto mb-2.5"></div>
-
-                  <!-- 3. Kartu Poster 4:5 Sesuai Sketsa Portal UNTAD -->
-                  <div class="w-full bg-white rounded-xl border-2 border-[#fab005] overflow-hidden shadow-md flex flex-col justify-between group hover:-translate-y-1.5 transition-all duration-300">
-                    
-                    <!-- Wadah Poster Rasio 4:5 -->
-                    <a href="{% url 'event_detail' event.slug %}" class="relative block w-full aspect-[4/5] overflow-hidden bg-slate-100">
-                      {% if event.poster %}
-                        <img src="{{ event.poster.url }}?v=20261123teal5" alt="{{ event.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-                      {% else %}
-                        <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#0b6476] to-[#05313a] text-white p-5 text-center">
-                          <i class="fas fa-calendar-check text-3xl text-[#fab005] mb-2"></i>
-                          <span class="text-[10px] font-bold text-amber-200 uppercase tracking-wider mb-1">{{ event.kategori }}</span>
-                          <span class="text-xs font-bold line-clamp-3 leading-snug">{{ event.judul }}</span>
-                        </div>
+                  <!-- Info Event -->
+                  <div class="p-4 bg-white flex flex-col justify-between flex-1">
+                    <div>
+                      <span class="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                        {{ event.kategori }}
+                      </span>
+                      <h4 class="text-xs sm:text-sm font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-brand-teal transition" title="{{ event.judul }}">
+                        <a href="{% url 'event_detail' event.slug %}">{{ event.judul }}</a>
+                      </h4>
+                      {% if event.lokasi %}
+                        <p class="text-[11px] text-slate-500 mt-2 flex items-center gap-1.5 truncate" title="{{ event.lokasi }}">
+                          <i class="fas fa-map-marker-alt text-rose-500 text-[10px] shrink-0"></i>
+                          <span class="truncate">{{ event.lokasi }}</span>
+                        </p>
                       {% endif %}
-                    </a>
-
-                    <!-- Judul & Info di Bawah Poster -->
-                    <div class="p-3.5 bg-white flex flex-col justify-between flex-1">
-                      <div>
-                        <h4 class="text-xs font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-brand-teal transition" title="{{ event.judul }}">
-                          <a href="{% url 'event_detail' event.slug %}">{{ event.judul }}</a>
-                        </h4>
-                        {% if event.lokasi %}
-                          <p class="text-[11px] text-slate-500 mt-1.5 flex items-center gap-1.5 truncate" title="{{ event.lokasi }}">
-                            <i class="fas fa-map-marker-alt text-rose-500 text-[10px] shrink-0"></i>
-                            <span class="truncate">{{ event.lokasi }}</span>
-                          </p>
-                        {% endif %}
-                      </div>
-
-                      <div class="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                        <a href="{% url 'event_detail' event.slug %}" class="font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
-                          Detail <i class="fas fa-arrow-right text-[9px]"></i>
-                        </a>
-                        {% if event.link_pendaftaran %}
-                          <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="font-semibold text-teal-700 hover:underline inline-flex items-center gap-0.5">
-                            Daftar <i class="fas fa-external-link-alt text-[8px]"></i>
-                          </a>
-                        {% endif %}
-                      </div>
                     </div>
 
+                    <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                      <a href="{% url 'event_detail' event.slug %}" class="font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
+                        Detail <i class="fas fa-arrow-right text-[9px]"></i>
+                      </a>
+                      {% if event.link_pendaftaran %}
+                        <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="font-semibold text-teal-700 hover:underline inline-flex items-center gap-0.5">
+                          Daftar <i class="fas fa-external-link-alt text-[8px]"></i>
+                        </a>
+                      {% endif %}
+                    </div>
                   </div>
-
                 </div>
-              {% endfor %}
+              </div>
             {% endfor %}
-
           </div>
-
+          <div class="swiper-pagination"></div>
         </div>
 
-        <!-- Script Navigasi Timeline: Bergerak Halus Dari Kanan ke Kiri Berulang (Infinite Loop) -->
-        <script>
-          (function() {
-            const slider = document.getElementById('event-timeline-slider');
-            if (!slider) return;
-
-            let isPaused = false;
-            let manualTimer = null;
-            let scrollSpeed = 0.85; // Kecepatan gerak kontinu dari kanan ke kiri (~50px/detik)
-            let animationFrameId = null;
-
-            function getHalfWidth() {
-              return slider.scrollWidth / 2;
-            }
-
-            function getStep() {
-              const card = slider.querySelector('.event-timeline-card');
-              return card ? (card.offsetWidth + 24) : 310;
-            }
-
-            // Animasi kontinu 60fps menggunakan requestAnimationFrame
-            function tick() {
-              if (!isPaused) {
-                slider.scrollLeft += scrollSpeed;
-                const half = getHalfWidth();
-                // Saat mencapai ujung 1 set kartu, reset ke awal tanpa jeda visual (seamless looping)
-                if (half > 0 && slider.scrollLeft >= half) {
-                  slider.scrollLeft -= half;
-                }
-              }
-              animationFrameId = requestAnimationFrame(tick);
-            }
-
-            // Jalankan animasi kontinu
-            animationFrameId = requestAnimationFrame(tick);
-
-            // Kontrol tombol manual panah kiri dan kanan
-            window.scrollEventTimeline = function(direction) {
-              isPaused = true;
-              if (manualTimer) clearTimeout(manualTimer);
-
-              const step = getStep();
-              const half = getHalfWidth();
-
-              if (direction < 0 && slider.scrollLeft <= 5 && half > 0) {
-                slider.scrollLeft += half;
-              }
-
-              slider.scrollBy({
-                left: direction * step,
-                behavior: 'smooth'
-              });
-
-              // Lanjutkan gerak otomatis setelah 3 detik interaksi tombol
-              manualTimer = setTimeout(function() {
-                isPaused = false;
-              }, 3000);
-            };
-
-            // Jeda otomatis saat kursor mouse berada di atas kartu (pengunjung bisa baca/klik)
-            slider.addEventListener('mouseenter', function() {
-              isPaused = true;
-            });
-
-            slider.addEventListener('mouseleave', function() {
-              isPaused = false;
-            });
-
-            // Dukungan touch di HP / Tablet
-            slider.addEventListener('touchstart', function() {
-              isPaused = true;
-            }, { passive: true });
-
-            slider.addEventListener('touchend', function() {
-              if (manualTimer) clearTimeout(manualTimer);
-              manualTimer = setTimeout(function() {
-                isPaused = false;
-              }, 2500);
-            }, { passive: true });
-          })();
-        </script>
-
-        <!-- Tombol Lihat Semua Event di Bawah Slider (Centered persis Berita Terbaru) -->
-        <div class="mt-10 text-center" data-aos="zoom-in">
+        <div class="mt-4 text-center" data-aos="zoom-in">
           <a href="{% url 'event_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow-sm transition duration-200">
             Lihat Semua Event &rarr;
           </a>
         </div>
-
       {% else %}
-        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-8 sm:p-12 text-center max-w-lg mx-auto" data-aos="fade-up">
-          <div class="w-16 h-16 rounded-2xl bg-teal-50 text-brand-teal flex items-center justify-center text-2xl mx-auto mb-4">
-            <i class="far fa-calendar-check"></i>
-          </div>
-          <h3 class="text-base font-bold text-slate-800 mb-1">Belum Ada Event Terdekat</h3>
-          <p class="text-xs text-slate-500 leading-relaxed">Saat ini belum ada agenda akademik mendatang yang aktif. Pantau terus halaman ini untuk update kegiatan selanjutnya.</p>
+        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-8 text-center max-w-lg mx-auto" data-aos="fade-up">
+          <p class="text-xs text-slate-500">Saat ini belum ada event mendatang.</p>
         </div>
       {% endif %}
+    </div>
+  </section>
 
+  <!-- ================= GALERI KEGIATAN (CAROUSEL 3-2-1) ================= -->
+  <section class="py-16 px-4 sm:px-6 bg-slate-50 border-t border-slate-200/60" id="galeri">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
+        <div class="text-center sm:text-left">
+          <h2 class="text-2xl font-bold text-brand-teal mb-1">Galeri Kegiatan</h2>
+          <p class="text-xs text-slate-500">Dokumentasi visual berbagai kegiatan, agenda akademik, dan kemahasiswaan</p>
+        </div>
+        {% if daftar_galeri %}
+          <!-- Tombol Navigasi Swiper Galeri -->
+          <div class="flex items-center justify-center sm:justify-end gap-2 shrink-0">
+            <button type="button" id="galeri-prev" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Galeri Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="galeri-next" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Galeri Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if daftar_galeri %}
+        <div class="swiper galeri-swiper custom-carousel-swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper">
+            {% for galeri in daftar_galeri %}
+              <div class="swiper-slide h-auto">
+                <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+                  <div>
+                    <a href="{% url 'galeri_list' %}" class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative block" style="aspect-ratio: 4 / 5;">
+                      {% if galeri.gambar %}
+                        <img src="{{ galeri.gambar.url }}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                      {% else %}
+                        <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                          <i class="far fa-images text-5xl mb-2"></i>
+                        </div>
+                      {% endif %}
+                      <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-white/20">
+                        Foto #{{ galeri.urutan|default:forloop.counter }}
+                      </span>
+                    </a>
+
+                    <div class="p-5">
+                      <span class="text-[11px] font-semibold text-brand-teal flex items-center gap-1.5 mb-2">
+                        <i class="far fa-clock text-[10px]"></i>
+                        {{ galeri.created_at|date:"d M Y" }}
+                      </span>
+                      <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 group-hover:text-brand-teal transition">
+                        <a href="{% url 'galeri_list' %}">{{ galeri.judul|default:"Dokumentasi Kegiatan" }}</a>
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div class="px-5 py-3.5 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <a href="{% url 'galeri_list' %}" class="text-[11px] font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
+                      Lihat Foto &rarr;
+                    </a>
+                    <span class="text-[10px] text-slate-400 font-medium">UNTAD</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+        <div class="mt-4 text-center" data-aos="zoom-in">
+          <a href="{% url 'galeri_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
+            Lihat Semua Foto &rarr;
+          </a>
+        </div>
+      {% else %}
+        <div class="text-sm text-slate-500 py-10" data-aos="fade-in">Belum ada foto kegiatan.</div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- ================= TENAGA PENGAJAR (DOSEN) (CAROUSEL 3-2-1) ================= -->
+  <section class="py-16 px-4 sm:px-6 bg-white border-t border-slate-200/60" id="dosen">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
+        <div class="text-center sm:text-left">
+          <h2 class="text-2xl font-bold text-brand-teal mb-1">Tenaga Pengajar (Dosen)</h2>
+          <p class="text-xs text-slate-500">Dosen berdedikasi Program Studi Administrasi Publik FISIP Universitas Tadulako</p>
+        </div>
+        {% if daftar_dosen %}
+          <div class="flex items-center justify-center sm:justify-end gap-2 shrink-0">
+            <button type="button" id="dosen-prev" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Dosen Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="dosen-next" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Dosen Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if daftar_dosen %}
+        <div class="swiper dosen-swiper custom-carousel-swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper">
+            {% for dosen in daftar_dosen %}
+              <div class="swiper-slide h-auto">
+                <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+                  <div>
+                    <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}" class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative block aspect-square">
+                      {% if dosen.foto %}
+                        <img src="{{ dosen.foto.url }}" alt="{{ dosen.nama }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                      {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                          <i class="fa-solid fa-chalkboard-user text-5xl"></i>
+                        </div>
+                      {% endif %}
+                    </a>
+
+                    <div class="p-5">
+                      <span class="inline-block text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-brand-teal text-brand-teal uppercase tracking-wider mb-2">
+                        {{ dosen.jabatan|default:"Dosen Tetap" }}
+                      </span>
+                      <h3 class="text-sm font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-brand-teal transition">
+                        <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}">{{ dosen.nama }}</a>
+                      </h3>
+                      {% if dosen.bidang_keahlian or dosen.bidang_ilmu %}
+                        <p class="text-xs text-brand-teal font-medium mt-1 truncate">{{ dosen.bidang_keahlian|default:dosen.bidang_ilmu }}</p>
+                      {% endif %}
+                      {% if dosen.nidn %}
+                        <p class="text-[11px] text-slate-400 mt-1">NIDN: {{ dosen.nidn }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="px-5 py-3.5 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}" class="text-[11px] font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
+                      Lihat Profil &rarr;
+                    </a>
+                    <span class="text-[10px] text-slate-400 font-medium">FISIP UNTAD</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+        <div class="mt-4 text-center" data-aos="zoom-in">
+          <a href="{% url 'tenaga_pendidik_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
+            Lihat Semua Dosen &rarr;
+          </a>
+        </div>
+      {% else %}
+        <div class="text-sm text-slate-500 py-10" data-aos="fade-in">Belum ada data tenaga pengajar.</div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- ================= TENAGA KEPENDIDIKAN (CAROUSEL 3-2-1) ================= -->
+  <section class="py-16 px-4 sm:px-6 bg-slate-50 border-t border-slate-200/60" id="tendik">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
+        <div class="text-center sm:text-left">
+          <h2 class="text-2xl font-bold text-brand-teal mb-1">Tenaga Kependidikan</h2>
+          <p class="text-xs text-slate-500">Staf administrasi dan operasional Program Studi Administrasi Publik</p>
+        </div>
+        {% if daftar_tendik %}
+          <div class="flex items-center justify-center sm:justify-end gap-2 shrink-0">
+            <button type="button" id="tendik-prev" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Tendik Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="tendik-next" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Tendik Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if daftar_tendik %}
+        <div class="swiper tendik-swiper custom-carousel-swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper">
+            {% for tendik in daftar_tendik %}
+              <div class="swiper-slide h-auto">
+                <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+                  <div>
+                    <a href="{% url 'tenaga_kependidikan_detail' tendik.pk %}" class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative block aspect-square">
+                      {% if tendik.foto %}
+                        <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                      {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                          <i class="fa-solid fa-user-gear text-5xl"></i>
+                        </div>
+                      {% endif %}
+                    </a>
+
+                    <div class="p-5">
+                      <span class="inline-block text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-brand-teal text-brand-teal uppercase tracking-wider mb-2">
+                        {{ tendik.status|default:"Tenaga Kependidikan" }}
+                      </span>
+                      <h3 class="text-sm font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-brand-teal transition">
+                        <a href="{% url 'tenaga_kependidikan_detail' tendik.pk %}">{{ tendik.nama }}</a>
+                      </h3>
+                      {% if tendik.bidang_ilmu %}
+                        <p class="text-xs text-brand-teal font-medium mt-1 truncate">{{ tendik.bidang_ilmu }}</p>
+                      {% endif %}
+                      {% if tendik.nip %}
+                        <p class="text-[11px] text-slate-400 mt-1">NIP: {{ tendik.nip }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="px-5 py-3.5 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <a href="{% url 'tenaga_kependidikan_detail' tendik.pk %}" class="text-[11px] font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
+                      Lihat Profil &rarr;
+                    </a>
+                    <span class="text-[10px] text-slate-400 font-medium">FISIP UNTAD</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+        <div class="mt-4 text-center" data-aos="zoom-in">
+          <a href="{% url 'tenaga_kependidikan_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
+            Lihat Semua Tenaga Kependidikan &rarr;
+          </a>
+        </div>
+      {% else %}
+        <div class="text-sm text-slate-500 py-10" data-aos="fade-in">Belum ada data tenaga kependidikan.</div>
+      {% endif %}
     </div>
   </section>
 
@@ -835,8 +982,8 @@
             </a>
           </li>
           <li>
-            <a href="https://siaga.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal Siaga 8
+            <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal SIGA-8
             </a>
           </li>
           <li>
@@ -941,6 +1088,51 @@
         if (icon) icon.classList.toggle('rotate-180');
       }
     }
+  </script>
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const makeCarouselConfig = (prevEl, nextEl, paginationEl) => ({
+        slidesPerView: 1,
+        spaceBetween: 16,
+        loop: false,
+        navigation: {
+          nextEl: nextEl,
+          prevEl: prevEl,
+        },
+        pagination: {
+          el: paginationEl,
+          clickable: true,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 24,
+          },
+        },
+      });
+
+      if (document.querySelector('.berita-swiper')) {
+        new Swiper('.berita-swiper', makeCarouselConfig('#berita-prev', '#berita-next', '.berita-swiper .swiper-pagination'));
+      }
+      if (document.querySelector('.event-swiper')) {
+        new Swiper('.event-swiper', makeCarouselConfig('#event-prev', '#event-next', '.event-swiper .swiper-pagination'));
+      }
+      if (document.querySelector('.galeri-swiper')) {
+        new Swiper('.galeri-swiper', makeCarouselConfig('#galeri-prev', '#galeri-next', '.galeri-swiper .swiper-pagination'));
+      }
+      if (document.querySelector('.dosen-swiper')) {
+        new Swiper('.dosen-swiper', makeCarouselConfig('#dosen-prev', '#dosen-next', '.dosen-swiper .swiper-pagination'));
+      }
+      if (document.querySelector('.tendik-swiper')) {
+        new Swiper('.tendik-swiper', makeCarouselConfig('#tendik-prev', '#tendik-next', '.tendik-swiper .swiper-pagination'));
+      }
+    });
   </script>
 </body>
 </html>

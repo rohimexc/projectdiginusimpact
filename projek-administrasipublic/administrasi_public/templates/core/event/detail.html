@@ -15,6 +15,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -56,6 +59,23 @@
       margin-top: 1.5rem;
       margin-bottom: 0.75rem;
     }
+    /* Swiper Styling Konsisten 3-2-1 */
+    .custom-carousel-swiper {
+      padding-bottom: 48px !important;
+      position: relative;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 24px !important;
+      border-radius: 9999px !important;
+    }
   </style>
 </head>
 <body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-brand-teal selection:text-white">
@@ -82,7 +102,7 @@
       <li><a href="{% url 'galeri_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Galeri</a></li>
       <li><a href="{% url 'berita_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Berita</a></li>
       <li><a href="{% url 'event_list' %}" class="text-white text-xs font-semibold py-2 px-3 rounded-md bg-white/15 text-[#ffd43b] transition">Event</a></li>
-      <li><a href="{% url 'akademik_detail' 'siga8' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Akademik</a></li>
+      <li><a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">SIGA-8</a></li>
       <li><a href="{% url 'tenaga_pendidik_list' %}" class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition">Staf</a></li>
     </ul>
 
@@ -136,7 +156,10 @@
           <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-akademik-icon"></i>
         </button>
         <div id="mobile-akademik-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
-          <a href="{% url 'akademik_detail' 'siga8' %}" class="block py-1 px-2 rounded hover:text-brand-accent">SIGA-8</a>
+          <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="py-1 px-2 rounded hover:text-brand-accent flex items-center justify-between">
+            <span>SIGA-8</span>
+            <i class="fas fa-external-link-alt text-[9px]"></i>
+          </a>
           <a href="{% url 'akademik_detail' 'kurikulum' %}" class="block py-1 px-2 rounded hover:text-brand-accent">Kurikulum</a>
           <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-brand-accent">Jadwal Perkuliahan</a>
           <a href="{% url 'akademik_detail' 'rps' %}" class="block py-1 px-2 rounded hover:text-brand-accent">RPS</a>
@@ -333,56 +356,66 @@
       </div>
     </div>
 
-    <!-- Rekomendasi Event Lainnya -->
+    <!-- Rekomendasi Event Lainnya (Carousel 3-2-1) -->
     {% if event_lainnya %}
       <div class="mt-12 pt-10 border-t border-slate-200">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h3 class="text-lg sm:text-xl font-bold text-[#0D636D]">Agenda & Event Terdekat Lainnya</h3>
+            <h3 class="text-lg sm:text-xl font-bold text-brand-teal">Agenda & Event Terdekat Lainnya</h3>
             <p class="text-xs text-slate-500">Ikuti juga agenda akademik mendatang lainnya</p>
           </div>
-          <a href="{% url 'event_list' %}" class="text-xs font-semibold text-[#0D636D] hover:underline">
-            Lihat Semua &rarr;
-          </a>
+          <div class="flex items-center gap-2">
+            <button type="button" id="event-terkait-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="event-terkait-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {% for ev in event_lainnya %}
-            <div class="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-lg transition duration-200 flex flex-col justify-between">
-              <div>
-                <a href="{% url 'event_detail' ev.slug %}" class="relative block w-full aspect-[4/5] overflow-hidden bg-slate-100">
-                  {% if ev.poster %}
-                    <img src="{{ ev.poster.url }}" alt="{{ ev.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                  {% else %}
-                    <div class="w-full h-full flex items-center justify-center bg-teal-900 text-white p-4 text-center">
-                      <span class="text-xs font-bold">{{ ev.judul }}</span>
+        <div class="swiper event-terkait-swiper custom-carousel-swiper">
+          <div class="swiper-wrapper">
+            {% for ev in event_lainnya %}
+              <div class="swiper-slide h-auto">
+                <div class="group h-full bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-lg transition duration-200 flex flex-col justify-between">
+                  <div>
+                    <a href="{% url 'event_detail' ev.slug %}" class="relative block w-full aspect-[4/5] overflow-hidden bg-slate-100">
+                      {% if ev.poster %}
+                        <img src="{{ ev.poster.url }}" alt="{{ ev.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                      {% else %}
+                        <div class="w-full h-full flex items-center justify-center bg-teal-900 text-white p-4 text-center">
+                          <span class="text-xs font-bold">{{ ev.judul }}</span>
+                        </div>
+                      {% endif %}
+                      <div class="absolute top-3 left-3 bg-white/95 rounded-xl shadow px-2.5 py-1 text-center min-w-[45px]">
+                        <span class="block text-sm font-bold text-[#0D636D] leading-none">{{ ev.hari_mulai }}</span>
+                        <span class="block text-[9px] font-bold text-slate-500 uppercase">{{ ev.bulan_mulai_singkat }}</span>
+                      </div>
+                    </a>
+                    <div class="p-4">
+                      <span class="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                        {{ ev.kategori }}
+                      </span>
+                      <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0D636D] transition line-clamp-2 leading-snug mb-2">
+                        <a href="{% url 'event_detail' ev.slug %}">{{ ev.judul }}</a>
+                      </h4>
+                      <div class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                        <i class="far fa-calendar-alt text-[#0D636D]"></i>
+                        <span>{{ ev.tanggal_display }}</span>
+                      </div>
                     </div>
-                  {% endif %}
-                  <div class="absolute top-3 left-3 bg-white/95 rounded-xl shadow px-2.5 py-1 text-center min-w-[45px]">
-                    <span class="block text-sm font-bold text-[#0D636D] leading-none">{{ ev.hari_mulai }}</span>
-                    <span class="block text-[9px] font-bold text-slate-500 uppercase">{{ ev.bulan_mulai_singkat }}</span>
                   </div>
-                </a>
-                <div class="p-4">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full inline-block mb-1.5">
-                    {{ ev.kategori }}
-                  </span>
-                  <h4 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0D636D] transition line-clamp-2 leading-snug mb-2">
-                    <a href="{% url 'event_detail' ev.slug %}">{{ ev.judul }}</a>
-                  </h4>
-                  <div class="text-[11px] text-slate-500 flex items-center gap-1.5">
-                    <i class="far fa-calendar-alt text-[#0D636D]"></i>
-                    <span>{{ ev.tanggal_display }}</span>
+                  <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 text-right">
+                    <a href="{% url 'event_detail' ev.slug %}" class="text-xs font-bold text-[#0D636D] hover:underline">
+                      Detail &rarr;
+                    </a>
                   </div>
                 </div>
               </div>
-              <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 text-right">
-                <a href="{% url 'event_detail' ev.slug %}" class="text-xs font-bold text-[#0D636D] hover:underline">
-                  Detail &rarr;
-                </a>
-              </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
         </div>
       </div>
     {% endif %}
@@ -446,6 +479,37 @@
         }
       });
     }
+  </script>
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.event-terkait-swiper')) {
+        new Swiper('.event-terkait-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          loop: false,
+          navigation: {
+            nextEl: '#event-terkait-next',
+            prevEl: '#event-terkait-prev',
+          },
+          pagination: {
+            el: '.event-terkait-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
   </script>
 </body>
 </html>

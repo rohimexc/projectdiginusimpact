@@ -101,6 +101,28 @@
           </span>
         </div>
 
+        <!-- Panduan Aturan Tampilan Fleksibel (Kondisi A, B, C) -->
+        <div class="mb-6 p-4 rounded-xl bg-teal-50/80 border border-teal-200/80 text-xs text-slate-700">
+          <div class="flex items-center gap-2 font-bold text-brand-teal mb-2">
+            <i class="bi bi-info-circle-fill text-sm"></i>
+            <span>Aturan Logika Tampilan Publik (Prioritas Otomatis):</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] leading-relaxed">
+            <div class="p-2.5 rounded-lg bg-white border border-teal-100 shadow-2xs">
+              <span class="font-bold text-teal-800 block mb-1">🔗 Kondisi A (Direct Link)</span>
+              Hanya isi field <strong>Tautan Eksternal</strong> (kosongkan dokumen & konten teks). Pengunjung akan langsung dialihkan ke tautan tersebut.
+            </div>
+            <div class="p-2.5 rounded-lg bg-white border border-teal-100 shadow-2xs">
+              <span class="font-bold text-teal-800 block mb-1">📄 Kondisi B (Preview PDF)</span>
+              Hanya unggah <strong>Dokumen Utama PDF</strong> (kosongkan tautan & teks). Pengunjung akan langsung melihat preview PDF interaktif.
+            </div>
+            <div class="p-2.5 rounded-lg bg-white border border-teal-100 shadow-2xs">
+              <span class="font-bold text-teal-800 block mb-1">📝 Kondisi C (Halaman Teks & File)</span>
+              Isi <strong>Isi Konten Akademik</strong> (dapat melampirkan file dokumen). Pengunjung akan melihat halaman detail artikel lengkap beserta tombol unduh/preview dokumen.
+            </div>
+          </div>
+        </div>
+
         <form method="POST" enctype="multipart/form-data" class="space-y-5">
           {% csrf_token %}
           
@@ -128,7 +150,7 @@
                 Tautan Eksternal / Portal <span class="text-slate-400 font-normal">(opsional)</span>
               </label>
               {{ form.link_eksternal }}
-              <p class="text-[10px] text-slate-400 mt-1">Misal tautan portal SIGA-8: <code>https://siaga.untad.ac.id/</code></p>
+              <p class="text-[10px] text-slate-400 mt-1">Misal tautan portal SIGA-8: <code>https://siga-8.untad.ac.id/</code></p>
               {% for err in form.link_eksternal.errors %}
                 <p class="text-xs text-rose-600 mt-1">{{ err }}</p>
               {% endfor %}

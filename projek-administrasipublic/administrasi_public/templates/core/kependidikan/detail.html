@@ -7,6 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <script>
     tailwind.config = {
       theme: {
@@ -24,6 +26,24 @@
       }
     }
   </script>
+  <style>
+    .custom-carousel-swiper {
+      padding-bottom: 48px !important;
+      position: relative;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 24px !important;
+      border-radius: 9999px !important;
+    }
+  </style>
 </head>
 <body class="font-poppins bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
@@ -109,7 +129,98 @@
       </div>
 
     </div>
+
+    <!-- ================= TENDIK LAINNYA (CAROUSEL 3-2-1) ================= -->
+    {% if tendik_lainnya %}
+      <section class="mt-12 pt-10 border-t border-slate-200">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-lg sm:text-xl font-bold text-brand-teal">Tenaga Kependidikan Lainnya</h3>
+            <p class="text-xs text-slate-500">Staf administrasi dan operasional Program Studi Administrasi Publik</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="tendik-terkait-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="tendik-terkait-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="swiper tendik-terkait-swiper custom-carousel-swiper">
+          <div class="swiper-wrapper">
+            {% for t in tendik_lainnya %}
+              <div class="swiper-slide h-auto">
+                <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+                  <div>
+                    <a href="{% url 'tenaga_kependidikan_detail' t.pk %}" class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative block aspect-square">
+                      {% if t.foto %}
+                        <img src="{{ t.foto.url }}" alt="{{ t.nama }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                      {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                          <i class="fa-solid fa-user-gear text-5xl"></i>
+                        </div>
+                      {% endif %}
+                    </a>
+                    <div class="p-4">
+                      <span class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full border border-brand-teal text-brand-teal uppercase tracking-wider mb-1.5">
+                        {{ t.status|default:"Tenaga Kependidikan" }}
+                      </span>
+                      <h4 class="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2 leading-snug group-hover:text-brand-teal transition">
+                        <a href="{% url 'tenaga_kependidikan_detail' t.pk %}">{{ t.nama }}</a>
+                      </h4>
+                      {% if t.bidang_ilmu %}
+                        <p class="text-[11px] text-brand-teal font-medium mt-1 truncate">{{ t.bidang_ilmu }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                    <a href="{% url 'tenaga_kependidikan_detail' t.pk %}" class="font-bold text-brand-teal hover:text-brand-darkteal">
+                      Lihat Profil &rarr;
+                    </a>
+                    <span class="text-slate-400 font-medium">FISIP UNTAD</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </section>
+    {% endif %}
   </main>
 
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.tendik-terkait-swiper')) {
+        new Swiper('.tendik-terkait-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          loop: false,
+          navigation: {
+            nextEl: '#tendik-terkait-next',
+            prevEl: '#tendik-terkait-prev',
+          },
+          pagination: {
+            el: '.tendik-terkait-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
+  </script>
 </body>
 </html>

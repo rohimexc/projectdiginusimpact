@@ -400,7 +400,7 @@ class HalamanAkademik(models.Model):
     kategori = models.CharField(max_length=50, choices=KATEGORI_CHOICES, unique=True, verbose_name="Kategori Menu")
     judul = models.CharField(max_length=255, verbose_name="Judul Halaman")
     subjudul = models.CharField(max_length=255, blank=True, null=True, verbose_name="Subjudul / Ringkasan")
-    isi = CKEditor5Field('Isi Konten Akademik', config_name='extends')
+    isi = CKEditor5Field('Isi Konten Akademik', config_name='extends', blank=True, null=True)
     link_eksternal = models.URLField(blank=True, null=True, verbose_name="Tautan Eksternal / Portal")
     file_utama = models.FileField(
         upload_to='akademik/dokumen/',
@@ -419,6 +419,29 @@ class HalamanAkademik(models.Model):
 
     def __str__(self):
         return self.get_kategori_display()
+
+    def get_kondisi_tampilan(self):
+        """
+        Menentukan kondisi tampilan berdasarkan input admin:
+        - Kondisi A: Hanya link_eksternal yang diisi (isi & file_utama kosong) -> Redirect langsung
+        - Kondisi B: Hanya file_utama yang diunggah (link_eksternal & isi kosong) -> Preview PDF langsung
+        - Kondisi C: Ada isi konten teks (dan/atau lampiran file) -> Halaman detail konten + download/preview
+        """
+        import re
+        isi_clean = re.sub(r'<[^>]*>', '', self.isi or '').replace('&nbsp;', '').strip()
+        has_isi = bool(isi_clean)
+        has_file = bool(self.file_utama)
+        has_link = bool(self.link_eksternal and self.link_eksternal.strip())
+
+        # Kondisi A: Hanya link eksternal yang diisi
+        if has_link and not has_isi and not has_file:
+            return 'A'
+        # Kondisi B: Hanya file dokumen/PDF yang diunggah
+        elif has_file and not has_isi and not has_link:
+            return 'B'
+        # Kondisi C: Ada konten teks (dan/atau ada file)
+        else:
+            return 'C'
 
 
 # 10. Model Berkas / Lampiran Tambahan untuk Halaman Akademik

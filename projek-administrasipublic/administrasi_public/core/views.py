@@ -52,7 +52,10 @@ def _validate_request_files(request, field_validators):
 def home(request):
     hero = Hero.objects.filter(is_active=True).first()
     sambutan = Sambutan.objects.first()
-    daftar_berita = Berita.objects.all().order_by('-posted_at')[:3]
+    daftar_berita = Berita.objects.all().order_by('-posted_at')[:12]
+    daftar_galeri = Galeri.objects.all().order_by('urutan', '-created_at')[:12]
+    daftar_dosen = TenagaPendidik.objects.filter(jenis='DOSEN').order_by('nama')[:12]
+    daftar_tendik = TenagaPendidik.objects.filter(jenis='TENDIK').order_by('nama')[:12]
 
     # Auto-seed data event jika database masih kosong di server
     if not Event.objects.exists():
@@ -120,6 +123,9 @@ def home(request):
         'sambutan': sambutan,
         'daftar_berita': daftar_berita,
         'daftar_event': daftar_event,
+        'daftar_galeri': daftar_galeri,
+        'daftar_dosen': daftar_dosen,
+        'daftar_tendik': daftar_tendik,
     }
     return render(request, 'core/index.html', context)
 
@@ -235,8 +241,10 @@ def galeri_list(request):
     paginator = Paginator(galeri_qs, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    sorotan_galeri = Galeri.objects.all().order_by('urutan', '-created_at')[:9]
 
     context = {
+        'sorotan_galeri': sorotan_galeri,
         'page_obj': page_obj,
         'query': query,
         'start_date': start_date_str,
@@ -464,7 +472,7 @@ def berita_detail(request, pk):
                 return JsonResponse({'status': 'error', 'message': 'Komentar tidak boleh kosong!'}, status=400)
             messages.error(request, 'Komentar tidak boleh kosong!')
 
-    berita_terkait = Berita.objects.exclude(pk=pk).order_by('-posted_at')[:3]
+    berita_terkait = Berita.objects.exclude(pk=pk).order_by('-posted_at')[:9]
     komentar_list = berita.komentar_list.all().order_by('-created_at')
 
     context = {
@@ -607,7 +615,8 @@ def tenaga_pendidik_list(request):
 
 def tenaga_pendidik_detail(request, pk):
     dosen = get_object_or_404(TenagaPendidik, pk=pk, jenis='DOSEN')
-    return render(request, 'core/dosen/detail.html', {'dosen': dosen})
+    dosen_lainnya = TenagaPendidik.objects.filter(jenis='DOSEN').exclude(pk=pk).order_by('nama')[:12]
+    return render(request, 'core/dosen/detail.html', {'dosen': dosen, 'dosen_lainnya': dosen_lainnya})
 
 
 def tenaga_kependidikan_list(request):
@@ -631,7 +640,11 @@ def tenaga_kependidikan_list(request):
 
 def tenaga_kependidikan_detail(request, pk):
     tenaga_kependidikan = get_object_or_404(TenagaPendidik, pk=pk)
-    return render(request, 'core/kependidikan/detail.html', {'tenaga_kependidikan': tenaga_kependidikan})
+    tendik_lainnya = TenagaPendidik.objects.filter(jenis='TENDIK').exclude(pk=pk).order_by('nama')[:12]
+    return render(request, 'core/kependidikan/detail.html', {
+        'tenaga_kependidikan': tenaga_kependidikan,
+        'tendik_lainnya': tendik_lainnya
+    })
 
 
 # ==========================================
@@ -1314,13 +1327,29 @@ def admin_kelola_visi_misi(request):
 # ==========================================
 
 def akademik_detail(request, kategori):
-    halaman = get_object_or_404(HalamanAkademik, kategori=kategori)
+    # Requirement 2: Direct link SIGA-8 -> langsung redirect ke URL eksternal resmi
+    if kategori in ('siga8', 'siga'):
+        return redirect('https://siga-8.untad.ac.id')
+
+    default_judul = dict(HalamanAkademik.KATEGORI_CHOICES).get(kategori, 'Layanan Akademik')
+    halaman, created = HalamanAkademik.objects.get_or_create(
+        kategori=kategori,
+        defaults={'judul': default_judul, 'isi': ''}
+    )
+
+    kondisi = halaman.get_kondisi_tampilan()
+
+    # Requirement 3: Kondisi A (Hanya Link yang diisi) -> langsung redirect ke link tersebut
+    if kondisi == 'A' and halaman.link_eksternal:
+        return redirect(halaman.link_eksternal)
+
     daftar_dokumen = halaman.dokumen_list.all()
     context = {
         'halaman': halaman,
         'kategori_aktif': kategori,
         'daftar_kategori': HalamanAkademik.KATEGORI_CHOICES,
         'daftar_dokumen': daftar_dokumen,
+        'kondisi': kondisi,
     }
     return render(request, 'core/akademik_detail.html', context)
 
@@ -1603,7 +1632,7 @@ def event_detail(request, slug):
     if not event:
         event = get_object_or_404(Event, slug=slug)
 
-    event_lainnya = Event.objects.filter(is_active=True).exclude(pk=event.pk).order_by('tanggal_mulai')[:3]
+    event_lainnya = Event.objects.filter(is_active=True).exclude(pk=event.pk).order_by('tanggal_mulai', '-created_at')[:9]
 
     context = {
         'event': event,

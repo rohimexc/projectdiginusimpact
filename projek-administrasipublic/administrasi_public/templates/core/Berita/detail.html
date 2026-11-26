@@ -15,6 +15,9 @@
   <!-- AOS Animation CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -36,6 +39,24 @@
     }
   </script>
   <style>
+    /* Swiper Styling Konsisten 3-2-1 */
+    .custom-carousel-swiper {
+      padding-bottom: 50px !important;
+      position: relative;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .custom-carousel-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 24px !important;
+      border-radius: 9999px !important;
+    }
+
     /* Animasi AOS Mobile Cepat, Ringan & Friendly */
     @media (max-width: 768px) {
       body, html {
@@ -124,8 +145,9 @@
         </button>
         <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
           <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
-            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
-              <i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8
+            <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <span class="flex items-center gap-2.5"><i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8</span>
+              <i class="fas fa-external-link-alt text-[9px] text-slate-400"></i>
             </a>
             <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-book-open text-[#fab005] w-4"></i> Kurikulum
@@ -235,7 +257,10 @@
           <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-akademik-icon"></i>
         </button>
         <div id="mobile-akademik-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
-          <a href="{% url 'akademik_detail' 'siga8' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">SIGA-8</a>
+          <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="py-1 px-2 rounded hover:text-[#ffd43b] flex items-center justify-between">
+            <span>SIGA-8</span>
+            <i class="fas fa-external-link-alt text-[9px]"></i>
+          </a>
           <a href="{% url 'akademik_detail' 'kurikulum' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Kurikulum</a>
           <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Jadwal Perkuliahan</a>
           <a href="{% url 'akademik_detail' 'rps' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">RPS</a>
@@ -525,6 +550,70 @@
 
       </section>
 
+      <!-- ================= REKOMENDASI BERITA TERKAIT (CAROUSEL 3-2-1) ================= -->
+      {% if berita_terkait %}
+        <section class="mt-14 pt-10 border-t border-slate-200" data-aos="fade-up">
+          <div class="flex items-center justify-between mb-6 gap-3">
+            <div>
+              <h3 class="text-lg sm:text-xl font-bold text-brand-teal">Berita Terkait Lainnya</h3>
+              <p class="text-xs text-slate-500">Baca juga informasi dan publikasi menarik lainnya</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" id="berita-terkait-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" id="berita-terkait-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="swiper berita-terkait-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for bt in berita_terkait %}
+                <div class="swiper-slide h-auto">
+                  <div class="h-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:-translate-y-1 hover:shadow-md transition duration-200 flex flex-col justify-between">
+                    <div>
+                      <a href="{% url 'berita_detail' bt.pk %}" class="block w-full overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 5;">
+                        {% if bt.gambar %}
+                          {% if bt.gambar.url %}
+                            <img src="{{ bt.gambar.url }}" alt="{{ bt.judul }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                          {% else %}
+                            <img src="{{ bt.gambar }}" alt="{{ bt.judul }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                          {% endif %}
+                        {% else %}
+                          <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                            <i class="fas fa-newspaper text-4xl mb-2"></i>
+                          </div>
+                        {% endif %}
+                      </a>
+                      <div class="p-4">
+                        <span class="text-[10px] font-semibold text-brand-teal bg-teal-50 px-2.5 py-0.5 rounded-md inline-block mb-1.5">
+                          {{ bt.posted_at|date:"d M Y" }}
+                        </span>
+                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 line-clamp-2 leading-snug hover:text-brand-teal transition">
+                          <a href="{% url 'berita_detail' bt.pk %}">{{ bt.judul }}</a>
+                        </h4>
+                        {% if bt.ringkasan %}
+                          <p class="text-[11px] text-slate-500 line-clamp-2 mt-1.5 leading-relaxed">{{ bt.ringkasan }}</p>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                      <span class="text-slate-400 font-mono">{{ bt.views }} pembaca</span>
+                      <a href="{% url 'berita_detail' bt.pk %}" class="font-bold text-brand-teal hover:text-brand-darkteal">
+                        Baca &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      {% endif %}
+
     </div>
   </main>
 
@@ -605,8 +694,8 @@
             </a>
           </li>
           <li>
-            <a href="https://siaga.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal Siaga 8
+            <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal SIGA-8
             </a>
           </li>
           <li>
@@ -1125,6 +1214,37 @@
         if (icon) icon.classList.toggle('rotate-180');
       }
     }
+  </script>
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.berita-terkait-swiper')) {
+        new Swiper('.berita-terkait-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          loop: false,
+          navigation: {
+            nextEl: '#berita-terkait-next',
+            prevEl: '#berita-terkait-prev',
+          },
+          pagination: {
+            el: '.berita-terkait-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
   </script>
 </body>
 </html>

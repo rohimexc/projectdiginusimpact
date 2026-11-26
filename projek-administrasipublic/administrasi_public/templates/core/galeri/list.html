@@ -15,6 +15,9 @@
   <!-- AOS Animation CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -150,8 +153,9 @@
         </button>
         <div class="absolute left-0 top-full pt-2 w-56 hidden group-hover:block z-50">
           <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
-            <a href="{% url 'akademik_detail' 'siga8' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
-              <i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8
+            <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+              <span class="flex items-center gap-2.5"><i class="fas fa-desktop text-[#fab005] w-4"></i> SIGA-8</span>
+              <i class="fas fa-external-link-alt text-[9px] text-slate-400"></i>
             </a>
             <a href="{% url 'akademik_detail' 'kurikulum' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
               <i class="fas fa-book-open text-[#fab005] w-4"></i> Kurikulum
@@ -293,7 +297,10 @@
           <i class="fas fa-chevron-down text-[10px] transition-transform duration-200" id="mobile-akademik-icon"></i>
         </button>
         <div id="mobile-akademik-menu" class="hidden pl-8 pr-2 py-1.5 space-y-1.5 bg-black/20 rounded-lg mt-1 text-[11px]">
-          <a href="{% url 'akademik_detail' 'siga8' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">SIGA-8</a>
+          <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="py-1 px-2 rounded hover:text-[#ffd43b] flex items-center justify-between">
+            <span>SIGA-8</span>
+            <i class="fas fa-external-link-alt text-[9px]"></i>
+          </a>
           <a href="{% url 'akademik_detail' 'kurikulum' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Kurikulum</a>
           <a href="{% url 'akademik_detail' 'jadwal' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">Jadwal Perkuliahan</a>
           <a href="{% url 'akademik_detail' 'rps' %}" class="block py-1 px-2 rounded hover:text-[#ffd43b]">RPS</a>
@@ -368,6 +375,81 @@
           Informasi dan dokumentasi visual seputar kegiatan Program Studi Administrasi Publik FISIP Universitas Tadulako
         </p>
       </header>
+
+      <!-- ================= SOROTAN DOKUMENTASI KEGIATAN (CAROUSEL 3-2-1) ================= -->
+      {% if sorotan_galeri %}
+        <section class="mb-8" data-aos="fade-up" data-aos-duration="600">
+          <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+              <h2 class="text-sm sm:text-base font-bold text-slate-800">
+                Dokumentasi Kegiatan <span class="text-xs font-normal text-slate-400">({{ total_galeri }} Foto)</span>
+              </h2>
+            </div>
+            <!-- Tombol Navigasi Slider -->
+            <div class="flex items-center gap-2">
+              <button type="button" id="sorotan-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Foto Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" id="sorotan-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Foto Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="swiper galeri-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for sg in sorotan_galeri %}
+                <div class="swiper-slide h-auto">
+                  <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+                    <div>
+                      <div class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative cursor-pointer" style="aspect-ratio: 4 / 5;"
+                           onclick="bukaLightboxByData('{% if sg.gambar %}{{ sg.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ sg.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ sg.urutan|default:forloop.counter }}', '{{ sg.created_at|date:'d M Y, H:i' }}')">
+                        {% if sg.gambar %}
+                          <img src="{{ sg.gambar.url }}" alt="{{ sg.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                        {% else %}
+                          <img src="{% static 'images/foto1.jpg' %}" alt="{{ sg.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                        {% endif %}
+
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity duration-200">
+                          <span class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-search-plus"></i>
+                          </span>
+                        </div>
+
+                        <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-white/20">
+                          Foto #{{ sg.urutan|default:forloop.counter }}
+                        </span>
+                      </div>
+
+                      <div class="p-4">
+                        <span class="text-[10px] font-semibold text-[#0b7285] flex items-center gap-1.5 mb-1.5">
+                          <i class="far fa-clock text-[9px]"></i>
+                          {{ sg.created_at|date:"d M Y" }}
+                        </span>
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug line-clamp-2 hover:text-[#0b7285] transition cursor-pointer"
+                            onclick="bukaLightboxByData('{% if sg.gambar %}{{ sg.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ sg.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ sg.urutan|default:forloop.counter }}', '{{ sg.created_at|date:'d M Y, H:i' }}')">
+                          {{ sg.judul|default:"Dokumentasi Kegiatan" }}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div class="px-4 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <button type="button" 
+                              onclick="bukaLightboxByData('{% if sg.gambar %}{{ sg.gambar.url }}{% else %}{% static 'images/foto1.jpg' %}{% endif %}', '{{ sg.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ sg.urutan|default:forloop.counter }}', '{{ sg.created_at|date:'d M Y, H:i' }}')"
+                              class="text-[11px] font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1 cursor-pointer">
+                        Pratinjau &rarr;
+                      </button>
+                      <span class="text-[10px] text-slate-400 font-medium">UNTAD</span>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      {% endif %}
 
       <!-- ================= KARTU PENCARIAN & FILTER KAPSUL MODERN (2 BARIS, PERSIS BERITA) ================= -->
       <div data-aos="fade-down" data-aos-duration="600" class="mb-5">
@@ -740,8 +822,8 @@
             </a>
           </li>
           <li>
-            <a href="https://siaga.untad.ac.id" target="_blank" class="hover:text-brand-gold transition-colors flex items-center gap-2">
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal Siaga 8
+            <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="hover:text-brand-gold transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-teal-400"></i> Portal SIGA-8
             </a>
           </li>
           <li>
@@ -1026,6 +1108,37 @@
         } else if (e.key === 'ArrowRight') {
           navigasiLightbox(1);
         }
+      }
+    });
+  </script>
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.galeri-sorotan-swiper')) {
+        new Swiper('.galeri-sorotan-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          loop: false,
+          navigation: {
+            nextEl: '#sorotan-next',
+            prevEl: '#sorotan-prev',
+          },
+          pagination: {
+            el: '.galeri-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
       }
     });
   </script>
