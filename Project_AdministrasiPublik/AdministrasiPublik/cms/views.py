@@ -11,12 +11,15 @@ from .forms import PageForm, MenuForm, SiteSettingForm, SocialMediaForm, QuickLi
 
 
 def staff_required(view_func):
-    """Decorator khusus untuk memastikan user adalah staff/admin"""
-    actual_decorator = user_passes_test(
-        lambda u: u.is_active and (u.is_staff or u.is_superuser),
-        login_url='landing:login'
-    )
-    return actual_decorator(view_func)
+    """Decorator khusus untuk memastikan user adalah Super Admin"""
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('landing:login')
+        if not request.user.is_superuser:
+            messages.error(request, "Akses ditolak! Menu CMS & Pengaturan hanya dapat diakses oleh Super Admin.")
+            return redirect('landing:dashboard_admin')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
 
 
 # ==========================================
@@ -30,10 +33,10 @@ def page_detail(request, slug):
     """
     page = get_object_or_404(Page, slug=slug)
     is_preview = request.GET.get('preview') == '1'
-    is_staff = request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)
+    is_superuser = request.user.is_authenticated and request.user.is_superuser
 
-    # Validasi status Draft
-    if page.status == 'draft' and not (is_preview and is_staff):
+    # Validasi status Draft (hanya Super Admin yang dapat melakukan preview draft)
+    if page.status == 'draft' and not (is_preview and is_superuser):
         raise Http404("Halaman ini masih dalam status konsep (Draft) dan belum dipublikasikan.")
 
     # Redirect jika jenisnya tautan eksternal
@@ -63,8 +66,8 @@ def page_detail(request, slug):
 
     context = {
         'page': page,
-        'is_preview': is_preview and is_staff,
-        'is_staff': is_staff,
+        'is_preview': is_preview and is_superuser,
+        'is_staff': is_superuser,
         'related_menu': related_menu,
     }
     return render(request, 'cms/page_detail.html', context)

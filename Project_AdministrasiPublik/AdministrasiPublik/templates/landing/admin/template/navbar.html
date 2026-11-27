@@ -93,7 +93,8 @@
                 <span>Kelola Event</span>
             </a>
 
-            <!-- CMS & SITE SETTINGS (BARU) -->
+            {% if request.user.is_superuser %}
+            <!-- CMS & SITE SETTINGS (BARU - KHUSUS SUPER ADMIN) -->
             <div class="pt-3 pb-1 border-t border-white/10">
                 <p class="px-3.5 text-[10px] font-bold uppercase tracking-wider text-teal-200/70">CMS & Pengaturan</p>
             </div>
@@ -115,6 +116,7 @@
                 <i class="fa-solid fa-sliders text-xs w-4 text-center group-hover:text-amber-300 {% if 'cms/site-settings' in request.path %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
                 <span>Pengaturan Situs</span>
             </a>
+            {% endif %}
         </nav>
     </div>
 
