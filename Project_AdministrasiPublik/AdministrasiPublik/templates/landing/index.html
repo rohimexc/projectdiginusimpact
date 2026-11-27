@@ -347,15 +347,15 @@
             <div class="space-y-4 text-xs sm:text-sm leading-relaxed">
                 <p class="flex items-start gap-3">
                     <i class="fa-solid fa-location-dot mt-1 text-amber-400"></i>
-                    <span>{{ site_settings.contact_address|default:kontak.alamat|default:"Jl. Soekarno Hatta No.KM.9, Tondo, Palu" }}</span>
+                    <span>{{ site_settings.contact_address|default:"Jl. Soekarno Hatta No.KM.9, Tondo, Palu" }}</span>
                 </p>
                 <p class="flex items-center gap-3">
                     <i class="fa-solid fa-phone text-amber-400"></i>
-                    <span>{{ site_settings.contact_phone|default:kontak.telepon|default:"085330144401" }}</span>
+                    <span>{{ site_settings.contact_phone|default:"085330144401" }}</span>
                 </p>
                 <p class="flex items-center gap-3">
                     <i class="fa-solid fa-envelope text-amber-400"></i>
-                    <span>{{ site_settings.contact_email|default:kontak.email|default:"Admpublik.FISIP@untad.ac.id" }}</span>
+                    <span>{{ site_settings.contact_email|default:"Admpublik.FISIP@untad.ac.id" }}</span>
                 </p>
             </div>
         </div>
