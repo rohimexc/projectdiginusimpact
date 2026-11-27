@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -47,8 +48,11 @@
 </head>
 <body class="font-poppins bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
+  <!-- Unified Navbar -->
+  {% include 'components/navbar.html' %}
+
   <!-- Header Banner -->
-  <header class="bg-brand-darkteal text-white pt-8 sm:pt-10 pb-12 sm:pb-16 px-4 sm:px-6">
+  <header class="bg-brand-darkteal text-white pt-24 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-6">
     <div class="max-w-5xl mx-auto">
       <nav aria-label="Breadcrumb" class="text-xs text-slate-300 mb-2.5 flex flex-wrap items-center gap-1.5">
         <a href="{% url 'home' %}" class="hover:text-brand-gold hover:underline transition-colors">Beranda</a>

@@ -3,20 +3,21 @@
 <!-- UNIFIED DYNAMIC NAVBAR COMPONENT (CMS POWERED)                            -->
 <!-- Mendukung menu dinamis dari database CMS, dropdown & submenu bertingkat,  -->
 <!-- responsif pada Desktop, Tablet, dan Mobile (Drawer).                      -->
+<!-- Tampilan rapi, konsisten, dan bebas ikon pada menu baris utama desktop.   -->
 <!-- ========================================================================= -->
-<nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-4 sm:px-6 md:px-10 z-50 shadow-md">
+<nav class="fixed top-0 left-0 w-full h-[70px] bg-[#0b7285] flex justify-between items-center px-4 sm:px-6 lg:px-8 z-50 shadow-md">
   
   <!-- Logo & Identitas Website -->
-  <a href="{% url 'home' %}" class="flex items-center gap-2.5 sm:gap-3 text-white">
-    <i class="fas fa-graduation-cap text-2xl sm:text-3xl text-[#fcc419]"></i>
+  <a href="{% url 'home' %}" class="flex items-center gap-3 text-white group">
+    <i class="fas fa-graduation-cap text-3xl text-[#ffd43b] group-hover:scale-105 transition-transform"></i>
     <div>
-      <h2 class="text-sm sm:text-base font-bold leading-tight">Administrasi Publik</h2>
-      <p class="text-[10px] sm:text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
+      <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
     </div>
   </a>
 
   <!-- ================= MENU DESKTOP ================= -->
-  <ul class="hidden lg:flex list-none items-center gap-3 xl:gap-4">
+  <ul class="hidden lg:flex list-none items-center gap-1.5 xl:gap-3">
     {% if cms_menus %}
       {% for menu in cms_menus %}
         {% if not menu.children_list %}
@@ -24,8 +25,7 @@
           <li>
             <a href="{{ menu.get_url }}" 
                target="{{ menu.get_target }}" 
-               class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5">
-              {% if menu.icon_class %}<i class="{{ menu.icon_class }} text-[11px]"></i>{% endif %}
+               class="text-xs font-medium py-2 px-3 rounded-md transition flex items-center gap-1.5 {% if menu.is_active_link %}bg-white/15 text-[#ffd43b] font-semibold{% else %}text-white hover:bg-white/15 hover:text-[#ffd43b]{% endif %}">
               <span>{{ menu.title }}</span>
               {% if menu.get_target == '_blank' %}
                 <i class="fas fa-external-link-alt text-[8px] opacity-70"></i>
@@ -36,23 +36,22 @@
           <!-- Menu Induk dengan Dropdown Submenu -->
           <li class="relative group">
             <button type="button" 
-                    class="text-white text-xs font-medium py-2 px-3 rounded-md hover:bg-white/15 hover:text-[#ffd43b] transition flex items-center gap-1.5 focus:outline-none">
-              {% if menu.icon_class %}<i class="{{ menu.icon_class }} text-[11px]"></i>{% endif %}
+                    class="text-xs font-medium py-2 px-3 rounded-md transition flex items-center gap-1.5 focus:outline-none cursor-pointer {% if menu.is_active_link %}bg-white/15 text-[#ffd43b] font-semibold{% else %}text-white hover:bg-white/15 hover:text-[#ffd43b]{% endif %}">
               <span>{{ menu.title }}</span>
-              <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+              <i class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180 opacity-80"></i>
             </button>
 
-            <!-- Dropdown Tingkat 1 -->
-            <div class="absolute left-0 top-full pt-2 min-w-56 hidden group-hover:block z-50">
-              <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 text-slate-700">
+            <!-- Dropdown Tingkat 1 (Posisikan right-0 jika berada di sisi kanan agar tidak overflow) -->
+            <div class="absolute {% if forloop.revcounter <= 2 %}right-0{% else %}left-0{% endif %} top-full pt-2 min-w-56 hidden group-hover:block z-50">
+              <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
                 {% for child in menu.children_list %}
                   {% if not child.nested_children_list %}
                     <!-- Submenu Item Biasa -->
                     <a href="{{ child.get_url }}" 
                        target="{{ child.get_target }}" 
-                       class="flex items-center justify-between px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                       class="flex items-center justify-between px-4 py-2.5 text-xs font-medium transition {% if child.is_active_link %}bg-teal-50 text-[#0b7285] font-semibold{% else %}hover:bg-teal-50 hover:text-[#0b7285]{% endif %}">
                       <span class="flex items-center gap-2.5">
-                        <i class="{% if child.icon_class %}{{ child.icon_class }}{% else %}fas fa-circle-notch text-[8px]{% endif %} text-[#fab005] w-4"></i>
+                        <i class="{% if child.icon_class %}{{ child.icon_class }}{% else %}fas fa-circle-notch text-[8px]{% endif %} text-[#fab005] w-4 text-center"></i>
                         <span>{{ child.title }}</span>
                       </span>
                       {% if child.get_target == '_blank' %}
@@ -60,24 +59,24 @@
                       {% endif %}
                     </a>
                   {% else %}
-                    <!-- Submenu Bertingkat (Flyout ke Kanan) -->
+                    <!-- Submenu Bertingkat (Flyout) -->
                     <div class="relative group/nested">
                       <button type="button" 
-                              class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition focus:outline-none">
+                              class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-medium transition hover:bg-teal-50 hover:text-[#0b7285] focus:outline-none cursor-pointer {% if child.is_active_link %}bg-teal-50 text-[#0b7285] font-semibold{% endif %}">
                         <span class="flex items-center gap-2.5">
-                          <i class="{% if child.icon_class %}{{ child.icon_class }}{% else %}fas fa-folder text-[10px]{% endif %} text-[#fab005] w-4"></i>
+                          <i class="{% if child.icon_class %}{{ child.icon_class }}{% else %}fas fa-folder text-[10px]{% endif %} text-[#fab005] w-4 text-center"></i>
                           <span>{{ child.title }}</span>
                         </span>
                         <i class="fas fa-chevron-right text-[9px] text-slate-400"></i>
                       </button>
-                      <div class="absolute left-full top-0 pl-1 min-w-52 hidden group-hover/nested:block z-50">
-                        <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 text-slate-700">
+                      <div class="absolute {% if forloop.parentloop.revcounter <= 2 %}right-full mr-1{% else %}left-full ml-1{% endif %} top-0 min-w-52 hidden group-hover/nested:block z-50">
+                        <div class="bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden text-slate-700">
                           {% for sub in child.nested_children_list %}
                             <a href="{{ sub.get_url }}" 
                                target="{{ sub.get_target }}" 
-                               class="flex items-center justify-between px-4 py-2 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                               class="flex items-center justify-between px-4 py-2 text-xs font-medium transition {% if sub.is_active_link %}bg-teal-50 text-[#0b7285] font-semibold{% else %}hover:bg-teal-50 hover:text-[#0b7285]{% endif %}">
                               <span class="flex items-center gap-2">
-                                <i class="{% if sub.icon_class %}{{ sub.icon_class }}{% else %}fas fa-angle-right text-[10px]{% endif %} text-[#fab005] w-3"></i>
+                                <i class="{% if sub.icon_class %}{{ sub.icon_class }}{% else %}fas fa-angle-right text-[10px]{% endif %} text-[#fab005] w-3 text-center"></i>
                                 <span>{{ sub.title }}</span>
                               </span>
                               {% if sub.get_target == '_blank' %}
@@ -176,7 +175,7 @@
           <!-- Menu Tunggal Mobile -->
           <a href="{{ menu.get_url }}" 
              target="{{ menu.get_target }}" 
-             class="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-white/15 font-semibold">
+             class="flex items-center justify-between py-2.5 px-3 rounded-lg font-semibold {% if menu.is_active_link %}bg-white/20 text-[#ffd43b]{% else %}hover:bg-white/15 text-white{% endif %}">
             <span class="flex items-center gap-2.5">
               <i class="{% if menu.icon_class %}{{ menu.icon_class }}{% else %}fas fa-link text-[11px]{% endif %} w-5 text-[#fab005]"></i>
               <span>{{ menu.title }}</span>
@@ -190,7 +189,7 @@
           <div class="border-t border-white/10 pt-1.5">
             <button type="button" 
                     onclick="toggleCmsAccordion('mobile-menu-{{ forloop.counter }}', 'mobile-icon-{{ forloop.counter }}')" 
-                    class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold text-left focus:outline-none">
+                    class="w-full flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/15 font-semibold text-left focus:outline-none cursor-pointer {% if menu.is_active_link %}text-[#ffd43b]{% else %}text-white{% endif %}">
               <span class="flex items-center gap-2.5">
                 <i class="{% if menu.icon_class %}{{ menu.icon_class }}{% else %}fas fa-layer-group text-[11px]{% endif %} w-5 text-[#fab005]"></i>
                 <span>{{ menu.title }}</span>
@@ -199,12 +198,12 @@
             </button>
 
             <!-- Isi Submenu Accordion -->
-            <div id="mobile-menu-{{ forloop.counter }}" class="hidden pl-8 pr-2 py-1.5 space-y-1 bg-black/25 rounded-lg mt-1 text-[11px]">
+            <div id="mobile-menu-{{ forloop.counter }}" class="{% if menu.is_active_link %}{% else %}hidden{% endif %} pl-8 pr-2 py-1.5 space-y-1 bg-black/25 rounded-lg mt-1 text-[11px]">
               {% for child in menu.children_list %}
                 {% if not child.nested_children_list %}
                   <a href="{{ child.get_url }}" 
                      target="{{ child.get_target }}" 
-                     class="flex items-center justify-between py-1.5 px-2 rounded hover:text-[#ffd43b] transition">
+                     class="flex items-center justify-between py-1.5 px-2 rounded transition {% if child.is_active_link %}text-[#ffd43b] font-semibold{% else %}hover:text-[#ffd43b]{% endif %}">
                     <span>{{ child.title }}</span>
                     {% if child.get_target == '_blank' %}
                       <i class="fas fa-external-link-alt text-[8px] opacity-60"></i>
@@ -216,7 +215,7 @@
                     <p class="font-bold text-[#ffd43b] text-[10px] uppercase tracking-wider px-2 pt-1">{{ child.title }}</p>
                     <div class="pl-2 space-y-1 mt-0.5">
                       {% for sub in child.nested_children_list %}
-                        <a href="{{ sub.get_url }}" target="{{ sub.get_target }}" class="block py-1 px-2 rounded hover:text-[#ffd43b] transition">
+                        <a href="{{ sub.get_url }}" target="{{ sub.get_target }}" class="block py-1 px-2 rounded transition {% if sub.is_active_link %}text-[#ffd43b] font-semibold{% else %}hover:text-[#ffd43b]{% endif %}">
                           - {{ sub.title }}
                         </a>
                       {% endfor %}
