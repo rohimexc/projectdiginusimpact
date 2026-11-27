@@ -121,9 +121,6 @@
                     <i class="fa-solid fa-graduation-cap text-xs"></i>
                 {% endif %}
                 <span>{{ item.judul }}</span>
-                {% if item.slug == 'siga-8' or item.link_eksternal and not item.file_utama and not item.konten %}
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                {% endif %}
             </a>
             {% endfor %}
         </div>
