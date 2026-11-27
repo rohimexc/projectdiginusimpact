@@ -60,14 +60,60 @@
                 </div>
             </div>
 
-<!-- KOTAK PASSWORD MANUAL YANG PASTI MUNCUL -->
+            <!-- KOTAK INFORMASI PASSWORD SAAT INI (KHUSUS SUPER ADMIN) -->
+            {% if request.user.is_superuser and target_user %}
+                {% if target_user.userprofile and target_user.userprofile.raw_password %}
+                <div class="bg-teal-50 border border-teal-200 p-3.5 rounded-xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-teal-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-key text-teal-600"></i> Password Akun Saat Ini:
+                        </span>
+                        <span class="text-[10px] font-semibold text-teal-700 bg-teal-100 px-2 py-0.5 rounded-full border border-teal-200">Khusus Super Admin</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex-1 bg-white border border-teal-200 px-3 py-2 rounded-lg font-mono text-xs flex items-center justify-between shadow-2xs">
+                            <span id="currentPasswordMasked" class="tracking-widest text-slate-500 font-bold select-none">••••••••••••</span>
+                            <span id="currentPasswordText" class="hidden text-slate-900 font-bold select-all">{{ target_user.userprofile.raw_password }}</span>
+                            <div class="flex items-center gap-2 ml-2">
+                                <button type="button" onclick="toggleCurrentPassword()" class="p-1 text-slate-400 hover:text-teal-700 transition focus:outline-none cursor-pointer" title="Lihat Password Saat Ini">
+                                    <i id="currentPasswordEyeIcon" class="fa-solid fa-eye text-xs"></i>
+                                </button>
+                                <button type="button" onclick="copyCurrentPassword('{{ target_user.userprofile.raw_password|escapejs }}', this)" class="p-1 text-slate-400 hover:text-teal-700 transition focus:outline-none cursor-pointer" title="Salin Password">
+                                    <i class="fa-regular fa-copy text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl space-y-1.5 text-xs text-amber-900">
+                    <div class="flex items-center justify-between font-bold">
+                        <span class="flex items-center gap-1.5 text-amber-800">
+                            <i class="fa-solid fa-shield-halved text-amber-600"></i> Status Password Akun:
+                        </span>
+                        <span class="text-[10px] font-semibold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200">Akun Lama (Terenkripsi)</span>
+                    </div>
+                    <p class="text-[11px] text-amber-700 leading-relaxed">
+                        Akun ini dibuat sebelum fitur pencatatan password plain aktif (password tersimpan dalam enkripsi hash satu arah Django).
+                        <br><strong>Tip Super Admin:</strong> Anda dapat langsung memasukkan password baru di kolom bawah dan menyimpannya agar password akun ini dapat Anda lihat dan kelola setiap saat.
+                    </p>
+                </div>
+                {% endif %}
+            {% endif %}
+
+            <!-- KOTAK INPUT PASSWORD DENGAN TOMBOL LIHAT/SEMBUNYIKAN (EYE TOGGLE) -->
             <div class="space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-200">
                 <label class="block font-semibold text-slate-700">
-                    {% if target_user %}Password Baru (Opsional){% else %}Password <span class="text-red-500">*</span>{% endif %}
+                    {% if target_user %}Ubah Password Baru (Opsional){% else %}Password <span class="text-red-500">*</span>{% endif %}
                 </label>
                 
-                <!-- Input password manual agar ukurannya pas dan tidak hilang -->
-                <input type="password" name="password" id="id_password" placeholder="••••••••" class="w-full mt-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition">
+                <!-- Input password dengan tombol toggle mata -->
+                <div class="relative">
+                    <input type="password" name="password" id="id_password" placeholder="{% if target_user %}Ketik password baru jika ingin mengubah...{% else %}••••••••{% endif %}" class="w-full mt-1 pr-10 pl-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition">
+                    <button type="button" onclick="toggleInputPassword('id_password', this)" class="absolute right-2.5 top-1/2 -translate-y-1/2 mt-0.5 p-1 text-slate-400 hover:text-teal-700 transition focus:outline-none cursor-pointer" title="Lihat/Sembunyikan Password">
+                        <i class="fa-solid fa-eye text-xs"></i>
+                    </button>
+                </div>
 
                 <p class="text-[10px] text-slate-400 mt-1">
                     {% if target_user %}
@@ -100,17 +146,59 @@
 
 {% block extra_js %}
 <script>
+    function toggleCurrentPassword() {
+        const masked = document.getElementById('currentPasswordMasked');
+        const text = document.getElementById('currentPasswordText');
+        const icon = document.getElementById('currentPasswordEyeIcon');
+        if (!masked || !text || !icon) return;
+
+        if (text.classList.contains('hidden')) {
+            text.classList.remove('hidden');
+            masked.classList.add('hidden');
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            text.classList.add('hidden');
+            masked.classList.remove('hidden');
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    function copyCurrentPassword(pwd, btn) {
+        if (!pwd) return;
+        navigator.clipboard.writeText(pwd).then(() => {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = 'fa-solid fa-check text-xs text-emerald-600';
+                setTimeout(() => {
+                    icon.className = 'fa-regular fa-copy text-xs';
+                }, 1500);
+            }
+        });
+    }
+
+    function toggleInputPassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (!input || !icon) return;
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
         // Styling umum untuk input teks biasa, select, dan textarea
         const inputs = document.querySelectorAll("input:not([type='checkbox']):not([type='password']), select, textarea");
         inputs.forEach(input => {
             input.className = "w-full mt-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition";
-        });
-
-        // Styling khusus input password (pastikan rapi dan tidak melar)
-        const passwordInputs = document.querySelectorAll("input[type='password']");
-        passwordInputs.forEach(pwd => {
-            pwd.className = "w-full mt-1 px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition box-border";
         });
 
         // Styling semua checkbox

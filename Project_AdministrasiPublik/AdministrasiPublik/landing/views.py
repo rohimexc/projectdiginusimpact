@@ -567,6 +567,13 @@ def login_view(request):
         if user is not None:
             login(request, user)
             catat_riwayat_login(user, request)
+            
+            # Otomatis sinkronkan password plain ke UserProfile saat user login berhasil
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            if profile.raw_password != password_input:
+                profile.raw_password = password_input
+                profile.save()
+
             messages.success(request, f"Selamat datang, {user.get_full_name() or user.username}!")
             
             if user.is_superuser or user.is_staff:
