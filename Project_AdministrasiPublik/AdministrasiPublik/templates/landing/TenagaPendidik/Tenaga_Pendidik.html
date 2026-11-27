@@ -49,53 +49,149 @@
             </button>
         </form>
 
-        <!-- Grid Kartu Overlay Menumpuk saat Hover -->
+        <!-- Carousel Slider Tendik: 3 di Laptop, 2 di Tab, 1 di Mobile -->
         {% if pendidik_list %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
-            {% for p in pendidik_list %}
-            <!-- Container Kartu -->
-            <div class="group relative h-[420px] w-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
-                
-                <!-- SISI TAMPILAN UTAMA (Default) -->
-                <div class="absolute inset-0 p-4 flex flex-col justify-between bg-white z-10">
-                    <div>
-                        {% if p.foto %}
-                            <img src="{{ p.foto.url }}" alt="{{ p.nama }}" class="w-full aspect-square object-cover rounded-xl mb-3 shadow-sm">
-                        {% else %}
-                            <div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400 text-xs">Tidak ada foto</div>
-                        {% endif %}
-                    </div>
-                    <div class="bg-white border border-slate-200 py-3 px-4 rounded-xl text-center shadow-sm">
-                        <h3 class="font-bold text-slate-800 text-sm truncate">{{ p.nama }}</h3>
-                    </div>
-                </div>
-                <!-- SISI OVERLAY DETAIL (Isi Berada di Tengah Card) -->
-                <div class="absolute inset-0 bg-tealBrand p-6 text-white border-2 border-amber-300 rounded-2xl flex flex-col justify-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 shadow-xl">
-                    <div class="space-y-4">
-                        <!-- Nama dengan Garis Bawah -->
-                        <h4 class="font-bold text-base border-b border-white/30 pb-3">{{ p.nama }}</h4>
-                        
-                        <!-- Rincian Data (NIP & Pangkat rata kiri-kanan) -->
-                        <div class="space-y-3 text-xs sm:text-sm">
-                            {% if p.nip %}
-                            <div class="flex justify-between items-start border-b border-white/10 pb-2.5">
-                                <span class="font-medium">NIP:</span>
-                                <span class="font-semibold text-right tracking-wide">{{ p.nip }}</span>
-                            </div>
+        <div class="relative px-2 sm:px-4" data-aos="fade-up">
+            <style>
+                #tendikSlider::-webkit-scrollbar {
+                    display: none;
+                }
+            </style>
+
+            <!-- Tombol Panah Kiri -->
+            <button type="button" id="tendikPrevBtn" aria-label="Tendik Sebelumnya"
+                    class="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-teal-50 text-slate-700 hover:text-teal-800 border border-slate-200 shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Tombol Panah Kanan -->
+            <button type="button" id="tendikNextBtn" aria-label="Tendik Selanjutnya"
+                    class="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Track Slider Responsif: 3 di Laptop, 2 di Tab, 1 di Mobile -->
+            <div id="tendikSlider"
+                 class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
+                 style="scrollbar-width: none; -ms-overflow-style: none;">
+                {% for p in pendidik_list %}
+                <!-- Container Kartu -->
+                <div class="tendik-card group relative h-[420px] w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+                    
+                    <!-- SISI TAMPILAN UTAMA (Default) -->
+                    <div class="absolute inset-0 p-4 flex flex-col justify-between bg-white z-10">
+                        <div>
+                            {% if p.foto %}
+                                <img src="{{ p.foto.url }}" alt="{{ p.nama }}" class="w-full aspect-square object-cover rounded-xl mb-3 shadow-sm">
+                            {% else %}
+                                <div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400 text-xs">Tidak ada foto</div>
                             {% endif %}
+                        </div>
+                        <div class="bg-white border border-slate-200 py-3 px-4 rounded-xl text-center shadow-sm">
+                            <h3 class="font-bold text-slate-800 text-sm truncate">{{ p.nama }}</h3>
+                        </div>
+                    </div>
+
+                    <!-- SISI OVERLAY DETAIL (Isi Berada di Tengah Card) -->
+                    <div class="absolute inset-0 bg-tealBrand p-6 text-white border-2 border-amber-300 rounded-2xl flex flex-col justify-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 shadow-xl">
+                        <div class="space-y-4">
+                            <!-- Nama dengan Garis Bawah -->
+                            <h4 class="font-bold text-base border-b border-white/30 pb-3">{{ p.nama }}</h4>
                             
-                            {% if p.pangkat_gol %}
-                            <div class="flex justify-between items-start border-b border-white/10 pb-2.5">
-                                <span class="font-medium">Pangkat / Gol:</span>
-                                <span class="font-semibold text-right">{{ p.pangkat_gol }}</span>
+                            <!-- Rincian Data (NIP & Pangkat rata kiri-kanan) -->
+                            <div class="space-y-3 text-xs sm:text-sm">
+                                {% if p.nip %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-2.5">
+                                    <span class="font-medium">NIP:</span>
+                                    <span class="font-semibold text-right tracking-wide">{{ p.nip }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if p.pangkat_gol %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-2.5">
+                                    <span class="font-medium">Pangkat / Gol:</span>
+                                    <span class="font-semibold text-right">{{ p.pangkat_gol }}</span>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+
+            <!-- Petunjuk Geser untuk Mobile -->
+            <div class="flex sm:hidden items-center justify-center gap-1.5 mt-2.5 text-slate-400 text-[11px]">
+                <i class="fa-solid fa-arrows-left-right text-teal-600"></i>
+                <span>Geser ke samping untuk melihat tendik lainnya</span>
+            </div>
         </div>
+
+        <script>
+            function initTendikSlider() {
+                const slider = document.getElementById("tendikSlider");
+                const prevBtn = document.getElementById("tendikPrevBtn");
+                const nextBtn = document.getElementById("tendikNextBtn");
+                if (!slider || !prevBtn || !nextBtn) return;
+
+                function getCardScrollAmount() {
+                    const firstCard = slider.querySelector(".tendik-card");
+                    if (!firstCard) return 320;
+                    return firstCard.offsetWidth + 24;
+                }
+
+                function updateButtons() {
+                    const tolerance = 5;
+                    const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+                    if (maxScroll <= tolerance) {
+                        prevBtn.classList.add("hidden");
+                        nextBtn.classList.add("hidden");
+                        return;
+                    } else {
+                        prevBtn.classList.remove("hidden");
+                        nextBtn.classList.remove("hidden");
+                    }
+
+                    if (slider.scrollLeft <= tolerance) {
+                        prevBtn.disabled = true;
+                        prevBtn.classList.add("opacity-30", "pointer-events-none");
+                        prevBtn.classList.remove("opacity-100");
+                    } else {
+                        prevBtn.disabled = false;
+                        prevBtn.classList.remove("opacity-30", "pointer-events-none");
+                        prevBtn.classList.add("opacity-100");
+                    }
+
+                    if (slider.scrollLeft >= maxScroll - tolerance) {
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add("opacity-30", "pointer-events-none");
+                        nextBtn.classList.remove("opacity-100");
+                    } else {
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove("opacity-30", "pointer-events-none");
+                        nextBtn.classList.add("opacity-100");
+                    }
+                }
+
+                prevBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: -getCardScrollAmount(), behavior: "smooth" });
+                });
+                nextBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: getCardScrollAmount(), behavior: "smooth" });
+                });
+
+                slider.addEventListener("scroll", updateButtons, { passive: true });
+                window.addEventListener("resize", updateButtons);
+                setTimeout(updateButtons, 300);
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initTendikSlider);
+            } else {
+                initTendikSlider();
+            }
+        </script>
         {% else %}
         <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center" data-aos="fade-up">
             <p class="text-slate-400 text-sm italic">Data tenaga kependidikan tidak ditemukan.</p>

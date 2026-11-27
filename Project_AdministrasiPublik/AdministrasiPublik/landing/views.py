@@ -26,7 +26,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 
 def index(request):
-    berita_list = Berita.objects.all().order_by('-post_date')[:3] # Ambil 3 berita terbaru
+    berita_list = Berita.objects.all().order_by('-post_date')[:12] # Ambil berita terbaru untuk carousel slider
     galeri_list = Galeri.objects.all().order_by('urutan', '-tanggal', '-id')
     hero = Hero.objects.filter(is_active=True).first()
     if hero and hero.deskripsi:

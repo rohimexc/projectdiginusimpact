@@ -33,12 +33,24 @@
 
         <!-- Slider Foto Galeri: 3 Foto di Laptop, 2 di Tab, 1 di Mobile -->
         {% if galeri_list %}
-        <div class="relative" data-aos="fade-up">
+        <div class="relative px-2 sm:px-4" data-aos="fade-up">
             <style>
                 #galeriSlider::-webkit-scrollbar {
                     display: none;
                 }
             </style>
+
+            <!-- Tombol Panah Kiri -->
+            <button type="button" id="galeriPrevBtn" aria-label="Foto Sebelumnya"
+                    class="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-teal-50 text-slate-700 hover:text-teal-800 border border-slate-200 shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Tombol Panah Kanan -->
+            <button type="button" id="galeriNextBtn" aria-label="Foto Selanjutnya"
+                    class="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+            </button>
 
             <div id="galeriSlider"
                  class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
@@ -172,64 +184,125 @@
         if (e.key === 'Escape') closeGalleryModal();
     });
 
-    // Kontrol Navigasi Titik-Titik Slider Galeri
+    // Kontrol Navigasi Slider Galeri: Tombol Panah (Slide ke Samping) & Titik-Titik Indikator
     function initGaleriSlider() {
         const slider = document.getElementById("galeriSlider");
+        const prevBtn = document.getElementById("galeriPrevBtn");
+        const nextBtn = document.getElementById("galeriNextBtn");
         const dotsContainer = document.getElementById("galeriDots");
-        if (!slider || !dotsContainer) return;
+        if (!slider) return;
 
         const items = slider.querySelectorAll(".galeri-item");
-        if (items.length <= 1) {
-            dotsContainer.style.display = "none";
-            return;
+        if (!items.length) return;
+
+        function getCardScrollAmount() {
+            const firstCard = slider.querySelector(".galeri-item");
+            if (!firstCard) return 320;
+            return firstCard.offsetWidth + 24; // Card width + gap-6 (24px)
         }
 
-        dotsContainer.innerHTML = "";
-        items.forEach((item, index) => {
-            const dot = document.createElement("button");
-            dot.type = "button";
-            dot.setAttribute("aria-label", "Lihat foto ke-" + (index + 1));
-            dot.className = index === 0 
-                ? "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs" 
-                : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
-            
-            dot.addEventListener("click", function() {
-                slider.scrollTo({
-                    left: item.offsetLeft - slider.offsetLeft,
-                    behavior: "smooth"
+        // Setup dots jika elemen dotsContainer ada
+        if (dotsContainer) {
+            if (items.length <= 1) {
+                dotsContainer.style.display = "none";
+            } else {
+                dotsContainer.innerHTML = "";
+                items.forEach((item, index) => {
+                    const dot = document.createElement("button");
+                    dot.type = "button";
+                    dot.setAttribute("aria-label", "Lihat foto ke-" + (index + 1));
+                    dot.className = index === 0 
+                        ? "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs" 
+                        : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
+                    
+                    dot.addEventListener("click", function() {
+                        slider.scrollTo({
+                            left: item.offsetLeft - slider.offsetLeft,
+                            behavior: "smooth"
+                        });
+                    });
+                    dotsContainer.appendChild(dot);
                 });
-            });
-            dotsContainer.appendChild(dot);
-        });
+            }
+        }
 
-        function updateActiveDot() {
-            const dots = dotsContainer.querySelectorAll("button");
-            if (!dots.length) return;
+        function updateControls() {
+            const tolerance = 5;
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
 
-            const scrollLeft = slider.scrollLeft;
-            let closestIndex = 0;
-            let minDiff = Infinity;
-
-            items.forEach((item, idx) => {
-                const diff = Math.abs(item.offsetLeft - slider.offsetLeft - scrollLeft);
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    closestIndex = idx;
-                }
-            });
-
-            dots.forEach((dot, idx) => {
-                if (idx === closestIndex) {
-                    dot.className = "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs";
+            // Update Tombol Panah Prev / Next
+            if (prevBtn && nextBtn) {
+                if (maxScroll <= tolerance) {
+                    prevBtn.classList.add("hidden");
+                    nextBtn.classList.add("hidden");
                 } else {
-                    dot.className = "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
+                    prevBtn.classList.remove("hidden");
+                    nextBtn.classList.remove("hidden");
+
+                    if (slider.scrollLeft <= tolerance) {
+                        prevBtn.disabled = true;
+                        prevBtn.classList.add("opacity-30", "pointer-events-none");
+                        prevBtn.classList.remove("opacity-100");
+                    } else {
+                        prevBtn.disabled = false;
+                        prevBtn.classList.remove("opacity-30", "pointer-events-none");
+                        prevBtn.classList.add("opacity-100");
+                    }
+
+                    if (slider.scrollLeft >= maxScroll - tolerance) {
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add("opacity-30", "pointer-events-none");
+                        nextBtn.classList.remove("opacity-100");
+                    } else {
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove("opacity-30", "pointer-events-none");
+                        nextBtn.classList.add("opacity-100");
+                    }
                 }
+            }
+
+            // Update Titik Indikator Aktif
+            if (dotsContainer) {
+                const dots = dotsContainer.querySelectorAll("button");
+                if (dots.length) {
+                    const scrollLeft = slider.scrollLeft;
+                    let closestIndex = 0;
+                    let minDiff = Infinity;
+
+                    items.forEach((item, idx) => {
+                        const diff = Math.abs(item.offsetLeft - slider.offsetLeft - scrollLeft);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closestIndex = idx;
+                        }
+                    });
+
+                    dots.forEach((dot, idx) => {
+                        if (idx === closestIndex) {
+                            dot.className = "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs";
+                        } else {
+                            dot.className = "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
+                        }
+                    });
+                }
+            }
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener("click", function() {
+                slider.scrollBy({ left: -getCardScrollAmount(), behavior: "smooth" });
             });
         }
 
-        slider.addEventListener("scroll", updateActiveDot, { passive: true });
-        window.addEventListener("resize", updateActiveDot);
-        setTimeout(updateActiveDot, 250);
+        if (nextBtn) {
+            nextBtn.addEventListener("click", function() {
+                slider.scrollBy({ left: getCardScrollAmount(), behavior: "smooth" });
+            });
+        }
+
+        slider.addEventListener("scroll", updateControls, { passive: true });
+        window.addEventListener("resize", updateControls);
+        setTimeout(updateControls, 300);
     }
 
     if (document.readyState === "loading") {
