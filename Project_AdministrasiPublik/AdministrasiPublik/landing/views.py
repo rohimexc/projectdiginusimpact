@@ -630,7 +630,7 @@ def register_view(request):
 
 
 def logout_view(request):
-    next_url = request.GET.get('next', '/')
+    next_url = request.POST.get('next') or request.GET.get('next') or reverse('landing:login')
     logout(request)
     messages.info(request, "Anda telah berhasil keluar.")
     return redirect(next_url)

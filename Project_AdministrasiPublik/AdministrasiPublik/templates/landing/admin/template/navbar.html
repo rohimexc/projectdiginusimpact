@@ -120,10 +120,11 @@
 
     <!-- Tombol Logout -->
     <div class="pt-4 border-t border-white/15">
-        <form action="{% url 'landing:login' %}" method="post">
+        <form action="{% url 'landing:logout' %}" method="post">
             {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'landing:login' %}">
             <button type="submit"
-                class="w-full flex items-center gap-3 px-3.5 py-2.5 text-xs text-red-200 hover:text-amber-300 hover:bg-white/10 rounded-xl transition duration-200 font-semibold group">
+                class="w-full flex items-center gap-3 px-3.5 py-2.5 text-xs text-red-200 hover:text-amber-300 hover:bg-white/10 rounded-xl transition duration-200 font-semibold group cursor-pointer">
                 <i class="fa-solid fa-arrow-right-from-bracket text-xs group-hover:text-amber-300"></i>
                 <span>Keluar / Logout</span>
             </button>
