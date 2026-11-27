@@ -23,6 +23,7 @@
                 <label class="block font-semibold text-slate-600">Filter berdasarkan Role:</label>
                 <select id="filterRole" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600">
                     <option value="">Semua Role</option>
+                    <option value="USER">USER</option>
                     <option value="Admin Prodi">Admin Prodi</option>
                     <option value="Editor">Editor</option>
                     <option value="Contributor">Contributor</option>
@@ -50,6 +51,9 @@
                         <th class="p-3">Role</th>
                         <th class="p-3">Status</th>
                         <th class="p-3">Login Terakhir</th>
+                        {% if request.user.is_superuser %}
+                        <th class="p-3">Password</th>
+                        {% endif %}
                         <th class="p-3 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -60,19 +64,29 @@
                         <td class="p-3 font-bold text-slate-800">{{ u.username }}</td>
                         <td class="p-3 text-slate-700">{{ u.first_name }} {{ u.last_name|default:"" }}</td>
                         <td class="p-3 text-slate-500">{{ u.email }}</td>
-<td class="p-3">
-    {% if u.is_superuser %}
-        <span class="px-2.5 py-0.5 bg-purple-50 text-purple-600 font-semibold rounded-full text-[10px] mr-1">Super Admin</span>
-    {% endif %}
-    
-    {% for g in u.groups.all %}
-        <span class="px-2.5 py-0.5 bg-sky-50 text-sky-600 font-semibold rounded-full text-[10px] mr-1 inline-block mb-0.5">{{ g.name }}</span>
-    {% empty %}
-        {% if not u.is_superuser %}
-            <span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 font-semibold rounded-full text-[10px]">Tanpa Role</span>
-        {% endif %}
-    {% endfor %}
-</td>
+                        <td class="p-3">
+                            {% if u.is_superuser %}
+                                <span class="px-2.5 py-0.5 bg-purple-50 text-purple-600 font-semibold rounded-full text-[10px] mr-1">Super Admin</span>
+                            {% endif %}
+                            
+                            {% if u.userprofile and u.userprofile.role %}
+                                {% if u.userprofile.role == 'USER' %}
+                                    <span class="px-2.5 py-0.5 bg-teal-50 text-teal-700 border border-teal-200 font-semibold rounded-full text-[10px] mr-1">USER</span>
+                                {% elif not u.is_superuser %}
+                                    <span class="px-2.5 py-0.5 bg-sky-50 text-sky-600 font-semibold rounded-full text-[10px] mr-1">{{ u.userprofile.role }}</span>
+                                {% endif %}
+                            {% endif %}
+                            
+                            {% for g in u.groups.all %}
+                                {% if not u.userprofile or g.name != u.userprofile.role and g.name != 'USER' %}
+                                    <span class="px-2.5 py-0.5 bg-sky-50 text-sky-600 font-semibold rounded-full text-[10px] mr-1 inline-block mb-0.5">{{ g.name }}</span>
+                                {% endif %}
+                            {% empty %}
+                                {% if not u.is_superuser and not u.userprofile.role %}
+                                    <span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 font-semibold rounded-full text-[10px]">Tanpa Role</span>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                         <td class="p-3">
                             {% if u.is_active %}
                                 <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-600 font-semibold rounded-full text-[10px]">Aktif</span>
@@ -87,6 +101,24 @@
                                 <span class="text-slate-400 italic">Belum pernah</span>
                             {% endif %}
                         </td>
+                        {% if request.user.is_superuser %}
+                        <td class="p-3 font-mono text-xs">
+                            {% if u.userprofile and u.userprofile.raw_password %}
+                                <div class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg">
+                                    <span class="password-masked font-mono tracking-widest text-slate-500 select-none">••••••••</span>
+                                    <span class="password-text hidden font-semibold text-slate-800 select-all">{{ u.userprofile.raw_password }}</span>
+                                    <button type="button" onclick="togglePasswordVisibility(this)" class="p-1 text-slate-400 hover:text-teal-700 transition focus:outline-none cursor-pointer" title="Lihat Password">
+                                        <i class="fa-solid fa-eye text-[11px]"></i>
+                                    </button>
+                                    <button type="button" onclick="copyPassword('{{ u.userprofile.raw_password|escapejs }}', this)" class="p-1 text-slate-400 hover:text-teal-700 transition focus:outline-none cursor-pointer" title="Salin Password">
+                                        <i class="fa-regular fa-copy text-[11px]"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                <span class="text-slate-400 italic text-[11px] bg-slate-50 px-2 py-0.5 rounded border border-slate-200" title="Password terenkripsi hash Django">(Terenkripsi)</span>
+                            {% endif %}
+                        </td>
+                        {% endif %}
                         <td class="p-3 text-center">
                             <div class="flex items-center justify-center gap-1.5">
                                 <a href="{% url 'landing:user_update' u.id %}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition shadow-2xs" title="Edit Akun">
@@ -167,6 +199,37 @@
 
 <!-- Script Inisialisasi & Custom Filter Role & Status (Tanpa regex strict) -->
 <script>
+    function togglePasswordVisibility(btn) {
+        var $btn = $(btn);
+        var container = $btn.closest('div');
+        var masked = container.find('.password-masked');
+        var text = container.find('.password-text');
+        var icon = $btn.find('i');
+
+        if (text.hasClass('hidden')) {
+            text.removeClass('hidden');
+            masked.addClass('hidden');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            $btn.attr('title', 'Sembunyikan Password');
+        } else {
+            text.addClass('hidden');
+            masked.removeClass('hidden');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            $btn.attr('title', 'Lihat Password');
+        }
+    }
+
+    function copyPassword(pwd, btn) {
+        if (!pwd) return;
+        navigator.clipboard.writeText(pwd).then(function() {
+            var icon = $(btn).find('i');
+            icon.removeClass('fa-copy fa-regular').addClass('fa-check fa-solid text-emerald-600');
+            setTimeout(function() {
+                icon.removeClass('fa-check fa-solid text-emerald-600').addClass('fa-copy fa-regular');
+            }, 1500);
+        });
+    }
+
     $(document).ready(function() {
         var table = $('#userTable').DataTable({
             "language": {
@@ -185,6 +248,9 @@
                 "infoFiltered": "(difilter dari _MAX_ total data)"
             },
             "order": [[1, "asc"]],
+            "columnDefs": [
+                { "orderable": false, "targets": [{% if request.user.is_superuser %}7, 8{% else %}7{% endif %}] }
+            ],
             "pageLength": 10,
             "lengthMenu": [ [5, 10, 25, -1], [5, 10, 25, "Semua"] ]
         });

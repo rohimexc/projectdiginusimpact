@@ -345,6 +345,15 @@ class AdminUserCreateForm(forms.ModelForm):
         if commit:
             user.save()
             user.groups.set(self.cleaned_data['groups'])
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.raw_password = self.cleaned_data['password']
+            if user.is_superuser:
+                profile.role = 'Admin'
+            elif self.cleaned_data.get('groups') and self.cleaned_data['groups'].exists():
+                profile.role = self.cleaned_data['groups'].first().name
+            else:
+                profile.role = 'USER'
+            profile.save()
         return user
 
 

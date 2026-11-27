@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from .models import (
     Sambutan, Galeri, Berita, Akademik, TenagaPendidik, Akreditasi, Kontak, AuditLog, Dosen,
     TentangPage, VisiMisiTujuan, MisiItem, TujuanItem,
@@ -615,10 +615,15 @@ def register_view(request):
                 password=password,
                 first_name=nama_lengkap
             )
-            UserProfile.objects.create(
-                user=user,
-                role='USER'
-            )
+            # Otomatis role USER dan group USER saat registrasi
+            user_group, _ = Group.objects.get_or_create(name='USER')
+            user.groups.add(user_group)
+            
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.role = 'USER'
+            profile.raw_password = password
+            profile.save()
+
             login(request, user)
             catat_riwayat_login(user, request)
             messages.success(request, f"Akun Anda berhasil dibuat! Selamat datang, {nama_lengkap}.")
@@ -754,8 +759,15 @@ def user_update_view(request, pk):
     target_user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
         form = AdminUserUpdateForm(request.POST, instance=target_user)
+        new_password = request.POST.get('password', '').strip()
         if form.is_valid():
-            form.save()
+            user = form.save()
+            if new_password:
+                user.set_password(new_password)
+                user.save()
+                profile, _ = UserProfile.objects.get_or_create(user=user)
+                profile.raw_password = new_password
+                profile.save()
             catat_log(request, request.user, f"Memperbarui akun administrator: '{target_user.username}'", "Berhasil memperbarui data user")
             messages.success(request, "Akun administrator berhasil diperbarui!")
             return redirect('landing:manajemen_user')
