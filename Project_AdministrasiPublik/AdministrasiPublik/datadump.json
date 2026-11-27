@@ -21,10 +21,17 @@
   }
 },
 {
+  "model": "auth.group",
+  "fields": {
+    "name": "USER",
+    "permissions": []
+  }
+},
+{
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$1000000$CwaeZtYeKCSvCmxtm9lepZ$vK6QeyMyQw7/U42xbWfIZrGv7kDp04PTtkF8Q3+1oB0=",
-    "last_login": "2026-11-27T07:20:23.824Z",
+    "last_login": "2026-11-27T14:11:10.636Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "Admin",
@@ -50,8 +57,8 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$1000000$NvrlJchKsekxxMF9rjLt0M$saeYmJ4Z+z03WziltK5/pbkKGfr7BPrLkXQo7Xvi8pM=",
-    "last_login": "2026-10-20T13:01:04.202Z",
+    "password": "pbkdf2_sha256$1000000$qyy3XZfovW9kKYWFDbIk5J$9XTlviWhByt2+w3vlO+F8jG12zxTN0vvVAN8VIxbnOk=",
+    "last_login": "2026-11-27T14:11:36.611Z",
     "is_superuser": false,
     "username": "Cenmoree",
     "first_name": "cen",
@@ -102,8 +109,421 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2026-11-07T06:38:50.637Z",
+    "groups": [
+      [
+        "USER"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "",
+    "last_login": "2026-11-27T11:44:24.671Z",
+    "is_superuser": true,
+    "username": "admin_test",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-27T11:44:24.640Z",
     "groups": [],
     "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "0se6qhzhzetuz476thb5dnttkum38gyv",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0hC:caRsCaOcKjwYnb5r8W2S9HaiF9foFdLSst0SYHjmoTY",
+    "expire_date": "2026-11-11T10:15:50.442Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "1phfl5qurql3846av7ciwivi2t3lfxwk",
+  "fields": {
+    "session_data": "e30:1xWueu:f0kuyVpBbbexdNt_SDLvcvmyBDBJ9VpgsghmqkcN_KQ",
+    "expire_date": "2026-12-11T12:02:32.487Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "28sumxqprxt931shteykzw4zu5l3ba3i",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0bM:fGNkuarx2_2M6aWHS0dm8Q3auTBOcbr2ppfgL0vuRAM",
+    "expire_date": "2026-11-11T10:09:48.748Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2xiztf9a8o1rvywinbafbj3p3uej89il",
+  "fields": {
+    "session_data": ".eJxVjE0OwiAYBe_C2hCgCOjSfc9Avh-QqoGktCvj3W2TLnT7Zua9RYR1KXHtaY4Ti6sw4vS7IdAz1R3wA-q9SWp1mSeUuyIP2uXYOL1uh_t3UKCXrVbOerTodYCU6ZLB5OAJtGU6B0ZPSgVjsnYI1rHfZMOcVOZh8BxoEJ8v-V44kA:1xWwfP:WYngmV__FYxgp_01EQ01k51AZ4Efz-goJwAha8RFXy4",
+    "expire_date": "2026-12-11T14:11:11.264Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3ml3f4elar4ukrugf9hyw6ti5z9r0f81",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Bq:1scddvI6UEfX0FDYY0h54oX5kH0L5BlWr1VrVpRVTVo",
+    "expire_date": "2026-11-11T09:43:26.779Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3r3za2b9qqkrknewyb5p0yblezeftg0s",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xUiCa:mK0_KREPfeP3A8yF1FCltP8Xzkut74uDJmb1kba_8wo",
+    "expire_date": "2026-12-05T10:20:12.731Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "50ca5nyl7ccu54nm5d8ndrh6lkv7y492",
+  "fields": {
+    "session_data": "e30:1xWuon:01QlufIt2Qu_u34vWApj2TzSkJaw0pEpV7kb4tOnHwk",
+    "expire_date": "2026-12-11T12:12:45.950Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "55843zvaaauy23f6cc9d9r1ra6kgo49g",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Sh:vceXD1CMIPhIsE5YbrY2Rxmou8tWkXX2tQiL5WW3GJI",
+    "expire_date": "2026-11-11T10:00:51.025Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5go1l3zaecaxf5u8xnuz693tviw83xjf",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLLKX:mzSyPYUeSMTYiGY2CUGClvT7f0gT3oipipu5jZzoan0",
+    "expire_date": "2026-11-09T14:05:41.702Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5oclwxeej1stoudntfvhv13hfsw3a11g",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWv5L:T5xN66KtHyOt_JMelBr5P3hx7nNSO4L6RelTHCBki_g",
+    "expire_date": "2026-12-11T12:29:51.792Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6pt6ynhigrh04m9s5f8pyy29yv6763vf",
+  "fields": {
+    "session_data": "e30:1xODSK:DefrmasyeEZevMEK_LQr7iYtMjSMA8XDYZZ5aKxfJNs",
+    "expire_date": "2026-11-17T12:17:36.028Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "75hzic1nksdn69w3ofv1ordodp6nesuo",
+  "fields": {
+    "session_data": "e30:1xWuN5:jJOnMSB-6F8hKuKJjUP9pO4A4ls-oeC0pYNMjY3yHgc",
+    "expire_date": "2026-12-11T11:44:07.783Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7f27zrfw8syg9u1c87jj5sapa75wtliw",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hCmU0C6dO8ZCAODRU2bUKoL4921STfd_vfe_4hX4TcnT1xLCx7F0OrKJ-HD2ka_Llx9SWIQWhw2CvHB0wbSPUy3WcZ5arWQ3BS500Ve58TPy-4eDsawjP9aGUC0FMmBIWXP6DT3iAFVD8aqbAE460yOAFzuYiRNnWEA6FRiQ-L7A7PIP4A:1xPB0S:B-cRozbHkTQcyzUZvcjceyQrXQAz0n7mnTse5nawj5A",
+    "expire_date": "2026-11-20T03:52:48.993Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7tgoerputfdyiere3otcpa3294j8nfrf",
+  "fields": {
+    "session_data": "e30:1xVoGl:Ikz2Xd2TcAlQWjW76rfOp7URKwjLfTscNzUw0AhdTmg",
+    "expire_date": "2026-12-08T11:01:03.420Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "9mec8afedx1lpac5q5lkas42uiuzz12m",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0h3:-B_eHyRy0V5tim1ZQha99A2imJrJq1rSeYdP-QkBdtU",
+    "expire_date": "2026-11-11T10:15:41.493Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "9twa5ig6el3io0u5p5v1axnqxlcfghjf",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwOO:JLRifS7NweCH70ATvrcQ9opZkD-D1cdz7CLlHAlE3cw",
+    "expire_date": "2026-12-11T13:53:36.661Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "aeryk7zlamakfo6pnj44r2sd55l1nj97",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLKnX:axBSU_j3hI3KCLRXc0VZ3RR1Ca7M2BNyI2mJeqSwpK4",
+    "expire_date": "2026-11-09T13:31:35.056Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "agd9tw9ebf08kvkk7fnia6linoa30263",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLx02:g4HPy_WvlSNvwWYOFMXxoalIQCQSODTELPPrOjIHzCE",
+    "expire_date": "2026-11-11T06:19:02.871Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "biswpvgiz5eg6a2hjsj8up1ajxy5hz7b",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Gw:kLEeofjQphzAkAA6sL8_7WVQNxSZ0dMtntK2QhRr-to",
+    "expire_date": "2026-11-11T09:48:42.587Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bj23cn8lwe2egejce40kermm6dd245cb",
+  "fields": {
+    "session_data": ".eJxVjE0OwiAYBe_C2hCgCOjSfc9Avh-QqoGktCvj3W2TLnT7Zua9RYR1KXHtaY4Ti6sw4vS7IdAz1R3wA-q9SWp1mSeUuyIP2uXYOL1uh_t3UKCXrVbOerTodYCU6ZLB5OAJtGU6B0ZPSgVjsnYI1rHfZMOcVOZh8BxoEJ8v-V44kA:1xWwfo:b3A5Y07YpPG83aox0y2WPCLOmwf4iLcg33OUiCcsMLQ",
+    "expire_date": "2026-12-11T14:11:36.626Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bqr4s0hmqhog75odsdjz8h55eqecvmqo",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSG8OjAu3fsNBBiQqoGktCvjv2uTLnR7zzn3xXzY1uq3kRc_EzszxU6_WwzpkdsO6B7arfPU27rMke8KP-jg1075eTncv4MaRv3WziJE6QQSxgAOJ8ogQBqHiCpYW4xURRUBoDNQsUllrc3kIhVEowp7fwC8fDcb:1xWwOl:rSTtFeuzVVZCOyCgyP49sn3nawW1s4TD_4VkuzyBAuU",
+    "expire_date": "2026-12-11T13:53:59.789Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ccwxm81e0pjczsdj3t06rjzdqw7rbwt3",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLwz6:T3qpjh0EvfQFzwRXdhfxKSncyYpbD4VJSeldl3SAcks",
+    "expire_date": "2026-11-11T06:18:04.078Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fxlan996wr14fa04hsheapgkqsufaajm",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xRS3J:-Q3srpU8Vg9GZbqud0oxMqVTCj5pcMj_RCh2XEjWeC8",
+    "expire_date": "2026-11-26T10:29:09.099Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "grepux64yn24z6xufzy5oxcwpnslzhtv",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWuoU:ppPOX6l7kykjZE3AIF_eNwSbPB6UrIlD9NxWQd1Uvzo",
+    "expire_date": "2026-12-11T12:12:26.777Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "grtrhg7t64qho78mo1lvqqxxwupn7c84",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xMiRb:pq8OqWwLl37skykJkQIGRydsU2YMj7EN3_YfX1DlBFo",
+    "expire_date": "2026-11-13T08:58:39.070Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gtm3o1m9f6sjfg0eiqj8j7ion59hg9on",
+  "fields": {
+    "session_data": "e30:1xUiC7:5jJpYEn6uFKP5XY97JM1W1DsiRBG33j392AWJxMhRw0",
+    "expire_date": "2026-12-05T10:19:43.418Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "hr1u88qi3wqzjh72dqy82tec60wdryk9",
+  "fields": {
+    "session_data": "e30:1xVoFv:yB4tO2g6yKn0Tv_Mmm_IXamZ_3oGlM5RDti-yY7awMg",
+    "expire_date": "2026-12-08T11:00:11.470Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "konxw8zu3d18p3qkzc84mqjxtgoswp1y",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwW9:YqY961lvV70d-iZMihPykgnz4z0na11WxAXPzamLDzU",
+    "expire_date": "2026-12-11T14:01:37.084Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "kyoee0noc573z742i41mekmtwxrto8oy",
+  "fields": {
+    "session_data": "e30:1xUiBr:plg-kvi46PTTYycMAWF-xeeMVSSZTRn5_PuVkZ5TqBM",
+    "expire_date": "2026-12-05T10:19:27.966Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e",
+  "fields": {
+    "session_data": ".eJxVjE0OwiAYBe_C2hCgCOjSfc9Avh-QqoGktCvj3W2TLnT7Zua9RYR1KXHtaY4Ti6sw4vS7IdAz1R3wA-q9SWp1mSeUuyIP2uXYOL1uh_t3UKCXrVbOerTodYCU6ZLB5OAJtGU6B0ZPSgVjsnYI1rHfZMOcVOZh8BxoEJ8v-V44kA:1xWwb6:oln2MDAyisHTdgJq1UP69awDhwuF_eOn-G1xLicSd6c",
+    "expire_date": "2026-12-11T14:06:44.476Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nbscaroc9rprlonmvswjbt84oi9k1bhl",
+  "fields": {
+    "session_data": "eyJ2aWV3ZWRfYmVyaXRhXzMiOnRydWV9:1xODTz:LDePYMVuIWzem5mCJsts66kmm4miSJMefC4xU-mYIA4",
+    "expire_date": "2026-11-17T12:19:19.371Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nheo6luk8bcv8cpm78acrdm5gqc74voj",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xR2U7:7tvMsNILxHF6Xyk4b_trx0dvSUpSkDTdYOPLwJcNK2I",
+    "expire_date": "2026-11-25T07:11:07.573Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nneaovmwple8axvg79e4dv47eouc075z",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xUiCL:MYj4Kce4fN6ZumD2501JS7vQdTV0OhBMiqJgzrobEXo",
+    "expire_date": "2026-12-05T10:19:57.723Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pdkivm0oiu2w6mt9fazoqg9h8vm5zd7b",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Sp:0I_Qu-Fdbw5gwwLbT7ZVjNwhiH1WDS3y4aFZN8HPrc0",
+    "expire_date": "2026-11-11T10:00:59.999Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pj2210g831x8jh5a6ybusrxdtvfwtt5p",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0T9:6jjhzsxob3AoDKciIiVwVFOMFdCdvhb1oMFu-_s6p-A",
+    "expire_date": "2026-11-11T10:01:19.588Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "poselp02amzi8fvve79dw7xp26ci22vn",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLLKj:OwfqbXvCg9gA6nHv_TLVPKn6uX2sHaY_xZuxMthNOVM",
+    "expire_date": "2026-11-09T14:05:53.363Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pqpor1genfvhsjarn32ppqadrlbtvyc5",
+  "fields": {
+    "session_data": "e30:1xUiWL:ZaanNexskwNqx0aCuPt9Wgsnyv8lA-zPjWtOm6-nWyE",
+    "expire_date": "2026-12-05T10:40:37.507Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "q2tz5awt41ghzsexc8yacn7rtne7606x",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0RC:dAnkCvdWS7CFBmS37JUtZP-G9FrENBTQqVeS2BoWoWs",
+    "expire_date": "2026-11-11T09:59:18.769Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "qf10x9hai99598ltegdpj111roxyb8pu",
+  "fields": {
+    "session_data": ".eJxVjMEOwiAQRP-FsyFIi-x69N5vIAu7laqBpLQn47_bJj3oHOe9mbcKtC45rE3mMLG6Kq9Ov12k9JSyA35QuVedalnmKepd0Qdteqgsr9vh_h1kanlbI0sEaw0gQY8AMl6MJUjMrhNBh-DEGDr7kbcAUB8xYrI-ibepA_X5Au9WOGE:1xWuNM:IGhjwzRWzvMOvZuJALFAzUuIWJy_J5aLLVofCg9Lfn4",
+    "expire_date": "2026-12-11T11:44:24.680Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "renh3ko0to7o64mpqcrg9dis7c5n9ilc",
+  "fields": {
+    "session_data": "e30:1xVRMJ:C-0yqie0Co4TWYKRNIdBkWFjbTGAnIU87T_kucp7WAY",
+    "expire_date": "2026-12-07T10:33:15.887Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "rq4p0joqy87jil80uokk15svvf2czidz",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwNv:aLmDoWqzwAXHWp_hJ62UO4Msf371DOHSacCyqCrajw4",
+    "expire_date": "2026-12-11T13:53:07.873Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "tk7k52qgywp918aetaidsra7mrbinjwa",
+  "fields": {
+    "session_data": "eyJ2aWV3ZWRfYmVyaXRhXzMiOnRydWV9:1xOZpK:U3nLmyO8H08gvbQFm7HJZOmlYY4c3facPSlw4pvZ-vQ",
+    "expire_date": "2026-11-18T12:10:50.496Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "uazikjlmkrprqz9zhcfae9kq6kaue95q",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwUa:0RuzAlNB6_a_h02qKt1L20zLAXT0gZ6ke5rz_k-Px9s",
+    "expire_date": "2026-12-11T14:00:00.351Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe-yNbJiB3-Skp4zWLv2mhhQItkOFIi7Q6Q0ad_MvA-8Mr85euKSG3oJYysrn8Dj2ia_Vi4-RxhBwmEjDA-eNxDvON8WEZa5lUxiU8ROq7gukZ-X3T0cTFinf01KO7Yx9RTYaIyDMkGi00lLrXQX7dAb6iyRxERmOLteJZmkcRYNKWXg-wPmBT_6:1xRSQA:uG0X2sX34GdMnaznA_VGvWGGI9folbF2mBihgU-6VXY",
+    "expire_date": "2026-11-26T10:52:46.337Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vcm0448l72dsy695ib3lrwgijyvw0qhf",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwWO:W3pfH0J_1HfQ6sAOb_ka0BMqOD-lcl2aHFHNIxjXbMo",
+    "expire_date": "2026-12-11T14:01:52.750Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vrk0lssfirp9etpity7rmw8l71ubowvp",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xTCHy:4ELrskKnNcBOvCk7cYUZBJjMoxlAz4hY4J_qa_27XzU",
+    "expire_date": "2026-12-01T06:03:30.006Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ywdauw6ex6pb2vq6uagrxug8vrcfxght",
+  "fields": {
+    "session_data": "e30:1xODUc:eJvqDCj9PExHrAUQ6pPu8tlHEK-xNvHfrngttwEpRVU",
+    "expire_date": "2026-11-17T12:19:58.274Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "zj8kzo8oaesvigp90z7d2ad0bgtabuo0",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0bD:tnBgeMM7RsARaAuebGnU2xppljgqwKlWk3Jf_mvQ4bU",
+    "expire_date": "2026-11-11T10:09:39.269Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "zkddrf5a7xys38eh8a1mwlej30x2qm18",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWuof:K1iF-nG65yxcC39ZonrY3BgSSbzE5N0-WpYOyDqLpyA",
+    "expire_date": "2026-12-11T12:12:37.752Z"
   }
 },
 {
@@ -1399,6 +1819,32 @@
   }
 },
 {
+  "model": "landing.auditlog",
+  "pk": 55,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'Cenmoree'",
+    "keterangan": "Berhasil memperbarui data user",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-27T12:11:47.272Z"
+  }
+},
+{
+  "model": "landing.auditlog",
+  "pk": 56,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "aktivitas": "Memperbarui akun administrator: 'Cenmoree'",
+    "keterangan": "Berhasil memperbarui data user",
+    "ip_address": "127.0.0.1",
+    "waktu": "2026-11-27T13:53:38.531Z"
+  }
+},
+{
   "model": "landing.pengunjungweb",
   "pk": 1,
   "fields": {
@@ -1789,6 +2235,1026 @@
   }
 },
 {
+  "model": "landing.pengunjungweb",
+  "pk": 40,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_8130ed52",
+    "created_at": "2026-11-27T11:43:01.857Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 41,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_70862d33",
+    "created_at": "2026-11-27T11:43:04.402Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 42,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_8203d2c8",
+    "created_at": "2026-11-27T11:43:09.909Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 43,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "75hzic1nksdn69w3ofv1ordodp6nesuo_15b608c6",
+    "created_at": "2026-11-27T11:44:07.693Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 44,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "oaz7ofs9hh6kqpsrbou8vi6y03ujr83u_8ff94c73",
+    "created_at": "2026-11-27T11:44:24.395Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 45,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "oaz7ofs9hh6kqpsrbou8vi6y03ujr83u_870f9485",
+    "created_at": "2026-11-27T11:44:24.489Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 46,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "oaz7ofs9hh6kqpsrbou8vi6y03ujr83u_f1ffef7b",
+    "created_at": "2026-11-27T11:44:24.533Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 47,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "oaz7ofs9hh6kqpsrbou8vi6y03ujr83u_9e634d15",
+    "created_at": "2026-11-27T11:44:24.563Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 48,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "oaz7ofs9hh6kqpsrbou8vi6y03ujr83u_fa242168",
+    "created_at": "2026-11-27T11:44:24.590Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 49,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "oaz7ofs9hh6kqpsrbou8vi6y03ujr83u_71de0fdc",
+    "created_at": "2026-11-27T11:44:24.620Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 50,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "qf10x9hai99598ltegdpj111roxyb8pu_8a7c2104",
+    "created_at": "2026-11-27T11:44:24.697Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 51,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "qf10x9hai99598ltegdpj111roxyb8pu_fec6f3fc",
+    "created_at": "2026-11-27T11:44:24.733Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 52,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "qf10x9hai99598ltegdpj111roxyb8pu_acd9539f",
+    "created_at": "2026-11-27T11:44:24.762Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 53,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_1b87f325",
+    "created_at": "2026-11-27T11:49:53.451Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 54,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_4b0ba0f9",
+    "created_at": "2026-11-27T11:50:08.723Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 55,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_d64da84b",
+    "created_at": "2026-11-27T11:50:16.001Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 56,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "1phfl5qurql3846av7ciwivi2t3lfxwk_5c14582a",
+    "created_at": "2026-11-27T12:02:32.396Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 57,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "1phfl5qurql3846av7ciwivi2t3lfxwk_1410730d",
+    "created_at": "2026-11-27T12:02:32.501Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 58,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "1phfl5qurql3846av7ciwivi2t3lfxwk_7163c2e0",
+    "created_at": "2026-11-27T12:02:32.546Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 59,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "1phfl5qurql3846av7ciwivi2t3lfxwk_6bf68dde",
+    "created_at": "2026-11-27T12:02:32.581Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 60,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "1phfl5qurql3846av7ciwivi2t3lfxwk_8c979af4",
+    "created_at": "2026-11-27T12:02:32.608Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 61,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_1625f317",
+    "created_at": "2026-11-27T12:05:10.382Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 62,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_f511b3e3",
+    "created_at": "2026-11-27T12:07:55.070Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 63,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_d91ab5a1",
+    "created_at": "2026-11-27T12:07:57.838Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 64,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_920a163f",
+    "created_at": "2026-11-27T12:08:00.678Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 65,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_4789f48a",
+    "created_at": "2026-11-27T12:08:03.049Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 66,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_03ec02ec",
+    "created_at": "2026-11-27T12:08:04.280Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 67,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_7bbb725f",
+    "created_at": "2026-11-27T12:08:05.363Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 68,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_5ccd70b0",
+    "created_at": "2026-11-27T12:08:07.027Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 69,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_ae8e1e44",
+    "created_at": "2026-11-27T12:08:10.149Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 70,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_137fef12",
+    "created_at": "2026-11-27T12:08:16.688Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 71,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_5bab5113",
+    "created_at": "2026-11-27T12:08:18.237Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 72,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_0508f6b0",
+    "created_at": "2026-11-27T12:08:20.957Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 73,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_c894d2ea",
+    "created_at": "2026-11-27T12:08:27.027Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 74,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_85883734",
+    "created_at": "2026-11-27T12:08:51.517Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 75,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_1af6030c",
+    "created_at": "2026-11-27T12:08:56.988Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 76,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_68d87571",
+    "created_at": "2026-11-27T12:09:09.096Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 77,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_22642856",
+    "created_at": "2026-11-27T12:09:23.149Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 78,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_236163ed",
+    "created_at": "2026-11-27T12:09:57.442Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 79,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_a4bab98e",
+    "created_at": "2026-11-27T12:10:06.849Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 80,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_50be66a6",
+    "created_at": "2026-11-27T12:11:19.907Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 81,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_b1e06cb9",
+    "created_at": "2026-11-27T12:11:23.016Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 82,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_4512ecf9",
+    "created_at": "2026-11-27T12:11:33.363Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 83,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_fc6f00ba",
+    "created_at": "2026-11-27T12:11:47.297Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 84,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_e7949310",
+    "created_at": "2026-11-27T12:11:52.294Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 85,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_8c5e69ed",
+    "created_at": "2026-11-27T12:11:54.950Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 86,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_d478d8f1",
+    "created_at": "2026-11-27T12:11:56.189Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 87,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_74e4d65a",
+    "created_at": "2026-11-27T12:12:02.491Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 88,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "70svzkj2pirpclr3ckwzqopcqjdqllbw_a60e4f57",
+    "created_at": "2026-11-27T12:12:26.689Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 89,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "grepux64yn24z6xufzy5oxcwpnslzhtv_0fa46dd4",
+    "created_at": "2026-11-27T12:12:26.791Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 90,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "grepux64yn24z6xufzy5oxcwpnslzhtv_68960ddd",
+    "created_at": "2026-11-27T12:12:26.816Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 91,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "zkddrf5a7xys38eh8a1mwlej30x2qm18_647bd13c",
+    "created_at": "2026-11-27T12:12:37.866Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 92,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "50ca5nyl7ccu54nm5d8ndrh6lkv7y492_c315d499",
+    "created_at": "2026-11-27T12:12:45.901Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 93,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_34b52b5d",
+    "created_at": "2026-11-27T12:13:55.641Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 94,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_821f5671",
+    "created_at": "2026-11-27T12:14:01.389Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 95,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_dc226c62",
+    "created_at": "2026-11-27T12:14:03.762Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 96,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_0cbcfd6d",
+    "created_at": "2026-11-27T12:14:16.328Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 97,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_dcb788a4",
+    "created_at": "2026-11-27T12:14:27.493Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 98,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_4c7aca49",
+    "created_at": "2026-11-27T12:14:40.491Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 99,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_2bd96d71",
+    "created_at": "2026-11-27T12:14:41.999Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 100,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "4963hsvqy0ifklf67lrw3aou1mo3jpr7_5aa42655",
+    "created_at": "2026-11-27T12:19:54.393Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 101,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "zv2fuvgw3d04v0jlechvhvm6nuzqzotj_0b4ae452",
+    "created_at": "2026-11-27T12:20:14.375Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 102,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "zv2fuvgw3d04v0jlechvhvm6nuzqzotj_30589ed8",
+    "created_at": "2026-11-27T12:20:24.370Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 103,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "zv2fuvgw3d04v0jlechvhvm6nuzqzotj_cdd0c56b",
+    "created_at": "2026-11-27T12:20:39.167Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 104,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "zv2fuvgw3d04v0jlechvhvm6nuzqzotj_bc6b293f",
+    "created_at": "2026-11-27T12:20:50.986Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 105,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_6d664fac",
+    "created_at": "2026-11-27T12:22:52.406Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 106,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_fac1fa46",
+    "created_at": "2026-11-27T12:23:23.501Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 107,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_26bf78d5",
+    "created_at": "2026-11-27T12:23:31.774Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 108,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_65050491",
+    "created_at": "2026-11-27T12:23:34.297Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 109,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "5oclwxeej1stoudntfvhv13hfsw3a11g_a43fa08e",
+    "created_at": "2026-11-27T12:29:51.852Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 110,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_5aab2f48",
+    "created_at": "2026-11-27T12:39:44.150Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 111,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_ec0e6e6a",
+    "created_at": "2026-11-27T12:39:48.236Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 112,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_72e21b0d",
+    "created_at": "2026-11-27T12:40:00.382Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 113,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_e2333926",
+    "created_at": "2026-11-27T12:40:05.618Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 114,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_6ec59b82",
+    "created_at": "2026-11-27T12:40:10.065Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 115,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_bb4b0307",
+    "created_at": "2026-11-27T12:43:32.853Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 116,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "rq4p0joqy87jil80uokk15svvf2czidz_569cbf52",
+    "created_at": "2026-11-27T13:53:08.290Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 117,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "9twa5ig6el3io0u5p5v1axnqxlcfghjf_c47c4915",
+    "created_at": "2026-11-27T13:53:36.906Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 118,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "9twa5ig6el3io0u5p5v1axnqxlcfghjf_53dc7235",
+    "created_at": "2026-11-27T13:53:38.571Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 119,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "9twa5ig6el3io0u5p5v1axnqxlcfghjf_6318f173",
+    "created_at": "2026-11-27T13:53:38.642Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 120,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "konxw8zu3d18p3qkzc84mqjxtgoswp1y_a4a2b890",
+    "created_at": "2026-11-27T14:01:37.322Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 121,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "vcm0448l72dsy695ib3lrwgijyvw0qhf_9d56c428",
+    "created_at": "2026-11-27T14:01:53.002Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 122,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_189dfcce",
+    "created_at": "2026-11-27T14:05:17.430Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 123,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_337d45d4",
+    "created_at": "2026-11-27T14:05:36.937Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 124,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_5f0d4871",
+    "created_at": "2026-11-27T14:05:42.955Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 125,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_ee988121",
+    "created_at": "2026-11-27T14:06:00.208Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 126,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_73c0cf46",
+    "created_at": "2026-11-27T14:06:07.063Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 127,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "cxluvqubq1vrcp3ojzdfewzi6p0m4vth_a23244a0",
+    "created_at": "2026-11-27T14:06:19.555Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 128,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "0nosh8clxmn6kdfr2y2m14ifsioaedoo_79890208",
+    "created_at": "2026-11-27T14:06:33.151Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 129,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_610b518a",
+    "created_at": "2026-11-27T14:06:44.548Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 130,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_aa926cef",
+    "created_at": "2026-11-27T14:06:46.783Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 131,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_254b97d8",
+    "created_at": "2026-11-27T14:06:54.592Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 132,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_a68add29",
+    "created_at": "2026-11-27T14:06:58.517Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 133,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_9b177ba9",
+    "created_at": "2026-11-27T14:07:02.177Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 134,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_f470b291",
+    "created_at": "2026-11-27T14:07:07.032Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 135,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_9fb8d355",
+    "created_at": "2026-11-27T14:07:12.194Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 136,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_cf4aabd8",
+    "created_at": "2026-11-27T14:07:15.231Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 137,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "va73dvqv1kfmrge28m2o09dwkvuiktfc_d92a3c5a",
+    "created_at": "2026-11-27T14:11:10.888Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 138,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "va73dvqv1kfmrge28m2o09dwkvuiktfc_794c149c",
+    "created_at": "2026-11-27T14:11:11.055Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 139,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "va73dvqv1kfmrge28m2o09dwkvuiktfc_9d1e37c4",
+    "created_at": "2026-11-27T14:11:11.124Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 140,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_eb66ae0e",
+    "created_at": "2026-11-27T14:42:48.073Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 141,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_b0884437",
+    "created_at": "2026-11-27T14:42:53.814Z"
+  }
+},
+{
   "model": "landing.eventterdekat",
   "pk": 1,
   "fields": {
@@ -1869,7 +3335,60 @@
     ],
     "role": "USER",
     "foto": "",
-    "no_telepon": null
+    "no_telepon": null,
+    "raw_password": null
+  }
+},
+{
+  "model": "akun.userprofile",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "role": "Admin",
+    "foto": "",
+    "no_telepon": null,
+    "raw_password": null
+  }
+},
+{
+  "model": "akun.userprofile",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "Cenmoree"
+    ],
+    "role": "Editor",
+    "foto": "",
+    "no_telepon": null,
+    "raw_password": "12345678"
+  }
+},
+{
+  "model": "akun.userprofile",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "apriana"
+    ],
+    "role": "Admin Prodi",
+    "foto": "",
+    "no_telepon": null,
+    "raw_password": null
+  }
+},
+{
+  "model": "akun.userprofile",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "admin_test"
+    ],
+    "role": "Admin",
+    "foto": "",
+    "no_telepon": null,
+    "raw_password": null
   }
 },
 {
@@ -2188,6 +3707,39 @@
       "admin"
     ],
     "waktu_login": "2026-11-27T07:20:23.842Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 31,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "waktu_login": "2026-11-27T12:22:52.359Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "Cenmoree"
+    ],
+    "waktu_login": "2026-11-27T13:53:59.690Z",
+    "ip_address": "127.0.0.1"
+  }
+},
+{
+  "model": "akun.riwayatlogin",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "Cenmoree"
+    ],
+    "waktu_login": "2026-11-27T14:06:44.463Z",
     "ip_address": "127.0.0.1"
   }
 },
