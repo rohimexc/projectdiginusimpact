@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Berita & Kegiatan - Administrasi Publik FISIP Untad{% endblock %}
+
+{% block content %}
+<style>
+    /* Styling agar indikator kalender dan panah tanggal selalu berada di sisi kanan */
+    input[type="date"] {
+        direction: ltr;
+        text-align: right;
+        min-width: 0;
+        max-width: 100%;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        margin-left: auto;
+        opacity: 0.6;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+</style>
+
+<div class="max-w-6xl mx-auto py-16 px-4 sm:px-6">
+    <!-- Breadcrumbs Navigation -->
+    <div class="mb-6" data-aos="fade-right" data-aos-duration="600">
+        <nav class="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
+            <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                <span>Beranda</span>
+            </a>
+            <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+            <span class="text-teal-800 font-semibold">Berita & Informasi</span>
+        </nav>
+    </div>
+    <div class="text-center mb-10 space-y-3 max-w-2xl mx-auto" data-aos="fade-up" data-aos-duration="700">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+            <i class="fa-solid fa-newspaper mr-1"></i> Berita & Informasi
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">Berita & Informasi Terbaru</h1>
+        <div class="w-24 h-1.5 bg-amber-400 rounded-full mx-auto"></div>
+        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">Pusat informasi resmi seputar kegiatan akademik dan kemahasiswaan Program Studi Administrasi Publik FISIP Universitas Tadulako</p>
+    </div>
+
+    <!-- Form Search & Filter Konsisten seperti Contoh Gambar (Di luar max-w-2xl agar di desktop leluasa dan tidak sempit) -->
+    <form id="beritaFilterForm" method="GET" action="{% url 'landing:berita_list' %}" class="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4 text-left" data-aos="fade-up">
+            <!-- Baris 1: Input Pencarian + Input Rentang Tanggal + Tombol Search -->
+            <div class="flex flex-col md:flex-row items-center gap-2.5 w-full">
+                <!-- Input Teks + Tombol Search Mobile -->
+                <div class="flex items-center gap-2 w-full md:flex-1 min-w-0">
+                    <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Cari judul atau isi..."
+                        class="w-full rounded-full border border-slate-200 bg-white px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 transition shadow-2xs">
+                    
+                    <!-- Tombol Search di samping input teks saat layar mobile (< md) -->
+                    <button type="submit" class="md:hidden w-10 h-10 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white flex items-center justify-center shrink-0 shadow-sm transition" title="Cari Berita">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Input Rentang Tanggal Manual (DARI -> SAMPAI) -->
+                <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto shrink-0">
+                    <!-- DARI -->
+                    <div class="relative flex items-center justify-between rounded-full border border-slate-200 bg-white px-3.5 py-2 shadow-2xs w-full sm:w-auto min-w-0">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1.5">DARI</span>
+                        <input type="date" name="tgl_mulai" value="{{ tgl_mulai|default:'' }}"
+                            class="w-full sm:w-36 text-right text-xs text-slate-700 bg-transparent focus:outline-none cursor-pointer font-medium">
+                    </div>
+
+                    <span class="text-slate-400 text-xs hidden md:inline shrink-0">&rarr;</span>
+
+                    <!-- SAMPAI -->
+                    <div class="relative flex items-center justify-between rounded-full border border-slate-200 bg-white px-3.5 py-2 shadow-2xs w-full sm:w-auto min-w-0">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1.5">SAMPAI</span>
+                        <input type="date" name="tgl_selesai" value="{{ tgl_selesai|default:'' }}"
+                            class="w-full sm:w-36 text-right text-xs text-slate-700 bg-transparent focus:outline-none cursor-pointer font-medium">
+                    </div>
+                </div>
+
+                <!-- Tombol Submit Bulat Dark Teal Khusus Desktop / Tablet (>= md) -->
+                <button type="submit" class="hidden md:flex w-11 h-11 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white items-center justify-center shrink-0 shadow-sm transition" title="Cari Berita">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Baris 2: Rentang Cepat + Tombol Reset Filter -->
+            <div class="flex items-center justify-between flex-wrap gap-3 pt-3 border-t border-slate-100">
+                <div class="flex items-center gap-2 flex-wrap text-xs">
+                    <span class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mr-1">
+                        <i class="fa-regular fa-calendar text-teal-700"></i> Rentang Cepat:
+                    </span>
+                    <button type="button" onclick="setQuickRange('semua')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if rentang == 'semua' or not rentang %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Semua Waktu
+                    </button>
+                    <button type="button" onclick="setQuickRange('7hari')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if rentang == '7hari' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        7 Hari Terakhir
+                    </button>
+                    <button type="button" onclick="setQuickRange('bulan_ini')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if rentang == 'bulan_ini' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Bulan Ini
+                    </button>
+                    <button type="button" onclick="setQuickRange('tahun_ini')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if rentang == 'tahun_ini' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Tahun Ini
+                    </button>
+                    <input type="hidden" name="rentang" id="rentangInput" value="{{ rentang|default:'semua' }}">
+                    <input type="hidden" name="urutan" id="urutanHiddenInput" value="{{ urutan|default:'terbaru' }}">
+                </div>
+
+                {% if filter_aktif %}
+                <a href="{% url 'landing:berita_list' %}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-50 text-rose-600 hover:bg-rose-100 text-xs font-semibold border border-rose-200 transition shadow-2xs">
+                    <i class="fa-solid fa-rotate-left text-[11px]"></i> Reset Filter
+                </a>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- Baris 3: Menampilkan X Berita & Pilihan Urutan dengan Custom Dropdown Arrow -->
+        <div class="flex items-center justify-between flex-wrap gap-4 pt-1 pb-4">
+            <div class="flex items-center gap-2 flex-wrap">
+                <span class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700">
+                    <span class="w-2 h-2 rounded-full bg-[#005f5f]"></span>
+                    Menampilkan <strong class="text-slate-900 font-bold">{{ berita_list|length }}</strong> berita
+                </span>
+                {% if filter_label %}
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200 text-xs font-medium">
+                    <i class="fa-solid fa-filter text-[10px]"></i> {{ filter_label }}
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+                <span class="font-medium text-slate-600">Urutkan:</span>
+                <div class="relative inline-flex items-center">
+                    <select onchange="submitWithSorting(this.value)" class="appearance-none rounded-full border border-slate-300 bg-white pl-4 pr-8 py-1.5 text-xs font-medium text-slate-700 focus:outline-none focus:border-teal-600 shadow-2xs cursor-pointer">
+                        <option value="terbaru" {% if urutan != 'terlama' %}selected{% endif %}>Terbaru ke Terlama</option>
+                        <option value="terlama" {% if urutan == 'terlama' %}selected{% endif %}>Terlama ke Terbaru</option>
+                    </select>
+                    <div class="pointer-events-none absolute right-3 flex items-center text-slate-400">
+                        <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function setQuickRange(val) {
+                document.getElementById('rentangInput').value = val;
+                // Bersihkan input tanggal spesifik agar filter cepat diprioritaskan
+                document.querySelector('input[name="tgl_mulai"]').value = '';
+                document.querySelector('input[name="tgl_selesai"]').value = '';
+                document.getElementById('beritaFilterForm').submit();
+            }
+            function submitWithSorting(sortVal) {
+                document.getElementById('urutanHiddenInput').value = sortVal;
+                document.getElementById('beritaFilterForm').submit();
+            }
+        </script>
+
+    <!-- Carousel Slider Berita: 3 di Laptop, 2 di Tab, 1 di Mobile -->
+    {% if berita_list %}
+        <div class="relative px-2 sm:px-4" data-aos="fade-up">
+            <style>
+                #beritaListSlider::-webkit-scrollbar {
+                    display: none;
+                }
+            </style>
+
+            <!-- Tombol Panah Kiri -->
+            <button type="button" id="beritaListPrevBtn" aria-label="Berita Sebelumnya"
+                    class="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-teal-50 text-slate-700 hover:text-teal-800 border border-slate-200 shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Tombol Panah Kanan -->
+            <button type="button" id="beritaListNextBtn" aria-label="Berita Selanjutnya"
+                    class="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Track Slider Responsif: 3 Card di Laptop, 2 di Tab, 1 di Mobile -->
+            <div id="beritaListSlider"
+                 class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
+                 style="scrollbar-width: none; -ms-overflow-style: none;">
+                {% for b in berita_list %}
+                <div class="berita-list-card w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-3 flex flex-col justify-between group/card hover:shadow-xl transition-all duration-300">
+                    <div>
+                        {% if b.gambar %}
+                        <!-- Menggunakan aspect-[4/5] agar rasionya selalu konsisten portrait 4:5 -->
+                        <img src="{{ b.gambar.url }}" alt="{{ b.judul }}"
+                            class="w-full aspect-[4/5] object-cover rounded-lg mb-3">
+                        {% endif %}
+                        <div class="flex items-center justify-between gap-2 flex-wrap mb-2">
+                            <span class="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
+                                {{ b.post_date|date:"d M Y" }}
+                            </span>
+                            <div class="flex items-center gap-2.5 text-[11px] text-slate-500 font-medium">
+                                <span class="flex items-center gap-1" title="Dilihat {{ b.views_count }} kali">
+                                    <i class="fa-regular fa-eye text-teal-600"></i>{{ b.views_count }}
+                                </span>
+                                <span class="flex items-center gap-1" title="{{ b.total_likes }} Suka">
+                                    <i class="fa-regular fa-heart text-rose-500"></i>{{ b.total_likes }}
+                                </span>
+                                <span class="flex items-center gap-1" title="{{ b.total_komentar }} Komentar">
+                                    <i class="fa-regular fa-comment text-sky-500"></i>{{ b.total_komentar }}
+                                </span>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-sm mt-2 line-clamp-2">{{ b.judul }}</h3>
+                        <div class="text-slate-600 text-xs mt-1 line-clamp-2">{{ b.konten|safe }}</div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex justify-between items-center">
+                        <a href="{% url 'landing:berita_detail' b.slug %}" class="text-teal-600 font-semibold text-xs hover:underline flex items-center gap-1">
+                            Baca selengkapnya &rarr;
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Petunjuk Geser untuk Mobile -->
+            <div class="flex sm:hidden items-center justify-center gap-1.5 mt-2.5 text-slate-400 text-[11px]">
+                <i class="fa-solid fa-arrows-left-right text-teal-600"></i>
+                <span>Geser ke samping untuk melihat berita lainnya</span>
+            </div>
+        </div>
+
+        <script>
+            function initBeritaListSlider() {
+                const slider = document.getElementById("beritaListSlider");
+                const prevBtn = document.getElementById("beritaListPrevBtn");
+                const nextBtn = document.getElementById("beritaListNextBtn");
+                if (!slider || !prevBtn || !nextBtn) return;
+
+                function getCardScrollAmount() {
+                    const firstCard = slider.querySelector(".berita-list-card");
+                    if (!firstCard) return 320;
+                    return firstCard.offsetWidth + 24;
+                }
+
+                function updateButtons() {
+                    const tolerance = 5;
+                    const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+                    if (maxScroll <= tolerance) {
+                        prevBtn.classList.add("hidden");
+                        nextBtn.classList.add("hidden");
+                        return;
+                    } else {
+                        prevBtn.classList.remove("hidden");
+                        nextBtn.classList.remove("hidden");
+                    }
+
+                    if (slider.scrollLeft <= tolerance) {
+                        prevBtn.disabled = true;
+                        prevBtn.classList.add("opacity-30", "pointer-events-none");
+                        prevBtn.classList.remove("opacity-100");
+                    } else {
+                        prevBtn.disabled = false;
+                        prevBtn.classList.remove("opacity-30", "pointer-events-none");
+                        prevBtn.classList.add("opacity-100");
+                    }
+
+                    if (slider.scrollLeft >= maxScroll - tolerance) {
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add("opacity-30", "pointer-events-none");
+                        nextBtn.classList.remove("opacity-100");
+                    } else {
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove("opacity-30", "pointer-events-none");
+                        nextBtn.classList.add("opacity-100");
+                    }
+                }
+
+                prevBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: -getCardScrollAmount(), behavior: "smooth" });
+                });
+                nextBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: getCardScrollAmount(), behavior: "smooth" });
+                });
+
+                slider.addEventListener("scroll", updateButtons, { passive: true });
+                window.addEventListener("resize", updateButtons);
+                setTimeout(updateButtons, 300);
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initBeritaListSlider);
+            } else {
+                initBeritaListSlider();
+            }
+        </script>
+    {% else %}
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center" data-aos="fade-up">
+            <p class="text-slate-400 text-sm italic">Belum ada berita yang ditemukan.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

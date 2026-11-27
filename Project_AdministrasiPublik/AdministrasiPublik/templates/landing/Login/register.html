@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun Pengguna - Administrasi Publik</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animate CSS CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+</head>
+<body class="bg-slate-100 font-sans antialiased">
+
+    <div class="min-h-screen flex items-center justify-center p-4 py-8">
+        <!-- Card Utama (Split Screen) -->
+        <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 border border-slate-200" data-aos="zoom-in" data-aos-duration="800">
+            
+            <!-- BAGIAN KIRI: BRANDING / INFO -->
+            <div class="bg-slate-900 text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden" data-aos="fade-right" data-aos-delay="100" data-aos-duration="800">
+                <!-- Aksen Background Glow Halus -->
+                <div class="absolute -top-24 -left-24 w-72 h-72 bg-teal-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <!-- Top Badge -->
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-teal-500/10 border border-teal-500/20 text-teal-400 text-[11px] font-semibold rounded-full tracking-wider uppercase">
+                        Komunitas Pembaca & Pengunjung
+                    </div>
+                </div>
+
+                <!-- Main Title & Desc -->
+                <div class="space-y-4 my-auto py-8">
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
+                        Bergabung <br>Bersama Kami!
+                    </h1>
+                    <p class="text-xs md:text-sm text-slate-400 leading-relaxed">
+                        Buat akun pengguna untuk ikut berpartisipasi memberikan komentar, menyukai artikel berita, dan berinteraksi di portal Administrasi Publik FISIP Untad.
+                    </p>
+
+                    <!-- Feature Badges/List -->
+                    <div class="space-y-3 pt-4">
+                        <div class="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
+                            <span class="p-2 bg-teal-500/20 text-teal-400 rounded-lg">💬</span>
+                            <span>Bebas berkomentar & berdiskusi santun</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
+                            <span class="p-2 bg-teal-500/20 text-teal-400 rounded-lg">⚡</span>
+                            <span>Proses instan otomatis berstatus Pengguna (USER)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Copyright -->
+                <div class="text-[11px] text-slate-500">
+                    &copy; 2026 Administrasi Publik FISIP Untad.
+                </div>
+            </div>
+
+            <!-- BAGIAN KANAN: FORM REGISTER -->
+            <div class="p-8 md:p-12 flex flex-col justify-center bg-white" data-aos="fade-left" data-aos-delay="100" data-aos-duration="800">
+                <div class="space-y-2 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-800">
+                        Buat <span class="text-teal-600">Akun Pengguna</span>
+                    </h2>
+                    <p class="text-xs text-slate-400">Lengkapi data diri Anda untuk membuat akun pembaca.</p>
+                </div>
+
+                <!-- Pesan Notifikasi / Error -->
+                {% if messages %}
+                    <div class="mb-4 space-y-2">
+                        {% for message in messages %}
+                            <div class="p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl flex items-center gap-2">
+                                <span>⚠️</span> {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Form Register -->
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    
+                    <div class="space-y-1">
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <input type="text" name="nama_lengkap" required placeholder="Contoh: Muhammad Rian" 
+                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Username <span class="text-red-500">*</span></label>
+                            <input type="text" name="username" required placeholder="rian2026" 
+                                   class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Email (Opsional)</label>
+                            <input type="email" name="email" placeholder="nama@email.com" 
+                                   class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Password <span class="text-red-500">*</span></label>
+                        <input type="password" name="password" required placeholder="Minimal 6 karakter" 
+                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition">
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Ulangi Password <span class="text-red-500">*</span></label>
+                        <input type="password" name="password_confirm" required placeholder="Ketik ulang password" 
+                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition">
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl text-xs transition shadow-lg shadow-teal-600/25 flex items-center justify-center gap-2 mt-2 cursor-pointer">
+                        <span>Daftar Sekarang</span>
+                        <span>→</span>
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center text-xs text-slate-500">
+                    Sudah punya akun? 
+                    <a href="{% url 'landing:login' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="text-teal-600 font-bold hover:underline">
+                        Masuk di sini
+                    </a>
+                </div>
+
+                <div class="mt-3 text-center text-xs">
+                    <a href="{% if next %}{{ next }}{% else %}/{% endif %}" class="text-slate-400 hover:text-slate-600 transition">
+                        &larr; Kembali ke Halaman Sebelumnya
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- AOS Animate JS CDN & Inisialisasi -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            easing: 'ease-out-cubic',
+        });
+    </script>
+</body>
+</html>
+

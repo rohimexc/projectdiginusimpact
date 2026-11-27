@@ -1,0 +1,146 @@
+{% extends 'landing/admin/template/base.html' %}
+
+{% block title %}Kelola Halaman Dinamis - Admin Portal{% endblock %}
+{% block header_title %}Manajemen Konten Halaman (CMS Pages){% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Header Actions -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" data-aos="fade-down">
+        <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-800">Daftar Halaman Dinamis (CMS)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Kelola isi artikel HTML, pratinjau dokumen PDF, tautan eksternal, dan berkas unduhan.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{% url 'cms:dashboard_menu_list' %}" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition border border-slate-200">
+                <i class="fa-solid fa-bars text-teal-600"></i>
+                <span>Kelola Menu Navigasi</span>
+            </a>
+            <a href="{% url 'cms:dashboard_page_create' %}" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#0f6b6b] hover:bg-[#0b5353] text-white text-xs font-semibold rounded-xl transition shadow-sm">
+                <i class="fa-solid fa-plus"></i>
+                <span>Buat Halaman Baru</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter & Pencarian -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4" data-aos="fade-up">
+        <form method="GET" class="flex flex-wrap items-center gap-3 w-full sm:w-auto flex-1">
+            <div class="relative flex-1 min-w-[200px]">
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Cari judul atau slug..." 
+                       class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-teal-600 focus:outline-none">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            </div>
+
+            <select name="type" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white text-slate-700">
+                <option value="">-- Semua Jenis Konten --</option>
+                <option value="html" {% if type_filter == 'html' %}selected{% endif %}>HTML Content</option>
+                <option value="pdf" {% if type_filter == 'pdf' %}selected{% endif %}>PDF Preview</option>
+                <option value="external_link" {% if type_filter == 'external_link' %}selected{% endif %}>External Link</option>
+                <option value="internal_link" {% if type_filter == 'internal_link' %}selected{% endif %}>Internal Link</option>
+                <option value="file_download" {% if type_filter == 'file_download' %}selected{% endif %}>File Download</option>
+            </select>
+
+            <select name="status" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white text-slate-700">
+                <option value="">-- Semua Status --</option>
+                <option value="published" {% if status_filter == 'published' %}selected{% endif %}>Published</option>
+                <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>Draft</option>
+            </select>
+
+            <button type="submit" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl transition">
+                Filter
+            </button>
+            {% if search_query or type_filter or status_filter %}
+            <a href="{% url 'cms:dashboard_page_list' %}" class="text-xs text-slate-400 hover:text-slate-600 underline">Reset</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Tabel Data Halaman -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" data-aos="fade-up">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase text-[10px] tracking-wider">
+                        <th class="p-3.5">Judul & Ringkasan</th>
+                        <th class="p-3.5 w-44">Slug URL</th>
+                        <th class="p-3.5 w-36 text-center">Jenis Konten</th>
+                        <th class="p-3.5 w-28 text-center">Status</th>
+                        <th class="p-3.5 w-36">Diperbarui</th>
+                        <th class="p-3.5 w-40 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for p in pages %}
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3.5">
+                            <div class="font-bold text-slate-900 text-xs sm:text-sm">{{ p.title }}</div>
+                            {% if p.meta_description %}
+                            <p class="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{{ p.meta_description }}</p>
+                            {% endif %}
+                        </td>
+                        <td class="p-3.5 font-mono text-[11px] text-teal-700">
+                            /p/{{ p.slug }}/
+                        </td>
+                        <td class="p-3.5 text-center">
+                            {% if p.content_type == 'html' %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">HTML Content</span>
+                            {% elif p.content_type == 'pdf' %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">PDF Preview</span>
+                            {% elif p.content_type == 'external_link' %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">External Link</span>
+                            {% elif p.content_type == 'internal_link' %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">Internal Link</span>
+                            {% elif p.content_type == 'file_download' %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">Download File</span>
+                            {% else %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">{{ p.get_content_type_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3.5 text-center">
+                            {% if p.status == 'published' %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Published</span>
+                            {% else %}
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Draft</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3.5 text-slate-500 text-[11px]">
+                            {{ p.updated_at|date:"d M Y, H:i" }}
+                        </td>
+                        <td class="p-3.5 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                {% if p.status == 'published' %}
+                                <a href="{% url 'cms:page_detail' p.slug %}" target="_blank" title="Buka Halaman Live" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-semibold text-[11px] transition inline-flex items-center gap-1">
+                                    <span>Lihat</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                                </a>
+                                {% else %}
+                                <a href="{% url 'cms:page_detail' p.slug %}?preview=1" target="_blank" title="Pratinjau Draft Halaman" class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-[11px] transition inline-flex items-center gap-1">
+                                    <span>Preview</span>
+                                    <i class="fa-solid fa-eye text-[9px]"></i>
+                                </a>
+                                {% endif %}
+                                <a href="{% url 'cms:dashboard_page_edit' p.pk %}" title="Ubah Halaman" class="w-7 h-7 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-pen text-[10px]"></i>
+                                </a>
+                                <a href="{% url 'cms:dashboard_page_delete' p.pk %}" title="Hapus Halaman" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-trash text-[10px]"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-400 italic">
+                            Tidak ada halaman dinamis yang ditemukan. Klik tombol "+ Buat Halaman Baru" untuk memulai.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

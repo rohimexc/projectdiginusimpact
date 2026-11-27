@@ -1,0 +1,385 @@
+{% extends 'landing/admin/template/base.html' %}
+{% load static %}
+
+{% block title %}Kelola Hero Banner - Admin Portal{% endblock %}
+
+{% block header_title %}Manajemen Hero Banner{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-6xl mx-auto pb-12">
+
+    <!-- TOP HEADER & INFO -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4" data-aos="fade-down">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200">
+                    <i class="fa-solid fa-film mr-1"></i> Banner Utama Beranda
+                </span>
+                <span class="text-slate-300">/</span>
+                <span class="text-xs text-slate-500 font-medium">Pengaturan Tunggal</span>
+            </div>
+            <h1 class="text-xl font-extrabold text-slate-800 mt-2">Kelola Hero Banner</h1>
+            <p class="text-xs text-slate-500 mt-0.5">
+                Konfigurasi tampilan banner utama website. Gambar hero akan tampil pertama kali sepersekian detik selama video masih dimuat.
+            </p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="{% url 'landing:landing_home' %}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition shadow-2xs border border-slate-200">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i> Lihat di Website
+            </a>
+        </div>
+    </div>
+
+    <!-- GRID LAYOUT: FORM EDIT DI KIRI & LIVE PREVIEW DI KANAN -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- KOLOM KIRI: FORM PENGATURAN HERO (7 COLS) -->
+        <div class="lg:col-span-7 space-y-6" data-aos="fade-right">
+            <form id="heroForm" method="POST" action="{% url 'landing:dashboard_hero' %}" enctype="multipart/form-data" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+                {% csrf_token %}
+
+                <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800">Form Pengaturan Hero</h2>
+                        <p class="text-[11px] text-slate-500">Perbarui video, gambar, dan teks banner beranda</p>
+                    </div>
+                    <span class="text-[10px] font-semibold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+                        <i class="fa-solid fa-shield-halved mr-1"></i> Validasi Aktif
+                    </span>
+                </div>
+
+                <!-- 1. BAGIAN VIDEO -->
+                <div class="space-y-3 p-4 bg-slate-50/70 rounded-xl border border-slate-200">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-video"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-800">Media Video Hero</h3>
+                            <p class="text-[10px] text-slate-500">Bisa unggah file video langsung (Maks 100 MB) atau gunakan link tautan.</p>
+                        </div>
+                    </div>
+
+                    <!-- Upload File Video -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">
+                            Upload File Video <span class="text-[10px] text-slate-400 font-normal">(Maksimal 100 MB &bull; Format: .mp4, .webm)</span>
+                        </label>
+                        {{ form.video_file }}
+                        {% if hero.video_file %}
+                        <div class="mt-2 flex items-center gap-2 text-[11px] text-teal-700 bg-teal-50 p-2 rounded-lg border border-teal-200">
+                            <i class="fa-solid fa-file-video"></i>
+                            <span class="truncate max-w-xs font-medium">File aktif: {{ hero.video_file.name }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Link Video URL (Alternatif) -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">
+                            Atau Link Video (URL / Path Lokal)
+                        </label>
+                        {{ form.video_url }}
+                        <p class="text-[10px] text-slate-400 mt-1">
+                            Gunakan jika tidak ingin upload file (Contoh: <code class="bg-white px-1 py-0.5 rounded text-teal-700 font-mono">/static/video/banner.mp4</code> atau link video online).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. BAGIAN GAMBAR HERO -->
+                <div class="space-y-3 p-4 bg-amber-50/50 rounded-xl border border-amber-200">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-800">Gambar Hero (Preload & Fallback)</h3>
+                            <p class="text-[10px] text-slate-600">
+                                <strong>Penting:</strong> Gambar ini muncul langsung pertama kali sepersekian detik selama video masih loading.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">
+                            Upload Gambar Hero <span class="text-[10px] text-slate-400 font-normal">(Maksimal 5 MB &bull; Format: .jpg, .jpeg, .png, .webp)</span>
+                        </label>
+                        {{ form.foto }}
+                        {% if hero.foto %}
+                        <div class="mt-2.5 flex items-center gap-3 p-2 bg-white rounded-xl border border-amber-200 shadow-2xs">
+                            <img src="{{ hero.foto.url }}" alt="Thumbnail Hero" class="w-16 h-12 object-cover rounded-lg border shadow-xs">
+                            <div class="text-[11px] text-slate-600">
+                                <span class="font-bold text-slate-800">Gambar Hero Tersimpan</span><br>
+                                <span class="text-[10px] text-slate-400">Pilih file baru di atas jika ingin mengganti.</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 3. BAGIAN TEKS & KONTEN -->
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Subjudul / Teks Atas</label>
+                            {{ form.subjudul }}
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Judul Utama</label>
+                            {{ form.judul }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Deskripsi Hero</label>
+                        {{ form.deskripsi }}
+                        <p class="text-[10px] text-slate-400 mt-1">Gunakan enter / baris baru untuk memisahkan baris teks deskripsi.</p>
+                    </div>
+                </div>
+
+                <!-- TOMBOL SIMPAN -->
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end">
+                    <button type="submit" id="btnSubmit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold rounded-xl transition shadow-sm">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan Hero
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- KOLOM KANAN: LIVE INTERACTIVE PREVIEW (5 COLS) -->
+        <div class="lg:col-span-5 space-y-4" data-aos="fade-left">
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3 sticky top-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        <i class="fa-solid fa-eye text-teal-700"></i>
+                        Live Preview Tampilan Beranda
+                    </h3>
+                    <span class="text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                        Real-time
+                    </span>
+                </div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">
+                    Simulasi tampilan hero di beranda website. Preview merespons perubahan teks dan file yang diunggah secara instan.
+                </p>
+
+                <!-- BANNER SIMULASI BERANDA -->
+                <div class="relative py-16 px-4 text-center overflow-hidden min-h-[300px] flex items-center justify-center rounded-xl bg-slate-950 border border-slate-800 shadow-inner">
+                    <!-- 1. Background Image Preview -->
+                    <img id="livePreviewImg" 
+                        src="{% if hero.foto %}{{ hero.foto.url }}{% endif %}" 
+                        alt="Preview Image" 
+                        class="absolute inset-0 w-full h-full object-cover z-0 {% if not hero.foto %}hidden{% endif %}">
+
+                    <!-- Fallback Gradien jika tidak ada gambar -->
+                    <div id="livePreviewGradient" class="absolute inset-0 w-full h-full bg-gradient-to-br from-teal-950 via-slate-900 to-teal-900 z-0 {% if hero.foto %}hidden{% endif %}"></div>
+
+                    <!-- 2. Video Preview -->
+                    <video id="livePreviewVideo" autoplay muted loop playsinline 
+                        class="absolute inset-0 w-full h-full object-cover z-0 {% if not hero.get_video_source and not hero.video_url %}hidden{% endif %}"
+                        {% if hero.foto %}poster="{{ hero.foto.url }}"{% endif %}>
+                        <source id="livePreviewVideoSrc" src="{% if hero.get_video_source %}{{ hero.get_video_source }}{% else %}{% static 'video/banner.mp4' %}{% endif %}" type="video/mp4">
+                    </video>
+
+                    <!-- 3. Dark Overlay -->
+                    <div class="absolute inset-0 bg-black/60 z-10"></div>
+
+                    <!-- 4. Text Overlay Preview -->
+                    <div class="relative z-20 max-w-sm mx-auto space-y-2 px-2 text-white">
+                        <h4 id="livePreviewSubjudul" class="text-[11px] font-medium tracking-wide text-slate-200">
+                            {{ hero.subjudul|default:"Welcome to" }}
+                        </h4>
+                        <h2 id="livePreviewJudul" class="text-lg font-extrabold tracking-tight text-amber-400 drop-shadow-md">
+                            {{ hero.judul|default:"Administrasi Publik" }}
+                        </h2>
+                        <p id="livePreviewDeskripsi" class="text-slate-200 text-[11px] leading-relaxed whitespace-pre-line">
+                            {{ hero.deskripsi|default:"Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako" }}
+                        </p>
+                        <div class="pt-2">
+                            <span class="bg-amber-400 text-slate-900 font-bold px-3.5 py-1.5 rounded-full text-[10px] shadow-sm inline-block">
+                                Jelajahi Lebih Lanjut
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-[11px] text-slate-400 flex items-center justify-between pt-1">
+                    <span><i class="fa-solid fa-circle-info mr-1"></i> Format rasio responsif</span>
+                    <span class="text-teal-700 font-medium">Maksimal 100 MB Video / 5 MB Gambar</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // ==========================================
+    // VALIDASI KEAMANAN LAPIS JS (CLIENT-SIDE)
+    // ==========================================
+    document.addEventListener("DOMContentLoaded", function() {
+        const videoInput = document.getElementById("id_video_file");
+        const videoUrlInput = document.getElementById("id_video_url");
+        const fotoInput = document.getElementById("id_foto");
+        const judulInput = document.getElementById("id_judul");
+        const subjudulInput = document.getElementById("id_subjudul");
+        const deskripsiInput = document.getElementById("id_deskripsi");
+
+        const previewVideo = document.getElementById("livePreviewVideo");
+        const previewVideoSrc = document.getElementById("livePreviewVideoSrc");
+        const previewImg = document.getElementById("livePreviewImg");
+        const previewGradient = document.getElementById("livePreviewGradient");
+        const previewJudul = document.getElementById("livePreviewJudul");
+        const previewSubjudul = document.getElementById("livePreviewSubjudul");
+        const previewDeskripsi = document.getElementById("livePreviewDeskripsi");
+
+        // 1. Validasi & Live Update File Video (Maks 100 MB, ekstensi .mp4 & .webm)
+        if (videoInput) {
+            videoInput.addEventListener("change", function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const allowedExts = [".mp4", ".webm"];
+                const fileName = file.name.toLowerCase();
+                const isValidExt = allowedExts.some(ext => fileName.endsWith(ext));
+
+                if (!isValidExt) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Format Video Ditolak!",
+                        text: "Hanya file video berformat .mp4 atau .webm yang diperbolehkan demi keamanan sistem.",
+                        confirmButtonColor: "#0f6b6b"
+                    });
+                    videoInput.value = "";
+                    return;
+                }
+
+                const maxVideoSize = 100 * 1024 * 1024; // 100 MB
+                if (file.size > maxVideoSize) {
+                    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Ukuran Video Terlalu Besar!",
+                        text: `Ukuran file video (${fileSizeMB} MB) melebihi batas maksimal 100 MB.`,
+                        confirmButtonColor: "#0f6b6b"
+                    });
+                    videoInput.value = "";
+                    return;
+                }
+
+                // Update Preview Video
+                try {
+                    const objectUrl = URL.createObjectURL(file);
+                    previewVideoSrc.src = objectUrl;
+                    previewVideo.load();
+                    previewVideo.classList.remove("hidden");
+                } catch (err) {
+                    console.error("Preview video error:", err);
+                }
+            });
+        }
+
+        // 2. Validasi & Live Update Gambar Hero (Maks 5 MB, ekstensi .jpg, .jpeg, .png, .webp)
+        if (fotoInput) {
+            fotoInput.addEventListener("change", function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const allowedExts = [".jpg", ".jpeg", ".png", ".webp"];
+                const fileName = file.name.toLowerCase();
+                const isValidExt = allowedExts.some(ext => fileName.endsWith(ext));
+
+                if (!isValidExt) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Format Gambar Ditolak!",
+                        text: "Hanya file gambar berformat .jpg, .jpeg, .png, atau .webp yang diperbolehkan.",
+                        confirmButtonColor: "#0f6b6b"
+                    });
+                    fotoInput.value = "";
+                    return;
+                }
+
+                const maxPhotoSize = 5 * 1024 * 1024; // 5 MB
+                if (file.size > maxPhotoSize) {
+                    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Ukuran Gambar Terlalu Besar!",
+                        text: `Ukuran file gambar (${fileSizeMB} MB) melebihi batas maksimal 5 MB.`,
+                        confirmButtonColor: "#0f6b6b"
+                    });
+                    fotoInput.value = "";
+                    return;
+                }
+
+                // Update Preview Gambar
+                try {
+                    const objectUrl = URL.createObjectURL(file);
+                    previewImg.src = objectUrl;
+                    previewImg.classList.remove("hidden");
+                    previewGradient.classList.add("hidden");
+                } catch (err) {
+                    console.error("Preview image error:", err);
+                }
+            });
+        }
+
+        // 3. Live Update Link Video (jika diinput lewat text)
+        if (videoUrlInput) {
+            videoUrlInput.addEventListener("input", function() {
+                if (videoUrlInput.value.trim()) {
+                    previewVideoSrc.src = videoUrlInput.value.trim();
+                    previewVideo.load();
+                    previewVideo.classList.remove("hidden");
+                }
+            });
+        }
+
+        // 4. Live Update Teks Hero
+        if (judulInput) {
+            judulInput.addEventListener("input", function() {
+                previewJudul.textContent = judulInput.value || "Administrasi Publik";
+            });
+        }
+        if (subjudulInput) {
+            subjudulInput.addEventListener("input", function() {
+                previewSubjudul.textContent = subjudulInput.value || "Welcome to";
+            });
+        }
+        if (deskripsiInput) {
+            deskripsiInput.addEventListener("input", function() {
+                previewDeskripsi.textContent = deskripsiInput.value || "Fakultas Ilmu Sosial dan Ilmu Politik\nUniversitas Tadulako";
+            });
+        }
+
+        // 5. Pengecekan Akhir Saat Form Di-Submit
+        const formEl = document.getElementById("heroForm");
+        if (formEl) {
+            formEl.addEventListener("submit", function(e) {
+                if (videoInput && videoInput.files.length > 0) {
+                    const file = videoInput.files[0];
+                    if (file.size > 100 * 1024 * 1024) {
+                        e.preventDefault();
+                        Swal.fire("Error!", "File video melebihi 100 MB.", "error");
+                        return false;
+                    }
+                }
+                if (fotoInput && fotoInput.files.length > 0) {
+                    const file = fotoInput.files[0];
+                    if (file.size > 5 * 1024 * 1024) {
+                        e.preventDefault();
+                        Swal.fire("Error!", "File gambar melebihi 5 MB.", "error");
+                        return false;
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

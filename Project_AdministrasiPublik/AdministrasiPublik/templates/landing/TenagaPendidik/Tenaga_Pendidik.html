@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Data Tendik - Administrasi Publik{% endblock %}
+
+{% block content %}
+<!-- Background Halaman Putih Bersih -->
+<div class="bg-slate-50 min-h-screen pb-16">
+    <div class="max-w-6xl mx-auto py-10 px-4 sm:px-6 space-y-10">
+        
+        <!-- Breadcrumbs Navigation -->
+        <div data-aos="fade-right" data-aos-duration="600">
+            <nav class="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
+                <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                    <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                    <span>Beranda</span>
+                </a>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+                <span class="text-teal-800 font-semibold">Tenaga Kependidikan</span>
+            </nav>
+        </div>
+
+        <!-- Header Judul Halaman Konsisten -->
+        <div class="text-center space-y-3 max-w-2xl mx-auto" data-aos="fade-down" data-aos-duration="700">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                <i class="fa-solid fa-users-gear mr-1"></i> Tenaga Kependidikan
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">Tenaga Kependidikan</h1>
+            <div class="w-24 h-1.5 bg-amber-400 rounded-full mx-auto"></div>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Daftar Staf dan Tenaga Kependidikan Program Studi Administrasi Publik FISIP Universitas Tadulako.
+            </p>
+        </div>
+
+        <!-- Form Pencarian Tenaga Kependidikan (Sesuai Contoh Gambar) -->
+        <form method="GET" action="{% url 'landing:tenaga_pendidik_beranda' %}" class="bg-white rounded-full border border-slate-200/90 shadow-xs p-1.5 sm:p-2 pl-6 flex items-center justify-between gap-3 max-w-4xl mx-auto" data-aos="fade-up">
+            <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Cari Nama Staf, NIP..."
+                class="w-full bg-transparent border-none text-xs sm:text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none">
+            
+            {% if filter_aktif %}
+            <a href="{% url 'landing:tenaga_pendidik_beranda' %}" class="text-xs text-rose-500 hover:text-rose-700 font-semibold px-2 shrink-0 flex items-center gap-1 transition">
+                <i class="fa-solid fa-xmark"></i> Reset
+            </a>
+            {% endif %}
+
+            <button type="submit" class="px-6 py-2.5 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-sm shrink-0 transition">
+                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                <span>Cari</span>
+            </button>
+        </form>
+
+        <!-- Carousel Slider Tendik: 3 di Laptop, 2 di Tab, 1 di Mobile -->
+        {% if pendidik_list %}
+        <div class="relative px-2 sm:px-4" data-aos="fade-up">
+            <style>
+                #tendikSlider::-webkit-scrollbar {
+                    display: none;
+                }
+            </style>
+
+            <!-- Tombol Panah Kiri -->
+            <button type="button" id="tendikPrevBtn" aria-label="Tendik Sebelumnya"
+                    class="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-teal-50 text-slate-700 hover:text-teal-800 border border-slate-200 shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Tombol Panah Kanan -->
+            <button type="button" id="tendikNextBtn" aria-label="Tendik Selanjutnya"
+                    class="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Track Slider Responsif: 3 di Laptop, 2 di Tab, 1 di Mobile -->
+            <div id="tendikSlider"
+                 class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
+                 style="scrollbar-width: none; -ms-overflow-style: none;">
+                {% for p in pendidik_list %}
+                <!-- Container Kartu -->
+                <div class="tendik-card group relative h-[420px] w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+                    
+                    <!-- SISI TAMPILAN UTAMA (Default) -->
+                    <div class="absolute inset-0 p-4 flex flex-col justify-between bg-white z-10">
+                        <div>
+                            {% if p.foto %}
+                                <img src="{{ p.foto.url }}" alt="{{ p.nama }}" class="w-full aspect-square object-cover rounded-xl mb-3 shadow-sm">
+                            {% else %}
+                                <div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400 text-xs">Tidak ada foto</div>
+                            {% endif %}
+                        </div>
+                        <div class="bg-white border border-slate-200 py-3 px-4 rounded-xl text-center shadow-sm">
+                            <h3 class="font-bold text-slate-800 text-sm truncate">{{ p.nama }}</h3>
+                        </div>
+                    </div>
+
+                    <!-- SISI OVERLAY DETAIL (Isi Berada di Tengah Card) -->
+                    <div class="absolute inset-0 bg-tealBrand p-6 text-white border-2 border-amber-300 rounded-2xl flex flex-col justify-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 shadow-xl">
+                        <div class="space-y-4">
+                            <!-- Nama dengan Garis Bawah -->
+                            <h4 class="font-bold text-base border-b border-white/30 pb-3">{{ p.nama }}</h4>
+                            
+                            <!-- Rincian Data (NIP & Pangkat rata kiri-kanan) -->
+                            <div class="space-y-3 text-xs sm:text-sm">
+                                {% if p.nip %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-2.5">
+                                    <span class="font-medium">NIP:</span>
+                                    <span class="font-semibold text-right tracking-wide">{{ p.nip }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if p.pangkat_gol %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-2.5">
+                                    <span class="font-medium">Pangkat / Gol:</span>
+                                    <span class="font-semibold text-right">{{ p.pangkat_gol }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Petunjuk Geser untuk Mobile -->
+            <div class="flex sm:hidden items-center justify-center gap-1.5 mt-2.5 text-slate-400 text-[11px]">
+                <i class="fa-solid fa-arrows-left-right text-teal-600"></i>
+                <span>Geser ke samping untuk melihat tendik lainnya</span>
+            </div>
+        </div>
+
+        <script>
+            function initTendikSlider() {
+                const slider = document.getElementById("tendikSlider");
+                const prevBtn = document.getElementById("tendikPrevBtn");
+                const nextBtn = document.getElementById("tendikNextBtn");
+                if (!slider || !prevBtn || !nextBtn) return;
+
+                function getCardScrollAmount() {
+                    const firstCard = slider.querySelector(".tendik-card");
+                    if (!firstCard) return 320;
+                    return firstCard.offsetWidth + 24;
+                }
+
+                function updateButtons() {
+                    const tolerance = 5;
+                    const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+                    if (maxScroll <= tolerance) {
+                        prevBtn.classList.add("hidden");
+                        nextBtn.classList.add("hidden");
+                        return;
+                    } else {
+                        prevBtn.classList.remove("hidden");
+                        nextBtn.classList.remove("hidden");
+                    }
+
+                    if (slider.scrollLeft <= tolerance) {
+                        prevBtn.disabled = true;
+                        prevBtn.classList.add("opacity-30", "pointer-events-none");
+                        prevBtn.classList.remove("opacity-100");
+                    } else {
+                        prevBtn.disabled = false;
+                        prevBtn.classList.remove("opacity-30", "pointer-events-none");
+                        prevBtn.classList.add("opacity-100");
+                    }
+
+                    if (slider.scrollLeft >= maxScroll - tolerance) {
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add("opacity-30", "pointer-events-none");
+                        nextBtn.classList.remove("opacity-100");
+                    } else {
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove("opacity-30", "pointer-events-none");
+                        nextBtn.classList.add("opacity-100");
+                    }
+                }
+
+                prevBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: -getCardScrollAmount(), behavior: "smooth" });
+                });
+                nextBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: getCardScrollAmount(), behavior: "smooth" });
+                });
+
+                slider.addEventListener("scroll", updateButtons, { passive: true });
+                window.addEventListener("resize", updateButtons);
+                setTimeout(updateButtons, 300);
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initTendikSlider);
+            } else {
+                initTendikSlider();
+            }
+        </script>
+        {% else %}
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center" data-aos="fade-up">
+            <p class="text-slate-400 text-sm italic">Data tenaga kependidikan tidak ditemukan.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

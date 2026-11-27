@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Data Tenaga Pengajar (Dosen) - Administrasi Publik{% endblock %}
+
+{% block content %}
+<!-- Background Halaman Putih Bersih -->
+<div class="bg-slate-50 min-h-screen pb-16">
+    <div class="max-w-6xl mx-auto py-10 px-4 sm:px-6 space-y-10">
+        
+        <!-- Breadcrumbs Navigation -->
+        <div data-aos="fade-right" data-aos-duration="600">
+            <nav class="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
+                <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                    <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                    <span>Beranda</span>
+                </a>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+                <span class="text-teal-800 font-semibold">Tenaga Pengajar (Dosen)</span>
+            </nav>
+        </div>
+
+        <!-- Header Judul Halaman Konsisten dengan Galeri -->
+        <div class="text-center space-y-3 max-w-2xl mx-auto" data-aos="fade-down" data-aos-duration="700">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                <i class="fa-solid fa-chalkboard-user mr-1"></i> Tenaga Pengajar & Dosen
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">Tenaga Pengajar</h1>
+            <div class="w-24 h-1.5 bg-amber-400 rounded-full mx-auto"></div>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Daftar Dosen Pengajar Program Studi Administrasi Publik FISIP Universitas Tadulako.
+            </p>
+        </div>
+
+        <!-- Form Pencarian & Filter Jabatan Fungsional Dosen (Sesuai Contoh Gambar) -->
+        <form id="dosenFilterForm" method="GET" action="{% url 'landing:dosen_beranda' %}" class="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-5 space-y-3.5" data-aos="fade-up">
+            <!-- Baris 1: Input Pencarian + Tombol Cari -->
+            <div class="flex items-center gap-3">
+                <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Cari Nama Dosen, NIP, NIDN, Bidang Keahlian..."
+                    class="w-full rounded-full border border-slate-200 bg-white px-5 py-3 text-xs sm:text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600 transition shadow-2xs">
+                
+                <button type="submit" class="px-6 py-3 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-sm shrink-0 transition">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    <span>Cari</span>
+                </button>
+            </div>
+
+            <!-- Baris 2: Jabatan Fungsional Chips + Tombol Reset -->
+            <div class="flex items-center justify-between flex-wrap gap-3 pt-2.5 border-t border-slate-100">
+                <div class="flex items-center gap-2 flex-wrap text-xs">
+                    <span class="text-xs font-semibold text-slate-700 flex items-center gap-1.5 mr-1">
+                        <i class="fa-solid fa-sliders text-teal-700"></i> Jabatan Fungsional:
+                    </span>
+                    <button type="button" onclick="setJabatan('')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if not jabatan %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Semua Dosen ({{ total_dosen }})
+                    </button>
+                    <button type="button" onclick="setJabatan('Guru Besar')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Guru Besar' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Guru Besar ({{ guru_besar_count }})
+                    </button>
+                    <button type="button" onclick="setJabatan('Lektor Kepala')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Lektor Kepala' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Lektor Kepala ({{ lektor_kepala_count }})
+                    </button>
+                    <button type="button" onclick="setJabatan('Lektor')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Lektor' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Lektor ({{ lektor_count }})
+                    </button>
+                    <button type="button" onclick="setJabatan('Asisten Ahli')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Asisten Ahli' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Asisten Ahli ({{ asisten_ahli_count }})
+                    </button>
+                    <input type="hidden" name="jabatan" id="jabatanInput" value="{{ jabatan|default:'' }}">
+                </div>
+
+                {% if filter_aktif %}
+                <a href="{% url 'landing:dosen_beranda' %}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-50 text-rose-600 hover:bg-rose-100 text-xs font-semibold border border-rose-200 transition shadow-2xs">
+                    <i class="fa-solid fa-rotate-left text-[11px]"></i> Reset
+                </a>
+                {% endif %}
+            </div>
+        </form>
+
+        <script>
+            function setJabatan(val) {
+                document.getElementById('jabatanInput').value = val;
+                document.getElementById('dosenFilterForm').submit();
+            }
+        </script>
+
+        <!-- Carousel Slider Dosen: 3 di Laptop, 2 di Tab, 1 di Mobile -->
+        {% if dosen_list %}
+        <div class="relative px-2 sm:px-4" data-aos="fade-up">
+            <style>
+                #dosenSlider::-webkit-scrollbar {
+                    display: none;
+                }
+            </style>
+
+            <!-- Tombol Panah Kiri -->
+            <button type="button" id="dosenPrevBtn" aria-label="Dosen Sebelumnya"
+                    class="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-teal-50 text-slate-700 hover:text-teal-800 border border-slate-200 shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Tombol Panah Kanan -->
+            <button type="button" id="dosenNextBtn" aria-label="Dosen Selanjutnya"
+                    class="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Track Slider Responsif: 3 di Laptop, 2 di Tab, 1 di Mobile -->
+            <div id="dosenSlider"
+                 class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
+                 style="scrollbar-width: none; -ms-overflow-style: none;">
+                {% for d in dosen_list %}
+                <!-- Container Kartu -->
+                <div class="dosen-card group relative h-[420px] w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+                    
+                    <!-- SISI TAMPILAN UTAMA (Default) -->
+                    <div class="absolute inset-0 p-4 flex flex-col justify-between bg-white z-10">
+                        <div>
+                            {% if d.foto %}
+                                <img src="{{ d.foto.url }}" alt="{{ d.nama }}" class="w-full aspect-square object-cover rounded-xl mb-3 shadow-sm">
+                            {% else %}
+                                <div class="w-full aspect-square bg-slate-100 rounded-xl mb-3 flex items-center justify-center text-slate-400 text-xs">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-user-tie text-4xl text-slate-300 mb-2"></i>
+                                        <p>Foto belum tersedia</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="bg-white border border-slate-200 py-3 px-4 rounded-xl text-center shadow-sm">
+                            <h3 class="font-bold text-slate-800 text-sm truncate">{{ d.nama }}</h3>
+                            <p class="text-[11px] text-teal-700 font-semibold truncate mt-0.5">{{ d.jabatan|default:"Dosen Pengajar" }}</p>
+                        </div>
+                    </div>
+
+                    <!-- SISI OVERLAY DETAIL (Muncul saat hover atau tap) -->
+                    <div class="absolute inset-0 bg-tealBrand p-6 text-white border-2 border-amber-300 rounded-2xl flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 shadow-xl overflow-y-auto">
+                        <div class="space-y-3">
+                            <!-- Nama dengan Garis Bawah -->
+                            <div class="border-b border-white/30 pb-2">
+                                <h4 class="font-bold text-sm sm:text-base leading-snug">{{ d.nama }}</h4>
+                                <span class="inline-block px-2 py-0.5 bg-amber-400 text-slate-900 text-[10px] font-bold rounded-md mt-1">
+                                    {{ d.jabatan|default:"Dosen" }}
+                                </span>
+                            </div>
+                            
+                            <!-- Rincian Data -->
+                            <div class="space-y-2 text-xs">
+                                {% if d.nip %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-1.5">
+                                    <span class="text-teal-200">NIP:</span>
+                                    <span class="font-semibold text-right">{{ d.nip }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if d.nidn %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-1.5">
+                                    <span class="text-teal-200">NIDN:</span>
+                                    <span class="font-semibold text-right">{{ d.nidn }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if d.bidang_ilmu %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-1.5">
+                                    <span class="text-teal-200">Bidang Ilmu:</span>
+                                    <span class="font-semibold text-right">{{ d.bidang_ilmu }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if d.pangkat_golongan %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-1.5">
+                                    <span class="text-teal-200">Pangkat/Gol:</span>
+                                    <span class="font-semibold text-right">{{ d.get_pangkat_golongan_display|default:d.pangkat_golongan }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if d.email %}
+                                <div class="flex justify-between items-start border-b border-white/10 pb-1.5">
+                                    <span class="text-teal-200">Email:</span>
+                                    <span class="font-semibold text-right truncate max-w-[160px]">{{ d.email }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="pt-2 text-center text-[10px] text-teal-100 italic">
+                            Administrasi Publik FISIP Untad
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Petunjuk Geser untuk Mobile -->
+            <div class="flex sm:hidden items-center justify-center gap-1.5 mt-2.5 text-slate-400 text-[11px]">
+                <i class="fa-solid fa-arrows-left-right text-teal-600"></i>
+                <span>Geser ke samping untuk melihat dosen lainnya</span>
+            </div>
+        </div>
+
+        <script>
+            function initDosenSlider() {
+                const slider = document.getElementById("dosenSlider");
+                const prevBtn = document.getElementById("dosenPrevBtn");
+                const nextBtn = document.getElementById("dosenNextBtn");
+                if (!slider || !prevBtn || !nextBtn) return;
+
+                function getCardScrollAmount() {
+                    const firstCard = slider.querySelector(".dosen-card");
+                    if (!firstCard) return 320;
+                    return firstCard.offsetWidth + 24;
+                }
+
+                function updateButtons() {
+                    const tolerance = 5;
+                    const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+                    if (maxScroll <= tolerance) {
+                        prevBtn.classList.add("hidden");
+                        nextBtn.classList.add("hidden");
+                        return;
+                    } else {
+                        prevBtn.classList.remove("hidden");
+                        nextBtn.classList.remove("hidden");
+                    }
+
+                    if (slider.scrollLeft <= tolerance) {
+                        prevBtn.disabled = true;
+                        prevBtn.classList.add("opacity-30", "pointer-events-none");
+                        prevBtn.classList.remove("opacity-100");
+                    } else {
+                        prevBtn.disabled = false;
+                        prevBtn.classList.remove("opacity-30", "pointer-events-none");
+                        prevBtn.classList.add("opacity-100");
+                    }
+
+                    if (slider.scrollLeft >= maxScroll - tolerance) {
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add("opacity-30", "pointer-events-none");
+                        nextBtn.classList.remove("opacity-100");
+                    } else {
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove("opacity-30", "pointer-events-none");
+                        nextBtn.classList.add("opacity-100");
+                    }
+                }
+
+                prevBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: -getCardScrollAmount(), behavior: "smooth" });
+                });
+                nextBtn.addEventListener("click", function() {
+                    slider.scrollBy({ left: getCardScrollAmount(), behavior: "smooth" });
+                });
+
+                slider.addEventListener("scroll", updateButtons, { passive: true });
+                window.addEventListener("resize", updateButtons);
+                setTimeout(updateButtons, 300);
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initDosenSlider);
+            } else {
+                initDosenSlider();
+            }
+        </script>
+        {% else %}
+        <div class="bg-white p-12 rounded-2xl border border-slate-200 shadow-sm text-center" data-aos="fade-up">
+            <p class="text-slate-400 text-sm italic">Data tenaga pengajar belum tersedia.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+

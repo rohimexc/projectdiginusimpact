@@ -1,0 +1,583 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ current_title }} - Tentang Administrasi Publik FISIP Untad
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Styling konten CKEditor 5 agar tampil rapi dan proporsional */
+    .ck-content h1,
+    .ck-content h2,
+    .ck-content h3,
+    .ck-content h4 {
+        color: #0f6b6b;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .ck-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .ck-content h2 {
+        font-size: 1.25rem;
+    }
+
+    .ck-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .ck-content p {
+        margin-bottom: 0.875rem;
+        line-height: 1.7;
+        color: #334155;
+    }
+
+    .ck-content ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+
+    .ck-content ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+
+    .ck-content li {
+        margin-bottom: 0.35rem;
+        line-height: 1.6;
+    }
+
+    .ck-content blockquote {
+        border-left: 4px solid #008080;
+        padding-left: 1rem;
+        margin: 1.25rem 0;
+        font-style: italic;
+        color: #475569;
+        background-color: #f8fafc;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+
+    .ck-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.25rem 0;
+    }
+
+    .ck-content table th,
+    .ck-content table td {
+        border: 1px solid #cbd5e1;
+        padding: 0.75rem;
+        text-align: left;
+    }
+
+    .ck-content table th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .ck-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+        margin: 1rem 0;
+    }
+</style>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 min-h-[65vh] space-y-8">
+
+    <!-- Breadcrumbs Navigation -->
+    <div data-aos="fade-right" data-aos-duration="600">
+        <nav class="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
+            <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                <span>Beranda</span>
+            </a>
+            <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+            <span class="text-slate-500 font-medium">Tentang</span>
+            <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+            <span class="text-teal-800 font-semibold">{{ current_title }}</span>
+        </nav>
+    </div>
+
+    <!-- HEADER & NAVIGASI CEPAT ANTAR SUB-MENU TENTANG -->
+    <div class="space-y-4" data-aos="fade-down" data-aos-duration="700">
+        <div>
+            <div class="mb-2">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                    <i class="fa-solid fa-circle-info mr-1"></i> Tentang &bull; Administrasi Publik
+                </span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f6b6b] tracking-tight">
+                {{ current_title }}
+            </h1>
+            {% if current_subjudul %}
+            <p class="text-slate-500 text-sm sm:text-base mt-1">{{ current_subjudul }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Tombol Pil Navigasi Tentang (Sesuai 5 Sub Menu) -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-b border-slate-200/80 pb-4">
+            {% for item in tentang_nav_list %}
+            <a href="{% url 'landing:detail_tentang' jenis=item.slug %}"
+                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition duration-150 shadow-2xs flex items-center gap-1.5 {% if item.slug == active_slug %}bg-[#0f6b6b] text-amber-300 shadow-sm border border-[#0f6b6b]{% else %}bg-white text-slate-700 border border-slate-200 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b]{% endif %}">
+                <i class="{{ item.icon }} text-xs"></i>
+                <span>{{ item.title }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if is_visi_misi_tujuan %}
+    <!-- TAMPILAN KHUSUS VISI, MISI, DAN TUJUAN (MINIMALIS & PROFESIONAL) -->
+    <div class="space-y-6">
+
+        <!-- KARTU VISI -->
+        <div id="visi" class="scroll-mt-24 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-3" data-aos="fade-up">
+            <div class="flex items-center gap-2 text-teal-800">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#005f5f]"></span>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">VISI PROGRAM STUDI</p>
+            </div>
+            <blockquote class="text-slate-800 text-base sm:text-lg leading-relaxed font-medium italic border-l-3 border-[#005f5f] pl-4">
+                "{{ visi_misi_obj.visi }}"
+            </blockquote>
+        </div>
+
+        <!-- SEKSI MISI -->
+        <div id="misi" class="scroll-mt-24 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-4" data-aos="fade-up">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#005f5f]"></span>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">MISI PROGRAM STUDI</p>
+            </div>
+            {% if visi_misi_obj.pengantar_misi %}
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                {{ visi_misi_obj.pengantar_misi }}
+            </p>
+            {% endif %}
+
+            <div class="space-y-3 pt-2">
+                {% for misi in misi_list %}
+                <div class="flex items-start gap-3.5 p-3.5 rounded-xl bg-slate-50/80 border border-slate-100/90 hover:bg-teal-50/30 transition">
+                    <span class="w-7 h-7 rounded-lg bg-[#005f5f] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        {{ misi.urutan|default:forloop.counter }}
+                    </span>
+                    <div class="text-slate-700 text-xs sm:text-sm leading-relaxed pt-0.5">
+                        {{ misi.deskripsi }}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-slate-400 text-xs italic py-4 text-center">Belum ada data misi yang diisi.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- SEKSI TUJUAN -->
+        <div id="tujuan" class="scroll-mt-24 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-4" data-aos="fade-up">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#005f5f]"></span>
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">TUJUAN PROGRAM STUDI</p>
+            </div>
+            {% if visi_misi_obj.pengantar_tujuan %}
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                {{ visi_misi_obj.pengantar_tujuan }}
+            </p>
+            {% endif %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                {% for tujuan in tujuan_list %}
+                <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-100/90 hover:bg-teal-50/30 transition flex items-start gap-3.5">
+                    <span class="w-7 h-7 rounded-lg bg-amber-400 text-slate-900 text-xs font-black flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        {{ tujuan.urutan|default:forloop.counter }}
+                    </span>
+                    <div class="space-y-1">
+                        <h4 class="font-bold text-slate-800 text-xs sm:text-sm">
+                            {{ tujuan.judul }}
+                        </h4>
+                        {% if tujuan.subjudul %}
+                        <p class="italic text-slate-400 text-[11px]">
+                            {{ tujuan.subjudul }}
+                        </p>
+                        {% endif %}
+                        <p class="text-slate-600 text-xs leading-relaxed pt-0.5">
+                            {{ tujuan.deskripsi }}
+                        </p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-slate-400 text-xs italic py-4 text-center col-span-2">Belum ada data tujuan yang diisi.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const targetSection = "{{ target_section|default:'' }}";
+            if (window.location.hash) {
+                const el = document.querySelector(window.location.hash);
+                if (el) {
+                    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                }
+            } else if (targetSection && targetSection !== 'visi') {
+                const el = document.getElementById(targetSection);
+                if (el) {
+                    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                }
+            }
+        });
+    </script>
+
+    {% elif active_slug == 'sertifikat' %}
+    <!-- TAMPILAN KHUSUS SERTIFIKAT AKREDITASI (SESUAI CONTOH GAMBAR) -->
+    <div class="space-y-6">
+
+        {% if akreditasi or konten_obj.file_dokumen %}
+        {% with cert_url=akreditasi.sertifikat.url|default:konten_obj.file_dokumen.url %}
+        
+        <!-- 4 Kotak Info Akreditasi Minimalis (Sesuai Contoh Gambar) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" data-aos="fade-up">
+            <!-- Kotak 1: Akreditasi -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">AKREDITASI</p>
+                <h3 class="text-xl sm:text-2xl font-bold text-[#005f5f]">
+                    {{ akreditasi.status_akreditasi|default:"Baik Sekali" }}
+                </h3>
+            </div>
+
+            <!-- Kotak 2: Nomor SK BAN-PT dengan Tombol Salin -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
+                <div class="flex items-center justify-between gap-2">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">NOMOR SK BAN-PT</p>
+                    <button type="button" onclick="copySkNumber()" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 text-[11px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-teal-700 transition" id="copySkBtn" title="Salin Nomor SK">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="copySkBtnText">Salin</span>
+                    </button>
+                </div>
+                <h3 id="skNumberText" class="text-xs sm:text-sm font-bold text-slate-800 break-words mt-2">
+                    {{ akreditasi.nomor_sk|default:"No. 4128/SK/BAN-PT/Ak.PPJ/S/VI/2022" }}
+                </h3>
+            </div>
+
+            <!-- Kotak 3: Lembaga Akreditasi -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">LEMBAGA AKREDITASI</p>
+                <h3 class="text-base sm:text-lg font-bold text-slate-800">
+                    BAN-PT / LAMSPAK
+                </h3>
+            </div>
+
+            <!-- Kotak 4: Masa Berlaku -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">MASA BERLAKU</p>
+                <h3 class="text-base sm:text-lg font-bold text-slate-800">
+                    {% if akreditasi.tanggal_kadaluarsa %}Hingga {{ akreditasi.tanggal_kadaluarsa|date:"d F Y" }}{% else %}Hingga 26 Juli 2027{% endif %}
+                </h3>
+            </div>
+        </div>
+
+        <!-- Viewer Dokumen Sertifikat dengan Toolbar Minimalis di Atas (Sesuai Contoh Gambar) -->
+        {% if cert_url %}
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden" data-aos="fade-up">
+            <!-- Header Bar Minimalis Gelap: Judul di kiri, Zoom Controls & Download di kanan -->
+            <div class="bg-[#005f5f] text-white px-5 py-3.5 flex items-center justify-between flex-wrap gap-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-amber-300">
+                        <i class="fa-regular fa-file-lines text-sm"></i>
+                    </span>
+                    <span class="font-bold text-sm sm:text-base tracking-wide">Dokumen Sertifikat Akreditasi</span>
+                </div>
+
+                <!-- Kontrol Minimalis di Atas (Zoom + Download) -->
+                <div class="flex items-center gap-2">
+                    <button id="zoomOutBtn" type="button" onclick="zoomPdf(-0.2)" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition" title="Perkecil">
+                        <i class="fa-solid fa-magnifying-glass-minus text-xs"></i>
+                    </button>
+                    <span id="zoomLevelText" class="text-xs font-semibold text-teal-100 min-w-[42px] text-center">100%</span>
+                    <button id="zoomInBtn" type="button" onclick="zoomPdf(0.2)" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition" title="Perbesar">
+                        <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                    </button>
+                    <div class="h-4 w-px bg-white/20 mx-1"></div>
+                    <a href="{{ cert_url }}" download class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white text-[#005f5f] hover:bg-teal-50 font-bold text-xs shadow-xs transition">
+                        <i class="fa-solid fa-download text-xs"></i>
+                        <span>Download</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sub-header Penunjuk Halaman -->
+            <div class="py-2 flex justify-center bg-slate-100 border-b border-slate-200">
+                <span id="pageIndicator" class="px-3 py-0.5 rounded-full bg-slate-200 text-slate-700 text-xs font-medium">
+                    Halaman 1 dari <span id="totalPagesText">1</span>
+                </span>
+            </div>
+
+            <!-- Scrollable Container untuk Render PDF -->
+            <div id="certPdfScrollContainer" class="w-full min-h-[480px] max-h-[850px] overflow-y-auto p-2 sm:p-6 flex flex-col items-center bg-slate-900/90 space-y-4">
+                <div id="certPdfLoadingSpinner" class="flex flex-col items-center justify-center py-20 text-teal-400 gap-2">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl"></i>
+                    <span class="text-xs text-slate-300">Merender pratinjau sertifikat PDF...</span>
+                </div>
+                
+                <div id="certPdfErrorFallback" class="hidden text-center py-12 px-4 text-slate-300 space-y-3">
+                    <p class="text-xs">Sertifikat tidak dapat dimuat otomatis di peramban ini.</p>
+                    <a href="{{ cert_url }}" target="_blank" class="inline-block px-4 py-2 bg-teal-700 hover:bg-teal-600 text-white rounded-lg text-xs font-semibold">
+                        Buka / Unduh Berkas Sertifikat
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% endwith %}
+        {% endif %}
+
+        <!-- Card Uraian Akreditasi (CKEditor) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6" data-aos="fade-up">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                    Uraian & Riwayat Akreditasi
+                </h2>
+            </div>
+            <div class="ck-content text-slate-700 text-sm leading-relaxed">
+                {% if konten_obj and konten_obj.konten %}
+                {{ konten_obj.konten|safe }}
+                {% else %}
+                <p class="text-slate-500">Program Studi Sarjana Administrasi Publik Fakultas Ilmu Sosial dan Ilmu
+                    Politik Universitas Tadulako senantiasa menjaga penjaminan mutu akademik dan kurikulum sesuai dengan
+                    standar akreditasi nasional dan internasional.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% elif active_slug == 'profil' %}
+    <!-- TAMPILAN PROFIL PROGRAM STUDI -->
+    <div class="space-y-6" data-aos="fade-up">
+
+        <!-- Card Konten CKEditor -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                    Gambaran Umum Program Studi
+                </h2>
+            </div>
+            <div class="ck-content text-slate-700 text-sm leading-relaxed">
+                {% if konten_obj and konten_obj.konten %}
+                {{ konten_obj.konten|safe }}
+                {% else %}
+                <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% elif active_slug == 'profil-lulusan' %}
+    <!-- TAMPILAN PROFIL LULUSAN -->
+    <div class="space-y-6" data-aos="fade-up">
+
+        <!-- Card Konten CKEditor -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                    Capaian Pembelajaran & Profil Lulusan
+                </h2>
+            </div>
+            <div class="ck-content text-slate-700 text-sm leading-relaxed">
+                {% if konten_obj and konten_obj.konten %}
+                {{ konten_obj.konten|safe }}
+                {% else %}
+                <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% else %}
+    <!-- TAMPILAN SUB-MENU STANDAR LAINNYA (MISAL SEJARAH & DASAR HUKUM) -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6" data-aos="fade-up">
+        <div class="border-b border-slate-100 pb-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                Uraian {{ current_title }}
+            </h2>
+        </div>
+        <div class="ck-content text-slate-700 text-sm leading-relaxed">
+            {% if konten_obj and konten_obj.konten %}
+            {{ konten_obj.konten|safe }}
+            {% else %}
+            <p class="text-slate-400 italic">Konten untuk sub-menu ini belum diisi oleh admin.</p>
+            {% endif %}
+        </div>
+        {% if konten_obj and konten_obj.file_dokumen %}
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+                <i class="fa-solid fa-paperclip text-[#0f6b6b]"></i>
+                <span>Dokumen Lampiran Tersedia</span>
+            </div>
+            <a href="{{ konten_obj.file_dokumen.url }}" target="_blank"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-[#0f6b6b] hover:bg-[#0f6b6b] hover:text-white rounded-xl text-xs font-semibold transition border border-teal-200">
+                <i class="fa-solid fa-download"></i>
+                Unduh Berkas Lampiran
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+
+{% if active_slug == 'sertifikat' %}
+<!-- Skrip Salin Nomor SK -->
+<script>
+    function copySkNumber() {
+        const skEl = document.getElementById('skNumberText');
+        if (!skEl) return;
+        const text = skEl.innerText.trim();
+        const btnText = document.getElementById('copySkBtnText');
+        
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(function() {
+                if (btnText) {
+                    btnText.innerText = 'Tersalin!';
+                    setTimeout(() => { btnText.innerText = 'Salin'; }, 2000);
+                }
+            }).catch(function() {
+                fallbackCopy(text, btnText);
+            });
+        } else {
+            fallbackCopy(text, btnText);
+        }
+    }
+
+    function fallbackCopy(text, btnText) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            if (btnText) {
+                btnText.innerText = 'Tersalin!';
+                setTimeout(() => { btnText.innerText = 'Salin'; }, 2000);
+            }
+        } catch (err) {
+            prompt("Nomor SK BAN-PT (Ctrl+C untuk menyalin):", text);
+        }
+        document.body.removeChild(textArea);
+    }
+</script>
+
+<!-- PDF.js Mozilla CDN untuk Render Halaman Dokumen PDF Asli di Layar HP & Desktop -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    let currentPdfScale = 1.0;
+    let currentPdfDoc = null;
+
+    function zoomPdf(delta) {
+        if (!currentPdfDoc) return;
+        currentPdfScale = Math.min(Math.max(currentPdfScale + delta, 0.6), 2.2);
+        const zoomText = document.getElementById('zoomLevelText');
+        if (zoomText) zoomText.innerText = Math.round(currentPdfScale * 100) + '%';
+        renderPdfPages(currentPdfDoc, currentPdfScale);
+    }
+
+    async function renderPdfPages(pdf, scaleMultiplier) {
+        const container = document.getElementById('certPdfScrollContainer');
+        if (!container) return;
+
+        // Kosongkan container kecuali spinner & fallback
+        const spinner = document.getElementById('certPdfLoadingSpinner');
+        const fallback = document.getElementById('certPdfErrorFallback');
+        container.innerHTML = '';
+        if (spinner) container.appendChild(spinner);
+        if (fallback) container.appendChild(fallback);
+
+        const baseWidth = Math.min((container.clientWidth || 800) - 32, 850);
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const unscaledViewport = page.getViewport({ scale: 1 });
+            const fitScale = (baseWidth / unscaledViewport.width) * scaleMultiplier;
+            const viewport = page.getViewport({ scale: Math.max(fitScale, 0.6) });
+
+            const pageWrapper = document.createElement('div');
+            pageWrapper.className = 'w-full flex flex-col items-center my-3';
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'shadow-xl rounded-lg bg-white max-w-full border border-slate-700';
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+            const label = document.createElement('span');
+            label.className = 'text-[11px] text-slate-400 font-medium mt-1';
+            label.innerText = `Halaman ${pageNum} dari ${pdf.numPages}`;
+
+            pageWrapper.appendChild(canvas);
+            pageWrapper.appendChild(label);
+            container.appendChild(pageWrapper);
+        }
+    }
+
+    (function() {
+        const fileUrl = "{% if konten_obj and konten_obj.file_dokumen %}{{ konten_obj.file_dokumen.url }}{% elif akreditasi and akreditasi.sertifikat %}{{ akreditasi.sertifikat.url }}{% endif %}";
+        if (!fileUrl) return;
+
+        const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(fileUrl);
+        const container = document.getElementById('certPdfScrollContainer');
+        const spinner = document.getElementById('certPdfLoadingSpinner');
+        const totalPagesText = document.getElementById('totalPagesText');
+
+        if (!container) return;
+
+        if (isImage) {
+            if (spinner) spinner.style.display = 'none';
+            if (totalPagesText) totalPagesText.innerText = '1';
+            const img = document.createElement('img');
+            img.src = fileUrl;
+            img.className = 'max-w-full max-h-[750px] rounded-lg shadow-xl object-contain mx-auto';
+            container.appendChild(img);
+            return;
+        }
+
+        // Setup PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        pdfjsLib.getDocument(fileUrl).promise.then(async function(pdf) {
+            currentPdfDoc = pdf;
+            if (spinner) spinner.style.display = 'none';
+            if (totalPagesText) totalPagesText.innerText = pdf.numPages;
+
+            await renderPdfPages(pdf, currentPdfScale);
+        }).catch(function(err) {
+            console.error("PDF.js render error:", err);
+            if (spinner) spinner.style.display = 'none';
+            const fallback = document.getElementById('certPdfErrorFallback');
+            if (fallback) fallback.classList.remove('hidden');
+        });
+    })();
+</script>
+{% endif %}
+{% endblock %}

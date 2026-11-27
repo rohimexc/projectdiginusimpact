@@ -1,0 +1,133 @@
+<!-- OVERLAY BACKDROP UNTUK MOBILE & TABLET (< md) -->
+<div id="adminSidebarOverlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 hidden opacity-0 transition-opacity duration-300 md:hidden"></div>
+
+<!-- SIDEBAR ADMIN RESPONSIVE (DESKTOP: STATIC, MOBILE/TABLET: OFF-CANVAS SLIDE-OVER) -->
+<aside id="adminSidebar" class="fixed md:static inset-y-0 left-0 z-50 w-64 bg-[#0f6b6b] text-white flex flex-col justify-between p-6 shadow-2xl md:shadow-xl shrink-0 h-screen border-r border-[#0d5959]/50 overflow-y-auto transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="space-y-6">
+        <!-- Header Logo & Portal -->
+        <div class="flex items-center justify-between pb-5 border-b border-white/15">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow shrink-0">
+                    <span class="text-xs font-bold text-red-600">🏛️</span>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-white tracking-wide leading-tight">Admin Portal</h2>
+                    <p class="text-amber-300 text-[10px] font-semibold tracking-wider uppercase">Administrasi Publik</p>
+                </div>
+            </div>
+            <!-- Tombol Close Sidebar Khusus Mobile / Tablet -->
+            <button id="adminSidebarCloseBtn" type="button" aria-label="Tutup Menu" class="md:hidden w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition focus:outline-none">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Menu Navigation -->
+        <nav class="space-y-1.5 text-xs font-medium">
+            <a href="{% url 'landing:dashboard_admin' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_admin' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-gauge text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_admin' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Dashboard Utama</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_berita' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_berita' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-newspaper text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_berita' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Berita</span>
+            </a>
+
+            <a href="{% url 'landing:tenaga_pendidik' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'tenaga_pendidik' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-user-tie text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'tenaga_pendidik' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Tendik</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_dosen' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_dosen' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-chalkboard-user text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_dosen' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Dosen</span>
+            </a>
+
+            <a href="{% url 'landing:manajemen_user' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'manajemen_user' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-users-gear text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'manajemen_user' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Manajemen User</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_tentang' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_tentang' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-circle-info text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_tentang' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Tentang</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_visi_misi_tujuan' %}"
+                class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_visi_misi_tujuan' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-bullseye text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_visi_misi_tujuan' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                    <span>Visi, Misi & Tujuan</span>
+                </div>
+            </a>
+
+            <a href="{% url 'landing:dashboard_akademik' %}"
+                class="flex items-center justify-between px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_akademik' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-graduation-cap text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_akademik' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                    <span>Kelola Akademik</span>
+                </div>
+            </a>
+
+            <a href="{% url 'landing:dashboard_hero' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_hero' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-film text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_hero' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Hero</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_galeri' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_galeri' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-images text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_galeri' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Galeri</span>
+            </a>
+
+            <a href="{% url 'landing:dashboard_event' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if request.resolver_match.url_name == 'dashboard_event' %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-calendar-days text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_event' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Kelola Event</span>
+            </a>
+
+            <!-- CMS & SITE SETTINGS (BARU) -->
+            <div class="pt-3 pb-1 border-t border-white/10">
+                <p class="px-3.5 text-[10px] font-bold uppercase tracking-wider text-teal-200/70">CMS & Pengaturan</p>
+            </div>
+
+            <a href="{% url 'cms:dashboard_menu_list' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if 'cms/menus' in request.path %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-bars-staggered text-xs w-4 text-center group-hover:text-amber-300 {% if 'cms/menus' in request.path %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Menu Navigasi</span>
+            </a>
+
+            <a href="{% url 'cms:dashboard_page_list' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if 'cms/pages' in request.path %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-file-circle-plus text-xs w-4 text-center group-hover:text-amber-300 {% if 'cms/pages' in request.path %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Halaman Dinamis</span>
+            </a>
+
+            <a href="{% url 'cms:dashboard_site_settings' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if 'cms/site-settings' in request.path %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-sliders text-xs w-4 text-center group-hover:text-amber-300 {% if 'cms/site-settings' in request.path %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Pengaturan Situs</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Tombol Logout -->
+    <div class="pt-4 border-t border-white/15">
+        <form action="{% url 'landing:logout' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'landing:login' %}">
+            <button type="submit"
+                class="w-full flex items-center gap-3 px-3.5 py-2.5 text-xs text-red-200 hover:text-amber-300 hover:bg-white/10 rounded-xl transition duration-200 font-semibold group cursor-pointer">
+                <i class="fa-solid fa-arrow-right-from-bracket text-xs group-hover:text-amber-300"></i>
+                <span>Keluar / Logout</span>
+            </button>
+        </form>
+    </div>
+</aside>

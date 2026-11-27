@@ -1,0 +1,10 @@
+/* Variabel Global (Warna, Font, dll) */
+:root {
+    --primary-color: #2563eb;
+    --primary-dark: #1d4ed8;
+    --text-color: #334155;
+    --text-muted: #64748b;
+    --bg-main: #f8fafc;
+    --bg-light: #f1f5f9;
+    --border-color: #e2e8f0;
+}

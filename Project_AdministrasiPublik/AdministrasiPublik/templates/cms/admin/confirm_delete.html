@@ -1,0 +1,32 @@
+{% extends 'landing/admin/template/base.html' %}
+
+{% block title %}Konfirmasi Hapus - Admin Portal{% endblock %}
+{% block header_title %}Konfirmasi Penghapusan Data{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto pt-10" data-aos="zoom-in">
+    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-red-100 shadow-xl text-center space-y-4">
+        <div class="w-14 h-14 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl shadow-inner">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        
+        <div class="space-y-1">
+            <h2 class="text-sm sm:text-base font-bold text-slate-800">Hapus {{ type }}?</h2>
+            <p class="text-xs text-slate-500 leading-relaxed">
+                Anda yakin ingin menghapus <strong class="text-slate-800">"{{ object }}"</strong>?
+                Data yang telah dihapus tidak dapat dipulihkan kembali.
+            </p>
+        </div>
+
+        <form method="POST" class="flex justify-center gap-3 pt-3">
+            {% csrf_token %}
+            <a href="javascript:history.back()" class="px-5 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+                Batal
+            </a>
+            <button type="submit" class="px-6 py-2.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition shadow-md">
+                Ya, Hapus Sekarang
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

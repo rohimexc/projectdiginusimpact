@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galeri Kegiatan - Administrasi Publik FISIP Untad{% endblock %}
+
+{% block content %}
+<div class="bg-slate-50 min-h-screen pb-20">
+    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 space-y-8">
+        
+        <!-- Breadcrumbs Navigation -->
+        <div data-aos="fade-right" data-aos-duration="600">
+            <nav class="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
+                <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                    <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                    <span>Beranda</span>
+                </a>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+                <span class="text-teal-800 font-semibold">Galeri Kegiatan</span>
+            </nav>
+        </div>
+
+        <!-- Header Halaman Galeri -->
+        <div class="text-center space-y-3 max-w-2xl mx-auto" data-aos="fade-down" data-aos-duration="700">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                <i class="fa-solid fa-images mr-1"></i> Dokumentasi Aktivitas
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">Galeri Kegiatan</h1>
+            <div class="w-24 h-1.5 bg-amber-400 rounded-full mx-auto"></div>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Koleksi foto dokumentasi kegiatan akademik, kemahasiswaan, seminar, pengabdian, dan berbagai momen penting di Program Studi Administrasi Publik FISIP Universitas Tadulako.
+            </p>
+        </div>
+
+        <!-- Slider Foto Galeri: 3 Foto di Laptop, 2 di Tab, 1 di Mobile -->
+        {% if galeri_list %}
+        <div class="relative px-2 sm:px-4" data-aos="fade-up">
+            <style>
+                #galeriSlider::-webkit-scrollbar {
+                    display: none;
+                }
+            </style>
+
+            <!-- Tombol Panah Kiri -->
+            <button type="button" id="galeriPrevBtn" aria-label="Foto Sebelumnya"
+                    class="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-teal-50 text-slate-700 hover:text-teal-800 border border-slate-200 shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+            </button>
+
+            <!-- Tombol Panah Kanan -->
+            <button type="button" id="galeriNextBtn" aria-label="Foto Selanjutnya"
+                    class="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+            </button>
+
+            <div id="galeriSlider"
+                 class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
+                 style="scrollbar-width: none; -ms-overflow-style: none;">
+                {% for g in galeri_list %}
+                <div class="galeri-item group w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
+                    
+                    <!-- Foto Container with Click to Preview -->
+                    <div class="relative overflow-hidden cursor-pointer aspect-4/3 bg-slate-100"
+                         onclick="openGalleryModal('{{ g.foto.url }}', '{{ g.judul|default:'Dokumentasi Kegiatan'|escapejs }}', '{{ g.tanggal|date:'d F Y'|default:'' }}')">
+                        {% if g.foto %}
+                            <img src="{{ g.foto.url }}" alt="{{ g.judul|default:'Foto Kegiatan' }}" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-slate-400">
+                                <i class="fa-solid fa-image text-3xl"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Overlay Hover Icon -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover/opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="w-11 h-11 rounded-full bg-white/90 text-teal-800 flex items-center justify-center shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-base"></i>
+                            </span>
+                        </div>
+
+                        {% if g.urutan %}
+                        <span class="absolute top-3 left-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-900/70 backdrop-blur-xs text-amber-300 shadow-xs">
+                            #{{ g.urutan }}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Keterangan & Judul -->
+                    <div class="p-4 space-y-2 flex-1 flex flex-col justify-between text-center">
+                        <div>
+                            <h3 class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-tealBrand transition line-clamp-2 leading-snug">
+                                {{ g.judul|default:"Dokumentasi Kegiatan" }}
+                            </h3>
+                        </div>
+                        {% if g.tanggal %}
+                        <div class="pt-2 border-t border-slate-100 flex items-center justify-center text-[11px] text-slate-400 gap-1.5">
+                            <i class="fa-regular fa-calendar text-teal-600"></i>
+                            <span>{{ g.tanggal|date:"d M Y" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Dots Pagination di Bawah Gambar -->
+            <div id="galeriDots" class="flex items-center justify-center gap-2 pt-6 flex-wrap"></div>
+
+            <!-- Petunjuk Geser untuk Mobile -->
+            <div class="flex sm:hidden items-center justify-center gap-1.5 mt-2.5 text-slate-400 text-[11px]">
+                <i class="fa-solid fa-arrows-left-right text-teal-600"></i>
+                <span>Geser ke samping untuk melihat foto lainnya</span>
+            </div>
+        </div>
+        {% else %}
+        <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-xs" data-aos="fade-up">
+            <div class="w-16 h-16 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center mx-auto text-2xl mb-3">
+                <i class="fa-solid fa-images"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-700">Belum Ada Foto Galeri</h3>
+            <p class="text-xs text-slate-400 mt-1">Foto dokumentasi kegiatan akan segera ditambahkan.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- MODAL PREVIEW LIGHTBOX GALERI -->
+<div id="galleryModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-6" onclick="closeGalleryModal(event)">
+    <div class="max-w-4xl w-full bg-slate-900 text-white rounded-2xl overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
+        <!-- Modal Header -->
+        <div class="p-4 border-b border-white/10 flex items-center justify-between bg-slate-950/80">
+            <div>
+                <h3 id="modalTitle" class="text-sm font-bold text-white truncate max-w-md sm:max-w-xl">Preview Foto Kegiatan</h3>
+                <p id="modalDate" class="text-[11px] text-amber-300 font-medium mt-0.5"></p>
+            </div>
+            <button type="button" onclick="closeGalleryModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Modal Image Container -->
+        <div class="flex-1 p-4 flex items-center justify-center bg-black/50 overflow-auto min-h-[300px]">
+            <img id="modalImg" src="" alt="Preview" class="max-h-[68vh] max-w-full object-contain rounded-lg shadow-xl">
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-3 border-t border-white/10 flex items-center justify-between bg-slate-950/90 text-xs">
+            <span class="text-slate-400 text-[11px]">Administrasi Publik FISIP Untad</span>
+            <a id="modalDownload" href="#" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-600 text-white font-semibold text-xs transition">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Buka Gambar Asli
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openGalleryModal(src, title, date) {
+        const modal = document.getElementById('galleryModal');
+        const img = document.getElementById('modalImg');
+        const titleEl = document.getElementById('modalTitle');
+        const dateEl = document.getElementById('modalDate');
+        const dlLink = document.getElementById('modalDownload');
+
+        if (!modal || !img) return;
+
+        img.src = src;
+        titleEl.textContent = title || 'Dokumentasi Kegiatan';
+        dateEl.textContent = date ? 'Tanggal: ' + date : '';
+        dlLink.href = src;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeGalleryModal(event) {
+        const modal = document.getElementById('galleryModal');
+        if (!modal) return;
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeGalleryModal();
+    });
+
+    // Kontrol Navigasi Slider Galeri: Tombol Panah (Slide ke Samping) & Titik-Titik Indikator
+    function initGaleriSlider() {
+        const slider = document.getElementById("galeriSlider");
+        const prevBtn = document.getElementById("galeriPrevBtn");
+        const nextBtn = document.getElementById("galeriNextBtn");
+        const dotsContainer = document.getElementById("galeriDots");
+        if (!slider) return;
+
+        const items = slider.querySelectorAll(".galeri-item");
+        if (!items.length) return;
+
+        function getCardScrollAmount() {
+            const firstCard = slider.querySelector(".galeri-item");
+            if (!firstCard) return 320;
+            return firstCard.offsetWidth + 24; // Card width + gap-6 (24px)
+        }
+
+        // Setup dots jika elemen dotsContainer ada
+        if (dotsContainer) {
+            if (items.length <= 1) {
+                dotsContainer.style.display = "none";
+            } else {
+                dotsContainer.innerHTML = "";
+                items.forEach((item, index) => {
+                    const dot = document.createElement("button");
+                    dot.type = "button";
+                    dot.setAttribute("aria-label", "Lihat foto ke-" + (index + 1));
+                    dot.className = index === 0 
+                        ? "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs" 
+                        : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
+                    
+                    dot.addEventListener("click", function() {
+                        slider.scrollTo({
+                            left: item.offsetLeft - slider.offsetLeft,
+                            behavior: "smooth"
+                        });
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+            }
+        }
+
+        function updateControls() {
+            const tolerance = 5;
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+            // Update Tombol Panah Prev / Next
+            if (prevBtn && nextBtn) {
+                if (maxScroll <= tolerance) {
+                    prevBtn.classList.add("hidden");
+                    nextBtn.classList.add("hidden");
+                } else {
+                    prevBtn.classList.remove("hidden");
+                    nextBtn.classList.remove("hidden");
+
+                    if (slider.scrollLeft <= tolerance) {
+                        prevBtn.disabled = true;
+                        prevBtn.classList.add("opacity-30", "pointer-events-none");
+                        prevBtn.classList.remove("opacity-100");
+                    } else {
+                        prevBtn.disabled = false;
+                        prevBtn.classList.remove("opacity-30", "pointer-events-none");
+                        prevBtn.classList.add("opacity-100");
+                    }
+
+                    if (slider.scrollLeft >= maxScroll - tolerance) {
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add("opacity-30", "pointer-events-none");
+                        nextBtn.classList.remove("opacity-100");
+                    } else {
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove("opacity-30", "pointer-events-none");
+                        nextBtn.classList.add("opacity-100");
+                    }
+                }
+            }
+
+            // Update Titik Indikator Aktif
+            if (dotsContainer) {
+                const dots = dotsContainer.querySelectorAll("button");
+                if (dots.length) {
+                    const scrollLeft = slider.scrollLeft;
+                    let closestIndex = 0;
+                    let minDiff = Infinity;
+
+                    items.forEach((item, idx) => {
+                        const diff = Math.abs(item.offsetLeft - slider.offsetLeft - scrollLeft);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closestIndex = idx;
+                        }
+                    });
+
+                    dots.forEach((dot, idx) => {
+                        if (idx === closestIndex) {
+                            dot.className = "w-6 h-2.5 bg-amber-400 rounded-full transition-all duration-300 shadow-xs";
+                        } else {
+                            dot.className = "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400 rounded-full transition-all duration-300 cursor-pointer";
+                        }
+                    });
+                }
+            }
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener("click", function() {
+                slider.scrollBy({ left: -getCardScrollAmount(), behavior: "smooth" });
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener("click", function() {
+                slider.scrollBy({ left: getCardScrollAmount(), behavior: "smooth" });
+            });
+        }
+
+        slider.addEventListener("scroll", updateControls, { passive: true });
+        window.addEventListener("resize", updateControls);
+        setTimeout(updateControls, 300);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initGaleriSlider);
+    } else {
+        initGaleriSlider();
+    }
+</script>
+{% endblock %}
+
