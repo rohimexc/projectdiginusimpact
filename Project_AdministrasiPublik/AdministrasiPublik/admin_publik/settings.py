@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'landing',
     'akun',
+    'cms',
     'django_ckeditor_5',
 ]
 
@@ -70,6 +71,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'landing.context_processors.visitor_count_processor',
+                'cms.context_processors.site_settings_context',
+                'cms.context_processors.cms_menus_context',
             ],
         },
     },

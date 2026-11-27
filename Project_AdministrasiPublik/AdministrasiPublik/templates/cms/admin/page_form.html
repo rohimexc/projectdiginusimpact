@@ -1,0 +1,193 @@
+{% extends 'landing/admin/template/base.html' %}
+
+{% block title %}{{ title }} - Admin Portal{% endblock %}
+{% block header_title %}{{ title }}{% endblock %}
+
+{% block extra_head %}
+{{ form.media }}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+
+    <div class="flex items-center justify-between" data-aos="fade-down">
+        <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-800">{{ title }}</h2>
+            <p class="text-xs text-slate-500">Sesuaikan jenis konten (HTML, PDF, atau Tautan) dan isi konten halaman.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            {% if page and page.slug %}
+            <a href="{% url 'cms:page_detail' page.slug %}?preview=1" target="_blank" class="px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-xl text-xs font-semibold transition border border-teal-200 flex items-center gap-1.5">
+                <i class="fa-solid fa-eye text-teal-600"></i>
+                <span>Preview</span>
+            </a>
+            {% endif %}
+            <a href="{% url 'cms:dashboard_page_list' %}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition border border-slate-200">
+                &larr; Kembali
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm" data-aos="fade-up">
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs space-y-1">
+                <span class="font-bold">Mohon perbaiki kesalahan berikut:</span>
+                <ul class="list-disc list-inside">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Baris 1: Judul Halaman & Slug -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Judul Halaman <span class="text-red-500">*</span></label>
+                    {{ form.title }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Slug URL <span class="text-red-500">*</span></label>
+                    {{ form.slug }}
+                    <p class="text-[11px] text-slate-400 mt-1">Akan diakses melalui <code>/p/slug-ini/</code></p>
+                </div>
+            </div>
+
+            <!-- Baris 2: Jenis Konten & Status Publikasi -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-4 bg-teal-50/50 rounded-xl border border-teal-100">
+                <div>
+                    <label class="block text-xs font-bold text-[#0f6b6b] mb-1.5">Jenis Konten Halaman <span class="text-red-500">*</span></label>
+                    {{ form.content_type }}
+                    <p class="text-[11px] text-slate-500 mt-1">Field pengisian di bawah otomatis berganti sesuai pilihan ini.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#0f6b6b] mb-1.5">Status Publikasi <span class="text-red-500">*</span></label>
+                    {{ form.status }}
+                    <p class="text-[11px] text-slate-500 mt-1">Draft hanya bisa dilihat oleh admin via tombol Preview.</p>
+                </div>
+            </div>
+
+            <!-- Ringkasan / Meta Description -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Ringkasan / Deskripsi Singkat</label>
+                {{ form.meta_description }}
+                <p class="text-[11px] text-slate-400 mt-1">Teks pengantar di bawah judul halaman publik.</p>
+            </div>
+
+            <!-- SECTION DINAMIS 1: KONTEN HTML (CKEDITOR) -->
+            <div id="sectionHtmlContent" class="space-y-2 border-t border-slate-100 pt-5">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-code text-[#0f6b6b]"></i>
+                    <label class="block text-xs font-bold text-slate-800">Isi Konten Artikel (Rich Text Editor)</label>
+                </div>
+                {{ form.html_content }}
+            </div>
+
+            <!-- SECTION DINAMIS 2: UPLOAD BERKAS / PDF PREVIEW -->
+            <div id="sectionFileContent" class="space-y-3 border-t border-slate-100 pt-5">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf text-amber-600"></i>
+                    <label class="block text-xs font-bold text-slate-800">Upload Berkas / PDF Preview</label>
+                </div>
+                {{ form.file }}
+                {% if page and page.file %}
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+                    <span class="text-slate-600">Berkas saat ini: <strong class="text-teal-700">{{ page.file.name }}</strong></span>
+                    <a href="{{ page.file.url }}" target="_blank" class="text-teal-700 font-semibold hover:underline">Buka File ↗</a>
+                </div>
+                {% endif %}
+                <p class="text-[11px] text-slate-400">Mendukung file format: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, ZIP, RAR.</p>
+            </div>
+
+            <!-- SECTION DINAMIS 3: EXTERNAL URL -->
+            <div id="sectionExtUrl" class="space-y-2 border-t border-slate-100 pt-5">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-blue-600"></i>
+                    <label class="block text-xs font-bold text-slate-800">Tautan Eksternal (Redirect Keluar)</label>
+                </div>
+                {{ form.external_url }}
+                <p class="text-[11px] text-slate-400">Pengunjung otomatis diarahkan ke URL luar ini saat mengakses halaman.</p>
+            </div>
+
+            <!-- SECTION DINAMIS 4: INTERNAL URL -->
+            <div id="sectionIntUrl" class="space-y-2 border-t border-slate-100 pt-5">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-route text-purple-600"></i>
+                    <label class="block text-xs font-bold text-slate-800">Tautan Internal (Route Website)</label>
+                </div>
+                {{ form.internal_url }}
+                <p class="text-[11px] text-slate-400">Masukkan path rute internal, contoh: <code>/berita/</code> atau <code>/#kontak</code></p>
+            </div>
+
+            <div class="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
+                <a href="{% url 'cms:dashboard_page_list' %}" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">
+                    Batal
+                </a>
+                <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-[#0f6b6b] hover:bg-[#0b5353] transition shadow-md">
+                    Simpan Halaman
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!-- SCRIPT TOGGLE DINAMIS FIELD SESUAI JENIS KONTEN & AUTO SLUG -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const typeSelect = document.getElementById("dashboardContentTypeSelect");
+    const secHtml = document.getElementById("sectionHtmlContent");
+    const secFile = document.getElementById("sectionFileContent");
+    const secExt = document.getElementById("sectionExtUrl");
+    const secInt = document.getElementById("sectionIntUrl");
+
+    function applyDynamicFields() {
+        if (!typeSelect) return;
+        const val = typeSelect.value;
+
+        // Reset
+        if (secHtml) secHtml.style.display = "none";
+        if (secFile) secFile.style.display = "none";
+        if (secExt) secExt.style.display = "none";
+        if (secInt) secInt.style.display = "none";
+
+        if (val === "html") {
+            if (secHtml) secHtml.style.display = "block";
+        } else if (val === "pdf" || val === "file_download") {
+            if (secFile) secFile.style.display = "block";
+        } else if (val === "external_link") {
+            if (secExt) secExt.style.display = "block";
+        } else if (val === "internal_link") {
+            if (secInt) secInt.style.display = "block";
+        }
+    }
+
+    if (typeSelect) {
+        typeSelect.addEventListener("change", applyDynamicFields);
+        applyDynamicFields();
+    }
+
+    // Auto slug dari Judul jika slug masih kosong
+    const titleInput = document.getElementById("id_title");
+    const slugInput = document.getElementById("id_slug");
+    if (titleInput && slugInput && !slugInput.value) {
+        titleInput.addEventListener("input", function() {
+            slugInput.value = this.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/[\s_-]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        });
+    }
+});
+</script>
+{% endblock %}

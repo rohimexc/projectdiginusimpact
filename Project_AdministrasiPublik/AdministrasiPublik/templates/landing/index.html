@@ -331,9 +331,9 @@
             <i class="fa-solid fa-headset text-amber-500"></i>
             <span>Layanan Informasi & Lokasi</span>
         </div>
-        <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Hubungi Kami</h2>
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">{{ site_settings.contact_title|default:"Hubungi Kami" }}</h2>
         <div class="h-1 w-20 sm:w-28 bg-amber-400 rounded-full mx-auto mt-2"></div>
-        <p class="text-slate-500 text-xs sm:text-sm mt-1.5 max-w-xl mx-auto leading-relaxed">Hubungi sekretariat Program Studi atau kunjungi kantor kami langsung.</p>
+        <p class="text-slate-500 text-xs sm:text-sm mt-1.5 max-w-xl mx-auto leading-relaxed">{{ site_settings.contact_subtitle|default:"Hubungi sekretariat Program Studi atau kunjungi kantor kami langsung." }}</p>
     </div>
     <div class="bg-tealBrand text-white rounded-3xl p-6 sm:p-12 grid md:grid-cols-2 gap-8 shadow-xl" data-aos="fade-up" data-aos-delay="100">
         <div class="space-y-6" data-aos="fade-right" data-aos-delay="200">
@@ -347,15 +347,15 @@
             <div class="space-y-4 text-xs sm:text-sm leading-relaxed">
                 <p class="flex items-start gap-3">
                     <i class="fa-solid fa-location-dot mt-1 text-amber-400"></i>
-                    <span>{{ kontak.alamat|default:"Jl. Soekarno Hatta No.KM.9, Tondo, Palu" }}</span>
+                    <span>{{ site_settings.contact_address|default:kontak.alamat|default:"Jl. Soekarno Hatta No.KM.9, Tondo, Palu" }}</span>
                 </p>
                 <p class="flex items-center gap-3">
                     <i class="fa-solid fa-phone text-amber-400"></i>
-                    <span>{{ kontak.telepon|default:"085330144401" }}</span>
+                    <span>{{ site_settings.contact_phone|default:kontak.telepon|default:"085330144401" }}</span>
                 </p>
                 <p class="flex items-center gap-3">
                     <i class="fa-solid fa-envelope text-amber-400"></i>
-                    <span>{{ kontak.email|default:"Admpublik.FISIP@untad.ac.id" }}</span>
+                    <span>{{ site_settings.contact_email|default:kontak.email|default:"Admpublik.FISIP@untad.ac.id" }}</span>
                 </p>
             </div>
         </div>
@@ -369,7 +369,7 @@
             </div>
             <div class="w-full h-52 sm:h-56 bg-slate-200 rounded-xl overflow-hidden border border-teal-600">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.3082596245!2d119.8912!3d-0.8587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zCsKuwqDCtsKqwqDCtsKqwqA!5e0!3m2!1sid!2sid!4v1600000000000!5m2!1sid!2sid"
+                    src="{{ site_settings.maps_embed_url|default:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.3082596245!2d119.8912!3d-0.8587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zCsKuwqDCtsKqwqDCtsKqwqA!5e0!3m2!1sid!2sid!4v1600000000000!5m2!1sid!2sid' }}"
                     width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>

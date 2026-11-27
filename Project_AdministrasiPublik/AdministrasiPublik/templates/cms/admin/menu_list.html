@@ -1,0 +1,216 @@
+{% extends 'landing/admin/template/base.html' %}
+
+{% block title %}Kelola Menu Navigasi - Admin Portal{% endblock %}
+{% block header_title %}Manajemen Menu & Navigasi (CMS){% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Header Actions -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" data-aos="fade-down">
+        <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-800">Struktur Menu & Submenu Navigasi</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Atur nama, urutan, induk dropdown, dan tujuan halaman pada navbar website.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{% url 'cms:dashboard_page_list' %}" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition border border-slate-200">
+                <i class="fa-solid fa-file-lines text-teal-600"></i>
+                <span>Kelola Halaman (Pages)</span>
+            </a>
+            <a href="{% url 'cms:dashboard_menu_create' %}" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#0f6b6b] hover:bg-[#0b5353] text-white text-xs font-semibold rounded-xl transition shadow-sm">
+                <i class="fa-solid fa-plus"></i>
+                <span>Tambah Menu Baru</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Tree View & Table Menu Navigasi -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" data-aos="fade-up">
+        <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700">Daftar Menu Aktif di Navbar (Total: {{ total_menus }})</span>
+            <span class="text-[11px] text-slate-500 font-medium"><i class="fa-solid fa-circle-info text-teal-600 mr-1"></i>Urutan dapat disesuaikan lewat tombol Ubah</span>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase text-[10px] tracking-wider">
+                        <th class="p-3.5 w-16 text-center">Urutan</th>
+                        <th class="p-3.5">Nama Menu (Hierarki)</th>
+                        <th class="p-3.5">Tujuan Halaman / Link</th>
+                        <th class="p-3.5 w-24 text-center">Target</th>
+                        <th class="p-3.5 w-24 text-center">Status</th>
+                        <th class="p-3.5 w-32 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for root in root_menus %}
+                    <!-- LEVEL 1: ROOT MENU -->
+                    <tr class="hover:bg-teal-50/40 bg-white font-medium transition">
+                        <td class="p-3.5 text-center">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 font-bold text-slate-700 text-[11px]">
+                                {{ root.order }}
+                            </span>
+                        </td>
+                        <td class="p-3.5">
+                            <div class="flex items-center gap-2">
+                                {% if root.submenus %}
+                                <i class="fa-solid fa-folder-open text-amber-500"></i>
+                                {% else %}
+                                <i class="fa-solid fa-link text-teal-600"></i>
+                                {% endif %}
+                                <span class="font-bold text-slate-900 text-xs sm:text-sm">{{ root.title }}</span>
+                                {% if root.submenus %}
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                                    {{ root.submenus|length }} Submenu
+                                </span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="p-3.5">
+                            {% if root.page %}
+                            <span class="text-teal-700 font-semibold">{{ root.page.title }}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">(/p/{{ root.page.slug }})</span>
+                            {% elif root.custom_url %}
+                            <code class="text-slate-600 bg-slate-100 px-2 py-0.5 rounded font-mono text-[11px]">{{ root.custom_url }}</code>
+                            {% else %}
+                            <span class="text-slate-400 italic">(Dropdown Induk)</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3.5 text-center font-mono text-[11px] text-slate-500">
+                            {{ root.target }}
+                        </td>
+                        <td class="p-3.5 text-center">
+                            {% if root.is_active %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span>
+                            {% else %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 border border-slate-200">Nonaktif</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3.5 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <a href="{% url 'cms:dashboard_menu_create' %}?parent={{ root.pk }}" title="Tambah Submenu di sini" class="w-7 h-7 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-plus text-[10px]"></i>
+                                </a>
+                                <a href="{% url 'cms:dashboard_menu_edit' root.pk %}" title="Ubah Menu" class="w-7 h-7 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-pen text-[10px]"></i>
+                                </a>
+                                <a href="{% url 'cms:dashboard_menu_delete' root.pk %}" title="Hapus Menu" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-trash text-[10px]"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- LEVEL 2: SUBMENU -->
+                    {% for sub in root.submenus %}
+                    <tr class="hover:bg-slate-50/80 bg-slate-50/30 transition text-slate-700">
+                        <td class="p-3 text-center">
+                            <span class="text-[10px] text-slate-400 font-mono">{{ root.order }}.{{ sub.order }}</span>
+                        </td>
+                        <td class="p-3 pl-8">
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-300">↳</span>
+                                <i class="fa-solid fa-arrow-turn-down text-slate-400 text-[10px]"></i>
+                                <span class="font-medium text-slate-800">{{ sub.title }}</span>
+                                {% if sub.submenus %}
+                                <span class="px-1.5 py-0.2 rounded text-[9px] bg-sky-50 text-sky-700 border border-sky-200">
+                                    {{ sub.submenus|length }} Sub-item
+                                </span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="p-3">
+                            {% if sub.page %}
+                            <span class="text-teal-700 font-semibold">{{ sub.page.title }}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">(/p/{{ sub.page.slug }})</span>
+                            {% elif sub.custom_url %}
+                            <code class="text-slate-600 bg-slate-100 px-2 py-0.5 rounded font-mono text-[11px]">{{ sub.custom_url }}</code>
+                            {% else %}
+                            <span class="text-slate-400 italic">(Dropdown Induk)</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3 text-center font-mono text-[11px] text-slate-500">
+                            {{ sub.target }}
+                        </td>
+                        <td class="p-3 text-center">
+                            {% if sub.is_active %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span>
+                            {% else %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 border border-slate-200">Nonaktif</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <a href="{% url 'cms:dashboard_menu_create' %}?parent={{ sub.pk }}" title="Tambah Submenu Bertingkat" class="w-7 h-7 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-plus text-[10px]"></i>
+                                </a>
+                                <a href="{% url 'cms:dashboard_menu_edit' sub.pk %}" title="Ubah Submenu" class="w-7 h-7 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-pen text-[10px]"></i>
+                                </a>
+                                <a href="{% url 'cms:dashboard_menu_delete' sub.pk %}" title="Hapus Submenu" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-trash text-[10px]"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- LEVEL 3: SUB-SUBMENU (BERTINGKAT) -->
+                    {% for subsub in sub.submenus %}
+                    <tr class="hover:bg-slate-50 bg-slate-100/40 transition text-slate-600 text-[11px]">
+                        <td class="p-2.5 text-center">
+                            <span class="text-[9px] text-slate-400 font-mono">{{ root.order }}.{{ sub.order }}.{{ subsub.order }}</span>
+                        </td>
+                        <td class="p-2.5 pl-14">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-slate-300">↳↳</span>
+                                <i class="fa-solid fa-circle text-[6px] text-teal-600"></i>
+                                <span>{{ subsub.title }}</span>
+                            </div>
+                        </td>
+                        <td class="p-2.5">
+                            {% if subsub.page %}
+                            <span class="text-teal-700 font-semibold">{{ subsub.page.title }}</span>
+                            {% elif subsub.custom_url %}
+                            <code class="text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded font-mono">{{ subsub.custom_url }}</code>
+                            {% endif %}
+                        </td>
+                        <td class="p-2.5 text-center font-mono text-slate-500">
+                            {{ subsub.target }}
+                        </td>
+                        <td class="p-2.5 text-center">
+                            {% if subsub.is_active %}
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700">Aktif</span>
+                            {% else %}
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-100 text-slate-500">Nonaktif</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-2.5 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <a href="{% url 'cms:dashboard_menu_edit' subsub.pk %}" title="Ubah" class="w-6 h-6 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-pen text-[9px]"></i>
+                                </a>
+                                <a href="{% url 'cms:dashboard_menu_delete' subsub.pk %}" title="Hapus" class="w-6 h-6 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-trash text-[9px]"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    {% endfor %}
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-400 italic">
+                            Belum ada menu navigasi yang dibuat. Klik tombol "+ Tambah Menu Baru" di atas.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

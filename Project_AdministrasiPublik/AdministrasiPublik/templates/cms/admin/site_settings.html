@@ -1,0 +1,520 @@
+{% extends 'landing/admin/template/base.html' %}
+
+{% block title %}Pengaturan Situs - Admin Portal{% endblock %}
+{% block header_title %}Pengaturan Situs & Identitas (Site Settings){% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Header Deskripsi -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" data-aos="fade-down">
+        <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-800">Identitas, Kontak & Media Website</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Atur logo header, favicon, footer, kontak, sosial media, dan tautan cepat secara langsung dari dashboard.</p>
+        </div>
+        <a href="{% url 'landing:landing_home' %}" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-semibold rounded-xl transition border border-teal-200 shadow-2xs">
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            <span>Lihat Website</span>
+        </a>
+    </div>
+
+    <!-- Navigasi 4 Tab -->
+    <div class="flex border-b border-slate-200 overflow-x-auto space-x-2 text-xs font-semibold" data-aos="fade-up">
+        <button type="button" onclick="switchSettingsTab('identitas')" id="tabBtn_identitas" 
+                class="px-5 py-3 border-b-2 transition flex items-center gap-2 whitespace-nowrap {% if active_tab == 'identitas' %}border-[#0f6b6b] text-[#0f6b6b] font-bold bg-white rounded-t-xl{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+            <i class="fa-solid fa-image text-amber-500"></i>
+            <span>Identitas Situs & Header</span>
+        </button>
+        <button type="button" onclick="switchSettingsTab('footer')" id="tabBtn_footer" 
+                class="px-5 py-3 border-b-2 transition flex items-center gap-2 whitespace-nowrap {% if active_tab == 'footer' %}border-[#0f6b6b] text-[#0f6b6b] font-bold bg-white rounded-t-xl{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+            <i class="fa-solid fa-shoe-prints text-teal-600"></i>
+            <span>Pengaturan Footer</span>
+        </button>
+        <button type="button" onclick="switchSettingsTab('kontak')" id="tabBtn_kontak" 
+                class="px-5 py-3 border-b-2 transition flex items-center gap-2 whitespace-nowrap {% if active_tab == 'kontak' %}border-[#0f6b6b] text-[#0f6b6b] font-bold bg-white rounded-t-xl{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+            <i class="fa-solid fa-address-book text-sky-500"></i>
+            <span>Kontak & Lokasi</span>
+        </button>
+        <button type="button" onclick="switchSettingsTab('sosmed')" id="tabBtn_sosmed" 
+                class="px-5 py-3 border-b-2 transition flex items-center gap-2 whitespace-nowrap {% if active_tab == 'sosmed' %}border-[#0f6b6b] text-[#0f6b6b] font-bold bg-white rounded-t-xl{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+            <i class="fa-solid fa-share-nodes text-rose-500"></i>
+            <span>Sosial Media ({{ social_list|length }})</span>
+        </button>
+        <button type="button" onclick="switchSettingsTab('tautan')" id="tabBtn_tautan" 
+                class="px-5 py-3 border-b-2 transition flex items-center gap-2 whitespace-nowrap {% if active_tab == 'tautan' %}border-[#0f6b6b] text-[#0f6b6b] font-bold bg-white rounded-t-xl{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+            <i class="fa-solid fa-link text-indigo-500"></i>
+            <span>Tautan Cepat ({{ quick_links|length }})</span>
+        </button>
+    </div>
+
+    <!-- FORM UTAMA PENGATURAN SITUS -->
+    <form method="POST" enctype="multipart/form-data" id="siteSettingsForm" class="space-y-6">
+        {% csrf_token %}
+        <input type="hidden" name="save_settings" value="1">
+        <input type="hidden" name="current_tab" id="currentTabInput" value="{{ active_tab }}">
+
+        <!-- ============================================== -->
+        <!-- TAB 1: IDENTITAS SITUS & HEADER                -->
+        <!-- ============================================== -->
+        <div id="tabContent_identitas" class="tab-pane bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 {% if active_tab != 'identitas' %}hidden{% endif %}">
+            <div class="border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-800">Identitas Header & Favicon</h3>
+                <p class="text-xs text-slate-400">Atur teks nama program studi, subjudul institusi, favicon, dan logo navbar.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Judul Header (Nama Web)</label>
+                    {{ form.header_title }}
+                    <p class="text-[11px] text-slate-400 mt-1">Contoh: Administrasi Publik</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Subjudul Header</label>
+                    {{ form.header_subtitle }}
+                    <p class="text-[11px] text-slate-400 mt-1">Contoh: FISIP Universitas Tadulako</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+                <!-- FAVICON UPLOAD & LIVE PREVIEW -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <label class="block text-xs font-bold text-slate-800">Favicon Situs</label>
+                    {{ form.favicon }}
+                    <p class="text-[11px] text-slate-400">Format: .png / .ico / .svg, rasio 1:1, maksimal 500 KB.</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <span class="text-xs text-slate-500 font-semibold">Preview:</span>
+                        <div id="faviconPreviewBox" class="w-12 h-12 rounded-xl bg-white border border-slate-300 flex items-center justify-center p-1.5 shadow-inner">
+                            {% if settings_obj.favicon %}
+                            <img src="{{ settings_obj.favicon.url }}" id="faviconImg" class="max-w-full max-h-full object-contain" alt="Favicon">
+                            {% else %}
+                            <span id="faviconPlaceholder" class="text-xs">🏛️</span>
+                            <img id="faviconImg" class="max-w-full max-h-full object-contain hidden" alt="Favicon">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HEADER LOGO UPLOAD & LIVE PREVIEW -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <label class="block text-xs font-bold text-slate-800">Logo Header / Navbar</label>
+                    {{ form.header_logo }}
+                    <p class="text-[11px] text-slate-400">Format: .png / .webp / .svg (transparan), tinggi ideal ~80-120 px, maks 2 MB.</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <span class="text-xs text-slate-500 font-semibold">Preview:</span>
+                        <div id="headerLogoPreviewBox" class="h-14 px-4 bg-[#0f6b6b] rounded-xl flex items-center justify-center border border-teal-800 shadow-inner">
+                            {% if settings_obj.header_logo %}
+                            <img src="{{ settings_obj.header_logo.url }}" id="headerLogoImg" class="h-10 w-auto object-contain" alt="Logo Header">
+                            {% else %}
+                            <span id="headerLogoPlaceholder" class="text-xs text-teal-100 flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-xs">🏛️</span>
+                                <span class="font-bold">Bawaan</span>
+                            </span>
+                            <img id="headerLogoImg" class="h-10 w-auto object-contain hidden" alt="Logo Header">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex justify-end">
+                <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-[#0f6b6b] hover:bg-[#0b5353] transition shadow-md">
+                    Simpan Identitas Situs
+                </button>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- TAB 2: PENGATURAN FOOTER                       -->
+        <!-- ============================================== -->
+        <div id="tabContent_footer" class="tab-pane bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 {% if active_tab != 'footer' %}hidden{% endif %}">
+            <div class="border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-800">Pengaturan Tampilan Footer</h3>
+                <p class="text-xs text-slate-400">Sesuaikan logo bawah, teks deskripsi program studi, dan alamat singkat footer.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Judul Footer</label>
+                    {{ form.footer_title }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Subjudul Footer</label>
+                    {{ form.footer_subtitle }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Deskripsi Profil di Bawah Logo Footer</label>
+                {{ form.footer_description }}
+                <p class="text-[11px] text-slate-400 mt-1">Teks profil singkat tentang komitmen dan akreditasi program studi.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Alamat Singkat Footer</label>
+                    {{ form.footer_short_address }}
+                    <p class="text-[11px] text-slate-400 mt-1">Contoh: Kampus Bumi Tadulako, Palu</p>
+                </div>
+
+                <!-- FOOTER LOGO UPLOAD & LIVE PREVIEW -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <label class="block text-xs font-bold text-slate-800">Logo Khusus Footer (Opsional)</label>
+                    {{ form.footer_logo }}
+                    <p class="text-[11px] text-slate-400">Jika dikosongkan, footer akan otomatis menggunakan Logo Header.</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <span class="text-xs text-slate-500 font-semibold">Preview:</span>
+                        <div id="footerLogoPreviewBox" class="h-14 px-4 bg-[#005f5f] rounded-xl flex items-center justify-center border border-teal-900 shadow-inner">
+                            {% if settings_obj.footer_logo %}
+                            <img src="{{ settings_obj.footer_logo.url }}" id="footerLogoImg" class="h-12 w-auto object-contain" alt="Logo Footer">
+                            {% else %}
+                            <span id="footerLogoPlaceholder" class="text-xs text-teal-200 font-medium italic">Mengikuti Logo Header</span>
+                            <img id="footerLogoImg" class="h-12 w-auto object-contain hidden" alt="Logo Footer">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex justify-end">
+                <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-[#0f6b6b] hover:bg-[#0b5353] transition shadow-md">
+                    Simpan Pengaturan Footer
+                </button>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- TAB 3: KONTAK & LOKASI                         -->
+        <!-- ============================================== -->
+        <div id="tabContent_kontak" class="tab-pane bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 {% if active_tab != 'kontak' %}hidden{% endif %}">
+            <div class="border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-800">Informasi Kontak & Lokasi Kantor</h3>
+                <p class="text-xs text-slate-400">Data ini akan tampil di bagian Hubungi Kami dan tombol mengambang WhatsApp.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Judul Seksi Kontak</label>
+                    {{ form.contact_title }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Subjudul Seksi Kontak</label>
+                    {{ form.contact_subtitle }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Alamat Lengkap</label>
+                {{ form.contact_address }}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Nomor Telepon</label>
+                    {{ form.contact_phone }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Nomor WhatsApp (Tautan wa.me) <span class="text-emerald-600 font-bold">*</span></label>
+                    {{ form.contact_whatsapp }}
+                    <p class="text-[11px] text-slate-400 mt-1">Format: 628xxxxxxxx (Otomatis dipakai tombol WA Melayang)</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Alamat Email</label>
+                    {{ form.contact_email }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">URL Iframe Google Maps (Peta Lokasi)</label>
+                {{ form.maps_embed_url }}
+                <p class="text-[11px] text-slate-400 mt-1">Salin nilai atribut <code>src</code> dari opsi "Sematkan peta" Google Maps.</p>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex justify-end">
+                <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-[#0f6b6b] hover:bg-[#0b5353] transition shadow-md">
+                    Simpan Kontak & Lokasi
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- ============================================== -->
+    <!-- TAB 4: SOSIAL MEDIA                            -->
+    <!-- ============================================== -->
+    <div id="tabContent_sosmed" class="tab-pane bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 {% if active_tab != 'sosmed' %}hidden{% endif %}">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-slate-100 gap-3">
+            <div>
+                <h3 class="text-sm font-bold text-slate-800">Daftar Akun Sosial Media</h3>
+                <p class="text-xs text-slate-400">Pilih platform dari daftar terkunci; ikon otomatis dipasangkan dan muncul di footer.</p>
+            </div>
+        </div>
+
+        <!-- Form Tambah Sosial Media Cepat -->
+        <form method="POST" action="{% url 'cms:dashboard_social_create' %}" class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+            {% csrf_token %}
+            <span class="block text-xs font-bold text-[#0f6b6b]">+ Tambah Sosial Media Baru</span>
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div class="sm:col-span-1">
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Platform</label>
+                    {{ social_form.platform }}
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">URL Tautan Profil</label>
+                    {{ social_form.url }}
+                </div>
+                <div class="sm:col-span-1 flex items-end">
+                    <button type="submit" class="w-full py-2 bg-[#0f6b6b] hover:bg-[#0b5353] text-white font-bold text-xs rounded-xl transition">
+                        Tambah
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Tabel Sosial Media Aktif -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase text-[10px]">
+                        <th class="p-3 w-16 text-center">Ikon</th>
+                        <th class="p-3">Platform</th>
+                        <th class="p-3">URL Tautan</th>
+                        <th class="p-3 w-20 text-center">Status</th>
+                        <th class="p-3 w-24 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for s in social_list %}
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 text-center">
+                            <span class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center mx-auto text-sm">
+                                <i class="{{ s.icon_class }}"></i>
+                            </span>
+                        </td>
+                        <td class="p-3 font-bold text-slate-800">{{ s.get_platform_display }}</td>
+                        <td class="p-3 font-mono text-[11px] text-teal-700 truncate max-w-[280px]">
+                            <a href="{{ s.url }}" target="_blank" class="hover:underline">{{ s.url }}</a>
+                        </td>
+                        <td class="p-3 text-center">
+                            {% if s.is_active %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">Aktif</span>
+                            {% else %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">Nonaktif</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3 text-center">
+                            <form method="POST" action="{% url 'cms:dashboard_social_delete' s.pk %}" onsubmit="return confirm('Hapus sosial media {{ s.get_platform_display }}?')">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="p-6 text-center text-slate-400 italic">
+                            Belum ada akun sosial media yang ditambahkan.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- TAB 5: TAUTAN CEPAT (QUICK LINKS)              -->
+    <!-- ============================================== -->
+    <div id="tabContent_tautan" class="tab-pane bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 {% if active_tab != 'tautan' %}hidden{% endif %}">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-slate-100 gap-3">
+            <div>
+                <h3 class="text-sm font-bold text-slate-800">Daftar Tautan Cepat Footer</h3>
+                <p class="text-xs text-slate-400">Tautan cepat di kolom footer (contoh: Website FISIP, UNTAD, SIGA-8, Sertifikat Akreditasi).</p>
+            </div>
+        </div>
+
+        <!-- Form Tambah Tautan Cepat -->
+        <form method="POST" action="{% url 'cms:dashboard_quicklink_create' %}" enctype="multipart/form-data" class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+            {% csrf_token %}
+            <span class="block text-xs font-bold text-[#0f6b6b]">+ Tambah Tautan Cepat Baru</span>
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div class="sm:col-span-1">
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Judul Tautan <span class="text-red-500">*</span></label>
+                    {{ quicklink_form.title }}
+                </div>
+                <div class="sm:col-span-1">
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">URL (Link)</label>
+                    {{ quicklink_form.url }}
+                </div>
+                <div class="sm:col-span-1">
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Atau Upload File (PDF)</label>
+                    {{ quicklink_form.file }}
+                </div>
+                <div class="sm:col-span-1 flex items-end">
+                    <button type="submit" class="w-full py-2 bg-[#0f6b6b] hover:bg-[#0b5353] text-white font-bold text-xs rounded-xl transition">
+                        Tambah Tautan
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 pt-1 text-[11px] text-slate-600">
+                {{ quicklink_form.open_in_new_tab }}
+                <label for="{{ quicklink_form.open_in_new_tab.id_for_label }}">Buka di Tab Baru (_blank)</label>
+            </div>
+        </form>
+
+        <!-- Tabel Tautan Cepat -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase text-[10px]">
+                        <th class="p-3 w-16 text-center">Urutan</th>
+                        <th class="p-3">Judul Tautan</th>
+                        <th class="p-3">Tujuan URL / Berkas</th>
+                        <th class="p-3 w-24 text-center">Tab Baru</th>
+                        <th class="p-3 w-20 text-center">Status</th>
+                        <th class="p-3 w-24 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for q in quick_links %}
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 text-center font-bold text-slate-700">{{ q.order }}</td>
+                        <td class="p-3 font-semibold text-slate-900">{{ q.title }}</td>
+                        <td class="p-3 font-mono text-[11px] text-teal-700">
+                            {% if q.file %}
+                            <a href="{{ q.file.url }}" target="_blank" class="hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-file-pdf text-amber-600"></i>
+                                <span>{{ q.file.name|slice:":30" }}...</span>
+                            </a>
+                            {% elif q.url %}
+                            <a href="{{ q.url }}" target="_blank" class="hover:underline">{{ q.url }}</a>
+                            {% else %}
+                            <span class="text-slate-400 italic">#</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3 text-center">
+                            {% if q.open_in_new_tab %}
+                            <i class="fa-solid fa-check text-emerald-600"></i>
+                            {% else %}
+                            <span class="text-slate-300">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3 text-center">
+                            {% if q.is_active %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">Aktif</span>
+                            {% else %}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">Nonaktif</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3 text-center">
+                            <form method="POST" action="{% url 'cms:dashboard_quicklink_delete' q.pk %}" onsubmit="return confirm('Hapus tautan {{ q.title }}?')">
+                                {% csrf_token %}
+                                <button type="submit" class="px-2.5 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="p-6 text-center text-slate-400 italic">
+                            Belum ada tautan cepat footer.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- SCRIPT LOGIKA LIVE PREVIEW GAMBAR & TAB SWITCHING -->
+<script>
+function switchSettingsTab(tabName) {
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+    const target = document.getElementById('tabContent_' + tabName);
+    if (target) target.classList.remove('hidden');
+
+    document.querySelectorAll('[id^="tabBtn_"]').forEach(btn => {
+        btn.classList.remove('border-[#0f6b6b]', 'text-[#0f6b6b]', 'font-bold', 'bg-white', 'rounded-t-xl');
+        btn.classList.add('border-transparent', 'text-slate-500');
+    });
+    const activeBtn = document.getElementById('tabBtn_' + tabName);
+    if (activeBtn) {
+        activeBtn.classList.add('border-[#0f6b6b]', 'text-[#0f6b6b]', 'font-bold', 'bg-white', 'rounded-t-xl');
+        activeBtn.classList.remove('border-transparent', 'text-slate-500');
+    }
+
+    const currentTabInput = document.getElementById('currentTabInput');
+    if (currentTabInput) currentTabInput.value = tabName;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Live Preview Favicon
+    const faviconInput = document.getElementById("settingFaviconInput");
+    const faviconImg = document.getElementById("faviconImg");
+    const faviconPlaceholder = document.getElementById("faviconPlaceholder");
+
+    if (faviconInput) {
+        faviconInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                if (file.size > 500 * 1024) {
+                    alert(`Peringatan: Ukuran favicon (${(file.size / 1024).toFixed(1)} KB) melebihi batas 500 KB.`);
+                }
+                const url = URL.createObjectURL(file);
+                if (faviconImg) {
+                    faviconImg.src = url;
+                    faviconImg.classList.remove("hidden");
+                }
+                if (faviconPlaceholder) faviconPlaceholder.classList.add("hidden");
+            }
+        });
+    }
+
+    // 2. Live Preview Header Logo
+    const headerLogoInput = document.getElementById("settingHeaderLogoInput");
+    const headerLogoImg = document.getElementById("headerLogoImg");
+    const headerLogoPlaceholder = document.getElementById("headerLogoPlaceholder");
+
+    if (headerLogoInput) {
+        headerLogoInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                if (file.size > 2 * 1024 * 1024) {
+                    alert(`Peringatan: Ukuran logo header (${(file.size / (1024 * 1024)).toFixed(1)} MB) melebihi batas 2 MB.`);
+                }
+                const url = URL.createObjectURL(file);
+                if (headerLogoImg) {
+                    headerLogoImg.src = url;
+                    headerLogoImg.classList.remove("hidden");
+                }
+                if (headerLogoPlaceholder) headerLogoPlaceholder.classList.add("hidden");
+            }
+        });
+    }
+
+    // 3. Live Preview Footer Logo
+    const footerLogoInput = document.getElementById("settingFooterLogoInput");
+    const footerLogoImg = document.getElementById("footerLogoImg");
+    const footerLogoPlaceholder = document.getElementById("footerLogoPlaceholder");
+
+    if (footerLogoInput) {
+        footerLogoInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                if (file.size > 2 * 1024 * 1024) {
+                    alert(`Peringatan: Ukuran logo footer (${(file.size / (1024 * 1024)).toFixed(1)} MB) melebihi batas 2 MB.`);
+                }
+                const url = URL.createObjectURL(file);
+                if (footerLogoImg) {
+                    footerLogoImg.src = url;
+                    footerLogoImg.classList.remove("hidden");
+                }
+                if (footerLogoPlaceholder) footerLogoPlaceholder.classList.add("hidden");
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

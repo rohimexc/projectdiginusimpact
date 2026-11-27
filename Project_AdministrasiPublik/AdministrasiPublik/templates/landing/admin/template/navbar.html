@@ -92,6 +92,29 @@
                 <i class="fa-solid fa-calendar-days text-xs w-4 text-center group-hover:text-amber-300 {% if request.resolver_match.url_name == 'dashboard_event' %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
                 <span>Kelola Event</span>
             </a>
+
+            <!-- CMS & SITE SETTINGS (BARU) -->
+            <div class="pt-3 pb-1 border-t border-white/10">
+                <p class="px-3.5 text-[10px] font-bold uppercase tracking-wider text-teal-200/70">CMS & Pengaturan</p>
+            </div>
+
+            <a href="{% url 'cms:dashboard_menu_list' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if 'cms/menus' in request.path %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-bars-staggered text-xs w-4 text-center group-hover:text-amber-300 {% if 'cms/menus' in request.path %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Menu Navigasi</span>
+            </a>
+
+            <a href="{% url 'cms:dashboard_page_list' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if 'cms/pages' in request.path %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-file-circle-plus text-xs w-4 text-center group-hover:text-amber-300 {% if 'cms/pages' in request.path %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Halaman Dinamis</span>
+            </a>
+
+            <a href="{% url 'cms:dashboard_site_settings' %}"
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-200 group {% if 'cms/site-settings' in request.path %}bg-[#0a4f4f] text-amber-300 font-semibold shadow-inner border-l-4 border-amber-300{% else %}text-slate-100 hover:text-amber-300 hover:bg-[#0c5959]/70{% endif %}">
+                <i class="fa-solid fa-sliders text-xs w-4 text-center group-hover:text-amber-300 {% if 'cms/site-settings' in request.path %}text-amber-300{% else %}text-teal-200{% endif %} transition"></i>
+                <span>Pengaturan Situs</span>
+            </a>
         </nav>
     </div>
 

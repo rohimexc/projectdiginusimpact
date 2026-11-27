@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page.title }} - {{ site_settings.header_title|default:"Administrasi Publik" }}{% endblock %}
+
+{% block content %}
+<style>
+    .ck-content h1, .ck-content h2, .ck-content h3, .ck-content h4 {
+        font-weight: 700;
+        color: #0f6b6b;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .ck-content h1 { font-size: 1.5rem; }
+    .ck-content h2 { font-size: 1.25rem; }
+    .ck-content h3 { font-size: 1.1rem; }
+    .ck-content p {
+        margin-bottom: 0.875rem;
+        line-height: 1.7;
+        color: #334155;
+    }
+    .ck-content ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+    .ck-content ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: #334155;
+    }
+    .ck-content li {
+        margin-bottom: 0.35rem;
+        line-height: 1.6;
+    }
+    .ck-content blockquote {
+        border-left: 4px solid #008080;
+        padding-left: 1rem;
+        margin: 1.25rem 0;
+        font-style: italic;
+        color: #475569;
+        background-color: #f8fafc;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+    .ck-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.25rem 0;
+    }
+    .ck-content table th, .ck-content table td {
+        border: 1px solid #cbd5e1;
+        padding: 0.75rem;
+        text-align: left;
+    }
+    .ck-content table th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    .ck-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+        margin: 1rem 0;
+    }
+</style>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 min-h-[65vh] space-y-8">
+
+    <!-- Banner Peringatan Mode Preview untuk Staff -->
+    {% if is_preview %}
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-xs flex items-center justify-between gap-3 text-amber-900 text-xs sm:text-sm animate-pulse">
+        <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base"></i>
+            <div>
+                <span class="font-bold">Mode Pratinjau (Preview Draft)</span>
+                <p class="text-[11px] text-amber-700">Halaman ini belum dipublikasikan dan hanya terlihat oleh administrator.</p>
+            </div>
+        </div>
+        <a href="{% url 'cms:dashboard_page_edit' page.pk %}" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg text-xs transition">
+            Edit Halaman &rarr;
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Breadcrumbs Navigation -->
+    <div data-aos="fade-right" data-aos-duration="600">
+        <nav class="flex items-center gap-2 text-xs text-slate-500 flex-wrap" aria-label="Breadcrumb">
+            <a href="{% url 'landing:landing_home' %}" class="flex items-center gap-1.5 hover:text-teal-700 font-medium transition text-slate-600">
+                <i class="fa-solid fa-house text-amber-500 text-[11px]"></i>
+                <span>Beranda</span>
+            </a>
+            {% if related_menu and related_menu.parent %}
+            <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+            <span class="text-slate-500 font-medium">{{ related_menu.parent.title }}</span>
+            {% endif %}
+            <i class="fa-solid fa-chevron-right text-[9px] text-slate-300"></i>
+            <span class="text-teal-800 font-semibold">{{ page.title }}</span>
+        </nav>
+    </div>
+
+    <!-- Header Judul Halaman -->
+    <div class="space-y-3" data-aos="fade-down" data-aos-duration="700">
+        <div>
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200 mb-2">
+                <i class="fa-solid fa-file-lines mr-1 text-amber-500"></i> Informasi &bull; {{ site_settings.header_title|default:"Administrasi Publik" }}
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f6b6b] tracking-tight">
+                {{ page.title }}
+            </h1>
+            {% if page.meta_description %}
+            <p class="text-slate-500 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">{{ page.meta_description }}</p>
+            {% endif %}
+        </div>
+        <div class="h-1 w-20 bg-amber-400 rounded-full"></div>
+    </div>
+
+    <!-- KONTEN HTML (JIKA ADA ATAU MEMILIH TIPE HTML) -->
+    {% if page.html_content %}
+    <div class="bg-white rounded-2xl p-6 sm:p-10 border border-slate-200/90 shadow-sm" data-aos="fade-up">
+        <div class="ck-content leading-relaxed text-slate-700 text-sm sm:text-base">
+            {{ page.html_content|safe }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- KONTEN PDF PREVIEW (JIKA MEMILIH TIPE PDF ATAU FILE BERKAS) -->
+    {% if page.file %}
+    <div class="space-y-4" data-aos="fade-up">
+        <div class="bg-gradient-to-r from-[#005f5f] via-[#0f6b6b] to-[#148383] rounded-2xl p-5 sm:p-6 text-white shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="space-y-1">
+                <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-white/10 text-amber-300 text-[11px] font-semibold">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Dokumen Digital</span>
+                </div>
+                <h3 class="text-base sm:text-lg font-bold">{{ page.title }}</h3>
+                <p class="text-xs text-teal-100">Pratinjau dokumen resmi secara langsung di peramban Anda.</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <a href="{{ page.file.url }}" download class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-900 text-xs font-bold transition shadow-md">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Unduh Berkas</span>
+                </a>
+                <a href="{{ page.file.url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition border border-white/20">
+                    <i class="fa-solid fa-expand"></i>
+                    <span>Tab Baru</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Frame Preview PDF Responsif -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="relative w-full h-[650px] sm:h-[800px] bg-slate-100">
+                <iframe 
+                    src="https://mozilla.github.io/pdf.js/web/viewer.html?file={{ page.file.url|urlencode }}" 
+                    class="w-full h-full border-0" 
+                    title="Pratinjau Dokumen PDF"
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
