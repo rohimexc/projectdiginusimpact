@@ -64,6 +64,7 @@ def page_detail(request, slug):
     context = {
         'page': page,
         'is_preview': is_preview and is_staff,
+        'is_staff': is_staff,
         'related_menu': related_menu,
     }
     return render(request, 'cms/page_detail.html', context)

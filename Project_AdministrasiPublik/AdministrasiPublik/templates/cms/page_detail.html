@@ -71,19 +71,39 @@
 
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 min-h-[65vh] space-y-8">
 
-    <!-- Banner Peringatan Mode Preview untuk Staff -->
-    {% if is_preview %}
+    <!-- Banner Status Halaman untuk Staff / Mode Preview -->
+    {% if page.status == 'draft' %}
     <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-xs flex items-center justify-between gap-3 text-amber-900 text-xs sm:text-sm animate-pulse">
         <div class="flex items-center gap-2.5">
             <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base"></i>
             <div>
-                <span class="font-bold">Mode Pratinjau (Preview Draft)</span>
-                <p class="text-[11px] text-amber-700">Halaman ini belum dipublikasikan dan hanya terlihat oleh administrator.</p>
+                <span class="font-bold">Mode Pratinjau (Draft)</span>
+                <p class="text-[11px] text-amber-700">Halaman ini masih berstatus Konsep (Draft) dan belum dipublikasikan ke publik. Hanya terlihat oleh administrator.</p>
             </div>
         </div>
-        <a href="{% url 'cms:dashboard_page_edit' page.pk %}" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg text-xs transition">
+        {% if is_staff %}
+        <a href="{% url 'cms:dashboard_page_edit' page.pk %}" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg text-xs transition shrink-0">
             Edit Halaman &rarr;
         </a>
+        {% endif %}
+    </div>
+    {% elif is_preview and is_staff %}
+    <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3.5 rounded-xl shadow-xs flex items-center justify-between gap-3 text-emerald-900 text-xs sm:text-sm">
+        <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+            <div>
+                <span class="font-bold">Halaman Terpublikasi (Published)</span>
+                <p class="text-[11px] text-emerald-700">Halaman ini sudah dipublikasikan secara live dan dapat diakses oleh seluruh pengunjung website.</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <a href="{% url 'cms:page_detail' page.slug %}" class="px-3 py-1.5 bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold rounded-lg text-xs transition">
+                Buka Link Publik &rarr;
+            </a>
+            <a href="{% url 'cms:dashboard_page_edit' page.pk %}" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-xs transition">
+                Edit Halaman
+            </a>
+        </div>
     </div>
     {% endif %}
 

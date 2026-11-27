@@ -110,10 +110,17 @@
                         </td>
                         <td class="p-3.5 text-center">
                             <div class="flex items-center justify-center gap-1.5">
-                                <a href="{% url 'cms:page_detail' p.slug %}?preview=1" target="_blank" title="Pratinjau Halaman" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-semibold text-[11px] transition inline-flex items-center gap-1">
-                                    <span>Preview</span>
+                                {% if p.status == 'published' %}
+                                <a href="{% url 'cms:page_detail' p.slug %}" target="_blank" title="Buka Halaman Live" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-semibold text-[11px] transition inline-flex items-center gap-1">
+                                    <span>Lihat</span>
                                     <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                                 </a>
+                                {% else %}
+                                <a href="{% url 'cms:page_detail' p.slug %}?preview=1" target="_blank" title="Pratinjau Draft Halaman" class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-[11px] transition inline-flex items-center gap-1">
+                                    <span>Preview</span>
+                                    <i class="fa-solid fa-eye text-[9px]"></i>
+                                </a>
+                                {% endif %}
                                 <a href="{% url 'cms:dashboard_page_edit' p.pk %}" title="Ubah Halaman" class="w-7 h-7 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center transition">
                                     <i class="fa-solid fa-pen text-[10px]"></i>
                                 </a>

@@ -50,10 +50,17 @@ class PageAdmin(admin.ModelAdmin):
     status_badge.short_description = "Status"
 
     def action_buttons(self, obj):
-        preview_url = reverse('cms:page_detail', kwargs={'slug': obj.slug}) + '?preview=1'
+        if obj.status == 'published':
+            url = reverse('cms:page_detail', kwargs={'slug': obj.slug})
+            label = "Lihat Live ↗"
+            bg = "#0f6b6b"
+        else:
+            url = reverse('cms:page_detail', kwargs={'slug': obj.slug}) + '?preview=1'
+            label = "Preview Draft ↗"
+            bg = "#d97706"
         return format_html(
-            '<a href="{}" target="_blank" style="display: inline-block; padding: 3px 8px; background: #0f6b6b; color: white; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold;">Preview Web ↗</a>',
-            preview_url
+            '<a href="{}" target="_blank" style="display: inline-block; padding: 3px 8px; background: {}; color: white; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold;">{}</a>',
+            url, bg, label
         )
     action_buttons.short_description = "Aksi"
 
