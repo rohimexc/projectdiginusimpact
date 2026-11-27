@@ -241,43 +241,72 @@
     </div>
 
     {% if berita_list %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for b in berita_list|slice:":3" %}
-        <div
-            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-3 flex flex-col justify-between {% if forloop.counter == 3 %}hidden lg:flex{% elif forloop.counter == 2 %}hidden md:flex{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
-            <div>
-                {% if b.gambar %}
-                <!-- Menggunakan aspect-[4/5] agar rasionya selalu konsisten portrait 4:5 -->
-                <img src="{{ b.gambar.url }}" alt="{{ b.judul }}"
-                    class="w-full aspect-[4/5] object-cover rounded-lg mb-3">
-                {% endif %}
-                <div class="flex items-center justify-between gap-2 flex-wrap mb-2">
-                    <span class="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
-                        {{ b.post_date|date:"d M Y" }}
-                    </span>
-                    <div class="flex items-center gap-2.5 text-[11px] text-slate-500 font-medium">
-                        <span class="flex items-center gap-1" title="Dilihat {{ b.views_count }} kali">
-                            <i class="fa-regular fa-eye text-teal-600"></i>{{ b.views_count }}
+    <!-- Carousel Slider Wrapper: 3 Card di Laptop, 2 Card di Tab, 1 Card di Mobile -->
+    <div class="relative px-2 sm:px-4" data-aos="fade-up">
+        <style>
+            #beritaSlider::-webkit-scrollbar {
+                display: none;
+            }
+        </style>
+
+        <!-- Tombol Panah Kiri -->
+        <button type="button" id="beritaPrevBtn" aria-label="Berita Sebelumnya"
+                class="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white hover:bg-teal-50 text-slate-700 hover:text-teal-800 border border-slate-200 shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+            <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+        </button>
+
+        <!-- Tombol Panah Kanan -->
+        <button type="button" id="beritaNextBtn" aria-label="Berita Selanjutnya"
+                class="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#005f5f] hover:bg-[#004d4d] text-white shadow-md flex items-center justify-center transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
+            <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+        </button>
+
+        <!-- Track Slider Responsif: 3 Card di Laptop, 2 Card di Tab, 1 Card di Mobile -->
+        <div id="beritaSlider"
+             class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 px-1"
+             style="scrollbar-width: none; -ms-overflow-style: none;">
+            {% for b in berita_list %}
+            <div class="berita-card w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] shrink-0 snap-start bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-4 space-y-3 flex flex-col justify-between group/card hover:shadow-xl transition-all duration-300">
+                <div>
+                    {% if b.gambar %}
+                    <!-- Menggunakan aspect-[4/5] agar rasionya selalu konsisten portrait 4:5 -->
+                    <img src="{{ b.gambar.url }}" alt="{{ b.judul }}"
+                        class="w-full aspect-[4/5] object-cover rounded-lg mb-3">
+                    {% endif %}
+                    <div class="flex items-center justify-between gap-2 flex-wrap mb-2">
+                        <span class="text-[10px] font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
+                            {{ b.post_date|date:"d M Y" }}
                         </span>
-                        <span class="flex items-center gap-1" title="{{ b.total_likes }} Suka">
-                            <i class="fa-regular fa-heart text-rose-500"></i>{{ b.total_likes }}
-                        </span>
-                        <span class="flex items-center gap-1" title="{{ b.total_komentar }} Komentar">
-                            <i class="fa-regular fa-comment text-sky-500"></i>{{ b.total_komentar }}
-                        </span>
+                        <div class="flex items-center gap-2.5 text-[11px] text-slate-500 font-medium">
+                            <span class="flex items-center gap-1" title="Dilihat {{ b.views_count }} kali">
+                                <i class="fa-regular fa-eye text-teal-600"></i>{{ b.views_count }}
+                            </span>
+                            <span class="flex items-center gap-1" title="{{ b.total_likes }} Suka">
+                                <i class="fa-regular fa-heart text-rose-500"></i>{{ b.total_likes }}
+                            </span>
+                            <span class="flex items-center gap-1" title="{{ b.total_komentar }} Komentar">
+                                <i class="fa-regular fa-comment text-sky-500"></i>{{ b.total_komentar }}
+                            </span>
+                        </div>
                     </div>
+                    <h3 class="font-bold text-slate-800 text-sm mt-2 line-clamp-2">{{ b.judul }}</h3>
+                    <div class="text-slate-600 text-xs mt-1 line-clamp-2">{{ b.konten|safe }}</div>
                 </div>
-                <h3 class="font-bold text-slate-800 text-sm mt-2 line-clamp-2">{{ b.judul }}</h3>
-                <div class="text-slate-600 text-xs mt-1 line-clamp-2">{{ b.konten|safe }}</div>
+                <div class="pt-3 border-t border-slate-100">
+                    <a href="{% url 'landing:berita_detail' b.slug %}"
+                        class="text-teal-600 font-semibold text-xs hover:underline flex items-center gap-1">
+                        Baca selengkapnya &rarr;
+                    </a>
+                </div>
             </div>
-            <div class="pt-3 border-t border-slate-100">
-                <a href="{% url 'landing:berita_detail' b.slug %}"
-                    class="text-teal-600 font-semibold text-xs hover:underline flex items-center gap-1">
-                    Baca selengkapnya &rarr;
-                </a>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+
+        <!-- Indikator Petunjuk Geser untuk Layar Kecil -->
+        <div class="flex sm:hidden items-center justify-center gap-1.5 mt-2 text-slate-400 text-[11px]">
+            <i class="fa-solid fa-arrows-left-right text-teal-600"></i>
+            <span>Geser untuk melihat berita lainnya</span>
+        </div>
     </div>
 
     <!-- Tombol Lihat Semua Berita di Tengah -->
@@ -490,10 +519,77 @@
         setTimeout(updateSliderButtons, 300);
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initEventSlider);
-    } else {
+    // Kontrol Navigasi Slider Berita Terbaru (Slide ke Samping)
+    function initBeritaSlider() {
+        const slider = document.getElementById("beritaSlider");
+        const prevBtn = document.getElementById("beritaPrevBtn");
+        const nextBtn = document.getElementById("beritaNextBtn");
+
+        if (!slider || !prevBtn || !nextBtn) return;
+
+        function getCardScrollAmount() {
+            const firstCard = slider.querySelector(".berita-card");
+            if (!firstCard) return 320;
+            return firstCard.offsetWidth + 24; // Card width + gap-6 (24px)
+        }
+
+        function updateSliderButtons() {
+            const tolerance = 5;
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+            if (maxScroll <= tolerance) {
+                prevBtn.classList.add("hidden");
+                nextBtn.classList.add("hidden");
+                return;
+            } else {
+                prevBtn.classList.remove("hidden");
+                nextBtn.classList.remove("hidden");
+            }
+
+            if (slider.scrollLeft <= tolerance) {
+                prevBtn.disabled = true;
+                prevBtn.classList.add("opacity-30", "pointer-events-none");
+                prevBtn.classList.remove("opacity-100");
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.classList.remove("opacity-30", "pointer-events-none");
+                prevBtn.classList.add("opacity-100");
+            }
+
+            if (slider.scrollLeft >= maxScroll - tolerance) {
+                nextBtn.disabled = true;
+                nextBtn.classList.add("opacity-30", "pointer-events-none");
+                nextBtn.classList.remove("opacity-100");
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove("opacity-30", "pointer-events-none");
+                nextBtn.classList.add("opacity-100");
+            }
+        }
+
+        prevBtn.addEventListener("click", function() {
+            slider.scrollBy({ left: -getCardScrollAmount(), behavior: "smooth" });
+        });
+
+        nextBtn.addEventListener("click", function() {
+            slider.scrollBy({ left: getCardScrollAmount(), behavior: "smooth" });
+        });
+
+        slider.addEventListener("scroll", updateSliderButtons, { passive: true });
+        window.addEventListener("resize", updateSliderButtons);
+
+        setTimeout(updateSliderButtons, 300);
+    }
+
+    function initAllSliders() {
         initEventSlider();
+        initBeritaSlider();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initAllSliders);
+    } else {
+        initAllSliders();
     }
 </script>
 {% endblock %}

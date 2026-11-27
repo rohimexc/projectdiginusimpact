@@ -104,7 +104,8 @@
         <!-- Tombol Pil Navigasi Akademik (Sesuai 5 Sub Menu) -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-b border-slate-200/80 pb-4">
             {% for item in akademik_list %}
-            <a href="{% url 'landing:detail_akademik' item.slug %}" 
+            <a href="{% if item.slug == 'siga-8' %}https://siga-8.untad.ac.id{% elif item.link_eksternal and not item.file_utama and not item.konten %}{{ item.link_eksternal }}{% else %}{% url 'landing:detail_akademik' item.slug %}{% endif %}" 
+               {% if item.slug == 'siga-8' or item.link_eksternal and not item.file_utama and not item.konten %}target="_blank" rel="noopener noreferrer"{% endif %}
                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition duration-150 shadow-2xs flex items-center gap-1.5 {% if item.slug == current_page.slug %}bg-[#0f6b6b] text-amber-300 shadow-sm border border-[#0f6b6b]{% else %}bg-white text-slate-700 border border-slate-200 hover:bg-[#0f6b6b] hover:text-amber-300 hover:border-[#0f6b6b]{% endif %}">
                 {% if item.slug == 'siga-8' %}
                     <i class="fa-solid fa-laptop-code text-xs"></i>
@@ -120,6 +121,9 @@
                     <i class="fa-solid fa-graduation-cap text-xs"></i>
                 {% endif %}
                 <span>{{ item.judul }}</span>
+                {% if item.slug == 'siga-8' or item.link_eksternal and not item.file_utama and not item.konten %}
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                {% endif %}
             </a>
             {% endfor %}
         </div>
@@ -144,6 +148,22 @@
             <span>Buka Portal {{ current_page.judul }}</span>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
         </a>
+    </div>
+    {% endif %}
+
+    <!-- CARD ISI KONTEN (CKEDITOR) -->
+    {% if current_page.konten %}
+    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6" data-aos="fade-up">
+        <div class="border-b border-slate-100 pb-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
+                Informasi & Uraian {{ current_page.judul }}
+            </h2>
+        </div>
+
+        <div class="ck-content text-slate-700 text-sm leading-relaxed">
+            {{ current_page.konten|safe }}
+        </div>
     </div>
     {% endif %}
 
@@ -207,23 +227,9 @@
     </div>
     {% endif %}
 
-    <!-- CARD ISI KONTEN (CKEDITOR) -->
-    {% if current_page.konten %}
-    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 space-y-6" data-aos="fade-up">
-        <div class="border-b border-slate-100 pb-4">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <span class="w-2.5 h-6 rounded-full bg-tealBrand"></span>
-                Informasi & Uraian {{ current_page.judul }}
-            </h2>
-        </div>
-
-        <div class="ck-content text-slate-700 text-sm leading-relaxed">
-            {{ current_page.konten|safe }}
-        </div>
-    </div>
-    {% elif not current_page.file_utama and not current_page.link_eksternal and not dokumen_list %}
+    {% if not current_page.konten and not current_page.file_utama and not current_page.link_eksternal and not dokumen_list %}
     <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-10 text-center text-slate-400 italic text-sm" data-aos="fade-up">
-        Uraian konten untuk sub-menu ini belum diisi oleh admin.
+        Uraian konten atau dokumen untuk sub-menu ini belum diisi oleh admin.
     </div>
     {% endif %}
 

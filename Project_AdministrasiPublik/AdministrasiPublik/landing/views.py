@@ -1163,11 +1163,24 @@ def detail_tentang(request, jenis):
 # ==============================================================================
 
 def detail_akademik(request, slug):
+    # Siga ketika diklik langsung redirect ke portal SIGA-8 Untad
+    if slug == 'siga-8':
+        return redirect('https://siga-8.untad.ac.id')
+
     akademik_list = AkademikPage.objects.filter(is_active=True).order_by('urutan', 'id')
     current_page = get_object_or_404(AkademikPage, slug=slug, is_active=True)
 
+    has_file = bool(current_page.file_utama)
+    has_konten = bool(current_page.konten and current_page.konten.strip())
+    has_link = bool(current_page.link_eksternal and current_page.link_eksternal.strip())
+
+    # Logika Revisi:
+    # 1. Jika admin isi link doang (tanpa file dan tanpa konten), langsung redirect ke link tersebut
+    if has_link and not has_file and not has_konten:
+        return redirect(current_page.link_eksternal.strip())
+
     # Deteksi otomatis berkas panduan jika diletakkan langsung di media/documents/akademik/
-    if current_page.slug == 'panduan-akademik':
+    if current_page.slug == 'panduan-akademik' and not has_file:
         import os
         from django.conf import settings
         akademik_dir = os.path.join(settings.MEDIA_ROOT, 'documents', 'akademik')
@@ -1177,6 +1190,7 @@ def detail_akademik(request, slug):
                 if pdf_files:
                     current_page.file_utama = f"documents/akademik/{pdf_files[0]}"
                     current_page.save()
+                    has_file = True
 
     dokumen_list = current_page.dokumen_list.all().order_by('-uploaded_at')
 
@@ -1184,6 +1198,9 @@ def detail_akademik(request, slug):
         'current_page': current_page,
         'akademik_list': akademik_list,
         'dokumen_list': dokumen_list,
+        'has_file': has_file,
+        'has_konten': has_konten,
+        'has_link': has_link,
     }
     return render(request, 'landing/akademik_detail.html', context)
 
