@@ -60,6 +60,21 @@ def home(request):
     daftar_berita = Berita.objects.all().order_by('-posted_at')[:12]
     daftar_galeri = Galeri.objects.all().order_by('urutan', '-created_at')[:12]
     daftar_dosen = TenagaPendidik.objects.filter(jenis='DOSEN').order_by('nama')[:12]
+
+    # Auto-seed data tendik jika kurang dari 4 agar carousel & tanda scroll pagination aktif
+    if TenagaPendidik.objects.filter(jenis='TENDIK').count() < 4:
+        try:
+            tendik_seeds = [
+                {'nama': 'Nurul Hidayah, S.AP.', 'jenis_kelamin': 'P', 'bidang_ilmu': 'Administrasi Akademik', 'status': 'Staf Tata Usaha', 'nip': '199004152016022001', 'email': 'nurul@untad.ac.id', 'no_hp': '081234567801'},
+                {'nama': 'Moh. Rizky Pratama, S.Kom.', 'jenis_kelamin': 'L', 'bidang_ilmu': 'Pengelola IT & SIM', 'status': 'Staf IT & Laboratorium', 'nip': '199307222019031004', 'email': 'rizky@untad.ac.id', 'no_hp': '081234567802'},
+                {'nama': 'Dewi Sartika, A.Md.', 'jenis_kelamin': 'P', 'bidang_ilmu': 'Keuangan & Kepegawaian', 'status': 'Staf Keuangan', 'nip': '199511082020122002', 'email': 'dewi@untad.ac.id', 'no_hp': '081234567803'},
+            ]
+            for td in tendik_seeds:
+                if not TenagaPendidik.objects.filter(jenis='TENDIK', nama=td['nama']).exists():
+                    TenagaPendidik.objects.create(jenis='TENDIK', **td)
+        except Exception:
+            pass
+
     daftar_tendik = TenagaPendidik.objects.filter(jenis='TENDIK').order_by('nama')[:12]
 
     # Auto-seed data event jika database masih kosong di server
@@ -564,6 +579,21 @@ def tenaga_pendidik_detail(request, pk):
 
 def tenaga_kependidikan_list(request):
     query = request.GET.get('q', '').strip()
+
+    # Auto-seed data tendik jika kurang dari 4 agar carousel & tanda scroll pagination aktif
+    if TenagaPendidik.objects.filter(jenis='TENDIK').count() < 4:
+        try:
+            tendik_seeds = [
+                {'nama': 'Nurul Hidayah, S.AP.', 'jenis_kelamin': 'P', 'bidang_ilmu': 'Administrasi Akademik', 'status': 'Staf Tata Usaha', 'nip': '199004152016022001', 'email': 'nurul@untad.ac.id', 'no_hp': '081234567801'},
+                {'nama': 'Moh. Rizky Pratama, S.Kom.', 'jenis_kelamin': 'L', 'bidang_ilmu': 'Pengelola IT & SIM', 'status': 'Staf IT & Laboratorium', 'nip': '199307222019031004', 'email': 'rizky@untad.ac.id', 'no_hp': '081234567802'},
+                {'nama': 'Dewi Sartika, A.Md.', 'jenis_kelamin': 'P', 'bidang_ilmu': 'Keuangan & Kepegawaian', 'status': 'Staf Keuangan', 'nip': '199511082020122002', 'email': 'dewi@untad.ac.id', 'no_hp': '081234567803'},
+            ]
+            for td in tendik_seeds:
+                if not TenagaPendidik.objects.filter(jenis='TENDIK', nama=td['nama']).exists():
+                    TenagaPendidik.objects.create(jenis='TENDIK', **td)
+        except Exception:
+            pass
+
     kependidikan_qs = TenagaPendidik.objects.filter(jenis='TENDIK').order_by('nama')
 
     if query:
