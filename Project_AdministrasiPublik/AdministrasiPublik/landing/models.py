@@ -342,13 +342,15 @@ STATUS_KEPEGAWAIAN_CHOICES = [
     ('Dosen PPPK', 'Dosen PPPK'),
 ]
 
-JABATAN_FUNGSIONAL_CHOICES = [
-    ('', '--- Pilih Jabatan Fungsional ---'),
-    ('Guru Besar', 'Guru Besar'),
-    ('Lektor Kepala', 'Lektor Kepala'),
-    ('Lektor', 'Lektor'),
-    ('Asisten Ahli', 'Asisten Ahli'),
-    ('Tenaga Pengajar', 'Tenaga Pengajar'),
+JABATAN_DOSEN_CHOICES = [
+    ('', '--- Pilih Jabatan / Posisi Dosen ---'),
+    ('Dosen Tetap', 'Dosen Tetap'),
+    ('Dosen Pengajar', 'Dosen Pengajar'),
+    ('Ketua Program Studi', 'Ketua Program Studi (Kaprodi)'),
+    ('Sekretaris Program Studi', 'Sekretaris Program Studi (Sekprodi)'),
+    ('Kepala Laboratorium', 'Kepala Laboratorium'),
+    ('Dosen Luar Biasa', 'Dosen Luar Biasa'),
+    ('Profesor', 'Profesor'),
 ]
 
 class Dosen(models.Model):
@@ -358,7 +360,7 @@ class Dosen(models.Model):
     nuptk = models.CharField(max_length=50, blank=True, null=True)
     jenis_kelamin = models.CharField(max_length=1, choices=[('', '--- Pilih Jenis Kelamin ---'), ('L', 'Laki-laki'), ('P', 'Perempuan')], blank=True, null=True)
     bidang_ilmu = models.CharField(max_length=150, blank=True, null=True)
-    jabatan = models.CharField(max_length=100, choices=JABATAN_FUNGSIONAL_CHOICES, blank=True, null=True)
+    jabatan = models.CharField(max_length=100, choices=JABATAN_DOSEN_CHOICES, blank=True, null=True)
     pangkat_golongan = models.CharField(max_length=50, choices=PANGKAT_GOLONGAN_CHOICES, blank=True, null=True)
     status = models.CharField(max_length=100, choices=STATUS_KEPEGAWAIAN_CHOICES, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)

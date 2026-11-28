@@ -430,11 +430,13 @@ def dosen_beranda_view(request):
 
     # Hitung data statistik jabatan untuk filter chips
     total_dosen = Dosen.objects.count()
-    guru_besar_count = Dosen.objects.filter(jabatan__icontains='Guru Besar').count()
-    lektor_kepala_count = Dosen.objects.filter(jabatan__icontains='Lektor Kepala').count()
-    lektor_count = Dosen.objects.filter(jabatan__icontains='Lektor').exclude(jabatan__icontains='Kepala').count()
-    asisten_ahli_count = Dosen.objects.filter(jabatan__icontains='Asisten Ahli').count()
-    tenaga_pengajar_count = Dosen.objects.filter(jabatan__icontains='Tenaga Pengajar').count()
+    dosen_tetap_count = Dosen.objects.filter(jabatan__icontains='Dosen Tetap').count()
+    dosen_pengajar_count = Dosen.objects.filter(jabatan__icontains='Dosen Pengajar').count()
+    kaprodi_count = Dosen.objects.filter(Q(jabatan__icontains='Ketua') | Q(jabatan__icontains='Kaprodi')).count()
+    sekprodi_count = Dosen.objects.filter(Q(jabatan__icontains='Sekretaris') | Q(jabatan__icontains='Sekprodi')).count()
+    kalab_count = Dosen.objects.filter(jabatan__icontains='Laboratorium').count()
+    dosen_lb_count = Dosen.objects.filter(jabatan__icontains='Luar Biasa').count()
+    profesor_count = Dosen.objects.filter(Q(jabatan__icontains='Profesor') | Q(jabatan__icontains='Guru Besar')).count()
 
     # Filter Pencarian Teks
     if query:
@@ -443,19 +445,23 @@ def dosen_beranda_view(request):
         )
         filter_aktif = True
 
-    # Filter Jabatan Fungsional
+    # Filter Jabatan / Peran Dosen
     if jabatan:
         filter_aktif = True
-        if jabatan == 'Guru Besar':
-            dosen_list = dosen_list.filter(jabatan__icontains='Guru Besar')
-        elif jabatan == 'Lektor Kepala':
-            dosen_list = dosen_list.filter(jabatan__icontains='Lektor Kepala')
-        elif jabatan == 'Lektor':
-            dosen_list = dosen_list.filter(jabatan__icontains='Lektor').exclude(jabatan__icontains='Kepala')
-        elif jabatan == 'Asisten Ahli':
-            dosen_list = dosen_list.filter(jabatan__icontains='Asisten Ahli')
-        elif jabatan == 'Tenaga Pengajar':
-            dosen_list = dosen_list.filter(jabatan__icontains='Tenaga Pengajar')
+        if jabatan == 'Dosen Tetap':
+            dosen_list = dosen_list.filter(jabatan__icontains='Dosen Tetap')
+        elif jabatan == 'Dosen Pengajar':
+            dosen_list = dosen_list.filter(jabatan__icontains='Dosen Pengajar')
+        elif jabatan == 'Ketua Program Studi':
+            dosen_list = dosen_list.filter(Q(jabatan__icontains='Ketua') | Q(jabatan__icontains='Kaprodi'))
+        elif jabatan == 'Sekretaris Program Studi':
+            dosen_list = dosen_list.filter(Q(jabatan__icontains='Sekretaris') | Q(jabatan__icontains='Sekprodi'))
+        elif jabatan == 'Kepala Laboratorium':
+            dosen_list = dosen_list.filter(jabatan__icontains='Laboratorium')
+        elif jabatan == 'Dosen Luar Biasa':
+            dosen_list = dosen_list.filter(jabatan__icontains='Luar Biasa')
+        elif jabatan == 'Profesor':
+            dosen_list = dosen_list.filter(Q(jabatan__icontains='Profesor') | Q(jabatan__icontains='Guru Besar'))
         else:
             dosen_list = dosen_list.filter(jabatan__icontains=jabatan)
 
@@ -465,11 +471,13 @@ def dosen_beranda_view(request):
         'jabatan': jabatan,
         'filter_aktif': filter_aktif,
         'total_dosen': total_dosen,
-        'guru_besar_count': guru_besar_count,
-        'lektor_kepala_count': lektor_kepala_count,
-        'lektor_count': lektor_count,
-        'asisten_ahli_count': asisten_ahli_count,
-        'tenaga_pengajar_count': tenaga_pengajar_count,
+        'dosen_tetap_count': dosen_tetap_count,
+        'dosen_pengajar_count': dosen_pengajar_count,
+        'kaprodi_count': kaprodi_count,
+        'sekprodi_count': sekprodi_count,
+        'kalab_count': kalab_count,
+        'dosen_lb_count': dosen_lb_count,
+        'profesor_count': profesor_count,
     })
 
 def galeri_kegiatan_view(request):

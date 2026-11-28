@@ -49,31 +49,39 @@
             <div class="flex items-center justify-between flex-wrap gap-3 pt-2.5 border-t border-slate-100">
                 <div class="flex items-center gap-2 flex-wrap text-xs">
                     <span class="text-xs font-semibold text-slate-700 flex items-center gap-1.5 mr-1">
-                        <i class="fa-solid fa-sliders text-teal-700"></i> Jabatan Fungsional:
+                        <i class="fa-solid fa-sliders text-teal-700"></i> Jabatan Dosen:
                     </span>
                     <button type="button" onclick="setJabatan('')"
                         class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if not jabatan %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
                         Semua Dosen ({{ total_dosen }})
                     </button>
-                    <button type="button" onclick="setJabatan('Guru Besar')"
-                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Guru Besar' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
-                        Guru Besar ({{ guru_besar_count }})
+                    <button type="button" onclick="setJabatan('Dosen Tetap')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Dosen Tetap' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Dosen Tetap ({{ dosen_tetap_count }})
                     </button>
-                    <button type="button" onclick="setJabatan('Lektor Kepala')"
-                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Lektor Kepala' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
-                        Lektor Kepala ({{ lektor_kepala_count }})
+                    <button type="button" onclick="setJabatan('Dosen Pengajar')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Dosen Pengajar' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Dosen Pengajar ({{ dosen_pengajar_count }})
                     </button>
-                    <button type="button" onclick="setJabatan('Lektor')"
-                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Lektor' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
-                        Lektor ({{ lektor_count }})
+                    <button type="button" onclick="setJabatan('Ketua Program Studi')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Ketua Program Studi' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Ketua Prodi ({{ kaprodi_count }})
                     </button>
-                    <button type="button" onclick="setJabatan('Asisten Ahli')"
-                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Asisten Ahli' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
-                        Asisten Ahli ({{ asisten_ahli_count }})
+                    <button type="button" onclick="setJabatan('Sekretaris Program Studi')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Sekretaris Program Studi' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Sekretaris Prodi ({{ sekprodi_count }})
                     </button>
-                    <button type="button" onclick="setJabatan('Tenaga Pengajar')"
-                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Tenaga Pengajar' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
-                        Tenaga Pengajar ({{ tenaga_pengajar_count }})
+                    <button type="button" onclick="setJabatan('Kepala Laboratorium')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Kepala Laboratorium' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Kepala Lab ({{ kalab_count }})
+                    </button>
+                    <button type="button" onclick="setJabatan('Dosen Luar Biasa')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Dosen Luar Biasa' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Dosen Luar Biasa ({{ dosen_lb_count }})
+                    </button>
+                    <button type="button" onclick="setJabatan('Profesor')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Profesor' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Profesor ({{ profesor_count }})
                     </button>
                     <input type="hidden" name="jabatan" id="jabatanInput" value="{{ jabatan|default:'' }}">
                 </div>
