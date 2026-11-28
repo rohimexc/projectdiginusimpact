@@ -645,7 +645,7 @@ def user_login(request):
 
             user_role = getattr(user, 'role', '').lower() if hasattr(user, 'role') and user.role else ''
             if next_url:
-                if '/Berita/' in next_url and '#komentar-section' not in next_url:
+                if ('/Berita/' in next_url or '/berita/' in next_url) and '#komentar-section' not in next_url:
                     next_url = f"{next_url.rstrip('/')}/#komentar-section"
                 return redirect(next_url)
             if 'admin' in user_role or user.is_staff or user.is_superuser:

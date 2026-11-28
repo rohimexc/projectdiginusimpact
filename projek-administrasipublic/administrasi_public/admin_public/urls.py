@@ -74,10 +74,16 @@ urlpatterns = [
     path('galeri/', galeri_list, name='galeri_list'),
     path('event/', event_list, name='event_list'),
     path('event/<slug:slug>/', event_detail, name='event_detail'),
-    path('Berita/', berita_list, name='berita_list'),
-    path('Berita/<int:pk>/', berita_detail, name='berita_detail'),
-    path('Berita/<int:pk>/like/', berita_like, name='berita_like'),
-    path('Berita/<int:pk>/share/', berita_share, name='berita_share'),
+    # 1. Halaman Berita Publik (Mendukung lowercase 'berita/' dan uppercase 'Berita/')
+    path('berita/', berita_list, name='berita_list'),
+    path('berita/<int:pk>/', berita_detail, name='berita_detail'),
+    path('berita/<int:pk>/like/', berita_like, name='berita_like'),
+    path('berita/<int:pk>/share/', berita_share, name='berita_share'),
+    # Alias backwards compatibility untuk URL berawalan huruf kapital
+    path('Berita/', berita_list),
+    path('Berita/<int:pk>/', berita_detail),
+    path('Berita/<int:pk>/like/', berita_like),
+    path('Berita/<int:pk>/share/', berita_share),
 
     # 2. Aksi AJAX Komentar
     path('komentar/<int:pk>/edit/', komentar_edit, name='komentar_edit'),

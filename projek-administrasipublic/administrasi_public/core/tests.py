@@ -219,3 +219,17 @@ class SiteSettingAdminViewTest(TestCase):
         setting = SiteSetting.get_settings()
         self.assertEqual(setting.header_title, 'Administrasi Publik Unggul')
         self.assertEqual(setting.clean_whatsapp, '6281234567890')
+
+
+class BeritaUrlRoutingTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_berita_url_lowercase_and_uppercase(self):
+        """Memastikan baik /berita/ (lowercase) maupun /Berita/ (uppercase) dapat diakses dan tidak 404"""
+        res_lower = self.client.get('/berita/')
+        self.assertEqual(res_lower.status_code, 200)
+
+        res_upper = self.client.get('/Berita/')
+        self.assertEqual(res_upper.status_code, 200)
+
