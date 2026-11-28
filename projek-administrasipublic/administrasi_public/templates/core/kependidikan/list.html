@@ -19,6 +19,9 @@
   <!-- AOS Animation CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -68,6 +71,29 @@
       [data-aos][data-aos-delay] {
         transition-delay: 50ms !important;
       }
+    }
+
+    /* Swiper Styles Persis Galeri, Berita & Event */
+    .tendik-sorotan-swiper {
+      padding-bottom: 46px !important;
+    }
+    .tendik-sorotan-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .tendik-sorotan-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
+    }
+    #tendik-prev.swiper-button-disabled,
+    #tendik-next.swiper-button-disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -143,97 +169,163 @@
         </form>
       </div>
 
-      <!-- BLOK 2 AOS: Grid Kartu Tendik -->
-      <section data-aos="fade-up" data-aos-duration="700">
-        <div id="tendik-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 justify-items-center">
-      {% for tendik in tenaga_kependidikan_list %}
-      <!-- Card Container -->
-      <div
-        class="tendik-card group relative w-72 h-[380px] bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg"
-        data-nama="{{ tendik.nama|lower }}"
-        data-nip="{{ tendik.nidn|default:''|lower }}"
-        data-bidang="{{ tendik.bidang_ilmu|default:''|lower }}"
-      >
-
-        <!-- ================= SISI DEPAN KARTU ================= -->
-        <div class="w-full h-full p-4 flex flex-col justify-between">
-          <!-- Frame Foto Asli -->
-          <div
-            class="w-full h-[270px] rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-100">
-            {% if tendik.foto %}
-            <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover">
-            {% else %}
-            <i class="fa-solid fa-user-gear text-6xl text-slate-300"></i>
-            {% endif %}
-          </div>
-
-          <!-- Nama Tendik (Badge Putih dengan Border Halus) -->
-          <div
-            class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide truncate">
-              {{ tendik.nama }}
-            </h3>
-          </div>
-        </div>
-
-        <!-- ================= SISI BELAKANG (OVERLAY MENUMPUK SAAT HOVER) ================= -->
-        <div
-          class="absolute inset-0 bg-[#0b7285] text-white p-6 rounded-2xl flex flex-col justify-center border-2 border-[#fab005]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-          <!-- Nama -->
-          <h2 class="text-sm font-bold uppercase tracking-wider mb-3 leading-snug">
-            {{ tendik.nama }}
-          </h2>
-
-          <div class="w-full border-b border-white/20 mb-4"></div>
-
-          <!-- Rincian Data -->
-          <div class="space-y-3 text-xs leading-relaxed">
-            <div class="flex justify-between items-center border-b border-white/10 pb-2">
-              <span class="font-medium text-slate-200">NIP:</span>
-              <span class="font-semibold text-right">{{ tendik.nidn|default:"-" }}</span>
+      <!-- ================= SOROTAN TENAGA KEPENDIDIKAN (CAROUSEL 3-2-1 PERSIS GALERI, BERITA & EVENT) ================= -->
+      {% if tenaga_kependidikan_list %}
+        <section class="mb-8" data-aos="fade-up" data-aos-duration="600">
+          <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+              <h2 class="text-sm sm:text-base font-bold text-slate-800">
+                Daftar Staf Tenaga Kependidikan <span class="text-xs font-normal text-slate-400">({{ tenaga_kependidikan_list|length }} Staf)</span>
+                {% if query %}
+                  <span class="text-xs font-normal text-slate-400 ml-1">• Pencarian: "{{ query }}"</span>
+                {% endif %}
+              </h2>
             </div>
-
-            {% if tendik.bidang_ilmu %}
-            <div class="flex justify-between items-center border-b border-white/10 pb-2">
-              <span class="font-medium text-slate-200">Bidang:</span>
-              <span class="font-semibold text-right">{{ tendik.bidang_ilmu }}</span>
-            </div>
-            {% endif %}
-
-            <div class="flex justify-between items-center border-b border-white/10 pb-2">
-              <span class="font-medium text-slate-200">Status:</span>
-              <span class="font-semibold text-right text-[#fab005]">{{ tendik.status|default:"Tendik" }}</span>
+            <!-- Tombol Navigasi Slider -->
+            <div class="flex items-center gap-2">
+              <button type="button" id="tendik-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Tendik Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" id="tendik-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Tendik Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
             </div>
           </div>
 
-        </div>
+          <div class="swiper tendik-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for tendik in tenaga_kependidikan_list %}
+                <div class="swiper-slide h-auto">
+                  <!-- Card Container -->
+                  <div
+                    class="tendik-card group relative w-full h-[400px] bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col justify-between"
+                    data-nama="{{ tendik.nama|lower }}"
+                    data-nip="{{ tendik.nidn|default:''|lower }}"
+                    data-bidang="{{ tendik.bidang_ilmu|default:''|lower }}"
+                  >
+                    <!-- ================= SISI DEPAN KARTU ================= -->
+                    <div class="w-full h-full p-4 flex flex-col justify-between">
+                      <!-- Frame Foto Asli -->
+                      <div
+                        class="w-full h-[280px] rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-100 relative">
+                        {% if tendik.foto %}
+                          <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        {% else %}
+                          <i class="fa-solid fa-user-gear text-6xl text-slate-300"></i>
+                        {% endif %}
 
-      </div>
-      {% empty %}
-      <div class="col-span-full text-center py-20 text-slate-400">
-        <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
-        <p class="text-sm font-medium">Belum ada data tenaga kependidikan ditemukan.</p>
-        {% if query %}
-        <p class="text-xs text-slate-400 mt-1">Kata kunci: "{{ query }}"</p>
-        <a href="{% url 'tenaga_kependidikan_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
-          Reset Pencarian
-        </a>
-        {% endif %}
-      </div>
-      {% endfor %}
+                        <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-white/20">
+                          Staf #{{ forloop.counter }}
+                        </span>
+                      </div>
 
-      <!-- Pesan jika live filter tidak menemukan data -->
-      <div id="tendik-no-results" class="col-span-full text-center py-20 text-slate-400 hidden">
-        <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
-        <p class="text-sm font-medium">Tidak ada tenaga kependidikan yang sesuai dengan kata kunci.</p>
-      </div>
+                      <!-- Nama Tendik -->
+                      <div
+                        class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] mt-3">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide truncate">
+                          {{ tendik.nama }}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <!-- ================= SISI BELAKANG (OVERLAY MENUMPUK SAAT HOVER) ================= -->
+                    <div
+                      class="absolute inset-0 bg-[#0b7285] text-white p-6 rounded-2xl flex flex-col justify-center border-2 border-[#fab005]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                      <!-- Nama -->
+                      <h2 class="text-sm font-bold uppercase tracking-wider mb-3 leading-snug">
+                        {{ tendik.nama }}
+                      </h2>
+
+                      <div class="w-full border-b border-white/20 mb-4"></div>
+
+                      <!-- Rincian Data -->
+                      <div class="space-y-3 text-xs leading-relaxed">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                          <span class="font-medium text-slate-200">NIP:</span>
+                          <span class="font-semibold text-right">{{ tendik.nidn|default:"-" }}</span>
+                        </div>
+
+                        {% if tendik.bidang_ilmu %}
+                          <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                            <span class="font-medium text-slate-200">Bidang:</span>
+                            <span class="font-semibold text-right">{{ tendik.bidang_ilmu }}</span>
+                          </div>
+                        {% endif %}
+
+                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                          <span class="font-medium text-slate-200">Status:</span>
+                          <span class="font-semibold text-right text-[#fab005]">{{ tendik.status|default:"Tendik" }}</span>
+                        </div>
+                      </div>
+
+                      <div class="mt-6 flex justify-center">
+                        <a href="{% url 'tenaga_kependidikan_detail' tendik.pk %}" class="px-4 py-2 rounded-xl bg-white text-[#0b7285] text-xs font-bold hover:bg-brand-gold hover:text-slate-900 transition shadow-sm inline-flex items-center gap-1.5">
+                          <span>Lihat Profil</span>
+                          <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Pagination Bullets Swiper -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      {% else %}
+        <div class="text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200" data-aos="fade-up">
+          <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
+          <p class="text-sm font-medium">Belum ada data tenaga kependidikan ditemukan.</p>
+          {% if query %}
+            <p class="text-xs text-slate-400 mt-1">Kata kunci: "{{ query }}"</p>
+            <a href="{% url 'tenaga_kependidikan_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
+              Reset Pencarian
+            </a>
+          {% endif %}
         </div>
-      </section>
+      {% endif %}
+
     </div>
   </main>
 
   <!-- UNIFIED FOOTER COMPONENT -->
   {% include 'core/footer.html' %}
+
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.tendik-sorotan-swiper')) {
+        new Swiper('.tendik-sorotan-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          grabCursor: true,
+          loop: false,
+          navigation: {
+            nextEl: '#tendik-next',
+            prevEl: '#tendik-prev',
+          },
+          pagination: {
+            el: '.tendik-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
+  </script>
 
   <!-- AOS Script & Inisialisasi Ringkas -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -285,39 +377,6 @@
         el.classList.toggle('hidden');
         if (icon) icon.classList.toggle('rotate-180');
       }
-    }
-
-    // Live Instant Search Filter untuk Tendik
-    const tendikSearchInput = document.getElementById('tendik-search-input');
-    const tendikCards = document.querySelectorAll('.tendik-card');
-    const tendikNoResults = document.getElementById('tendik-no-results');
-
-    if (tendikSearchInput && tendikCards.length > 0) {
-      tendikSearchInput.addEventListener('input', function() {
-        const val = this.value.trim().toLowerCase();
-        let visibleCount = 0;
-
-        tendikCards.forEach(card => {
-          const nama = card.getAttribute('data-nama') || '';
-          const nip = card.getAttribute('data-nip') || '';
-          const bidang = card.getAttribute('data-bidang') || '';
-
-          if (!val || nama.includes(val) || nip.includes(val) || bidang.includes(val)) {
-            card.style.display = '';
-            visibleCount++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
-        if (tendikNoResults) {
-          if (visibleCount === 0) {
-            tendikNoResults.classList.remove('hidden');
-          } else {
-            tendikNoResults.classList.add('hidden');
-          }
-        }
-      });
     }
   </script>
 </body>
