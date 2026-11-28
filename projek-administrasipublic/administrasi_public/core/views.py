@@ -1546,8 +1546,8 @@ def event_list(request):
     # 3. Urutkan berdasarkan tanggal terdekat
     events = events.order_by('tanggal_mulai', '-created_at')
 
-    # 4. Pagination (8 kartu per halaman)
-    paginator = Paginator(events, 8)
+    # 4. Pagination (12 kartu per halaman agar carousel memuat banyak item secara horizontal)
+    paginator = Paginator(events, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
