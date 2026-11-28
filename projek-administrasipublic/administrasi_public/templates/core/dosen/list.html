@@ -18,6 +18,9 @@
   <!-- AOS Animation CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -69,6 +72,29 @@
     .no-scrollbar {
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
+    }
+
+    /* Swiper Styles Persis Galeri, Berita, Event & Tendik */
+    .dosen-sorotan-swiper {
+      padding-bottom: 46px !important;
+    }
+    .dosen-sorotan-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .dosen-sorotan-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
+    }
+    #dosen-prev.swiper-button-disabled,
+    #dosen-next.swiper-button-disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -225,69 +251,102 @@
         </form>
       </div>
 
-      <!-- BLOK 2 AOS: Grid Kartu Dosen -->
+      <!-- BLOK 2 AOS: Sorotan & Slider Kartu Dosen -->
       <section data-aos="fade-up" data-aos-duration="700">
-        <div id="dosen-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
-          {% for dosen in daftar_dosen %}
-            <div 
-              class="dosen-card bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between"
-              data-nama="{{ dosen.nama|lower }}"
-              data-nip="{{ dosen.nip|default:''|lower }}"
-              data-nidn="{{ dosen.nidn|default:''|lower }}"
-              data-bidang="{{ dosen.bidang_ilmu|default:''|lower }} {{ dosen.bidang_keahlian|default:''|lower }}"
-              data-jabatan="{{ dosen.jabatan_fungsional|default:dosen.jabatan|default:''|lower }}"
-            >
-              <div>
-                <!-- Wadah Foto Rasio 4:5 -->
-                <div class="w-full overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 5;">
-                  {% if dosen.foto %}
-                    <img src="{{ dosen.foto.url }}" alt="{{ dosen.nama }}" class="w-full h-full object-cover">
-                  {% else %}
-                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                      <i class="fas fa-chalkboard-user text-5xl mb-2"></i>
-                      <span class="text-xs text-slate-400">Tidak ada foto</span>
-                    </div>
-                  {% endif %}
-                </div>
-
-                <div class="p-4">
-                  <span class="text-[10px] font-semibold text-[#0b7285] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full inline-block mb-2">
-                    {{ dosen.jabatan|default:"Dosen Tetap" }}
-                  </span>
-                  <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1">
-                    {{ dosen.nama }}
-                  </h3>
-                  <p class="text-xs text-slate-500 line-clamp-2">
-                    {{ dosen.bidang_keahlian|default:dosen.bidang_ilmu|default:"Ilmu Administrasi Publik" }}
-                  </p>
-                </div>
-              </div>
-
-              {% if dosen.pk %}
-              <div class="p-4 pt-0">
-                <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}" class="text-xs font-semibold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
-                  Lihat Profil &rarr;
-                </a>
-              </div>
+        <!-- Header Bar dengan Jumlah & Navigasi Panah Persis Tendik, Event, Berita & Galeri -->
+        <div class="flex items-center justify-between mb-4 px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+            <h2 class="text-sm sm:text-base font-bold text-slate-800">
+              Daftar Tenaga Pengajar <span class="text-xs font-normal text-slate-400">({{ daftar_dosen|length }} Dosen)</span>
+              {% if selected_jabatan %}
+                <span class="text-xs font-medium text-teal-800 ml-1">• {{ selected_jabatan }}</span>
               {% endif %}
-            </div>
-          {% empty %}
-            <div class="col-span-full text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200">
-              <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
-              <p class="text-sm font-medium">Belum ada data tenaga pengajar yang sesuai kriteria.</p>
-              {% if has_active_filter %}
-              <a href="{% url 'tenaga_pendidik_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
-                Reset Filter
-              </a>
+              {% if query %}
+                <span class="text-xs font-normal text-slate-400 ml-1">• "{{ query }}"</span>
               {% endif %}
-            </div>
-          {% endfor %}
-
-          <!-- Pesan jika live filter tidak menemukan data -->
-          <div id="dosen-no-results" class="col-span-full text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200 hidden">
-            <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
-            <p class="text-sm font-medium">Tidak ada tenaga pengajar yang sesuai dengan pencarian atau filter.</p>
+            </h2>
           </div>
+          <!-- Tombol Navigasi Slider -->
+          <div class="flex items-center gap-2">
+            <button type="button" id="dosen-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Dosen Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="dosen-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Dosen Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        {% if daftar_dosen %}
+          <div class="swiper dosen-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for dosen in daftar_dosen %}
+                <div class="swiper-slide h-auto">
+                  <div 
+                    class="dosen-card h-full bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between"
+                    data-nama="{{ dosen.nama|lower }}"
+                    data-nip="{{ dosen.nip|default:''|lower }}"
+                    data-nidn="{{ dosen.nidn|default:''|lower }}"
+                    data-bidang="{{ dosen.bidang_ilmu|default:''|lower }} {{ dosen.bidang_keahlian|default:''|lower }}"
+                    data-jabatan="{{ dosen.jabatan_fungsional|default:dosen.jabatan|default:''|lower }}"
+                  >
+                    <div>
+                      <!-- Wadah Foto Rasio 4:5 (Rasio Asli 100% Dipertahankan) -->
+                      <div class="w-full overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 5;">
+                        {% if dosen.foto %}
+                          <img src="{{ dosen.foto.url }}" alt="{{ dosen.nama }}" class="w-full h-full object-cover">
+                        {% else %}
+                          <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                            <i class="fas fa-chalkboard-user text-5xl mb-2"></i>
+                            <span class="text-xs text-slate-400">Tidak ada foto</span>
+                          </div>
+                        {% endif %}
+                      </div>
+
+                      <div class="p-4">
+                        <span class="text-[10px] font-semibold text-[#0b7285] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full inline-block mb-2">
+                          {{ dosen.jabatan|default:"Dosen Tetap" }}
+                        </span>
+                        <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1">
+                          {{ dosen.nama }}
+                        </h3>
+                        <p class="text-xs text-slate-500 line-clamp-2">
+                          {{ dosen.bidang_keahlian|default:dosen.bidang_ilmu|default:"Ilmu Administrasi Publik" }}
+                        </p>
+                      </div>
+                    </div>
+
+                    {% if dosen.pk %}
+                    <div class="p-4 pt-0">
+                      <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}" class="text-xs font-semibold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
+                        Lihat Profil &rarr;
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <!-- Swiper Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
+        {% else %}
+          <div class="text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200">
+            <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+            <p class="text-sm font-medium">Belum ada data tenaga pengajar yang sesuai kriteria.</p>
+            {% if has_active_filter or query or selected_jabatan %}
+            <a href="{% url 'tenaga_pendidik_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
+              Reset Filter
+            </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <!-- Pesan jika live filter tidak menemukan data -->
+        <div id="dosen-no-results" class="text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200 hidden mt-4">
+          <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+          <p class="text-sm font-medium">Tidak ada tenaga pengajar yang sesuai dengan pencarian atau filter.</p>
         </div>
       </section>
 
@@ -296,6 +355,43 @@
 
   <!-- UNIFIED FOOTER COMPONENT -->
   {% include 'core/footer.html' %}
+
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.dosen-sorotan-swiper')) {
+        window.dosenSwiperInstance = new Swiper('.dosen-sorotan-swiper', {
+          slidesPerView: 1.15,
+          spaceBetween: 16,
+          grabCursor: true,
+          loop: false,
+          navigation: {
+            nextEl: '#dosen-next',
+            prevEl: '#dosen-prev',
+          },
+          pagination: {
+            el: '.dosen-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            480: {
+              slidesPerView: 2,
+              spaceBetween: 16,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
+  </script>
 
   <!-- AOS Script -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -369,10 +465,15 @@
       if (jabatan) jabatan.value = '';
 
       // Bersihkan live filter di DOM jika ada
+      const slides = document.querySelectorAll('.dosen-sorotan-swiper .swiper-slide');
+      slides.forEach(slide => slide.style.display = '');
       const cards = document.querySelectorAll('.dosen-card');
       cards.forEach(card => card.style.display = '');
       const noResults = document.getElementById('dosen-no-results');
       if (noResults) noResults.classList.add('hidden');
+      if (window.dosenSwiperInstance) {
+        window.dosenSwiperInstance.update();
+      }
 
       // Selalu muat ulang ke URL awal tanpa filter
       window.location.href = "{% url 'tenaga_pendidik_list' %}";
@@ -394,13 +495,20 @@
           const nidn = card.getAttribute('data-nidn') || '';
           const bidang = card.getAttribute('data-bidang') || '';
 
+          const slide = card.closest('.swiper-slide');
           if (!val || nama.includes(val) || nip.includes(val) || nidn.includes(val) || bidang.includes(val)) {
-            card.style.display = '';
+            if (slide) slide.style.display = '';
+            else card.style.display = '';
             visibleCount++;
           } else {
-            card.style.display = 'none';
+            if (slide) slide.style.display = 'none';
+            else card.style.display = 'none';
           }
         });
+
+        if (window.dosenSwiperInstance) {
+          window.dosenSwiperInstance.update();
+        }
 
         if (dosenNoResults) {
           if (visibleCount === 0) {
