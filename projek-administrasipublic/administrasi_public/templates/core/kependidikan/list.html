@@ -1,0 +1,367 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  {% if site_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  {% endif %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Tendik - Program Studi Administrasi Publik</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#005b52',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Animasi AOS Mobile Cepat, Ringan & Friendly */
+    @media (max-width: 768px) {
+
+      body,
+      html {
+        overflow-x: hidden !important;
+      }
+
+      [data-aos] {
+        transition-duration: 450ms !important;
+        transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+      }
+
+      [data-aos="fade-left"],
+      [data-aos="fade-right"] {
+        transform: translate3d(0, 20px, 0) !important;
+      }
+
+      [data-aos="fade-left"].aos-animate,
+      [data-aos="fade-right"].aos-animate {
+        transform: translate3d(0, 0, 0) !important;
+      }
+
+      [data-aos][data-aos-delay] {
+        transition-delay: 50ms !important;
+      }
+    }
+
+    /* Swiper Styles Persis Galeri, Berita & Event */
+    .tendik-sorotan-swiper {
+      padding-bottom: 46px !important;
+    }
+    .tendik-sorotan-swiper .swiper-slide {
+      width: auto !important;
+      height: auto !important;
+    }
+    .tendik-sorotan-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .tendik-sorotan-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
+    }
+    #tendik-prev.swiper-button-disabled,
+    #tendik-next.swiper-button-disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body
+  class="font-poppins bg-slate-50 text-slate-800 overflow-x-hidden antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/{{ site_settings.clean_whatsapp|default:'6285330144401' }}" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Unified Dynamic Navbar Component (CMS) -->
+  {% include 'components/navbar.html' %}
+
+  
+
+  <!-- Area Konten Utama -->
+  <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- BLOK 1 AOS: Header Halaman -->
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
+        <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+          <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+          <span class="text-slate-400">›</span>
+          <span class="text-slate-500">Staf</span>
+          <span class="text-slate-400">›</span>
+          <span class="font-medium text-teal-800">Tenaga Kependidikan (Tendik)</span>
+        </nav>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+          Tenaga Kependidikan (Tendik)
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-normal">
+          Daftar staf tenaga kependidikan Program Studi Administrasi Publik FISIP Universitas Tadulako
+        </p>
+      </header>
+
+      <!-- ================= SEARCH BAR KAPSUL (PILL-SHAPED) ================= -->
+      <div data-aos="fade-down" data-aos-duration="600" class="mb-8 sm:mb-10 w-full">
+        <form method="GET" action="{% url 'tenaga_kependidikan_list' %}" id="tendik-search-form" class="bg-white rounded-full p-1.5 sm:p-2.5 border border-slate-200/90 shadow-sm flex items-center gap-2 sm:gap-3 transition hover:shadow-md">
+          <!-- Input Pencarian -->
+          <div class="flex-1 relative flex items-center">
+            <input 
+              type="text" 
+              name="q" 
+              id="tendik-search-input"
+              value="{{ query }}" 
+              placeholder="Cari Nama Staf, NIP..." 
+              autocomplete="off"
+              class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-4 sm:px-5 py-2 sm:py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+            >
+            {% if query %}
+              <a 
+                href="{% url 'tenaga_kependidikan_list' %}" 
+                class="absolute right-3.5 sm:right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition cursor-pointer" 
+                title="Hapus pencarian"
+              >
+                <i class="fas fa-times-circle"></i>
+              </a>
+            {% endif %}
+          </div>
+
+          <!-- Tombol Submit Cari -->
+          <button 
+            type="submit" 
+            class="rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-5 sm:px-7 py-2 sm:py-3 flex items-center justify-center gap-1.5 sm:gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
+          >
+            <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
+            <span>Cari</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- ================= SOROTAN TENAGA KEPENDIDIKAN (CAROUSEL 3-2-1 PERSIS GALERI, BERITA & EVENT) ================= -->
+      {% if tenaga_kependidikan_list %}
+        <section class="mb-8" data-aos="fade-up" data-aos-duration="600">
+          <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+              <h2 class="text-sm sm:text-base font-bold text-slate-800">
+                Daftar Staf Tenaga Kependidikan <span class="text-xs font-normal text-slate-400">({{ tenaga_kependidikan_list|length }} Staf)</span>
+                {% if query %}
+                  <span class="text-xs font-normal text-slate-400 ml-1">• Pencarian: "{{ query }}"</span>
+                {% endif %}
+              </h2>
+            </div>
+            <!-- Tombol Navigasi Slider -->
+            <div class="flex items-center gap-2">
+              <button type="button" id="tendik-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Tendik Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" id="tendik-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Tendik Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="swiper tendik-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for tendik in tenaga_kependidikan_list %}
+                <div class="swiper-slide">
+                  <!-- Card Container (Rasio Asli 100% Dipertahankan: w-72 h-[380px] dengan frame foto h-[270px]) -->
+                  <div
+                    class="tendik-card group relative w-72 h-[380px] bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col justify-between"
+                    data-nama="{{ tendik.nama|lower }}"
+                    data-nip="{{ tendik.nidn|default:''|lower }}"
+                    data-bidang="{{ tendik.bidang_ilmu|default:''|lower }}"
+                  >
+                    <!-- ================= SISI DEPAN KARTU ================= -->
+                    <div class="w-full h-full p-4 flex flex-col justify-between">
+                      <!-- Frame Foto Asli (Rasio Asli h-[270px]) -->
+                      <div
+                        class="w-full h-[270px] rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-100 relative">
+                        {% if tendik.foto %}
+                          <img src="{{ tendik.foto.url }}" alt="{{ tendik.nama }}" class="w-full h-full object-cover">
+                        {% else %}
+                          <i class="fa-solid fa-user-gear text-6xl text-slate-300"></i>
+                        {% endif %}
+                      </div>
+
+                      <!-- Nama Tendik (Badge Putih dengan Border Halus) -->
+                      <div
+                        class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)] mt-3">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide truncate">
+                          {{ tendik.nama }}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <!-- ================= SISI BELAKANG (OVERLAY MENUMPUK SAAT HOVER) ================= -->
+                    <div
+                      class="absolute inset-0 bg-[#0b7285] text-white p-6 rounded-2xl flex flex-col justify-center border-2 border-[#fab005]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                      <!-- Nama -->
+                      <h2 class="text-sm font-bold uppercase tracking-wider mb-3 leading-snug">
+                        {{ tendik.nama }}
+                      </h2>
+
+                      <div class="w-full border-b border-white/20 mb-4"></div>
+
+                      <!-- Rincian Data -->
+                      <div class="space-y-3 text-xs leading-relaxed">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                          <span class="font-medium text-slate-200">NIP:</span>
+                          <span class="font-semibold text-right">{{ tendik.nidn|default:"-" }}</span>
+                        </div>
+
+                        {% if tendik.bidang_ilmu %}
+                          <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                            <span class="font-medium text-slate-200">Bidang:</span>
+                            <span class="font-semibold text-right">{{ tendik.bidang_ilmu }}</span>
+                          </div>
+                        {% endif %}
+
+                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                          <span class="font-medium text-slate-200">Status:</span>
+                          <span class="font-semibold text-right text-[#fab005]">{{ tendik.status|default:"Tendik" }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Pagination Bullets Swiper -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      {% else %}
+        <div class="text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200" data-aos="fade-up">
+          <i class="fa-solid fa-users-gear text-5xl mb-4 text-slate-300"></i>
+          <p class="text-sm font-medium">Belum ada data tenaga kependidikan ditemukan.</p>
+          {% if query %}
+            <p class="text-xs text-slate-400 mt-1">Kata kunci: "{{ query }}"</p>
+            <a href="{% url 'tenaga_kependidikan_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
+              Reset Pencarian
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+  </main>
+
+  <!-- UNIFIED FOOTER COMPONENT -->
+  {% include 'core/footer.html' %}
+
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.tendik-sorotan-swiper')) {
+        new Swiper('.tendik-sorotan-swiper', {
+          slidesPerView: 'auto',
+          spaceBetween: 24,
+          grabCursor: true,
+          loop: false,
+          navigation: {
+            nextEl: '#tendik-next',
+            prevEl: '#tendik-prev',
+          },
+          pagination: {
+            el: '.tendik-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+        });
+      }
+    });
+  </script>
+
+  <!-- AOS Script & Inisialisasi Ringkas -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: window.innerWidth < 768 ? 450 : 650,
+      offset: window.innerWidth < 768 ? 25 : 60,
+      once: true,
+      easing: 'ease-out-cubic'
+    });
+
+    // Mobile Navbar Drawer & Accordion
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (!drawer) return;
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (drawer) {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function toggleMobileAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id.replace('-menu', '-icon'));
+      if (el) {
+        el.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,334 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  {% if site_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  {% endif %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Hero Banner - Admin Portal UNTAD</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: { teal: '#0b7285', darkteal: '#084c5a', deepteal: '#05313a', gold: '#fab005', accent: '#ffd43b' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN UTAMA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-sm sticky top-0 z-20">
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 -ml-1 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition flex items-center justify-center" aria-label="Buka Menu Admin">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+        <a href="{% url 'admin_dashboard' %}" class="hidden sm:inline-flex text-xs text-brand-teal hover:underline items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="hidden sm:inline text-slate-300">/</span>
+        <h1 class="text-sm sm:text-base font-bold text-slate-800">Manajemen Hero Banner</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <button type="button" onclick="bukaPreviewHero()" class="px-3.5 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-semibold transition inline-flex items-center gap-1.5">
+          <i class="bi bi-eye"></i> Preview Tampilan Hero
+        </button>
+        <a href="{% url 'home' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+          <i class="bi bi-box-arrow-up-right text-[10px]"></i> Lihat Beranda
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 p-6 md:p-8">
+      <div class="max-w-4xl bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+        <div class="flex items-start justify-between mb-6 pb-4 border-b border-slate-100 gap-4">
+          <div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200 text-[10px] font-bold uppercase tracking-wider mb-2">
+              <i class="bi bi-camera-reels"></i> Pengaturan Hero Tunggal Beranda
+            </span>
+            <h2 class="text-xl font-bold text-slate-800">Edit Hero Banner</h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Website hanya memiliki 1 Hero Banner aktif. Anda dapat mengatur tautan video, unggahan video (maksimal 100 MB), atau gambar hero sebagai latar belakang beranda.
+            </p>
+          </div>
+          {% if hero.is_active %}
+            <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold flex-shrink-0">
+              <i class="bi bi-check-circle-fill mr-1"></i> Aktif
+            </span>
+          {% else %}
+            <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200 text-[11px] font-semibold flex-shrink-0">
+              Mode Default
+            </span>
+          {% endif %}
+        </div>
+
+        {% if form.non_field_errors %}
+          <div class="mb-5 p-3.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-xs">
+            {% for err in form.non_field_errors %}<p>{{ err }}</p>{% endfor %}
+          </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-6 text-xs font-medium text-slate-700">
+          {% csrf_token %}
+
+          <!-- Teks Hero -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label for="{{ form.subjudul.id_for_label }}" class="block mb-1.5 font-semibold text-slate-700">
+                Subjudul / Badge Hero
+              </label>
+              {{ form.subjudul }}
+              {% for error in form.subjudul.errors %}
+                <p class="text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div>
+              <label for="{{ form.judul.id_for_label }}" class="block mb-1.5 font-semibold text-slate-700">
+                Judul Utama Hero
+              </label>
+              {{ form.judul }}
+              {% for error in form.judul.errors %}
+                <p class="text-rose-600 mt-1">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div>
+            <label for="{{ form.deskripsi.id_for_label }}" class="block mb-1.5 font-semibold text-slate-700">
+              Deskripsi Singkat Hero
+            </label>
+            {{ form.deskripsi }}
+            {% for error in form.deskripsi.errors %}
+              <p class="text-rose-600 mt-1">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <!-- Media Video & Gambar -->
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-5">
+            <div>
+              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <i class="bi bi-film text-teal-700"></i> Media Latar Belakang Hero
+              </h3>
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                Urutan prioritas di beranda: File Video Unggahan &rarr; Link Video (YouTube/MP4) &rarr; Gambar Hero &rarr; Video Default.
+              </p>
+            </div>
+
+            <!-- Link Video -->
+            <div>
+              <label for="{{ form.link_video.id_for_label }}" class="block mb-1.5 font-semibold text-slate-700">
+                Link Video (YouTube / URL Video MP4)
+              </label>
+              {{ form.link_video }}
+              <p class="text-[11px] text-slate-400 mt-1">
+                Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/...
+              </p>
+              {% for error in form.link_video.errors %}
+                <p class="text-rose-600 mt-1 font-semibold">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <!-- Upload Video Max 100 MB -->
+            <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="{{ form.video_file.id_for_label }}" class="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <i class="bi bi-cloud-arrow-up text-teal-700"></i> Upload File Video
+                </label>
+                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-bold">
+                  Maksimal 100 MB &bull; MP4 / WebM / OGG
+                </span>
+              </div>
+              {{ form.video_file }}
+              {% for error in form.video_file.errors %}
+                <p class="text-rose-600 font-semibold">{{ error }}</p>
+              {% endfor %}
+
+              {% if hero.video_file %}
+                <div class="pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 text-[11px] text-teal-800">
+                    <i class="bi bi-file-earmark-play-fill text-base"></i>
+                    <span class="truncate max-w-xs font-semibold">{{ hero.video_file.name }}</span>
+                    <a href="{{ hero.video_file.url }}" target="_blank" class="underline text-sky-700">Buka</a>
+                  </div>
+                  <label class="inline-flex items-center gap-1.5 text-[11px] text-rose-600 cursor-pointer select-none font-semibold">
+                    <input type="checkbox" name="hapus_video" value="1" class="rounded border-rose-300 text-rose-600 focus:ring-rose-500">
+                    Hapus video saat disimpan
+                  </label>
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Upload Gambar Hero -->
+            <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-2.5">
+              <div class="flex items-center justify-between">
+                <label for="{{ form.foto.id_for_label }}" class="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <i class="bi bi-image text-teal-700"></i> Upload Gambar Hero
+                </label>
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold">
+                  Maksimal 10 MB &bull; JPG / PNG / WebP
+                </span>
+              </div>
+              {{ form.foto }}
+              {% for error in form.foto.errors %}
+                <p class="text-rose-600 font-semibold">{{ error }}</p>
+              {% endfor %}
+
+              {% if hero.foto %}
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <img src="{{ hero.foto.url }}" alt="Hero Banner" class="w-24 h-14 object-cover rounded-lg border border-slate-200">
+                    <span class="text-[11px] text-slate-600 truncate max-w-xs">{{ hero.foto.name }}</span>
+                  </div>
+                  <label class="inline-flex items-center gap-1.5 text-[11px] text-rose-600 cursor-pointer select-none font-semibold">
+                    <input type="checkbox" name="hapus_foto" value="1" class="rounded border-rose-300 text-rose-600 focus:ring-rose-500">
+                    Hapus gambar saat disimpan
+                  </label>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Status Aktif -->
+          <div class="flex items-center justify-between p-4 bg-teal-50/70 border border-teal-200 rounded-xl">
+            <div>
+              <p class="font-bold text-slate-800">Aktifkan Hero Banner di Beranda</p>
+              <p class="text-[11px] text-slate-500">Jika nonaktif, halaman beranda akan menampilkan video bawaan tema.</p>
+            </div>
+            <label class="inline-flex items-center gap-2 cursor-pointer select-none font-bold text-teal-800">
+              {{ form.is_active }}
+              <span>Tampilkan Hero Ini</span>
+            </label>
+          </div>
+
+          <!-- Tombol Aksi -->
+          <div class="flex items-center justify-between pt-5 border-t border-slate-100">
+            <a href="{% url 'admin_dashboard' %}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+              Kembali ke Dashboard
+            </a>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold shadow-sm transition inline-flex items-center gap-2">
+              <i class="bi bi-save"></i> Simpan Perubahan Hero
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL PREVIEW HERO BANNER -->
+  <div id="modalPreviewHero" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm items-center justify-center p-4">
+    <div class="bg-slate-900 text-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-white/10">
+      <div class="px-6 py-4 flex items-center justify-between border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <i class="bi bi-display text-amber-400"></i>
+          <h3 class="text-sm font-bold">Preview Tampilan Hero Beranda</h3>
+        </div>
+        <button type="button" onclick="tutupPreviewHero()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition">
+          <i class="bi bi-x-lg text-xs"></i>
+        </button>
+      </div>
+      <div id="previewHeroMedia" class="relative w-full h-80 sm:h-96 bg-slate-950 flex items-center justify-center overflow-hidden">
+        <!-- Diisi dinamis oleh JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/upload-validator.js' %}"></script>
+  <script>
+    function extractYoutubeEmbed(url) {
+      if (!url) return "";
+      var match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      if (match && match[1]) {
+        return "https://www.youtube.com/embed/" + match[1] + "?autoplay=1&mute=1&loop=1&playlist=" + match[1];
+      }
+      return "";
+    }
+
+    function escapeHtml(text) {
+      var div = document.createElement("div");
+      div.textContent = text || "";
+      return div.innerHTML;
+    }
+
+    function bukaPreviewHero() {
+      var subjudul = document.getElementById("id_subjudul")?.value || "Program Studi Administrasi Publik";
+      var judul = document.getElementById("id_judul")?.value || "Hero Banner";
+      var deskripsi = document.getElementById("id_deskripsi")?.value || "";
+      var linkVideo = (document.getElementById("id_link_video")?.value || "").trim();
+      var videoInput = document.getElementById("id_video_file");
+      var fotoInput = document.getElementById("id_foto");
+      var existingVideoUrl = "{% if hero.video_file %}{{ hero.video_file.url|escapejs }}{% endif %}";
+      var existingFotoUrl = "{% if hero.foto %}{{ hero.foto.url|escapejs }}{% endif %}";
+
+      var container = document.getElementById("previewHeroMedia");
+      var mediaHtml = "";
+
+      if (videoInput && videoInput.files && videoInput.files[0]) {
+        var objVideoUrl = URL.createObjectURL(videoInput.files[0]);
+        mediaHtml = '<video src="' + objVideoUrl + '" class="w-full h-full object-cover opacity-70" autoplay muted loop controls></video>';
+      } else if (existingVideoUrl && !document.querySelector('input[name="hapus_video"]:checked')) {
+        mediaHtml = '<video src="' + existingVideoUrl + '" class="w-full h-full object-cover opacity-70" autoplay muted loop controls></video>';
+      } else if (linkVideo) {
+        var ytEmbed = extractYoutubeEmbed(linkVideo);
+        if (ytEmbed) {
+          mediaHtml = '<iframe src="' + ytEmbed + '" class="w-full h-full border-0" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+        } else {
+          mediaHtml = '<video src="' + escapeHtml(linkVideo) + '" class="w-full h-full object-cover opacity-70" autoplay muted loop controls></video>';
+        }
+      } else if (fotoInput && fotoInput.files && fotoInput.files[0]) {
+        var objFotoUrl = URL.createObjectURL(fotoInput.files[0]);
+        mediaHtml = '<img src="' + objFotoUrl + '" class="w-full h-full object-cover opacity-65" alt="Preview Hero">';
+      } else if (existingFotoUrl && !document.querySelector('input[name="hapus_foto"]:checked')) {
+        mediaHtml = '<img src="' + existingFotoUrl + '" class="w-full h-full object-cover opacity-65" alt="Preview Hero">';
+      } else {
+        mediaHtml = '<div class="text-xs text-slate-400">Belum ada media khusus (menggunakan video default beranda).</div>';
+      }
+
+      var overlayHtml =
+        '<div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/35 to-transparent pointer-events-none flex flex-col justify-end p-6 sm:p-8">' +
+        '<span class="inline-block w-fit px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[10px] font-bold uppercase mb-2">' + escapeHtml(subjudul) + '</span>' +
+        '<h4 class="text-lg sm:text-2xl font-extrabold leading-snug max-w-2xl">' + escapeHtml(judul) + '</h4>' +
+        (deskripsi ? '<p class="text-xs text-slate-200 mt-1.5 max-w-xl line-clamp-2">' + escapeHtml(deskripsi) + '</p>' : '') +
+        '</div>';
+
+      container.innerHTML = mediaHtml + overlayHtml;
+      var modal = document.getElementById("modalPreviewHero");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function tutupPreviewHero() {
+      var modal = document.getElementById("modalPreviewHero");
+      document.getElementById("previewHeroMedia").innerHTML = "";
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if 'error' in message.tags %}error{% elif 'info' in message.tags %}info{% else %}success{% endif %}",
+          title: "{{ message|escapejs }}",
+          timer: 2600,
+          showConfirmButton: false
+        });
+      {% endfor %}
+    {% endif %}
+  </script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  {% if site_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  {% endif %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenaga Pengajar - Administrasi Publik UNTAD</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              hovergold: '#e59900',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Animasi AOS Mobile Cepat, Ringan & Friendly */
+    @media (max-width: 768px) {
+      body, html {
+        overflow-x: hidden !important;
+      }
+      [data-aos] {
+        transition-duration: 450ms !important;
+        transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+      }
+      [data-aos="fade-left"],
+      [data-aos="fade-right"] {
+        transform: translate3d(0, 20px, 0) !important;
+      }
+      [data-aos="fade-left"].aos-animate,
+      [data-aos="fade-right"].aos-animate {
+        transform: translate3d(0, 0, 0) !important;
+      }
+      [data-aos][data-aos-delay] {
+        transition-delay: 50ms !important;
+      }
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+
+    /* Swiper Styles Persis Galeri, Berita, Event & Tendik */
+    .dosen-sorotan-swiper {
+      padding-bottom: 46px !important;
+    }
+    .dosen-sorotan-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .dosen-sorotan-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
+    }
+    #dosen-prev.swiper-button-disabled,
+    #dosen-next.swiper-button-disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/{{ site_settings.clean_whatsapp|default:'6285330144401' }}" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Unified Dynamic Navbar Component (CMS) -->
+  {% include 'components/navbar.html' %}
+
+  
+
+  <!-- Konten Utama -->
+  <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- BLOK 1 AOS: Header Halaman -->
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
+        <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+          <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+          <span class="text-slate-400">›</span>
+          <span class="text-slate-500">Staf</span>
+          <span class="text-slate-400">›</span>
+          <span class="font-medium text-teal-800">Tenaga Pengajar (Dosen)</span>
+        </nav>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+          Tenaga Pengajar (Dosen)
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-normal">
+          Daftar staf pengajar dan dosen Program Studi Administrasi Publik FISIP Universitas Tadulako
+        </p>
+      </header>
+
+      <!-- ================= KARTU PENCARIAN & FILTER DOSEN (2 BARIS KAPSUL) ================= -->
+      <div data-aos="fade-down" data-aos-duration="600" class="mb-8 sm:mb-10 w-full">
+        <form method="GET" action="{% url 'tenaga_pendidik_list' %}" id="dosen-filter-form" class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-sm transition hover:shadow-md">
+          <!-- Hidden Input untuk Jabatan Fungsional -->
+          <input type="hidden" name="jabatan" id="jabatan-input" value="{{ selected_jabatan }}">
+
+          <!-- BARIS 1: Input Pencarian & Tombol Submit Cari -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
+            <!-- Input Teks (Pill Kapsul) -->
+            <div class="flex-1 relative flex items-center">
+              <input 
+                type="text" 
+                name="q" 
+                id="dosen-search-input"
+                value="{{ query }}" 
+                placeholder="Cari Nama Dosen, NIP, NIDN, Bidang Keahlian..." 
+                autocomplete="off"
+                class="w-full text-xs sm:text-sm text-slate-700 bg-white border border-slate-200 rounded-full px-4 sm:px-5 py-2.5 sm:py-3 outline-none placeholder:text-slate-400 font-normal focus:border-[#0D636D] transition shadow-2xs"
+              >
+              {% if query %}
+                <button 
+                  type="button" 
+                  onclick="clearSearchInput()"
+                  class="absolute right-4 text-slate-400 hover:text-rose-500 p-1 text-xs transition cursor-pointer" 
+                  title="Hapus pencarian"
+                >
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              {% endif %}
+            </div>
+
+            <!-- Tombol Submit Cari (Pill Kapsul #0D636D) -->
+            <button 
+              type="submit" 
+              class="w-full sm:w-auto rounded-full bg-[#0D636D] hover:bg-[#094c54] text-white px-7 py-2.5 sm:py-3 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm shadow-sm transition active:scale-95 cursor-pointer shrink-0"
+            >
+              <i class="fas fa-magnifying-glass text-xs sm:text-sm"></i>
+              <span>Cari</span>
+            </button>
+          </div>
+
+          <!-- BARIS 2: Filter Jabatan Fungsional & Tombol Reset -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 pt-3 mt-2 border-t border-slate-100">
+            <!-- Sisi Kiri: Label & Deretan Tombol Jabatan (Scroll Horizontal di Layar HP) -->
+            <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 min-w-0">
+              <span class="text-xs font-medium text-slate-500 sm:font-semibold sm:text-slate-600 flex items-center gap-1.5 shrink-0 select-none">
+                <i class="fa-solid fa-sliders text-[#0D636D]"></i> Jabatan Fungsional:
+              </span>
+
+              <!-- Deretan Tombol Pill (Horizontal Scroll di Layar HP) -->
+              <div class="flex items-center overflow-x-auto no-scrollbar gap-2 pb-1 sm:pb-0 -mx-1 px-1 sm:mx-0 sm:px-0">
+                <!-- Preset Semua Dosen -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('')" 
+                  data-jabatan=""
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if not selected_jabatan %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Semua Dosen ({{ jabatan_counts.all|default:0 }})
+                </button>
+
+                <!-- Guru Besar -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Guru Besar')" 
+                  data-jabatan="guru besar"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'guru besar' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Guru Besar ({{ jabatan_counts.guru_besar|default:0 }})
+                </button>
+
+                <!-- Lektor Kepala -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Lektor Kepala')" 
+                  data-jabatan="lektor kepala"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'lektor kepala' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Lektor Kepala ({{ jabatan_counts.lektor_kepala|default:0 }})
+                </button>
+
+                <!-- Lektor -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Lektor')" 
+                  data-jabatan="lektor"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'lektor' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Lektor ({{ jabatan_counts.lektor|default:0 }})
+                </button>
+
+                <!-- Asisten Ahli -->
+                <button 
+                  type="button" 
+                  onclick="setJabatanFilter('Asisten Ahli')" 
+                  data-jabatan="asisten ahli"
+                  class="jabatan-pill px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer whitespace-nowrap shrink-0 {% if selected_jabatan|lower == 'asisten ahli' %}bg-[#0D636D] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200/80 font-medium{% endif %}"
+                >
+                  Asisten Ahli ({{ jabatan_counts.asisten_ahli|default:0 }})
+                </button>
+              </div>
+            </div>
+
+            <!-- Sisi Kanan: Tombol Reset (Selalu Tampil) -->
+            <div class="flex justify-end pt-1 sm:pt-0 shrink-0">
+              <a 
+                href="{% url 'tenaga_pendidik_list' %}" 
+                onclick="resetAllDosenFilter(event)"
+                class="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-semibold bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-600 border border-rose-100/80 transition cursor-pointer shadow-2xs whitespace-nowrap"
+                title="Kembalikan semua filter ke kondisi awal"
+              >
+                <i class="fas fa-arrows-rotate text-[11px]"></i>
+                <span>Reset</span>
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- BLOK 2 AOS: Sorotan & Slider Kartu Dosen -->
+      <section data-aos="fade-up" data-aos-duration="700">
+        <!-- Header Bar dengan Jumlah & Navigasi Panah Persis Tendik, Event, Berita & Galeri -->
+        <div class="flex items-center justify-between mb-4 px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+            <h2 class="text-sm sm:text-base font-bold text-slate-800">
+              Daftar Tenaga Pengajar <span class="text-xs font-normal text-slate-400">({{ daftar_dosen|length }} Dosen)</span>
+              {% if selected_jabatan %}
+                <span class="text-xs font-medium text-teal-800 ml-1">• {{ selected_jabatan }}</span>
+              {% endif %}
+              {% if query %}
+                <span class="text-xs font-normal text-slate-400 ml-1">• "{{ query }}"</span>
+              {% endif %}
+            </h2>
+          </div>
+          <!-- Tombol Navigasi Slider -->
+          <div class="flex items-center gap-2">
+            <button type="button" id="dosen-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Dosen Sebelumnya">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="dosen-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Dosen Selanjutnya">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        {% if daftar_dosen %}
+          <div class="swiper dosen-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for dosen in daftar_dosen %}
+                <div class="swiper-slide h-auto">
+                  <div 
+                    class="dosen-card h-full bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between"
+                    data-nama="{{ dosen.nama|lower }}"
+                    data-nip="{{ dosen.nip|default:''|lower }}"
+                    data-nidn="{{ dosen.nidn|default:''|lower }}"
+                    data-bidang="{{ dosen.bidang_ilmu|default:''|lower }} {{ dosen.bidang_keahlian|default:''|lower }}"
+                    data-jabatan="{{ dosen.jabatan_fungsional|default:dosen.jabatan|default:''|lower }}"
+                  >
+                    <div>
+                      <!-- Wadah Foto Rasio 4:5 (Rasio Asli 100% Dipertahankan) -->
+                      <div class="w-full overflow-hidden bg-slate-100" style="aspect-ratio: 4 / 5;">
+                        {% if dosen.foto %}
+                          <img src="{{ dosen.foto.url }}" alt="{{ dosen.nama }}" class="w-full h-full object-cover">
+                        {% else %}
+                          <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                            <i class="fas fa-chalkboard-user text-5xl mb-2"></i>
+                            <span class="text-xs text-slate-400">Tidak ada foto</span>
+                          </div>
+                        {% endif %}
+                      </div>
+
+                      <div class="p-4">
+                        <span class="text-[10px] font-semibold text-[#0b7285] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full inline-block mb-2">
+                          {{ dosen.jabatan|default:"Dosen Tetap" }}
+                        </span>
+                        <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mb-1">
+                          {{ dosen.nama }}
+                        </h3>
+                        <p class="text-xs text-slate-500 line-clamp-2">
+                          {{ dosen.bidang_keahlian|default:dosen.bidang_ilmu|default:"Ilmu Administrasi Publik" }}
+                        </p>
+                      </div>
+                    </div>
+
+                    {% if dosen.pk %}
+                    <div class="p-4 pt-0">
+                      <a href="{% url 'tenaga_pendidik_detail' dosen.pk %}" class="text-xs font-semibold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
+                        Lihat Profil &rarr;
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <!-- Swiper Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
+        {% else %}
+          <div class="text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200">
+            <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+            <p class="text-sm font-medium">Belum ada data tenaga pengajar yang sesuai kriteria.</p>
+            {% if has_active_filter or query or selected_jabatan %}
+            <a href="{% url 'tenaga_pendidik_list' %}" class="inline-block mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-teal-50 text-[#0D636D] hover:bg-teal-100 transition">
+              Reset Filter
+            </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <!-- Pesan jika live filter tidak menemukan data -->
+        <div id="dosen-no-results" class="text-center py-20 text-slate-400 bg-white rounded-2xl border border-slate-200 hidden mt-4">
+          <i class="fas fa-chalkboard-teacher text-5xl mb-3 text-slate-300"></i>
+          <p class="text-sm font-medium">Tidak ada tenaga pengajar yang sesuai dengan pencarian atau filter.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- UNIFIED FOOTER COMPONENT -->
+  {% include 'core/footer.html' %}
+
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.dosen-sorotan-swiper')) {
+        window.dosenSwiperInstance = new Swiper('.dosen-sorotan-swiper', {
+          slidesPerView: 1.15,
+          spaceBetween: 16,
+          grabCursor: true,
+          loop: false,
+          navigation: {
+            nextEl: '#dosen-next',
+            prevEl: '#dosen-prev',
+          },
+          pagination: {
+            el: '.dosen-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            480: {
+              slidesPerView: 2,
+              spaceBetween: 16,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
+  </script>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: window.innerWidth < 768 ? 450 : 650,
+      offset: window.innerWidth < 768 ? 25 : 60,
+      once: true,
+      easing: 'ease-out-cubic'
+    });
+
+    // Mobile Navbar Drawer & Accordion
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (!drawer) return;
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (drawer) {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function toggleMobileAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id.replace('-menu', '-icon'));
+      if (el) {
+        el.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
+      }
+    }
+
+    // ================= LOGIKA FILTER & PENCARIAN DOSEN =================
+    function setJabatanFilter(val) {
+      document.getElementById('jabatan-input').value = val;
+      document.getElementById('dosen-filter-form').submit();
+    }
+
+    function clearSearchInput() {
+      const input = document.getElementById('dosen-search-input');
+      if (input) input.value = '';
+      document.getElementById('dosen-filter-form').submit();
+    }
+
+    function resetAllDosenFilter(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('dosen-search-input');
+      const jabatan = document.getElementById('jabatan-input');
+      if (input) input.value = '';
+      if (jabatan) jabatan.value = '';
+
+      // Bersihkan live filter di DOM jika ada
+      const slides = document.querySelectorAll('.dosen-sorotan-swiper .swiper-slide');
+      slides.forEach(slide => slide.style.display = '');
+      const cards = document.querySelectorAll('.dosen-card');
+      cards.forEach(card => card.style.display = '');
+      const noResults = document.getElementById('dosen-no-results');
+      if (noResults) noResults.classList.add('hidden');
+      if (window.dosenSwiperInstance) {
+        window.dosenSwiperInstance.update();
+      }
+
+      // Selalu muat ulang ke URL awal tanpa filter
+      window.location.href = "{% url 'tenaga_pendidik_list' %}";
+    }
+
+    // Live Instant Search Filter untuk Dosen
+    const dosenSearchInput = document.getElementById('dosen-search-input');
+    const dosenCards = document.querySelectorAll('.dosen-card');
+    const dosenNoResults = document.getElementById('dosen-no-results');
+
+    if (dosenSearchInput && dosenCards.length > 0) {
+      dosenSearchInput.addEventListener('input', function() {
+        const val = this.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        dosenCards.forEach(card => {
+          const nama = card.getAttribute('data-nama') || '';
+          const nip = card.getAttribute('data-nip') || '';
+          const nidn = card.getAttribute('data-nidn') || '';
+          const bidang = card.getAttribute('data-bidang') || '';
+
+          const slide = card.closest('.swiper-slide');
+          if (!val || nama.includes(val) || nip.includes(val) || nidn.includes(val) || bidang.includes(val)) {
+            if (slide) slide.style.display = '';
+            else card.style.display = '';
+            visibleCount++;
+          } else {
+            if (slide) slide.style.display = 'none';
+            else card.style.display = 'none';
+          }
+        });
+
+        if (window.dosenSwiperInstance) {
+          window.dosenSwiperInstance.update();
+        }
+
+        if (dosenNoResults) {
+          if (visibleCount === 0) {
+            dosenNoResults.classList.remove('hidden');
+          } else {
+            dosenNoResults.classList.add('hidden');
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

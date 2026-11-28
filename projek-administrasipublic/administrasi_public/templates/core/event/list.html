@@ -1,0 +1,414 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  {% if site_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  {% endif %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda & Event - Administrasi Publik UNTAD</title>
+  
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media (max-width: 768px) {
+      body, html {
+        overflow-x: hidden !important;
+      }
+      [data-aos] {
+        transition-duration: 450ms !important;
+        transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+      }
+      [data-aos="fade-left"],
+      [data-aos="fade-right"] {
+        transform: translate3d(0, 20px, 0) !important;
+      }
+      [data-aos="fade-left"].aos-animate,
+      [data-aos="fade-right"].aos-animate {
+        transform: translate3d(0, 0, 0) !important;
+      }
+      [data-aos][data-aos-delay] {
+        transition-delay: 50ms !important;
+      }
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Swiper Styles Persis Galeri & Berita */
+    .event-sorotan-swiper {
+      padding-bottom: 46px !important;
+    }
+    .event-sorotan-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .event-sorotan-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
+    }
+    #event-prev.swiper-button-disabled,
+    #event-next.swiper-button-disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-brand-teal selection:text-white">
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/{{ site_settings.clean_whatsapp|default:'6285330144401' }}" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Unified Dynamic Navbar Component (CMS) -->
+  {% include 'components/navbar.html' %}
+
+  
+
+  <!-- KONTEN UTAMA -->
+  <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Header Halaman & Eyebrow -->
+      <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-10" data-aos="fade-up">
+        <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+          <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+          <span class="text-slate-400">›</span>
+          <span class="font-medium text-teal-800">Agenda & Event Terdekat</span>
+        </nav>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0D636D] tracking-tight mb-2">
+          Agenda & Event Terdekat
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
+          Jadwal kegiatan akademik, seminar nasional, kuliah umum, workshop, dan agenda kemahasiswaan Program Studi Administrasi Publik FISIP Universitas Tadulako.
+        </p>
+      </div>
+
+      <!-- Kotak Pencarian & Filter Kapsul (Pill-Shaped Modern) -->
+      <div class="max-w-4xl mx-auto mb-8 sm:mb-10" data-aos="fade-up" data-aos-delay="100">
+        <div class="bg-white rounded-3xl md:rounded-full border border-slate-200 p-2 sm:p-2.5 shadow-xs">
+          <form method="GET" action="{% url 'event_list' %}" class="flex flex-col md:flex-row items-center gap-2">
+            {% if kategori_selected %}
+              <input type="hidden" name="kategori" value="{{ kategori_selected }}">
+            {% endif %}
+            <div class="relative flex-1 w-full">
+              <input type="text" 
+                     name="q" 
+                     value="{{ q }}" 
+                     placeholder="Cari judul agenda, narasumber, atau tempat kegiatan..." 
+                     class="w-full px-5 py-3 rounded-full border border-slate-200 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0D636D] focus:ring-1 focus:ring-[#0D636D] transition">
+            </div>
+            <button type="submit" class="w-full md:w-auto px-7 py-3 rounded-full bg-[#0D636D] hover:bg-teal-900 text-white font-semibold text-xs transition duration-200 flex items-center justify-center gap-2 shadow-xs">
+              <i class="fas fa-search"></i>
+              <span>Cari Event</span>
+            </button>
+            {% if q or kategori_selected %}
+              <a href="{% url 'event_list' %}" class="w-full md:w-auto px-4 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium text-xs transition text-center">
+                Reset
+              </a>
+            {% endif %}
+          </form>
+        </div>
+
+        <!-- Filter Kategori Horizontal Scrollable Pills -->
+        <div class="mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+          <span class="text-xs font-semibold text-slate-400 whitespace-nowrap shrink-0 flex items-center gap-1.5 mr-1">
+            <i class="fas fa-sliders text-[#0D636D]"></i> Kategori:
+          </span>
+          <a href="?{% if q %}q={{ q }}&{% endif %}" 
+             class="px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition {% if not kategori_selected %}bg-[#0D636D] text-white shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+            Semua Agenda
+          </a>
+          {% for kat in kategori_list %}
+            <a href="?kategori={{ kat }}{% if q %}&q={{ q }}{% endif %}" 
+               class="px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition {% if kategori_selected == kat %}bg-[#0D636D] text-white shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+              {{ kat }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- ================= SOROTAN AGENDA & EVENT KEGIATAN (CAROUSEL 3-2-1 PERSIS GALERI) ================= -->
+      {% if events %}
+        <section class="mb-8" data-aos="fade-up" data-aos-duration="600">
+          <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+              <h2 class="text-sm sm:text-base font-bold text-slate-800">
+                Agenda Kegiatan <span class="text-xs font-normal text-slate-400">({{ total_event }} Agenda)</span>
+                {% if kategori_selected %}
+                  <span class="text-xs font-medium text-teal-800 ml-1">• {{ kategori_selected }}</span>
+                {% endif %}
+                {% if q %}
+                  <span class="text-xs font-normal text-slate-400 ml-1">• "{{ q }}"</span>
+                {% endif %}
+              </h2>
+            </div>
+            <!-- Tombol Navigasi Slider -->
+            <div class="flex items-center gap-2">
+              <button type="button" id="event-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Event Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" id="event-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Event Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="swiper event-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for event in events %}
+                <div class="swiper-slide h-auto">
+                  <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                      <!-- Poster Wadah Rasio 4:5 Vertikal Persis Galeri -->
+                      <a href="{% url 'event_detail' event.slug %}" class="relative block w-full overflow-hidden bg-slate-100 rounded-t-2xl cursor-pointer" style="aspect-ratio: 4 / 5;">
+                        {% if event.poster %}
+                          <img src="{{ event.poster.url }}" alt="{{ event.judul }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                        {% else %}
+                          <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#084c5a] to-[#0D636D] text-white p-6 text-center">
+                            <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-3 text-brand-gold">
+                              <i class="fas fa-calendar-check text-2xl"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-teal-200 uppercase tracking-wider mb-1.5">{{ event.kategori }}</span>
+                            <span class="text-xs font-bold line-clamp-3 leading-snug">{{ event.judul }}</span>
+                          </div>
+                        {% endif %}
+
+                        <!-- Overlay hover -->
+                        <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity duration-200">
+                          <span class="w-10 h-10 rounded-full bg-white/25 backdrop-blur-xs flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-arrow-right"></i>
+                          </span>
+                        </div>
+
+                        <!-- Badge Tanggal Minimalis di Pojok Atas Poster -->
+                        <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-xs rounded-xl shadow-md border border-slate-100 px-3 py-1.5 text-center min-w-[50px]">
+                          <span class="block text-base font-extrabold text-[#0D636D] leading-none">{{ event.hari_mulai }}</span>
+                          <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">{{ event.bulan_mulai_singkat }}</span>
+                        </div>
+
+                        <!-- Badge Kategori Pojok Kanan Atas -->
+                        <div class="absolute top-3 right-3 bg-[#0D636D]/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow">
+                          {{ event.kategori }}
+                        </div>
+                      </a>
+
+                      <!-- Konten Kartu di Bawah Poster -->
+                      <div class="p-4 sm:p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                          <span class="text-[11px] font-semibold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full inline-block">
+                            {{ event.kategori }}
+                          </span>
+                          {% if event.waktu %}
+                            <span class="text-[11px] text-slate-400 flex items-center gap-1">
+                              <i class="far fa-clock text-[10px]"></i> {{ event.waktu }}
+                            </span>
+                          {% endif %}
+                        </div>
+
+                        <h3 class="text-sm font-bold text-slate-800 group-hover:text-[#0D636D] transition line-clamp-2 leading-snug mb-3">
+                          <a href="{% url 'event_detail' event.slug %}">{{ event.judul }}</a>
+                        </h3>
+
+                        <!-- Info Tanggal & Lokasi -->
+                        <div class="space-y-1.5 text-xs text-slate-500">
+                          <div class="flex items-center gap-2">
+                            <i class="far fa-calendar-alt text-[#0D636D] w-3.5 shrink-0"></i>
+                            <span class="font-medium text-slate-700 truncate">{{ event.tanggal_display }}</span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <i class="fas fa-map-marker-alt text-rose-500 w-3.5 shrink-0"></i>
+                            <span class="truncate" title="{{ event.lokasi }}">{{ event.lokasi }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Footer Kartu -->
+                    <div class="p-4 sm:p-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <a href="{% url 'event_detail' event.slug %}" class="text-xs font-bold text-[#0D636D] hover:underline inline-flex items-center gap-1">
+                        Detail Acara <i class="fas fa-arrow-right text-[10px]"></i>
+                      </a>
+                      {% if event.link_pendaftaran %}
+                        <a href="{{ event.link_pendaftaran }}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold px-3 py-1 rounded-full bg-teal-50 text-[#0D636D] hover:bg-[#0D636D] hover:text-white transition inline-flex items-center gap-1">
+                          <span>Daftar</span>
+                          <i class="fas fa-external-link-alt text-[9px]"></i>
+                        </a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Pagination Bullets Swiper -->
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+
+        <!-- Pagination Halaman jika ada lebih dari 12 event -->
+        {% if page_obj.has_other_pages %}
+          <div class="mt-8 flex justify-center items-center gap-2">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}{% if kategori_selected %}&kategori={{ kategori_selected }}{% endif %}" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition">
+                &larr; Sebelumnya
+              </a>
+            {% endif %}
+
+            <span class="px-4 py-2 bg-[#0D636D] text-white rounded-xl text-xs font-bold">
+              Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}{% if kategori_selected %}&kategori={{ kategori_selected }}{% endif %}" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition">
+                Selanjutnya &rarr;
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      {% else %}
+        <div class="bg-white rounded-3xl border border-slate-200 p-12 text-center max-w-md mx-auto shadow-xs my-8" data-aos="fade-up">
+          <div class="w-16 h-16 rounded-2xl bg-teal-50 text-[#0D636D] flex items-center justify-center text-2xl mx-auto mb-4">
+            <i class="far fa-calendar-xmark"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-800 mb-1">Tidak Ada Event Ditemukan</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-6">
+            Tidak ada kegiatan atau agenda yang sesuai dengan kriteria pencarian Anda.
+          </p>
+          <a href="{% url 'event_list' %}" class="inline-block px-5 py-2.5 rounded-full bg-[#0D636D] text-white text-xs font-semibold hover:bg-teal-900 transition">
+            Lihat Semua Agenda
+          </a>
+        </div>
+      {% endif %}
+
+    </div>
+  </main>
+
+  <!-- Include Footer Terpadu -->
+  {% include 'core/footer.html' %}
+
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.event-sorotan-swiper')) {
+        new Swiper('.event-sorotan-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          grabCursor: true,
+          loop: false,
+          navigation: {
+            nextEl: '#event-next',
+            prevEl: '#event-prev',
+          },
+          pagination: {
+            el: '.event-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
+  </script>
+
+  <!-- AOS Animation Scripts -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ once: true });
+
+    // Mobile Navbar Drawer & Accordion
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (!drawer) return;
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (drawer) {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function toggleMobileAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id.replace('-menu', '-icon'));
+      if (el) {
+        el.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
+      }
+    }
+  </script>
+</body>
+</html>

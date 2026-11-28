@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  {% if site_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  {% endif %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Event & Agenda - Admin Portal UNTAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap Icons & SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- DataTables CSS & jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              deepteal: '#05313a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-poppins bg-slate-100 text-slate-800 antialiased flex min-h-screen">
+
+  <!-- SIDEBAR ADMIN TERPUSAT -->
+  {% include 'core/admin/sidebar.html' %}
+
+  <!-- KONTEN UTAMA -->
+  <div class="flex-1 flex flex-col min-w-0">
+    
+    <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-xs sticky top-0 z-20">
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 -ml-1 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition flex items-center justify-center" aria-label="Buka Menu Admin">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+        <a href="{% url 'admin_dashboard' %}" class="hidden sm:inline-flex text-xs text-brand-teal hover:underline items-center gap-1 font-medium">
+          <i class="bi bi-arrow-left text-[10px]"></i> Dashboard
+        </a>
+        <span class="hidden sm:inline text-slate-300">/</span>
+        <h1 class="text-sm sm:text-base font-bold text-slate-800">Manajemen Event & Agenda</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="{% url 'event_list' %}" target="_blank" class="text-xs font-medium text-brand-teal hover:underline flex items-center gap-1.5">
+          <i class="bi bi-box-arrow-up-right text-[10px]"></i> Lihat Halaman Event
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 sm:p-6 md:p-8">
+      
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden w-full p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-lg font-bold text-slate-800">Daftar Event Terdekat</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Kelola seminar, kuliah tamu, workshop, dan agenda prodi berformat poster rasio 4:5</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="{% url 'event_create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl text-xs font-semibold transition shadow-xs self-start sm:self-auto">
+              <i class="bi bi-plus-lg"></i> Tambah Event Baru
+            </a>
+          </div>
+        </div>
+
+        <div class="w-full overflow-x-auto">
+          <table id="tabelEvent" class="display w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-slate-100">
+              <tr>
+                <th class="py-3.5 px-4 w-16 text-center">Poster</th>
+                <th class="py-3.5 px-4">Judul & Kategori</th>
+                <th class="py-3.5 px-4">Tanggal & Waktu</th>
+                <th class="py-3.5 px-4">Lokasi</th>
+                <th class="py-3.5 px-4 text-center w-24">Status</th>
+                <th class="py-3.5 px-4 text-center w-36">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {% for ev in daftar_event %}
+                <tr class="hover:bg-slate-50/70 transition">
+                  <!-- Poster 4:5 Preview -->
+                  <td class="py-3.5 px-4 text-center align-middle">
+                    <div class="w-12 h-15 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shadow-xs relative group cursor-pointer mx-auto aspect-[4/5]"
+                         onclick="bukaPreviewPoster('{% if ev.poster %}{{ ev.poster.url }}{% endif %}', '{{ ev.judul|escapejs }}')">
+                      {% if ev.poster %}
+                        <img src="{{ ev.poster.url }}" alt="{{ ev.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-200">
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition duration-150">
+                          <i class="bi bi-zoom-in text-xs"></i>
+                        </div>
+                      {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-slate-300 bg-slate-100">
+                          <i class="bi bi-image text-sm"></i>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </td>
+
+                  <!-- Judul & Kategori -->
+                  <td class="py-3.5 px-4 align-middle">
+                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-teal-800 mb-1 border border-teal-100">
+                      {{ ev.kategori }}
+                    </span>
+                    <a href="{% url 'event_detail' ev.slug %}" target="_blank" class="block font-bold text-slate-800 hover:text-teal-800 transition text-xs leading-snug">
+                      {{ ev.judul }}
+                    </a>
+                    {% if ev.link_pendaftaran %}
+                      <a href="{{ ev.link_pendaftaran }}" target="_blank" class="inline-flex items-center gap-1 text-[10px] text-teal-600 hover:underline mt-1">
+                        <i class="bi bi-link-45deg"></i> Link Registrasi
+                      </a>
+                    {% endif %}
+                  </td>
+
+                  <!-- Tanggal & Waktu -->
+                  <td class="py-3.5 px-4 align-middle whitespace-nowrap">
+                    <div class="flex items-center gap-1.5 font-semibold text-slate-700">
+                      <i class="bi bi-calendar3 text-teal-700"></i>
+                      <span>{{ ev.tanggal_display }}</span>
+                    </div>
+                    {% if ev.waktu %}
+                      <div class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1">
+                        <i class="bi bi-clock"></i> {{ ev.waktu }}
+                      </div>
+                    {% endif %}
+                  </td>
+
+                  <!-- Lokasi -->
+                  <td class="py-3.5 px-4 align-middle">
+                    <div class="flex items-start gap-1.5 text-slate-600 max-w-xs truncate" title="{{ ev.lokasi }}">
+                      <i class="bi bi-geo-alt text-rose-500 shrink-0 mt-0.5"></i>
+                      <span class="truncate">{{ ev.lokasi }}</span>
+                    </div>
+                  </td>
+
+                  <!-- Status Aktif / Toggle -->
+                  <td class="py-3.5 px-4 text-center align-middle">
+                    <a href="{% url 'event_toggle_status' ev.pk %}" title="Klik untuk ubah status" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold transition {% if ev.is_active %}bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100{% else %}bg-slate-100 text-slate-400 border border-slate-200 hover:bg-slate-200{% endif %}">
+                      <span class="w-1.5 h-1.5 rounded-full {% if ev.is_active %}bg-emerald-500{% else %}bg-slate-400{% endif %}"></span>
+                      <span>{% if ev.is_active %}Aktif{% else %}Nonaktif{% endif %}</span>
+                    </a>
+                  </td>
+
+                  <!-- Aksi -->
+                  <td class="py-3.5 px-4 text-center align-middle whitespace-nowrap">
+                    <div class="inline-flex items-center justify-center gap-1.5">
+                      <!-- Lihat Halaman -->
+                      <a href="{% url 'event_detail' ev.slug %}" target="_blank" title="Lihat Publik" class="p-2 bg-teal-50 text-teal-700 rounded-lg hover:bg-teal-100 transition border border-teal-200">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                      </a>
+
+                      <!-- Edit -->
+                      <a href="{% url 'event_update' ev.pk %}" title="Edit Event" class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 transition border border-amber-200">
+                        <i class="bi bi-pencil-square"></i>
+                      </a>
+
+                      <!-- Hapus -->
+                      <button type="button" 
+                              onclick="konfirmasiHapusEvent('{% url 'event_delete' ev.pk %}', '{{ ev.judul|escapejs }}')" 
+                              title="Hapus Event" 
+                              class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition border border-rose-200">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Modal Preview Poster 4:5 -->
+  <div id="modalPoster" class="fixed inset-0 bg-slate-900/80 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl relative border border-slate-100 animate-in fade-in zoom-in duration-200">
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-xs font-bold text-slate-800 truncate pr-4">Poster Event</h3>
+        <button type="button" onclick="tutupPreviewPoster()" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
+          <i class="bi bi-x-lg text-base"></i>
+        </button>
+      </div>
+      <div class="p-4 bg-slate-50 flex items-center justify-center">
+        <div class="w-full max-w-[280px] aspect-[4/5] rounded-2xl overflow-hidden bg-slate-200 shadow-md">
+          <img id="modalImg" src="" alt="Poster" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SweetAlert Flash Notification -->
+  {% if messages %}
+    <div id="django-messages" class="hidden">
+      {% for message in messages %}
+        <span class="django-msg-item" 
+              data-icon="{% if message.tags == 'error' %}error{% elif message.tags == 'info' %}info{% else %}success{% endif %}" 
+              data-text="{{ message|escapejs }}"></span>
+      {% endfor %}
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var msgElements = document.querySelectorAll('#django-messages .django-msg-item');
+        msgElements.forEach(function(el) {
+          Swal.fire({
+            icon: el.getAttribute('data-icon') || 'info',
+            title: el.getAttribute('data-text'),
+            timer: 2500,
+            showConfirmButton: false
+          });
+        });
+      });
+    </script>
+  {% endif %}
+
+  <!-- DataTables Init & Modal Scripts -->
+  <script>
+    $(document).ready(function() {
+      $('#tabelEvent').DataTable({
+        language: {
+          search: "Cari Event:",
+          lengthMenu: "Tampilkan _MENU_ data",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ event",
+          paginate: {
+            first: "Awal",
+            last: "Akhir",
+            next: "→",
+            previous: "←"
+          },
+          emptyTable: "Belum ada data event tersimpan"
+        },
+        pageLength: 10,
+        order: [[2, 'asc']]
+      });
+    });
+
+    function bukaPreviewPoster(url, judul) {
+      if (!url) return;
+      document.getElementById('modalImg').src = url;
+      document.getElementById('modalTitle').textContent = judul || 'Poster Event (4:5)';
+      document.getElementById('modalPoster').classList.remove('hidden');
+    }
+
+    function tutupPreviewPoster() {
+      document.getElementById('modalPoster').classList.add('hidden');
+      document.getElementById('modalImg').src = '';
+    }
+
+    function konfirmasiHapusEvent(urlHapus, judul) {
+      Swal.fire({
+        title: 'Hapus Event?',
+        html: `Apakah Anda yakin ingin menghapus event <br><strong>"${judul}"</strong>?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e11d48',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = urlHapus;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

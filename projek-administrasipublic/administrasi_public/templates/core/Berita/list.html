@@ -1,0 +1,487 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  {% if site_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  {% endif %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berita Terkini - Administrasi Publik UNTAD</title>
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            brand: {
+              teal: '#0b7285',
+              darkteal: '#084c5a',
+              gold: '#fab005',
+              accent: '#ffd43b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Animasi AOS Mobile Cepat, Ringan & Friendly */
+    @media (max-width: 768px) {
+      body, html {
+        overflow-x: hidden !important;
+      }
+      [data-aos] {
+        transition-duration: 450ms !important;
+        transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+      }
+      [data-aos="fade-left"],
+      [data-aos="fade-right"] {
+        transform: translate3d(0, 20px, 0) !important;
+      }
+      [data-aos="fade-left"].aos-animate,
+      [data-aos="fade-right"].aos-animate {
+        transform: translate3d(0, 0, 0) !important;
+      }
+      [data-aos][data-aos-delay] {
+        transition-delay: 50ms !important;
+      }
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+
+    /* Swiper Styles Persis Galeri */
+    .berita-sorotan-swiper {
+      padding-bottom: 46px !important;
+    }
+    .berita-sorotan-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .berita-sorotan-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
+    }
+  </style>
+</head>
+<body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/{{ site_settings.clean_whatsapp|default:'6285330144401' }}" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Unified Dynamic Navbar Component (CMS) -->
+  {% include 'components/navbar.html' %}
+
+  
+
+  <!-- Konten Utama -->
+  <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- BLOK 1 AOS: Header Halaman -->
+      <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
+        <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+          <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
+          <span class="text-slate-400">›</span>
+          <span class="font-medium text-teal-800">Berita Terkini</span>
+        </nav>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-[#0b7285] tracking-tight mb-2">
+          Berita Terkini
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-normal">
+          Informasi dan dokumentasi kegiatan seputar Program Studi Administrasi Publik FISIP Universitas Tadulako
+        </p>
+      </header>
+      
+      <!-- ================= SOROTAN BERITA KEGIATAN (CAROUSEL 3-2-1 PERSIS GALERI) ================= -->
+      {% if sorotan_berita %}
+        <section class="mb-8" data-aos="fade-up" data-aos-duration="600">
+          <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+              <h2 class="text-sm sm:text-base font-bold text-slate-800">
+                Sorotan Berita <span class="text-xs font-normal text-slate-400">({{ total_sorotan }} Berita)</span>
+              </h2>
+            </div>
+            <!-- Tombol Navigasi Slider -->
+            <div class="flex items-center gap-2">
+              <button type="button" id="sorotan-berita-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Berita Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" id="sorotan-berita-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Berita Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="swiper berita-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for sb in sorotan_berita %}
+                <div class="swiper-slide h-auto">
+                  <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+                    <div>
+                      <!-- FRAME GAMBAR RASIO 4:5 VERTIKAL PERSIS GALERI -->
+                      <a href="{% url 'berita_detail' sb.pk %}" class="block w-full overflow-hidden bg-slate-100 rounded-t-2xl relative cursor-pointer" style="aspect-ratio: 4 / 5;">
+                        {% if sb.gambar %}
+                          {% if sb.gambar.url %}
+                            <img src="{{ sb.gambar.url }}" alt="{{ sb.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                          {% else %}
+                            <img src="{{ sb.gambar }}" alt="{{ sb.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                          {% endif %}
+                        {% else %}
+                          <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 bg-slate-100">
+                            <i class="fas fa-newspaper text-5xl mb-2 text-slate-300"></i>
+                            <span class="text-xs text-slate-400">Tidak ada gambar</span>
+                          </div>
+                        {% endif %}
+
+                        <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity duration-200">
+                          <span class="w-10 h-10 rounded-full bg-white/25 backdrop-blur-xs flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-arrow-right"></i>
+                          </span>
+                        </div>
+
+                        <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-white/20">
+                          Berita #{{ forloop.counter }}
+                        </span>
+                      </a>
+
+                      <div class="p-4 sm:p-5">
+                        <span class="text-[10px] font-semibold text-[#0b7285] flex items-center gap-1.5 mb-1.5">
+                          <i class="far fa-clock text-[9px]"></i>
+                          {{ sb.posted_at|date:"d M Y, H:i" }}
+                        </span>
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug line-clamp-2 hover:text-[#0b7285] transition">
+                          <a href="{% url 'berita_detail' sb.pk %}">{{ sb.judul }}</a>
+                        </h3>
+                        {% if sb.ringkasan %}
+                          <p class="text-xs text-slate-500 leading-relaxed line-clamp-2 mt-2">
+                            {{ sb.ringkasan }}
+                          </p>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <!-- Bar Interaksi Bawah Sesuai Desain: View, Like, Comment, Share & Baca -->
+                    <div class="px-4 sm:px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <div class="flex items-center gap-3">
+                        <!-- View -->
+                        <span class="flex items-center gap-1 text-slate-600 text-[11px]" title="{{ sb.views }} pembaca">
+                          <i class="far fa-eye text-xs text-[#0b7285]"></i>
+                          <span class="font-bold text-slate-700 font-mono">{{ sb.views }}</span>
+                        </span>
+                        <!-- Like -->
+                        <button type="button" class="btn-card-like group flex items-center gap-1 text-slate-600 focus:outline-none cursor-pointer text-[11px]" data-id="{{ sb.pk }}" title="Sukai berita">
+                          <i class="far fa-heart text-xs text-slate-400 group-hover:text-rose-500 transition-colors"></i>
+                          <span class="font-bold text-slate-700 font-mono like-count">{{ sb.likes }}</span>
+                        </button>
+                        <!-- Komentar -->
+                        <a href="{% url 'berita_detail' sb.pk %}#komentar-section" class="flex items-center gap-1 text-slate-600 hover:text-[#0b7285] text-[11px]" title="Komentar">
+                          <i class="far fa-comment-dots text-xs text-slate-400"></i>
+                          <span class="font-bold text-slate-700 font-mono">{{ sb.komentar_list.count }}</span>
+                        </a>
+                      </div>
+                      <a href="{% url 'berita_detail' sb.pk %}" class="text-[11px] font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
+                        Baca &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      {% endif %}
+
+    </div>
+  </main>
+
+  <!-- UNIFIED FOOTER COMPONENT -->
+  {% include 'core/footer.html' %}
+
+  <!-- Toast Notifikasi Global -->
+  <div id="toast-notify" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2.5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs">
+    <i class="fas fa-check-circle text-teal-400 text-sm"></i>
+    <span id="toast-message">Tautan berita berhasil disalin!</span>
+  </div>
+
+  <form id="csrf-holder" class="hidden">{% csrf_token %}</form>
+
+  <!-- AOS Script & Inisialisasi Ringkas -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    try {
+      if (typeof AOS !== 'undefined') {
+        AOS.init({
+          duration: window.innerWidth < 768 ? 450 : 650,
+          offset: window.innerWidth < 768 ? 25 : 60,
+          once: true,
+          easing: 'ease-out-cubic'
+        });
+      }
+    } catch (e) {
+      console.warn('AOS initialization error:', e);
+    }
+    // Failsafe: pastikan semua elemen konten ber-AOS selalu terlihat jika CDN lambat/gagal
+    setTimeout(function() {
+      document.querySelectorAll('[data-aos]').forEach(function(el) {
+        if (!el.classList.contains('aos-animate')) {
+          el.classList.add('aos-animate');
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }
+      });
+    }, 1000);
+
+    // Mobile Navbar Drawer & Accordion
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (!drawer) return;
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (iconBars) iconBars.classList.add('hidden');
+        if (iconClose) iconClose.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const iconBars = document.getElementById('menu-icon-bars');
+      const iconClose = document.getElementById('menu-icon-close');
+      if (drawer) {
+        drawer.classList.add('hidden');
+        if (backdrop) backdrop.classList.add('hidden');
+        if (iconBars) iconBars.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+      }
+    }
+
+    function toggleMobileAccordion(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById(id.replace('-menu', '-icon'));
+      if (el) {
+        el.classList.toggle('hidden');
+        if (icon) icon.classList.toggle('rotate-180');
+      }
+    }
+
+    // Helper CSRF
+    function getCsrfToken() {
+      const input = document.querySelector('#csrf-holder input[name=csrfmiddlewaretoken]');
+      if (input) return input.value;
+      const match = document.cookie.match(/csrftoken=([^;]+)/);
+      return match ? match[1] : '';
+    }
+
+    // Helper Toast
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notify');
+      const text = document.getElementById('toast-message');
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    // Interaksi Like pada Kartu
+    document.querySelectorAll('.btn-card-like').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const beritaId = this.dataset.id;
+        const heartIcon = this.querySelector('i');
+        const countSpan = this.querySelector('.like-count');
+
+        fetch(`/Berita/${beritaId}/like/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            countSpan.textContent = data.likes;
+            if (data.liked) {
+              heartIcon.classList.remove('far', 'text-slate-400');
+              heartIcon.classList.add('fas', 'text-rose-600');
+            } else {
+              heartIcon.classList.remove('fas', 'text-rose-600');
+              heartIcon.classList.add('far', 'text-slate-400');
+            }
+          }
+        })
+        .catch(err => console.error('Error like:', err));
+      });
+    });
+
+    // Interaksi Share pada Kartu
+    document.querySelectorAll('.btn-card-share').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const beritaId = this.dataset.id;
+        const countSpan = this.querySelector('.share-count');
+        const relativeUrl = this.dataset.url;
+        const fullUrl = window.location.origin + relativeUrl;
+
+        // Salin ke Clipboard
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(fullUrl).then(() => {
+            showToast('Tautan berita berhasil disalin ke clipboard!');
+          });
+        } else {
+          showToast('Tautan berita: ' + fullUrl);
+        }
+
+        // Simpan jumlah share ke database
+        fetch(`/Berita/${beritaId}/share/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            countSpan.textContent = data.shares;
+          }
+        })
+        .catch(err => console.error('Error share:', err));
+      });
+    });
+
+    // ================= LOGIKA PRESET TANGGAL & PENGURUTAN FILTER KAPSUL =================
+    function setPreset(type) {
+      const form = document.getElementById('filter-form');
+      const startInput = document.getElementById('start_date');
+      const endInput = document.getElementById('end_date');
+      const presetInput = document.getElementById('preset-input');
+
+      const today = new Date();
+      const formatYMD = d => {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      };
+
+      if (type === 'all') {
+        startInput.value = '';
+        endInput.value = '';
+        presetInput.value = 'all';
+      } else if (type === '7d') {
+        const start = new Date();
+        start.setDate(today.getDate() - 7);
+        startInput.value = formatYMD(start);
+        endInput.value = formatYMD(today);
+        presetInput.value = '7d';
+      } else if (type === 'this_month') {
+        const start = new Date(today.getFullYear(), today.getMonth(), 1);
+        startInput.value = formatYMD(start);
+        endInput.value = formatYMD(today);
+        presetInput.value = 'this_month';
+      } else if (type === 'this_year') {
+        const start = new Date(today.getFullYear(), 0, 1);
+        startInput.value = formatYMD(start);
+        endInput.value = formatYMD(today);
+        presetInput.value = 'this_year';
+      }
+      form.submit();
+    }
+
+    function applySort(val) {
+      const form = document.getElementById('filter-form');
+      document.getElementById('sort-input').value = val;
+      form.submit();
+    }
+
+    // Bersihkan preset saat input tanggal diubah manual
+    document.getElementById('start_date')?.addEventListener('change', () => {
+      const p = document.getElementById('preset-input');
+      if (p) p.value = '';
+    });
+    document.getElementById('end_date')?.addEventListener('change', () => {
+      const p = document.getElementById('preset-input');
+      if (p) p.value = '';
+    });
+  </script>
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.berita-sorotan-swiper')) {
+        new Swiper('.berita-sorotan-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          grabCursor: true,
+          loop: false,
+          navigation: {
+            nextEl: '#sorotan-berita-next',
+            prevEl: '#sorotan-berita-prev',
+          },
+          pagination: {
+            el: '.berita-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
+    });
+  </script>
+</body>
+</html>
