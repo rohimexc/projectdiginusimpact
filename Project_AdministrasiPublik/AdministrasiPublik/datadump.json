@@ -31,7 +31,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$1000000$CwaeZtYeKCSvCmxtm9lepZ$vK6QeyMyQw7/U42xbWfIZrGv7kDp04PTtkF8Q3+1oB0=",
-    "last_login": "2026-11-27T14:11:10.636Z",
+    "last_login": "2026-11-28T08:55:58.535Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "Admin",
@@ -132,398 +132,6 @@
     "date_joined": "2026-11-27T11:44:24.640Z",
     "groups": [],
     "user_permissions": []
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "0se6qhzhzetuz476thb5dnttkum38gyv",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0hC:caRsCaOcKjwYnb5r8W2S9HaiF9foFdLSst0SYHjmoTY",
-    "expire_date": "2026-11-11T10:15:50.442Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "1phfl5qurql3846av7ciwivi2t3lfxwk",
-  "fields": {
-    "session_data": "e30:1xWueu:f0kuyVpBbbexdNt_SDLvcvmyBDBJ9VpgsghmqkcN_KQ",
-    "expire_date": "2026-12-11T12:02:32.487Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "28sumxqprxt931shteykzw4zu5l3ba3i",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0bM:fGNkuarx2_2M6aWHS0dm8Q3auTBOcbr2ppfgL0vuRAM",
-    "expire_date": "2026-11-11T10:09:48.748Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "2xiztf9a8o1rvywinbafbj3p3uej89il",
-  "fields": {
-    "session_data": ".eJxVjE0OwiAYBe_C2hCgCOjSfc9Avh-QqoGktCvj3W2TLnT7Zua9RYR1KXHtaY4Ti6sw4vS7IdAz1R3wA-q9SWp1mSeUuyIP2uXYOL1uh_t3UKCXrVbOerTodYCU6ZLB5OAJtGU6B0ZPSgVjsnYI1rHfZMOcVOZh8BxoEJ8v-V44kA:1xWwfP:WYngmV__FYxgp_01EQ01k51AZ4Efz-goJwAha8RFXy4",
-    "expire_date": "2026-12-11T14:11:11.264Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "3ml3f4elar4ukrugf9hyw6ti5z9r0f81",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Bq:1scddvI6UEfX0FDYY0h54oX5kH0L5BlWr1VrVpRVTVo",
-    "expire_date": "2026-11-11T09:43:26.779Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "3r3za2b9qqkrknewyb5p0yblezeftg0s",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xUiCa:mK0_KREPfeP3A8yF1FCltP8Xzkut74uDJmb1kba_8wo",
-    "expire_date": "2026-12-05T10:20:12.731Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "50ca5nyl7ccu54nm5d8ndrh6lkv7y492",
-  "fields": {
-    "session_data": "e30:1xWuon:01QlufIt2Qu_u34vWApj2TzSkJaw0pEpV7kb4tOnHwk",
-    "expire_date": "2026-12-11T12:12:45.950Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "55843zvaaauy23f6cc9d9r1ra6kgo49g",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Sh:vceXD1CMIPhIsE5YbrY2Rxmou8tWkXX2tQiL5WW3GJI",
-    "expire_date": "2026-11-11T10:00:51.025Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "5go1l3zaecaxf5u8xnuz693tviw83xjf",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLLKX:mzSyPYUeSMTYiGY2CUGClvT7f0gT3oipipu5jZzoan0",
-    "expire_date": "2026-11-09T14:05:41.702Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "5oclwxeej1stoudntfvhv13hfsw3a11g",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWv5L:T5xN66KtHyOt_JMelBr5P3hx7nNSO4L6RelTHCBki_g",
-    "expire_date": "2026-12-11T12:29:51.792Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "6pt6ynhigrh04m9s5f8pyy29yv6763vf",
-  "fields": {
-    "session_data": "e30:1xODSK:DefrmasyeEZevMEK_LQr7iYtMjSMA8XDYZZ5aKxfJNs",
-    "expire_date": "2026-11-17T12:17:36.028Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "75hzic1nksdn69w3ofv1ordodp6nesuo",
-  "fields": {
-    "session_data": "e30:1xWuN5:jJOnMSB-6F8hKuKJjUP9pO4A4ls-oeC0pYNMjY3yHgc",
-    "expire_date": "2026-12-11T11:44:07.783Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "7f27zrfw8syg9u1c87jj5sapa75wtliw",
-  "fields": {
-    "session_data": ".eJxVjEEOwiAQRe_C2hCmU0C6dO8ZCAODRU2bUKoL4921STfd_vfe_4hX4TcnT1xLCx7F0OrKJ-HD2ka_Llx9SWIQWhw2CvHB0wbSPUy3WcZ5arWQ3BS500Ve58TPy-4eDsawjP9aGUC0FMmBIWXP6DT3iAFVD8aqbAE460yOAFzuYiRNnWEA6FRiQ-L7A7PIP4A:1xPB0S:B-cRozbHkTQcyzUZvcjceyQrXQAz0n7mnTse5nawj5A",
-    "expire_date": "2026-11-20T03:52:48.993Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "7tgoerputfdyiere3otcpa3294j8nfrf",
-  "fields": {
-    "session_data": "e30:1xVoGl:Ikz2Xd2TcAlQWjW76rfOp7URKwjLfTscNzUw0AhdTmg",
-    "expire_date": "2026-12-08T11:01:03.420Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "9mec8afedx1lpac5q5lkas42uiuzz12m",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0h3:-B_eHyRy0V5tim1ZQha99A2imJrJq1rSeYdP-QkBdtU",
-    "expire_date": "2026-11-11T10:15:41.493Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "9twa5ig6el3io0u5p5v1axnqxlcfghjf",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwOO:JLRifS7NweCH70ATvrcQ9opZkD-D1cdz7CLlHAlE3cw",
-    "expire_date": "2026-12-11T13:53:36.661Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "aeryk7zlamakfo6pnj44r2sd55l1nj97",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLKnX:axBSU_j3hI3KCLRXc0VZ3RR1Ca7M2BNyI2mJeqSwpK4",
-    "expire_date": "2026-11-09T13:31:35.056Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "agd9tw9ebf08kvkk7fnia6linoa30263",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLx02:g4HPy_WvlSNvwWYOFMXxoalIQCQSODTELPPrOjIHzCE",
-    "expire_date": "2026-11-11T06:19:02.871Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "biswpvgiz5eg6a2hjsj8up1ajxy5hz7b",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Gw:kLEeofjQphzAkAA6sL8_7WVQNxSZ0dMtntK2QhRr-to",
-    "expire_date": "2026-11-11T09:48:42.587Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "bj23cn8lwe2egejce40kermm6dd245cb",
-  "fields": {
-    "session_data": ".eJxVjE0OwiAYBe_C2hCgCOjSfc9Avh-QqoGktCvj3W2TLnT7Zua9RYR1KXHtaY4Ti6sw4vS7IdAz1R3wA-q9SWp1mSeUuyIP2uXYOL1uh_t3UKCXrVbOerTodYCU6ZLB5OAJtGU6B0ZPSgVjsnYI1rHfZMOcVOZh8BxoEJ8v-V44kA:1xWwfo:b3A5Y07YpPG83aox0y2WPCLOmwf4iLcg33OUiCcsMLQ",
-    "expire_date": "2026-12-11T14:11:36.626Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "bqr4s0hmqhog75odsdjz8h55eqecvmqo",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSG8OjAu3fsNBBiQqoGktCvjv2uTLnR7zzn3xXzY1uq3kRc_EzszxU6_WwzpkdsO6B7arfPU27rMke8KP-jg1075eTncv4MaRv3WziJE6QQSxgAOJ8ogQBqHiCpYW4xURRUBoDNQsUllrc3kIhVEowp7fwC8fDcb:1xWwOl:rSTtFeuzVVZCOyCgyP49sn3nawW1s4TD_4VkuzyBAuU",
-    "expire_date": "2026-12-11T13:53:59.789Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "ccwxm81e0pjczsdj3t06rjzdqw7rbwt3",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLwz6:T3qpjh0EvfQFzwRXdhfxKSncyYpbD4VJSeldl3SAcks",
-    "expire_date": "2026-11-11T06:18:04.078Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "fxlan996wr14fa04hsheapgkqsufaajm",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xRS3J:-Q3srpU8Vg9GZbqud0oxMqVTCj5pcMj_RCh2XEjWeC8",
-    "expire_date": "2026-11-26T10:29:09.099Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "grepux64yn24z6xufzy5oxcwpnslzhtv",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWuoU:ppPOX6l7kykjZE3AIF_eNwSbPB6UrIlD9NxWQd1Uvzo",
-    "expire_date": "2026-12-11T12:12:26.777Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "grtrhg7t64qho78mo1lvqqxxwupn7c84",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xMiRb:pq8OqWwLl37skykJkQIGRydsU2YMj7EN3_YfX1DlBFo",
-    "expire_date": "2026-11-13T08:58:39.070Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "gtm3o1m9f6sjfg0eiqj8j7ion59hg9on",
-  "fields": {
-    "session_data": "e30:1xUiC7:5jJpYEn6uFKP5XY97JM1W1DsiRBG33j392AWJxMhRw0",
-    "expire_date": "2026-12-05T10:19:43.418Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "hr1u88qi3wqzjh72dqy82tec60wdryk9",
-  "fields": {
-    "session_data": "e30:1xVoFv:yB4tO2g6yKn0Tv_Mmm_IXamZ_3oGlM5RDti-yY7awMg",
-    "expire_date": "2026-12-08T11:00:11.470Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "konxw8zu3d18p3qkzc84mqjxtgoswp1y",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwW9:YqY961lvV70d-iZMihPykgnz4z0na11WxAXPzamLDzU",
-    "expire_date": "2026-12-11T14:01:37.084Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "kyoee0noc573z742i41mekmtwxrto8oy",
-  "fields": {
-    "session_data": "e30:1xUiBr:plg-kvi46PTTYycMAWF-xeeMVSSZTRn5_PuVkZ5TqBM",
-    "expire_date": "2026-12-05T10:19:27.966Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e",
-  "fields": {
-    "session_data": ".eJxVjE0OwiAYBe_C2hCgCOjSfc9Avh-QqoGktCvj3W2TLnT7Zua9RYR1KXHtaY4Ti6sw4vS7IdAz1R3wA-q9SWp1mSeUuyIP2uXYOL1uh_t3UKCXrVbOerTodYCU6ZLB5OAJtGU6B0ZPSgVjsnYI1rHfZMOcVOZh8BxoEJ8v-V44kA:1xWwb6:oln2MDAyisHTdgJq1UP69awDhwuF_eOn-G1xLicSd6c",
-    "expire_date": "2026-12-11T14:06:44.476Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "nbscaroc9rprlonmvswjbt84oi9k1bhl",
-  "fields": {
-    "session_data": "eyJ2aWV3ZWRfYmVyaXRhXzMiOnRydWV9:1xODTz:LDePYMVuIWzem5mCJsts66kmm4miSJMefC4xU-mYIA4",
-    "expire_date": "2026-11-17T12:19:19.371Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "nheo6luk8bcv8cpm78acrdm5gqc74voj",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xR2U7:7tvMsNILxHF6Xyk4b_trx0dvSUpSkDTdYOPLwJcNK2I",
-    "expire_date": "2026-11-25T07:11:07.573Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "nneaovmwple8axvg79e4dv47eouc075z",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xUiCL:MYj4Kce4fN6ZumD2501JS7vQdTV0OhBMiqJgzrobEXo",
-    "expire_date": "2026-12-05T10:19:57.723Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "pdkivm0oiu2w6mt9fazoqg9h8vm5zd7b",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0Sp:0I_Qu-Fdbw5gwwLbT7ZVjNwhiH1WDS3y4aFZN8HPrc0",
-    "expire_date": "2026-11-11T10:00:59.999Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "pj2210g831x8jh5a6ybusrxdtvfwtt5p",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0T9:6jjhzsxob3AoDKciIiVwVFOMFdCdvhb1oMFu-_s6p-A",
-    "expire_date": "2026-11-11T10:01:19.588Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "poselp02amzi8fvve79dw7xp26ci22vn",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xLLKj:OwfqbXvCg9gA6nHv_TLVPKn6uX2sHaY_xZuxMthNOVM",
-    "expire_date": "2026-11-09T14:05:53.363Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "pqpor1genfvhsjarn32ppqadrlbtvyc5",
-  "fields": {
-    "session_data": "e30:1xUiWL:ZaanNexskwNqx0aCuPt9Wgsnyv8lA-zPjWtOm6-nWyE",
-    "expire_date": "2026-12-05T10:40:37.507Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "q2tz5awt41ghzsexc8yacn7rtne7606x",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0RC:dAnkCvdWS7CFBmS37JUtZP-G9FrENBTQqVeS2BoWoWs",
-    "expire_date": "2026-11-11T09:59:18.769Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "qf10x9hai99598ltegdpj111roxyb8pu",
-  "fields": {
-    "session_data": ".eJxVjMEOwiAQRP-FsyFIi-x69N5vIAu7laqBpLQn47_bJj3oHOe9mbcKtC45rE3mMLG6Kq9Ov12k9JSyA35QuVedalnmKepd0Qdteqgsr9vh_h1kanlbI0sEaw0gQY8AMl6MJUjMrhNBh-DEGDr7kbcAUB8xYrI-ibepA_X5Au9WOGE:1xWuNM:IGhjwzRWzvMOvZuJALFAzUuIWJy_J5aLLVofCg9Lfn4",
-    "expire_date": "2026-12-11T11:44:24.680Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "renh3ko0to7o64mpqcrg9dis7c5n9ilc",
-  "fields": {
-    "session_data": "e30:1xVRMJ:C-0yqie0Co4TWYKRNIdBkWFjbTGAnIU87T_kucp7WAY",
-    "expire_date": "2026-12-07T10:33:15.887Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "rq4p0joqy87jil80uokk15svvf2czidz",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwNv:aLmDoWqzwAXHWp_hJ62UO4Msf371DOHSacCyqCrajw4",
-    "expire_date": "2026-12-11T13:53:07.873Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "tk7k52qgywp918aetaidsra7mrbinjwa",
-  "fields": {
-    "session_data": "eyJ2aWV3ZWRfYmVyaXRhXzMiOnRydWV9:1xOZpK:U3nLmyO8H08gvbQFm7HJZOmlYY4c3facPSlw4pvZ-vQ",
-    "expire_date": "2026-11-18T12:10:50.496Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "uazikjlmkrprqz9zhcfae9kq6kaue95q",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwUa:0RuzAlNB6_a_h02qKt1L20zLAXT0gZ6ke5rz_k-Px9s",
-    "expire_date": "2026-12-11T14:00:00.351Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "umkqvsl3itihvc3kzla9mqwg2beqc5vi",
-  "fields": {
-    "session_data": ".eJxVjDsOwjAQBe-yNbJiB3-Skp4zWLv2mhhQItkOFIi7Q6Q0ad_MvA-8Mr85euKSG3oJYysrn8Dj2ia_Vi4-RxhBwmEjDA-eNxDvON8WEZa5lUxiU8ROq7gukZ-X3T0cTFinf01KO7Yx9RTYaIyDMkGi00lLrXQX7dAb6iyRxERmOLteJZmkcRYNKWXg-wPmBT_6:1xRSQA:uG0X2sX34GdMnaznA_VGvWGGI9folbF2mBihgU-6VXY",
-    "expire_date": "2026-11-26T10:52:46.337Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "vcm0448l72dsy695ib3lrwgijyvw0qhf",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWwWO:W3pfH0J_1HfQ6sAOb_ka0BMqOD-lcl2aHFHNIxjXbMo",
-    "expire_date": "2026-12-11T14:01:52.750Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "vrk0lssfirp9etpity7rmw8l71ubowvp",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xTCHy:4ELrskKnNcBOvCk7cYUZBJjMoxlAz4hY4J_qa_27XzU",
-    "expire_date": "2026-12-01T06:03:30.006Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "ywdauw6ex6pb2vq6uagrxug8vrcfxght",
-  "fields": {
-    "session_data": "e30:1xODUc:eJvqDCj9PExHrAUQ6pPu8tlHEK-xNvHfrngttwEpRVU",
-    "expire_date": "2026-11-17T12:19:58.274Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "zj8kzo8oaesvigp90z7d2ad0bgtabuo0",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xM0bD:tnBgeMM7RsARaAuebGnU2xppljgqwKlWk3Jf_mvQ4bU",
-    "expire_date": "2026-11-11T10:09:39.269Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "zkddrf5a7xys38eh8a1mwlej30x2qm18",
-  "fields": {
-    "session_data": ".eJxVjMsOwiAQRf-FtSGFOgO4dN9vIDM8pGogKe3K-O_apAvd3nPOfQlP21r81tPi5yguQonT78YUHqnuIN6p3poMra7LzHJX5EG7nFpMz-vh_h0U6uVbswabTMwjh4RA0WkMiixkUKBhiMaNyINhVpQZ3dmOOqus0BpC1hrF-wPsPzem:1xWuof:K1iF-nG65yxcC39ZonrY3BgSSbzE5N0-WpYOyDqLpyA",
-    "expire_date": "2026-12-11T12:12:37.752Z"
   }
 },
 {
@@ -1044,7 +652,7 @@
     "nuptk": "213131",
     "jenis_kelamin": "L",
     "bidang_ilmu": "Ekonomi",
-    "jabatan": "DOSEN TETAP",
+    "jabatan": "Lektor Kepala",
     "pangkat_golongan": "Profesor",
     "status": "Aktif",
     "email": "aprianaimade08@gmail.com",
@@ -1062,11 +670,11 @@
     "nuptk": "02497575",
     "jenis_kelamin": "P",
     "bidang_ilmu": "Anjay",
-    "jabatan": "adoadjojdoaj",
+    "jabatan": "Lektor",
     "pangkat_golongan": "III/c",
     "status": "Dosen PNS",
     "email": "anjayyyy@gmail.com",
-    "no_hp": "24242424",
+    "no_hp": "24242423",
     "foto": "dosen/Screenshot_2026-06-06_191428.png"
   }
 },
@@ -1080,7 +688,7 @@
     "nuptk": "0249757522525",
     "jenis_kelamin": null,
     "bidang_ilmu": "Anjayasad",
-    "jabatan": "adoadjojdoajafafaf",
+    "jabatan": "Asisten Ahli",
     "pangkat_golongan": "IV/d",
     "status": "Dosen Luar Biasa",
     "email": "anjayyyadady@gmail.com",
@@ -1098,7 +706,7 @@
     "nuptk": "0249757522525797",
     "jenis_kelamin": "L",
     "bidang_ilmu": "Anjayasa",
-    "jabatan": "adoadjojdoajaf",
+    "jabatan": "Guru Besar",
     "pangkat_golongan": "III/d",
     "status": "Dosen Tetap Yayasan",
     "email": "anjayyadady@gmail.com",
@@ -3252,6 +2860,146 @@
     "ip_address": "127.0.0.1",
     "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_b0884437",
     "created_at": "2026-11-27T14:42:53.814Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 142,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_75d3e279",
+    "created_at": "2026-11-27T14:49:12.760Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 143,
+  "fields": {
+    "tanggal": "2026-11-27",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_cb7a406f",
+    "created_at": "2026-11-27T14:49:14.380Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 144,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_7af0b62b",
+    "created_at": "2026-11-28T08:46:17.910Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 145,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_9672be1a",
+    "created_at": "2026-11-28T08:46:28.729Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 146,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_98ab89b8",
+    "created_at": "2026-11-28T08:46:46.162Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 147,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_2d97f04c",
+    "created_at": "2026-11-28T08:46:48.915Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 148,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_bd50ed80",
+    "created_at": "2026-11-28T08:47:01.803Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 149,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "na0fpi7r1gqdlz1xnri9go59i1nzjx2e_ad90b1ac",
+    "created_at": "2026-11-28T08:47:11.886Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 150,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "j09efd8hosy8fwsfbaim2c4zsafe6326_07b1aa66",
+    "created_at": "2026-11-28T08:54:20.877Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 151,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "zerrfi5r3e2x1flnp7t6kk0vqkae4rd2_f0a122f8",
+    "created_at": "2026-11-28T08:54:30.721Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 152,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "b3d98ix3vydzf8qd68ohsp4vcwt8s7yp_0c2e9dbe",
+    "created_at": "2026-11-28T08:54:47.719Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 153,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "ns8qssmq6j0zyrbi3n1ajf5m12nadh6q_624a7cd2",
+    "created_at": "2026-11-28T08:54:56.738Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 154,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "ns8qssmq6j0zyrbi3n1ajf5m12nadh6q_72ecd3f8",
+    "created_at": "2026-11-28T08:54:56.797Z"
+  }
+},
+{
+  "model": "landing.pengunjungweb",
+  "pk": 155,
+  "fields": {
+    "tanggal": "2026-11-28",
+    "ip_address": "127.0.0.1",
+    "session_key": "qrnh1n9370f2vzjxxkulnyuy5cwpcgbp_2d931150",
+    "created_at": "2026-11-28T08:55:58.684Z"
   }
 },
 {

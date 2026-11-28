@@ -434,6 +434,7 @@ def dosen_beranda_view(request):
     lektor_kepala_count = Dosen.objects.filter(jabatan__icontains='Lektor Kepala').count()
     lektor_count = Dosen.objects.filter(jabatan__icontains='Lektor').exclude(jabatan__icontains='Kepala').count()
     asisten_ahli_count = Dosen.objects.filter(jabatan__icontains='Asisten Ahli').count()
+    tenaga_pengajar_count = Dosen.objects.filter(jabatan__icontains='Tenaga Pengajar').count()
 
     # Filter Pencarian Teks
     if query:
@@ -453,6 +454,10 @@ def dosen_beranda_view(request):
             dosen_list = dosen_list.filter(jabatan__icontains='Lektor').exclude(jabatan__icontains='Kepala')
         elif jabatan == 'Asisten Ahli':
             dosen_list = dosen_list.filter(jabatan__icontains='Asisten Ahli')
+        elif jabatan == 'Tenaga Pengajar':
+            dosen_list = dosen_list.filter(jabatan__icontains='Tenaga Pengajar')
+        else:
+            dosen_list = dosen_list.filter(jabatan__icontains=jabatan)
 
     return render(request, 'landing/Dosen/dosen_public_list.html', {
         'dosen_list': dosen_list,
@@ -464,6 +469,7 @@ def dosen_beranda_view(request):
         'lektor_kepala_count': lektor_kepala_count,
         'lektor_count': lektor_count,
         'asisten_ahli_count': asisten_ahli_count,
+        'tenaga_pengajar_count': tenaga_pengajar_count,
     })
 
 def galeri_kegiatan_view(request):

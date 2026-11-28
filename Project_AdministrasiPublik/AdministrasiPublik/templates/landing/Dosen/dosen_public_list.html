@@ -71,6 +71,10 @@
                         class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Asisten Ahli' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
                         Asisten Ahli ({{ asisten_ahli_count }})
                     </button>
+                    <button type="button" onclick="setJabatan('Tenaga Pengajar')"
+                        class="px-4 py-1.5 rounded-full text-xs font-medium transition {% if jabatan == 'Tenaga Pengajar' %}bg-[#005f5f] text-white font-semibold shadow-xs{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+                        Tenaga Pengajar ({{ tenaga_pengajar_count }})
+                    </button>
                     <input type="hidden" name="jabatan" id="jabatanInput" value="{{ jabatan|default:'' }}">
                 </div>
 
