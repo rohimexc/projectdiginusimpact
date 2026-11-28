@@ -1,3 +1,8 @@
+import io
+import os
+import re
+from PIL import Image
+from django.core.files.base import ContentFile
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
@@ -7,6 +12,8 @@ from .validators import (
     validate_video_file,
     validate_pdf_file,
     validate_document_file,
+    validate_favicon_file,
+    validate_site_logo_file,
 )
 
 
@@ -595,3 +602,362 @@ class Event(models.Model):
         hari = HARI_NAMA.get(self.tanggal_mulai.weekday(), "")
         bulan = BULAN_NAMA.get(self.tanggal_mulai.month, "")
         return f"{hari} {self.tanggal_mulai.day} {bulan} {self.tanggal_mulai.year}"
+
+
+# =========================================================================
+# MODEL KONFIGURASI SITUS TERPADU (SITE SETTINGS)
+# =========================================================================
+
+SOCIAL_PLATFORM_CHOICES = [
+    ('facebook', 'Facebook'),
+    ('instagram', 'Instagram'),
+    ('whatsapp', 'WhatsApp'),
+    ('tiktok', 'TikTok'),
+    ('youtube', 'YouTube'),
+    ('x', 'X (Twitter)'),
+    ('linkedin', 'LinkedIn'),
+    ('telegram', 'Telegram'),
+    ('threads', 'Threads'),
+    ('pinterest', 'Pinterest'),
+    ('snapchat', 'Snapchat'),
+    ('discord', 'Discord'),
+    ('reddit', 'Reddit'),
+    ('line', 'LINE'),
+    ('kaskus', 'Kaskus'),
+    ('twitch', 'Twitch'),
+]
+
+PLATFORM_ICONS = {
+    'facebook': 'bi bi-facebook',
+    'instagram': 'bi bi-instagram',
+    'whatsapp': 'bi bi-whatsapp',
+    'tiktok': 'bi bi-tiktok',
+    'youtube': 'bi bi-youtube',
+    'x': 'bi bi-twitter-x',
+    'linkedin': 'bi bi-linkedin',
+    'telegram': 'bi bi-telegram',
+    'threads': 'bi bi-threads',
+    'pinterest': 'bi bi-pinterest',
+    'snapchat': 'bi bi-snapchat',
+    'discord': 'bi bi-discord',
+    'reddit': 'bi bi-reddit',
+    'line': 'bi bi-line',
+    'kaskus': 'bi bi-chat-quote-fill',
+    'twitch': 'bi bi-twitch',
+}
+
+PLATFORM_FA_ICONS = {
+    'facebook': 'fab fa-facebook-f',
+    'instagram': 'fab fa-instagram',
+    'whatsapp': 'fab fa-whatsapp',
+    'tiktok': 'fab fa-tiktok',
+    'youtube': 'fab fa-youtube',
+    'x': 'fab fa-x-twitter',
+    'linkedin': 'fab fa-linkedin-in',
+    'telegram': 'fab fa-telegram-plane',
+    'threads': 'fab fa-threads',
+    'pinterest': 'fab fa-pinterest',
+    'snapchat': 'fab fa-snapchat',
+    'discord': 'fab fa-discord',
+    'reddit': 'fab fa-reddit',
+    'line': 'fab fa-line',
+    'kaskus': 'fas fa-comments',
+    'twitch': 'fab fa-twitch',
+}
+
+
+def _resize_site_image(image_field, max_size=(800, 300), quality=90):
+    """Fungsi pembantu auto-resize gambar menggunakan Pillow tanpa merusak aspek rasio."""
+    if not image_field:
+        return
+    name = getattr(image_field, 'name', '')
+    ext = os.path.splitext(name)[1].lower()
+    if ext in {'.svg', '.ico'}:
+        return
+    try:
+        # Buka berkas dan cek dimensi
+        image_field.seek(0)
+        img = Image.open(image_field)
+        if img.width > max_size[0] or img.height > max_size[1]:
+            img.thumbnail(max_size, Image.Resampling.LANCZOS)
+            output = io.BytesIO()
+            fmt = 'PNG' if ext == '.png' else ('WEBP' if ext == '.webp' else 'JPEG')
+            if fmt == 'JPEG' and img.mode in ('RGBA', 'LA', 'P'):
+                img = img.convert('RGB')
+            img.save(output, format=fmt, quality=quality, optimize=True)
+            output.seek(0)
+            image_field.save(name, ContentFile(output.read()), save=False)
+    except Exception:
+        pass
+
+
+class SiteSetting(models.Model):
+    """
+    Model konfigurasi situs utama berbasis pola Single Instance (Singleton).
+    Menampung identitas situs, logo, footer, dan informasi kontak secara dinamis.
+    """
+    # 1. Identitas Situs & Header
+    favicon = models.ImageField(
+        upload_to='site/favicon/',
+        blank=True,
+        null=True,
+        validators=[validate_favicon_file],
+        help_text="Format .png, .ico, atau .svg (Rasio 1:1, ideal 64x64 atau 128x128 px, maks 500 KB)",
+        verbose_name="Favicon Website"
+    )
+    header_logo = models.ImageField(
+        upload_to='site/logo/',
+        blank=True,
+        null=True,
+        validators=[validate_site_logo_file],
+        help_text="Format .png, .webp, atau .svg transparan (Tinggi ideal 80–120 px, maks 2 MB)",
+        verbose_name="Logo Header (Navbar)"
+    )
+    header_title = models.CharField(
+        max_length=200,
+        default="Administrasi Publik",
+        verbose_name="Judul Header / Nama Instansi"
+    )
+    header_subtitle = models.CharField(
+        max_length=200,
+        default="FISIP Universitas Tadulako",
+        verbose_name="Subjudul Header"
+    )
+
+    # 2. Pengaturan Footer
+    footer_logo = models.ImageField(
+        upload_to='site/logo/',
+        blank=True,
+        null=True,
+        validators=[validate_site_logo_file],
+        help_text="Format .png, .webp, atau .svg transparan (Tinggi ideal 80–120 px, maks 2 MB)",
+        verbose_name="Logo Footer"
+    )
+    footer_title = models.CharField(
+        max_length=200,
+        default="Administrasi Publik",
+        verbose_name="Judul Footer"
+    )
+    footer_subtitle = models.CharField(
+        max_length=200,
+        default="FISIP Universitas Tadulako",
+        verbose_name="Subjudul Footer"
+    )
+    footer_description = models.TextField(
+        default="Mencetak sarjana yang unggul, berintegritas, dan inovatif dalam perumusan kebijakan publik serta tata kelola pemerintahan yang berwawasan lingkungan.",
+        verbose_name="Deskripsi Footer / Profil Singkat"
+    )
+    footer_short_address = models.CharField(
+        max_length=255,
+        default="Kampus Bumi Tadulako, Palu",
+        verbose_name="Alamat Singkat Footer"
+    )
+
+    # 3. Kontak
+    contact_title = models.CharField(
+        max_length=200,
+        default="Informasi Kontak",
+        verbose_name="Judul Bagian Kontak"
+    )
+    contact_subtitle = models.CharField(
+        max_length=200,
+        default="Program Studi Administrasi Publik",
+        verbose_name="Subjudul Bagian Kontak"
+    )
+    contact_address = models.TextField(
+        default="Gedung FISIP UNTAD, Kampus Bumi Tadulako Tondo, Jl. Soekarno-Hatta Km. 9, Kota Palu, Sulawesi Tengah 94118",
+        verbose_name="Alamat Lengkap"
+    )
+    contact_phone = models.CharField(
+        max_length=50,
+        default="(0451) 422611 / +62 811-450-000",
+        verbose_name="Nomor Telepon Kantor"
+    )
+    contact_whatsapp = models.CharField(
+        max_length=50,
+        default="6285330144401",
+        verbose_name="Nomor WhatsApp",
+        help_text="Format 628xxx agar otomatis terhubung ke tombol WhatsApp publik (wa.me)"
+    )
+    contact_email = models.EmailField(
+        default="admpublik@untad.ac.id",
+        verbose_name="Alamat Email Resmi"
+    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Terakhir Diperbarui")
+
+    class Meta:
+        verbose_name = "Pengaturan Situs (Site Settings)"
+        verbose_name_plural = "Pengaturan Situs (Site Settings)"
+
+    def __str__(self):
+        return f"Pengaturan Situs: {self.header_title}"
+
+    @property
+    def clean_whatsapp(self):
+        """Mengembalikan nomor telepon dalam digit murni diawali 628 untuk link wa.me."""
+        if not self.contact_whatsapp:
+            return "6285330144401"
+        digits = re.sub(r'\D', '', str(self.contact_whatsapp))
+        if digits.startswith('08'):
+            digits = '628' + digits[2:]
+        elif digits.startswith('8'):
+            digits = '628' + digits[1:]
+        return digits or "6285330144401"
+
+    def save(self, *args, **kwargs):
+        # Pola Singleton: Memastikan hanya ada 1 record konfigurasi dengan pk=1
+        self.pk = 1
+
+        # Auto-resize favicon (maks 256x256 px)
+        if self.favicon:
+            _resize_site_image(self.favicon, max_size=(256, 256))
+
+        # Auto-resize logo header & footer (maks 800x300 px)
+        if self.header_logo:
+            _resize_site_image(self.header_logo, max_size=(800, 300))
+        if self.footer_logo:
+            _resize_site_image(self.footer_logo, max_size=(800, 300))
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Mencegah penghapusan instance utama konfigurasi
+        pass
+
+    @classmethod
+    def get_settings(cls):
+        """Metode aman untuk mendapatkan instance pengaturan dengan fallback otomatis."""
+        obj, created = cls.objects.get_or_create(
+            pk=1,
+            defaults={
+                'header_title': 'Administrasi Publik',
+                'header_subtitle': 'FISIP Universitas Tadulako',
+                'footer_title': 'Administrasi Publik',
+                'footer_subtitle': 'FISIP Universitas Tadulako',
+                'footer_description': 'Mencetak sarjana yang unggul, berintegritas, dan inovatif dalam perumusan kebijakan publik serta tata kelola pemerintahan yang berwawasan lingkungan.',
+                'footer_short_address': 'Kampus Bumi Tadulako, Palu',
+                'contact_title': 'Informasi Kontak',
+                'contact_subtitle': 'Program Studi Administrasi Publik',
+                'contact_address': 'Gedung FISIP UNTAD, Kampus Bumi Tadulako Tondo, Jl. Soekarno-Hatta Km. 9, Kota Palu, Sulawesi Tengah 94118',
+                'contact_email': 'admpublik@untad.ac.id',
+                'contact_phone': '(0451) 422611 / +62 811-450-000',
+                'contact_whatsapp': '6285330144401',
+            }
+        )
+        return obj
+
+
+class SocialMedia(models.Model):
+    """
+    Model relasi akun media sosial resmi prodi.
+    Hanya ditampilkan jika URL terisi dan berstatus aktif.
+    """
+    site_setting = models.ForeignKey(
+        SiteSetting,
+        on_delete=models.CASCADE,
+        related_name='social_medias',
+        verbose_name="Pengaturan Situs"
+    )
+    platform = models.CharField(
+        max_length=30,
+        choices=SOCIAL_PLATFORM_CHOICES,
+        verbose_name="Platform Media Sosial"
+    )
+    url = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="Tautan / URL Akun",
+        help_text="Contoh: https://instagram.com/admpublik_untad (kosongkan jika tidak dipakai)"
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Urutan Tampil",
+        help_text="Urutan urut posisi ikon (0, 1, 2...)"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Status Aktif",
+        help_text="Hilangkan centang jika ingin menyembunyikan sementara dari pengunjung"
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = "Sosial Media"
+        verbose_name_plural = "Sosial Media"
+
+    def __str__(self):
+        return f"{self.get_platform_display()} ({self.url or 'Tanpa URL'})"
+
+    def get_icon_class(self):
+        """Ikon Bootstrap Icons bawaan sistem."""
+        return PLATFORM_ICONS.get(self.platform, 'bi bi-globe')
+
+    def get_fa_icon_class(self):
+        """Ikon Font Awesome bawaan sistem."""
+        return PLATFORM_FA_ICONS.get(self.platform, 'fas fa-globe')
+
+
+class QuickLink(models.Model):
+    """
+    Model relasi tautan cepat pada footer / halaman portal (Layanan & Portal).
+    Mendukung tautan URL internal/eksternal maupun unggahan berkas (PDF).
+    """
+    site_setting = models.ForeignKey(
+        SiteSetting,
+        on_delete=models.CASCADE,
+        related_name='quick_links',
+        verbose_name="Pengaturan Situs"
+    )
+    title = models.CharField(
+        max_length=200,
+        verbose_name="Judul Tautan",
+        help_text="Contoh: Portal SIGA-8, Website UNTAD, Sertifikat Akreditasi"
+    )
+    url = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True,
+        verbose_name="Tautan URL",
+        help_text="Tautan website (https://...) atau path internal website (/akademik/kurikulum/)"
+    )
+    file = models.FileField(
+        upload_to='site/quick_links/',
+        blank=True,
+        null=True,
+        validators=[validate_document_file],
+        verbose_name="Unggah Berkas / Dokumen",
+        help_text="Pilihan jika tautan berupa dokumen unduhan (misal: PDF Akreditasi)"
+    )
+    open_in_new_tab = models.BooleanField(
+        default=True,
+        verbose_name="Buka di Tab Baru",
+        help_text="Centang agar terbuka di tab baru (_blank)"
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Urutan Tampil",
+        help_text="Urutan tampil pada daftar tautan cepat"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Status Aktif",
+        help_text="Centang agar tampil di website publik"
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = "Tautan Cepat"
+        verbose_name_plural = "Tautan Cepat"
+
+    def __str__(self):
+        return self.title
+
+    def get_url(self):
+        if self.file:
+            return self.file.url
+        return self.url or '#'
+
+    @property
+    def is_file(self):
+        return bool(self.file)
+

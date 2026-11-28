@@ -61,6 +61,7 @@ from core.views import (
     event_update,
     event_delete,
     event_toggle_status,
+    admin_kelola_pengaturan,
 )
 
 urlpatterns = [
@@ -159,6 +160,9 @@ urlpatterns = [
     path('dashboard/event/edit/<int:pk>/', event_update, name='event_update'),
     path('dashboard/event/hapus/<int:pk>/', event_delete, name='event_delete'),
     path('dashboard/event/toggle/<int:pk>/', event_toggle_status, name='event_toggle_status'),
+
+    # 10. Admin Pengaturan Situs (Site Settings, Footer, Kontak, Sosmed, Tautan Cepat)
+    path('dashboard/pengaturan/', admin_kelola_pengaturan, name='admin_kelola_pengaturan'),
 ]
 
 # Static & Media URL

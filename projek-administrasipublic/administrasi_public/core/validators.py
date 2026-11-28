@@ -139,3 +139,58 @@ def validate_document_file(file):
     if ext in {'.doc', '.xls', '.ppt'} and not header.startswith(b'\xd0\xcf\x11\xe0'):
         raise ValidationError('Isi berkas Office (.doc/.xls/.ppt) tidak valid!')
 
+
+# =========================================================================
+# VALIDATOR SITE SETTINGS (FAVICON & LOGO WEBSITE)
+# =========================================================================
+ALLOWED_FAVICON_EXTENSIONS = {'.png', '.ico', '.svg', '.jpg', '.jpeg', '.webp'}
+MAX_FAVICON_SIZE = 500 * 1024  # 500 KB
+
+ALLOWED_LOGO_EXTENSIONS = {'.png', '.webp', '.svg', '.jpg', '.jpeg'}
+MAX_LOGO_SIZE = 2 * 1024 * 1024  # 2 MB
+
+
+def validate_favicon_file(file):
+    """Validasi favicon website (ekstensi .png, .ico, .svg, .jpg, .webp, maks 500 KB)."""
+    if not file:
+        return
+    ext = _get_extension(file)
+    if ext not in ALLOWED_FAVICON_EXTENSIONS:
+        raise ValidationError('Format favicon tidak diizinkan! Rekomendasi: .png, .ico, atau .svg.')
+
+    if file.size > MAX_FAVICON_SIZE:
+        raise ValidationError('Ukuran favicon terlalu besar! Maksimal 500 KB agar website tetap cepat dimuat.')
+
+    if ext in {'.png', '.jpg', '.jpeg', '.webp'}:
+        try:
+            pos = file.tell() if hasattr(file, 'tell') else 0
+            file.seek(0)
+            img = Image.open(file)
+            img.verify()
+            file.seek(pos)
+        except Exception:
+            raise ValidationError('Berkas favicon rusak atau bukan file gambar yang valid!')
+
+
+def validate_site_logo_file(file):
+    """Validasi logo header & footer website (ekstensi .png, .webp, .svg, .jpg, .jpeg, maks 2 MB)."""
+    if not file:
+        return
+    ext = _get_extension(file)
+    if ext not in ALLOWED_LOGO_EXTENSIONS:
+        raise ValidationError('Format logo tidak diizinkan! Rekomendasi: .png, .webp, atau .svg (transparan).')
+
+    if file.size > MAX_LOGO_SIZE:
+        raise ValidationError('Ukuran file logo terlalu besar! Maksimal 2 MB.')
+
+    if ext in {'.png', '.jpg', '.jpeg', '.webp'}:
+        try:
+            pos = file.tell() if hasattr(file, 'tell') else 0
+            file.seek(0)
+            img = Image.open(file)
+            img.verify()
+            file.seek(pos)
+        except Exception:
+            raise ValidationError('Berkas logo rusak atau bukan file gambar yang valid!')
+
+

@@ -13,7 +13,10 @@ from .models import (
     DokumenAkademik,
     Pengunjung,
     PengunjungTotal,
-    Event
+    Event,
+    SiteSetting,
+    SocialMedia,
+    QuickLink
 )
 
 @admin.register(Sambutan)
@@ -184,4 +187,48 @@ class EventAdmin(admin.ModelAdmin):
             )
         return format_html('<span style="color: #94a3b8; font-size: 11px; font-style: italic;">Tanpa Poster</span>')
     poster_thumbnail.short_description = 'Poster (4:5)'
+
+
+# =========================================================================
+# ADMIN SITE SETTING (SINGLETON, INLINES SOSMED & TAUTAN CEPAT)
+# =========================================================================
+
+class SocialMediaInline(admin.TabularInline):
+    model = SocialMedia
+    extra = 1
+    fields = ('platform', 'url', 'order', 'is_active')
+
+
+class QuickLinkInline(admin.TabularInline):
+    model = QuickLink
+    extra = 1
+    fields = ('title', 'url', 'file', 'open_in_new_tab', 'order', 'is_active')
+
+
+@admin.register(SiteSetting)
+class SiteSettingAdmin(admin.ModelAdmin):
+    list_display = ('header_title', 'header_subtitle', 'contact_phone', 'contact_whatsapp', 'contact_email', 'updated_at')
+    fieldsets = (
+        ('Identitas Situs & Header', {
+            'fields': ('favicon', 'header_logo', 'header_title', 'header_subtitle'),
+            'description': 'Pengaturan nama situs, subjudul, favicon (maks 500 KB), dan logo navbar (maks 2 MB).'
+        }),
+        ('Pengaturan Footer', {
+            'fields': ('footer_logo', 'footer_title', 'footer_subtitle', 'footer_description', 'footer_short_address'),
+            'description': 'Informasi profil dan logo yang tampil di bagian bawah website (footer).'
+        }),
+        ('Kontak Resmi', {
+            'fields': ('contact_title', 'contact_subtitle', 'contact_address', 'contact_phone', 'contact_whatsapp', 'contact_email'),
+            'description': 'Kontak kantor, alamat, dan nomor WhatsApp yang langsung terhubung ke floating chat.'
+        }),
+    )
+    inlines = [SocialMediaInline, QuickLinkInline]
+
+    def has_add_permission(self, request):
+        # Pola Singleton: hanya izinkan tambah jika belum ada data sama sekali
+        return False if SiteSetting.objects.exists() else True
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 

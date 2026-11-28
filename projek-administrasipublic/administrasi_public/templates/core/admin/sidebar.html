@@ -108,6 +108,13 @@
         <span>CMS: Menu & Halaman</span>
       </a>
 
+      <!-- 6c. Pengaturan Website (Site Settings) -->
+      <a href="{% url 'admin_kelola_pengaturan' %}" 
+         class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if request.resolver_match.url_name == 'admin_kelola_pengaturan' %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">
+        <i class="bi bi-sliders2 text-base transition-colors duration-200 {% if request.resolver_match.url_name == 'admin_kelola_pengaturan' %}text-slate-900{% else %}text-brand-gold group-hover:text-slate-900{% endif %}"></i>
+        <span>Pengaturan Website</span>
+      </a>
+
       <!-- 7. Manajemen User -->
       <a href="{% url 'admin_kelola_user' %}" 
          class="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 {% if 'user' in request.resolver_match.url_name and request.resolver_match.url_name != 'user_login' and request.resolver_match.url_name != 'user_logout' %}bg-brand-gold text-slate-900 font-bold shadow-md{% else %}text-teal-100/90 hover:bg-brand-gold hover:text-slate-900 hover:font-bold hover:shadow-md{% endif %}">

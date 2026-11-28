@@ -1,9 +1,17 @@
 from django import forms
+from django.forms import inlineformset_factory
 from django.contrib.auth import get_user_model
 from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import Berita, TenagaPendidik, PangkatGolongan, Sambutan, Galeri, Hero, Event
 from .models import HalamanTentang, HalamanAkademik, DokumenAkademik
-from .validators import validate_image_file, validate_video_file, validate_document_file
+from .models import SiteSetting, SocialMedia, QuickLink
+from .validators import (
+    validate_image_file,
+    validate_video_file,
+    validate_document_file,
+    validate_favicon_file,
+    validate_site_logo_file,
+)
 
 User = get_user_model()
 
@@ -487,4 +495,187 @@ class EventForm(forms.ModelForm):
         if file and hasattr(file, 'content_type'):
             validate_image_file(file)
         return file
+
+
+# =========================================================================
+# FORM PENGATURAN SITUS (SITE SETTINGS)
+# =========================================================================
+
+class SiteSettingForm(forms.ModelForm):
+    class Meta:
+        model = SiteSetting
+        fields = [
+            'favicon',
+            'header_logo',
+            'header_title',
+            'header_subtitle',
+            'footer_logo',
+            'footer_title',
+            'footer_subtitle',
+            'footer_description',
+            'footer_short_address',
+            'contact_title',
+            'contact_subtitle',
+            'contact_address',
+            'contact_phone',
+            'contact_whatsapp',
+            'contact_email',
+        ]
+        widgets = {
+            'favicon': forms.FileInput(attrs={
+                'class': 'site-image-input w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': '.png,.ico,.svg,.jpg,.jpeg,.webp',
+                'data-target-preview': 'preview-favicon',
+                'data-max-bytes': '512000',
+            }),
+            'header_logo': forms.FileInput(attrs={
+                'class': 'site-image-input w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': '.png,.webp,.svg,.jpg,.jpeg',
+                'data-target-preview': 'preview-header-logo',
+                'data-max-bytes': '2097152',
+            }),
+            'header_title': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Administrasi Publik'
+            }),
+            'header_subtitle': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: FISIP Universitas Tadulako'
+            }),
+            'footer_logo': forms.FileInput(attrs={
+                'class': 'site-image-input w-full p-2 border rounded-xl border-slate-300 bg-white text-xs file:mr-4 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-brand-teal hover:file:bg-teal-100 cursor-pointer',
+                'accept': '.png,.webp,.svg,.jpg,.jpeg',
+                'data-target-preview': 'preview-footer-logo',
+                'data-max-bytes': '2097152',
+            }),
+            'footer_title': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Administrasi Publik'
+            }),
+            'footer_subtitle': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: FISIP Universitas Tadulako'
+            }),
+            'footer_description': forms.Textarea(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs leading-relaxed',
+                'rows': 3,
+                'placeholder': 'Teks ringkas profil program studi di footer...'
+            }),
+            'footer_short_address': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Kampus Bumi Tadulako, Palu'
+            }),
+            'contact_title': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Informasi Kontak'
+            }),
+            'contact_subtitle': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: Program Studi Administrasi Publik'
+            }),
+            'contact_address': forms.Textarea(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs leading-relaxed',
+                'rows': 2,
+                'placeholder': 'Alamat lengkap gedung, kampus, dan kode pos...'
+            }),
+            'contact_phone': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: (0451) 422611 / +62 811-450-000'
+            }),
+            'contact_whatsapp': forms.TextInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: 6285330144401 (Format 628xxx)'
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'w-full p-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-teal-500 text-xs',
+                'placeholder': 'Contoh: admpublik@untad.ac.id'
+            }),
+        }
+
+    def clean_favicon(self):
+        file = self.cleaned_data.get('favicon')
+        if file and hasattr(file, 'content_type'):
+            validate_favicon_file(file)
+        return file
+
+    def clean_header_logo(self):
+        file = self.cleaned_data.get('header_logo')
+        if file and hasattr(file, 'content_type'):
+            validate_site_logo_file(file)
+        return file
+
+    def clean_footer_logo(self):
+        file = self.cleaned_data.get('footer_logo')
+        if file and hasattr(file, 'content_type'):
+            validate_site_logo_file(file)
+        return file
+
+
+class SocialMediaForm(forms.ModelForm):
+    class Meta:
+        model = SocialMedia
+        fields = ['platform', 'url', 'order', 'is_active']
+        widgets = {
+            'platform': forms.Select(attrs={
+                'class': 'platform-select w-full p-2 border rounded-lg border-slate-300 text-xs bg-slate-50 font-medium'
+            }),
+            'url': forms.URLInput(attrs={
+                'class': 'w-full p-2 border rounded-lg border-slate-300 text-xs',
+                'placeholder': 'https://...'
+            }),
+            'order': forms.NumberInput(attrs={
+                'class': 'w-16 p-2 border rounded-lg border-slate-300 text-xs text-center font-semibold',
+                'min': 0
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-brand-teal rounded border-slate-300 focus:ring-teal-500 cursor-pointer'
+            }),
+        }
+
+
+class QuickLinkForm(forms.ModelForm):
+    class Meta:
+        model = QuickLink
+        fields = ['title', 'url', 'file', 'open_in_new_tab', 'order', 'is_active']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'w-full p-2 border rounded-lg border-slate-300 text-xs',
+                'placeholder': 'Nama Tautan (misal: Portal SIGA-8)'
+            }),
+            'url': forms.TextInput(attrs={
+                'class': 'w-full p-2 border rounded-lg border-slate-300 text-xs',
+                'placeholder': 'https://... atau /akademik/...'
+            }),
+            'file': forms.FileInput(attrs={
+                'class': 'w-full p-1.5 border rounded-lg border-slate-300 text-xs bg-white file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[11px] file:bg-teal-50 file:text-brand-teal'
+            }),
+            'open_in_new_tab': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-brand-teal rounded border-slate-300 focus:ring-teal-500 cursor-pointer'
+            }),
+            'order': forms.NumberInput(attrs={
+                'class': 'w-16 p-2 border rounded-lg border-slate-300 text-xs text-center font-semibold',
+                'min': 0
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'w-4 h-4 text-brand-teal rounded border-slate-300 focus:ring-teal-500 cursor-pointer'
+            }),
+        }
+
+
+SocialMediaFormSet = inlineformset_factory(
+    SiteSetting,
+    SocialMedia,
+    form=SocialMediaForm,
+    extra=1,
+    can_delete=True
+)
+
+QuickLinkFormSet = inlineformset_factory(
+    SiteSetting,
+    QuickLink,
+    form=QuickLinkForm,
+    extra=1,
+    can_delete=True
+)
+
 

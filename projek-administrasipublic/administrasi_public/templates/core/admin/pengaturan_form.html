@@ -1,0 +1,728 @@
+{% extends 'core/admin/base_admin.html' %}
+{% load static %}
+
+{% block title %}Pengaturan Website & Identitas - Admin Portal{% endblock %}
+
+{% block page_header %}
+  <div class="flex items-center gap-2">
+    <i class="bi bi-sliders2 text-brand-teal text-xl"></i>
+    <div>
+      <h1 class="text-base sm:text-lg font-bold text-slate-800 leading-tight">Pengaturan Website (Site Settings)</h1>
+      <p class="text-[11px] text-slate-500">Kelola identitas, header, footer, kontak, tautan cepat, dan media sosial resmi secara dinamis</p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-6">
+
+  <!-- ================= NAV TAB ================= -->
+  <div class="bg-white rounded-2xl shadow-xs border border-slate-200 p-2 sm:p-2.5">
+    <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar" id="settings-tab-list" role="tablist">
+      <button type="button" 
+              onclick="switchSettingsTab('tab-identitas')" 
+              id="btn-tab-identitas"
+              class="settings-tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer {% if active_tab == 'identitas' %}bg-[#0b7285] text-white shadow-sm{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+        <i class="bi bi-window-fullscreen text-sm"></i>
+        <span>Identitas & Header</span>
+      </button>
+
+      <button type="button" 
+              onclick="switchSettingsTab('tab-footer')" 
+              id="btn-tab-footer"
+              class="settings-tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer {% if active_tab == 'footer' %}bg-[#0b7285] text-white shadow-sm{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+        <i class="bi bi-layout-text-window-reverse text-sm"></i>
+        <span>Pengaturan Footer</span>
+      </button>
+
+      <button type="button" 
+              onclick="switchSettingsTab('tab-kontak')" 
+              id="btn-tab-kontak"
+              class="settings-tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer {% if active_tab == 'kontak' %}bg-[#0b7285] text-white shadow-sm{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+        <i class="bi bi-chat-dots-fill text-sm"></i>
+        <span>Kontak & Sosial Media</span>
+      </button>
+
+      <button type="button" 
+              onclick="switchSettingsTab('tab-tautan')" 
+              id="btn-tab-tautan"
+              class="settings-tab-btn flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer {% if active_tab == 'tautan' %}bg-[#0b7285] text-white shadow-sm{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+        <i class="bi bi-link-45deg text-base"></i>
+        <span>Tautan Cepat (Quick Links)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= FORM UTAMA ================= -->
+  <form method="POST" enctype="multipart/form-data" id="form-site-settings" class="space-y-6">
+    {% csrf_token %}
+    <input type="hidden" name="active_tab" id="active_tab_input" value="{{ active_tab }}">
+
+    <!-- ================= TAB 1: IDENTITAS SITUS & HEADER ================= -->
+    <div id="tab-identitas" class="settings-tab-panel space-y-6 {% if active_tab != 'identitas' %}hidden{% endif %}">
+      
+      <!-- Card Branding & Gambar -->
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 sm:p-7 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+            <i class="bi bi-image text-brand-teal"></i>
+            <span>Favicon & Logo Header Navbar</span>
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Atur logo website dan ikon tab browser. Dilengkapi live preview langsung sebelum disimpan.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          
+          <!-- Box 1: Favicon Website -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-slate-800">
+                Favicon Browser (Tab Ikon)
+                <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-semibold">Maks 500 KB</span>
+            </div>
+
+            <!-- Live Preview Favicon Container -->
+            <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-inner">
+              <div class="w-16 h-16 rounded-xl border-2 border-dashed border-teal-300 bg-slate-100 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-xs relative">
+                <img id="preview-favicon" 
+                     src="{% if setting.favicon %}{{ setting.favicon.url }}{% else %}https://via.placeholder.com/64?text=ICO{% endif %}" 
+                     alt="Favicon Preview" 
+                     class="w-8 h-8 object-contain">
+              </div>
+              <div class="text-[11px] text-slate-500 leading-relaxed">
+                <p class="font-bold text-slate-800">Live Preview Favicon</p>
+                <p>Format: <strong>.png, .ico, .svg</strong></p>
+                <p>Rasio 1:1 (Ideal 64x64 atau 128x128 px)</p>
+              </div>
+            </div>
+
+            <!-- Input File Favicon -->
+            <div>
+              {{ form.favicon }}
+              {% if form.favicon.errors %}
+                <p class="text-[11px] text-rose-600 font-semibold mt-1">{{ form.favicon.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            {% if setting.favicon %}
+              <div class="flex items-center gap-2 pt-1 text-[11px] text-slate-600">
+                <input type="checkbox" name="hapus_favicon" id="hapus_favicon" value="1" class="w-3.5 h-3.5 rounded text-rose-600 border-slate-300 cursor-pointer">
+                <label for="hapus_favicon" class="cursor-pointer hover:text-rose-600">Hapus Favicon (Gunakan Ikon Bawaan)</label>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Box 2: Logo Header (Navbar) -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-slate-800">
+                Logo Header (Navbar)
+                <span class="text-slate-400 font-normal">(Opsional)</span>
+              </label>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-semibold">Maks 2 MB</span>
+            </div>
+
+            <!-- Live Preview Navbar Simulator -->
+            <div class="bg-[#0b7285] p-3.5 rounded-xl border border-teal-800 shadow-md flex items-center gap-3">
+              <div class="h-10 w-24 rounded-lg bg-black/15 flex items-center justify-center p-1 border border-white/20 overflow-hidden flex-shrink-0">
+                <img id="preview-header-logo" 
+                     src="{% if setting.header_logo %}{{ setting.header_logo.url }}{% else %}https://via.placeholder.com/120x40/0b7285/ffffff?text=LOGO{% endif %}" 
+                     alt="Header Logo Preview" 
+                     class="h-full w-auto object-contain">
+              </div>
+              <div class="text-white">
+                <h4 class="text-xs font-bold leading-tight" id="sim-header-title">{{ setting.header_title|default:"Administrasi Publik" }}</h4>
+                <p class="text-[10px] opacity-80" id="sim-header-subtitle">{{ setting.header_subtitle|default:"FISIP Universitas Tadulako" }}</p>
+              </div>
+            </div>
+
+            <!-- Input File Header Logo -->
+            <div>
+              {{ form.header_logo }}
+              {% if form.header_logo.errors %}
+                <p class="text-[11px] text-rose-600 font-semibold mt-1">{{ form.header_logo.errors.0 }}</p>
+              {% endif %}
+              <p class="text-[10px] text-slate-400 mt-1">Rekomendasi: Format .png / .webp / .svg transparan, tinggi 80–120 px. Jika kosong, akan menampilkan ikon topi wisuda emas bawaan.</p>
+            </div>
+
+            {% if setting.header_logo %}
+              <div class="flex items-center gap-2 pt-1 text-[11px] text-slate-600">
+                <input type="checkbox" name="hapus_header_logo" id="hapus_header_logo" value="1" class="w-3.5 h-3.5 rounded text-rose-600 border-slate-300 cursor-pointer">
+                <label for="hapus_header_logo" class="cursor-pointer hover:text-rose-600">Hapus Logo Header (Kembali ke ikon toga)</label>
+              </div>
+            {% endif %}
+          </div>
+
+        </div>
+
+        <!-- Teks Header & Identitas -->
+        <div class="border-t border-slate-100 pt-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">
+              Judul Header / Nama Instansi
+              <span class="text-rose-500">*</span>
+            </label>
+            {{ form.header_title }}
+            {% if form.header_title.errors %}
+              <p class="text-[11px] text-rose-600 mt-1">{{ form.header_title.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">
+              Subjudul Header / Fakultas
+              <span class="text-rose-500">*</span>
+            </label>
+            {{ form.header_subtitle }}
+            {% if form.header_subtitle.errors %}
+              <p class="text-[11px] text-rose-600 mt-1">{{ form.header_subtitle.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 2: PENGATURAN FOOTER ================= -->
+    <div id="tab-footer" class="settings-tab-panel space-y-6 {% if active_tab != 'footer' %}hidden{% endif %}">
+      
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 sm:p-7 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+            <i class="bi bi-layout-text-window-reverse text-brand-teal"></i>
+            <span>Logo & Konten Kolom 1 Footer</span>
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Informasi profil singkat program studi dan logo yang tampil di bagian bawah setiap halaman website.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Logo Footer Preview -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-slate-800">
+                Logo Footer
+                <span class="text-slate-400 font-normal">(Opsional)</span>
+              </label>
+              <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-semibold">Maks 2 MB</span>
+            </div>
+
+            <!-- Preview Footer Dark Simulator -->
+            <div class="bg-[#05313a] p-4 rounded-xl border border-teal-950 shadow-md flex items-center justify-center">
+              <img id="preview-footer-logo" 
+                   src="{% if setting.footer_logo %}{{ setting.footer_logo.url }}{% else %}https://via.placeholder.com/120x48/05313a/ffd43b?text=FOOTER+LOGO{% endif %}" 
+                   alt="Footer Logo Preview" 
+                   class="h-12 w-auto object-contain">
+            </div>
+
+            <!-- Input File Footer Logo -->
+            <div>
+              {{ form.footer_logo }}
+              {% if form.footer_logo.errors %}
+                <p class="text-[11px] text-rose-600 font-semibold mt-1">{{ form.footer_logo.errors.0 }}</p>
+              {% endif %}
+              <p class="text-[10px] text-slate-400 mt-1">Format .png / .webp / .svg transparan. Jika kosong, akan menggunakan logo gradien toga emas bawaan.</p>
+            </div>
+
+            {% if setting.footer_logo %}
+              <div class="flex items-center gap-2 pt-1 text-[11px] text-slate-600">
+                <input type="checkbox" name="hapus_footer_logo" id="hapus_footer_logo" value="1" class="w-3.5 h-3.5 rounded text-rose-600 border-slate-300 cursor-pointer">
+                <label for="hapus_footer_logo" class="cursor-pointer hover:text-rose-600">Hapus Logo Footer (Kembali ke logo bawaan)</label>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Teks Kolom Footer -->
+          <div class="lg:col-span-2 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-800 mb-1.5">Judul Footer</label>
+                {{ form.footer_title }}
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-800 mb-1.5">Subjudul Footer</label>
+                {{ form.footer_subtitle }}
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-800 mb-1.5">
+                Deskripsi Ringkas / Visi Singkat Footer
+              </label>
+              {{ form.footer_description }}
+              <p class="text-[10px] text-slate-400 mt-1">Teks paragraf ringkas yang menjelaskan profil program studi di kolom 1 footer.</p>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-800 mb-1.5">Alamat Singkat Footer</label>
+              {{ form.footer_short_address }}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 3: KONTAK & SOSIAL MEDIA ================= -->
+    <div id="tab-kontak" class="settings-tab-panel space-y-6 {% if active_tab != 'kontak' %}hidden{% endif %}">
+      
+      <!-- Informasi Kontak Resmi -->
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 sm:p-7 space-y-5">
+        <div class="border-b border-slate-100 pb-3">
+          <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+            <i class="bi bi-telephone-inbound text-brand-teal"></i>
+            <span>Informasi Kontak Resmi Program Studi</span>
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Data kontak yang tampil pada footer website dan floating button chat WhatsApp.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">Judul Kontak</label>
+            {{ form.contact_title }}
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">Subjudul Kontak</label>
+            {{ form.contact_subtitle }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1.5">Alamat Lengkap Kantor / Kampus</label>
+          {{ form.contact_address }}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">Nomor Telepon Kantor</label>
+            {{ form.contact_phone }}
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5 flex items-center justify-between">
+              <span>Nomor WhatsApp</span>
+              <span class="text-emerald-600 font-semibold text-[10px] flex items-center gap-1">
+                <i class="bi bi-whatsapp"></i> Chat WA
+              </span>
+            </label>
+            {{ form.contact_whatsapp }}
+            <p class="text-[10px] text-slate-400 mt-1">Format: 628xxx (otomatis untuk tombol WhatsApp melayang).</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">Email Resmi</label>
+            {{ form.contact_email }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Relasi Sosial Media Dinamis -->
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 sm:p-7 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="bi bi-share text-brand-teal"></i>
+              <span>Daftar Akun Media Sosial Resmi</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Pilih platform media sosial dan masukkan URL profilnya. Ikon akan otomatis disesuaikan dan hanya tampil jika URL terisi & aktif.
+            </p>
+          </div>
+
+          <button type="button" 
+                  onclick="addFormsetRow('social')" 
+                  class="self-start sm:self-auto px-3.5 py-2 bg-teal-50 text-[#0b7285] hover:bg-[#0b7285] hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-teal-200 shadow-xs">
+            <i class="bi bi-plus-circle-fill"></i>
+            <span>Tambah Akun</span>
+          </button>
+        </div>
+
+        {{ social_formset.management_form }}
+
+        <div class="space-y-3" id="social-formset-container">
+          {% for sform in social_formset %}
+            <div class="social-form-row bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 flex flex-col md:flex-row md:items-center gap-3 transition hover:border-teal-300">
+              {{ sform.id }}
+              
+              <!-- Ikon Platform Live -->
+              <div class="flex items-center gap-2 md:w-44 flex-shrink-0">
+                <div class="w-8 h-8 rounded-lg bg-teal-800 text-amber-400 flex items-center justify-center text-sm shadow-xs flex-shrink-0 platform-icon-badge" data-row="{{ forloop.counter0 }}">
+                  <i class="bi bi-share"></i>
+                </div>
+                <div class="flex-1">
+                  {{ sform.platform }}
+                </div>
+              </div>
+
+              <!-- URL Input -->
+              <div class="flex-1">
+                {{ sform.url }}
+                {% if sform.url.errors %}
+                  <p class="text-[10px] text-rose-600 mt-0.5">{{ sform.url.errors.0 }}</p>
+                {% endif %}
+              </div>
+
+              <!-- Urutan & Status Aktif -->
+              <div class="flex items-center gap-4 justify-between md:justify-end">
+                <div class="flex items-center gap-1.5 text-xs text-slate-600">
+                  <span class="text-[11px] text-slate-400">Urut:</span>
+                  {{ sform.order }}
+                </div>
+
+                <label class="flex items-center gap-1.5 text-xs text-slate-700 cursor-pointer">
+                  {{ sform.is_active }}
+                  <span>Aktif</span>
+                </label>
+
+                <!-- Tombol Hapus -->
+                {% if social_formset.can_delete %}
+                  <div class="flex items-center gap-1 text-rose-600 text-xs">
+                    <span class="hidden">{{ sform.DELETE }}</span>
+                    <button type="button" 
+                            onclick="markFormsetDelete(this)" 
+                            class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition cursor-pointer" 
+                            title="Hapus baris ini">
+                      <i class="bi bi-trash3 text-sm"></i>
+                    </button>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <p class="text-[11px] text-slate-400">
+          <i class="bi bi-info-circle mr-1"></i> Platform yang didukung: Facebook, Instagram, WhatsApp, TikTok, YouTube, X (Twitter), LinkedIn, Telegram, Threads, Pinterest, Snapchat, Discord, Reddit, LINE, Kaskus, Twitch.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 4: TAUTAN CEPAT ================= -->
+    <div id="tab-tautan" class="settings-tab-panel space-y-6 {% if active_tab != 'tautan' %}hidden{% endif %}">
+      
+      <div class="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 sm:p-7 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="bi bi-link-45deg text-brand-teal text-lg"></i>
+              <span>Daftar Tautan Cepat (Layanan & Portal)</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Kelola menu tautan pada kolom Layanan & Portal di footer. Dapat berupa tautan web eksternal/internal maupun unduhan berkas (PDF).
+            </p>
+          </div>
+
+          <button type="button" 
+                  onclick="addFormsetRow('quick')" 
+                  class="self-start sm:self-auto px-3.5 py-2 bg-teal-50 text-[#0b7285] hover:bg-[#0b7285] hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-teal-200 shadow-xs">
+            <i class="bi bi-plus-circle-fill"></i>
+            <span>Tambah Tautan</span>
+          </button>
+        </div>
+
+        {{ quick_formset.management_form }}
+
+        <div class="space-y-3" id="quick-formset-container">
+          {% for qform in quick_formset %}
+            <div class="quick-form-row bg-slate-50 border border-slate-200/80 rounded-xl p-4 space-y-3 transition hover:border-teal-300">
+              {{ qform.id }}
+              
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                
+                <!-- Judul Tautan -->
+                <div class="md:col-span-4">
+                  <label class="block text-[11px] font-bold text-slate-700 mb-1">Judul Tautan</label>
+                  {{ qform.title }}
+                  {% if qform.title.errors %}
+                    <p class="text-[10px] text-rose-600 mt-0.5">{{ qform.title.errors.0 }}</p>
+                  {% endif %}
+                </div>
+
+                <!-- Tautan URL -->
+                <div class="md:col-span-4">
+                  <label class="block text-[11px] font-bold text-slate-700 mb-1">
+                    URL Link <span class="font-normal text-slate-400">(atau unggah berkas di samping)</span>
+                  </label>
+                  {{ qform.url }}
+                  {% if qform.url.errors %}
+                    <p class="text-[10px] text-rose-600 mt-0.5">{{ qform.url.errors.0 }}</p>
+                  {% endif %}
+                </div>
+
+                <!-- Upload Berkas (Opsional) -->
+                <div class="md:col-span-4">
+                  <label class="block text-[11px] font-bold text-slate-700 mb-1">
+                    Berkas / PDF Dokumen <span class="font-normal text-slate-400">(opsional)</span>
+                  </label>
+                  {{ qform.file }}
+                  {% if qform.instance.file %}
+                    <p class="text-[10px] text-teal-700 font-medium truncate mt-1">
+                      Saat ini: <a href="{{ qform.instance.file.url }}" target="_blank" class="underline">Lihat Berkas &rarr;</a>
+                    </p>
+                  {% endif %}
+                </div>
+
+              </div>
+
+              <!-- Baris Opsi Bawah -->
+              <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/60 text-xs text-slate-700">
+                <div class="flex items-center gap-5">
+                  <label class="flex items-center gap-1.5 cursor-pointer">
+                    {{ qform.open_in_new_tab }}
+                    <span>Buka di Tab Baru (_blank)</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 cursor-pointer">
+                    {{ qform.is_active }}
+                    <span>Aktif</span>
+                  </label>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <div class="flex items-center gap-1 text-slate-600">
+                    <span class="text-[11px] text-slate-400">Urutan:</span>
+                    {{ qform.order }}
+                  </div>
+
+                  {% if quick_formset.can_delete %}
+                    <div class="flex items-center gap-1 text-rose-600">
+                      <span class="hidden">{{ qform.DELETE }}</span>
+                      <button type="button" 
+                              onclick="markFormsetDelete(this)" 
+                              class="p-1 text-slate-400 hover:text-rose-600 rounded hover:bg-rose-50 transition cursor-pointer flex items-center gap-1 text-xs" 
+                              title="Hapus tautan ini">
+                        <i class="bi bi-trash3"></i>
+                        <span>Hapus</span>
+                      </button>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================= FLOATING STICKY ACTION BAR ================= -->
+    <div class="sticky bottom-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="text-xs text-slate-500 flex items-center gap-2">
+        <i class="bi bi-check2-circle text-emerald-600 text-base"></i>
+        <span>Perubahan akan otomatis diterapkan ke seluruh halaman website.</span>
+      </div>
+
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+        <a href="{% url 'admin_dashboard' %}" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold transition">
+          Kembali
+        </a>
+        <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#0b7285] hover:bg-[#084c5a] text-white text-xs font-bold shadow-md transition flex items-center gap-2 cursor-pointer active:scale-95">
+          <i class="bi bi-save"></i>
+          <span>Simpan Semua Pengaturan</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+<!-- Mapping Ikon Sosial Media untuk JS -->
+<div id="platform-icon-data" class="hidden" 
+     data-icons='{"facebook":"bi bi-facebook","instagram":"bi bi-instagram","whatsapp":"bi bi-whatsapp","tiktok":"bi bi-tiktok","youtube":"bi bi-youtube","x":"bi bi-twitter-x","linkedin":"bi bi-linkedin","telegram":"bi bi-telegram","threads":"bi bi-threads","pinterest":"bi bi-pinterest","snapchat":"bi bi-snapchat","discord":"bi bi-discord","reddit":"bi bi-reddit","line":"bi bi-line","kaskus":"bi bi-chat-quote-fill","twitch":"bi bi-twitch"}'>
+</div>
+
+<!-- ================= JAVASCRIPT LIVE PREVIEW & FORMSET ================= -->
+<script>
+  // 1. Tab Switching
+  function switchSettingsTab(tabId) {
+    document.querySelectorAll('.settings-tab-panel').forEach(panel => panel.classList.add('hidden'));
+    const target = document.getElementById(tabId);
+    if (target) target.classList.remove('hidden');
+
+    document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+      btn.classList.remove('bg-[#0b7285]', 'text-white', 'shadow-sm');
+      btn.classList.add('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100');
+    });
+
+    const activeBtn = document.getElementById('btn-' + tabId);
+    if (activeBtn) {
+      activeBtn.classList.add('bg-[#0b7285]', 'text-white', 'shadow-sm');
+      activeBtn.classList.remove('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100');
+    }
+
+    const shortKey = tabId.replace('tab-', '');
+    const tabInput = document.getElementById('active_tab_input');
+    if (tabInput) tabInput.value = shortKey;
+
+    // Update query string tanpa reload halaman
+    const url = new URL(window.location);
+    url.searchParams.set('tab', shortKey);
+    window.history.replaceState({}, '', url);
+  }
+
+  // 2. Live Preview Gambar & Validasi Ukuran File (Favicon & Logo)
+  document.querySelectorAll('.site-image-input').forEach(input => {
+    input.addEventListener('change', function(e) {
+      const file = this.files && this.files[0];
+      const targetId = this.getAttribute('data-target-preview');
+      const maxBytes = parseInt(this.getAttribute('data-max-bytes') || '2097152');
+
+      if (!file) return;
+
+      // Validasi Ukuran File
+      if (file.size > maxBytes) {
+        const maxKb = Math.round(maxBytes / 1024);
+        const maxMb = (maxBytes / (1024 * 1024)).toFixed(1);
+        const limitStr = maxBytes < 1048576 ? `${maxKb} KB` : `${maxMb} MB`;
+        
+        Swal.fire({
+          icon: 'warning',
+          title: 'Ukuran File Terlalu Besar!',
+          text: `Berkas "${file.name}" berukuran ${(file.size / 1024).toFixed(1)} KB. Batas maksimal yang diizinkan adalah ${limitStr}.`,
+          confirmButtonColor: '#0b7285'
+        });
+        this.value = '';
+        return;
+      }
+
+      // Live Preview Instan via URL.createObjectURL
+      if (targetId) {
+        const previewEl = document.getElementById(targetId);
+        if (previewEl) {
+          const previewUrl = URL.createObjectURL(file);
+          previewEl.src = previewUrl;
+          previewEl.onload = () => URL.revokeObjectURL(previewUrl);
+        }
+      }
+    });
+  });
+
+  // 3. Update Text Simulator Header Live saat Mengetik
+  const headerTitleInput = document.getElementById('id_header_title');
+  const headerSubtitleInput = document.getElementById('id_header_subtitle');
+  const simTitle = document.getElementById('sim-header-title');
+  const simSubtitle = document.getElementById('sim-header-subtitle');
+
+  if (headerTitleInput && simTitle) {
+    headerTitleInput.addEventListener('input', function() {
+      simTitle.textContent = this.value || 'Administrasi Publik';
+    });
+  }
+  if (headerSubtitleInput && simSubtitle) {
+    headerSubtitleInput.addEventListener('input', function() {
+      simSubtitle.textContent = this.value || 'FISIP Universitas Tadulako';
+    });
+  }
+
+  // 4. Update Ikon Platform Sosmed Secara Dinamis
+  const iconDataEl = document.getElementById('platform-icon-data');
+  const platformIcons = iconDataEl ? JSON.parse(iconDataEl.getAttribute('data-icons')) : {};
+
+  function updateSocialRowIcon(selectEl) {
+    const row = selectEl.closest('.social-form-row');
+    if (!row) return;
+    const badge = row.querySelector('.platform-icon-badge');
+    if (!badge) return;
+    const platform = selectEl.value;
+    const iconClass = platformIcons[platform] || 'bi bi-share';
+    badge.innerHTML = `<i class="${iconClass}"></i>`;
+  }
+
+  document.querySelectorAll('.platform-select').forEach(sel => {
+    updateSocialRowIcon(sel);
+    sel.addEventListener('change', function() {
+      updateSocialRowIcon(this);
+    });
+  });
+
+  // 5. Tambah Baris Formset Baru (Repeater Dinamis)
+  function addFormsetRow(prefix) {
+    const totalFormsInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    if (!totalFormsInput) return;
+
+    const currentCount = parseInt(totalFormsInput.value);
+    const container = document.getElementById(`${prefix}-formset-container`);
+    if (!container) return;
+
+    const rows = container.querySelectorAll(`.${prefix}-form-row`);
+    if (rows.length === 0) return;
+
+    // Kloning baris terakhir
+    const templateRow = rows[rows.length - 1];
+    const newRow = templateRow.cloneNode(true);
+
+    // Reset nilai input di baris baru
+    newRow.querySelectorAll('input, select').forEach(input => {
+      const name = input.getAttribute('name');
+      const id = input.getAttribute('id');
+      if (name) {
+        input.setAttribute('name', name.replace(new RegExp(`${prefix}-\\d+-`), `${prefix}-${currentCount}-`));
+      }
+      if (id) {
+        input.setAttribute('id', id.replace(new RegExp(`id_${prefix}-\\d+-`), `id_${prefix}-${currentCount}-`));
+      }
+
+      if (input.type === 'checkbox') {
+        input.checked = input.name.includes('is_active') || input.name.includes('open_in_new_tab');
+      } else if (input.type === 'number') {
+        input.value = currentCount + 1;
+      } else if (input.type !== 'hidden') {
+        input.value = '';
+      } else if (input.name.includes('-id')) {
+        input.value = '';
+      }
+    });
+
+    // Reset link berkas lama jika ada di quick link
+    const fileLink = newRow.querySelector('a');
+    if (fileLink && fileLink.textContent.includes('Lihat Berkas')) {
+      fileLink.parentElement.remove();
+    }
+
+    // Reset style coret jika baris sebelumnya ditandai hapus
+    newRow.classList.remove('opacity-40', 'bg-rose-50/50', 'pointer-events-none');
+    newRow.style.textDecoration = 'none';
+
+    container.appendChild(newRow);
+    totalFormsInput.value = currentCount + 1;
+
+    // Pasang listener untuk select platform jika formset sosmed
+    const newSelect = newRow.querySelector('.platform-select');
+    if (newSelect) {
+      updateSocialRowIcon(newSelect);
+      newSelect.addEventListener('change', function() {
+        updateSocialRowIcon(this);
+      });
+    }
+  }
+
+  // 6. Tandai Baris Formset untuk Dihapus
+  function markFormsetDelete(btn) {
+    const row = btn.closest('.social-form-row') || btn.closest('.quick-form-row');
+    if (!row) return;
+
+    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+    if (deleteCheckbox) {
+      deleteCheckbox.checked = !deleteCheckbox.checked;
+      if (deleteCheckbox.checked) {
+        row.classList.add('opacity-40', 'bg-rose-50/50');
+        row.style.textDecoration = 'line-through';
+      } else {
+        row.classList.remove('opacity-40', 'bg-rose-50/50');
+        row.style.textDecoration = 'none';
+      }
+    } else {
+      // Jika baris baru yang belum tersimpan di DB
+      row.remove();
+    }
+  }
+</script>
+{% endblock %}

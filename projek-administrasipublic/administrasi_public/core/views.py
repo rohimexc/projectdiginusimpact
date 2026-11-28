@@ -12,13 +12,18 @@ from django.core.exceptions import ValidationError
 from .models import (
     Sambutan, Galeri, Hero, Berita, TenagaPendidik, AuditLog, 
     HalamanTentang, VisiMisiTujuan, MisiItem, TujuanItem, 
-    HalamanAkademik, DokumenAkademik, KomentarBerita, Event
+    HalamanAkademik, DokumenAkademik, KomentarBerita, Event,
+    SiteSetting, SocialMedia, QuickLink, SOCIAL_PLATFORM_CHOICES, PLATFORM_ICONS
 )
 from .forms import (
     BeritaForm, TenagaPendidikForm, UserForm, SambutanForm, 
-    HalamanTentangForm, HalamanAkademikForm, GaleriForm, HeroForm, EventForm
+    HalamanTentangForm, HalamanAkademikForm, GaleriForm, HeroForm, EventForm,
+    SiteSettingForm, SocialMediaFormSet, QuickLinkFormSet
 )
-from .validators import validate_image_file, validate_video_file, validate_document_file
+from .validators import (
+    validate_image_file, validate_video_file, validate_document_file,
+    validate_favicon_file, validate_site_logo_file
+)
 
 User = get_user_model()
 
@@ -1635,3 +1640,74 @@ def event_toggle_status(request, pk):
     catat_audit(request, 'Toggle Status Event', f"Event #{event.id} {status_str}")
     messages.success(request, f'Status event "{event.judul}" berhasil {status_str}!')
     return redirect('admin_kelola_event')
+
+
+# =========================================================================
+# MANAJEMEN PENGATURAN SITUS (SITE SETTINGS) - KHUSUS ROLE ADMIN
+# =========================================================================
+
+@login_required(login_url='user_login')
+def admin_kelola_pengaturan(request):
+    """
+    Halaman manajemen Site Settings terpadu:
+    - Identitas Situs & Header (Favicon, Logo, Judul, Subjudul)
+    - Pengaturan Footer (Logo Footer, Judul, Subjudul, Deskripsi, Alamat Singkat)
+    - Kontak & Sosial Media (Alamat, Telepon, WhatsApp, Email, & Relasi Akun Sosmed)
+    - Tautan Cepat (Daftar Layanan & Portal Kampus beserta berkas dokumen)
+    """
+    user_role = getattr(request.user, 'role', '').lower() if hasattr(request.user, 'role') and request.user.role else ''
+    if not ('admin' in user_role or request.user.is_staff or request.user.is_superuser):
+        logout(request)
+        return redirect('user_login')
+
+    setting = SiteSetting.get_settings()
+
+    if request.method == 'POST':
+        form = SiteSettingForm(request.POST, request.FILES, instance=setting)
+        social_formset = SocialMediaFormSet(request.POST, instance=setting, prefix='social')
+        quick_formset = QuickLinkFormSet(request.POST, request.FILES, instance=setting, prefix='quick')
+
+        # Penanganan Hapus Gambar Eksplisit jika dicentang
+        if request.POST.get('hapus_favicon') == '1' and 'favicon' not in request.FILES:
+            if setting.favicon:
+                setting.favicon.delete(save=False)
+            setting.favicon = None
+
+        if request.POST.get('hapus_header_logo') == '1' and 'header_logo' not in request.FILES:
+            if setting.header_logo:
+                setting.header_logo.delete(save=False)
+            setting.header_logo = None
+
+        if request.POST.get('hapus_footer_logo') == '1' and 'footer_logo' not in request.FILES:
+            if setting.footer_logo:
+                setting.footer_logo.delete(save=False)
+            setting.footer_logo = None
+
+        if form.is_valid() and social_formset.is_valid() and quick_formset.is_valid():
+            form.save()
+            social_formset.save()
+            quick_formset.save()
+            catat_audit(request, 'Update Site Settings', 'Memperbarui konfigurasi identitas situs, footer, kontak, dan tautan')
+            messages.success(request, 'Pengaturan website, sosial media, dan tautan cepat berhasil diperbarui!')
+            active_tab = request.POST.get('active_tab', 'identitas')
+            return redirect(f"{reverse('admin_kelola_pengaturan')}?tab={active_tab}")
+        else:
+            messages.error(request, 'Terdapat kesalahan pada formulir pengaturan. Silakan periksa tab terkait.')
+    else:
+        form = SiteSettingForm(instance=setting)
+        social_formset = SocialMediaFormSet(instance=setting, prefix='social')
+        quick_formset = QuickLinkFormSet(instance=setting, prefix='quick')
+
+    active_tab = request.GET.get('tab', 'identitas')
+
+    context = {
+        'setting': setting,
+        'form': form,
+        'social_formset': social_formset,
+        'quick_formset': quick_formset,
+        'active_tab': active_tab,
+        'social_choices': SOCIAL_PLATFORM_CHOICES,
+        'platform_icons': PLATFORM_ICONS,
+    }
+    return render(request, 'core/admin/pengaturan_form.html', context)
+

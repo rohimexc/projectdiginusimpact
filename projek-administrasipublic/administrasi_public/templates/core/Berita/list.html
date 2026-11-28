@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  {% if site_settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  {% endif %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Berita Terkini - Administrasi Publik UNTAD</title>
@@ -71,7 +74,7 @@
 <body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
   <!-- Floating WhatsApp -->
-  <a href="https://wa.me/6285330144401" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+  <a href="https://wa.me/{{ site_settings.clean_whatsapp|default:'6285330144401' }}" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
     <i class="fab fa-whatsapp"></i>
   </a>
 

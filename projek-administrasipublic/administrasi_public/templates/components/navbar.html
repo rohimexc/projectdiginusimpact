@@ -9,10 +9,14 @@
   
   <!-- Logo & Identitas Website -->
   <a href="{% url 'home' %}" class="flex items-center gap-3 text-white group">
-    <i class="fas fa-graduation-cap text-3xl text-[#ffd43b] group-hover:scale-105 transition-transform"></i>
+    {% if site_settings.header_logo %}
+      <img src="{{ site_settings.header_logo.url }}" alt="{{ site_settings.header_title|default:'Administrasi Publik' }}" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform">
+    {% else %}
+      <i class="fas fa-graduation-cap text-3xl text-[#ffd43b] group-hover:scale-105 transition-transform"></i>
+    {% endif %}
     <div>
-      <h2 class="text-base font-bold leading-tight">Administrasi Publik</h2>
-      <p class="text-[11px] opacity-85">FISIP Universitas Tadulako</p>
+      <h2 class="text-base font-bold leading-tight">{{ site_settings.header_title|default:"Administrasi Publik" }}</h2>
+      <p class="text-[11px] opacity-85">{{ site_settings.header_subtitle|default:"FISIP Universitas Tadulako" }}</p>
     </div>
   </a>
 
@@ -123,6 +127,9 @@
             {% if request.user.is_staff or request.user.is_superuser %}
               <a href="{% url 'admin_dashboard' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
                 <i class="fas fa-gauge-high text-[#fab005] w-4"></i> Dashboard Admin
+              </a>
+              <a href="{% url 'admin_kelola_pengaturan' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
+                <i class="fas fa-sliders-h text-[#fab005] w-4"></i> Pengaturan Website
               </a>
               <a href="{% url 'admin:app_list' 'cms' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium hover:bg-teal-50 hover:text-[#0b7285] transition">
                 <i class="fas fa-sitemap text-[#fab005] w-4"></i> Kelola CMS Navbar

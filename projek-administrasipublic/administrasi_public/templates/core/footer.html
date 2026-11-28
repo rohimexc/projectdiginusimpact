@@ -5,29 +5,41 @@
       <!-- Kolom 1: Profil Prodi & Alamat Lengkap Kampus -->
       <div class="space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#fab005] to-[#ffd43b] flex items-center justify-center text-slate-900 font-black shadow-md">
-            <i class="bi bi-mortarboard-fill text-lg"></i>
-          </div>
+          {% if site_settings.footer_logo %}
+            <img src="{{ site_settings.footer_logo.url }}" alt="{{ site_settings.footer_title|default:'Administrasi Publik' }}" class="h-12 w-auto object-contain">
+          {% else %}
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#fab005] to-[#ffd43b] flex items-center justify-center text-slate-900 font-black shadow-md">
+              <i class="bi bi-mortarboard-fill text-lg"></i>
+            </div>
+          {% endif %}
           <div>
-            <h3 class="font-bold text-sm text-white tracking-wide leading-tight">Administrasi Publik</h3>
-            <p class="text-[11px] text-teal-300 font-medium">FISIP Universitas Tadulako</p>
+            <h3 class="font-bold text-sm text-white tracking-wide leading-tight">
+              {{ site_settings.footer_title|default:"Administrasi Publik" }}
+            </h3>
+            <p class="text-[11px] text-teal-300 font-medium">
+              {{ site_settings.footer_subtitle|default:"FISIP Universitas Tadulako" }}
+            </p>
           </div>
         </div>
+
         <p class="text-slate-300 text-[11px] leading-relaxed text-justify">
-          Mencetak sarjana yang unggul, berintegritas, dan inovatif dalam perumusan kebijakan publik serta tata kelola pemerintahan yang berwawasan lingkungan.
+          {{ site_settings.footer_description|default:"Mencetak sarjana yang unggul, berintegritas, dan inovatif dalam perumusan kebijakan publik serta tata kelola pemerintahan yang berwawasan lingkungan." }}
         </p>
+
         <div class="space-y-2 pt-1 text-[11px] text-slate-300">
           <p class="flex items-start gap-2.5">
             <i class="bi bi-geo-alt-fill text-amber-400 mt-0.5 text-sm flex-shrink-0"></i>
-            <span>Gedung FISIP UNTAD, Kampus Bumi Tadulako Tondo, Jl. Soekarno-Hatta Km. 9, Kota Palu, Sulawesi Tengah 94118</span>
+            <span>{{ site_settings.contact_address|default:"Gedung FISIP UNTAD, Kampus Bumi Tadulako Tondo, Jl. Soekarno-Hatta Km. 9, Kota Palu, Sulawesi Tengah 94118" }}</span>
           </p>
           <p class="flex items-center gap-2.5">
             <i class="bi bi-envelope-fill text-amber-400 text-xs flex-shrink-0"></i>
-            <span>admpublik@untad.ac.id</span>
+            <a href="mailto:{{ site_settings.contact_email|default:'admpublik@untad.ac.id' }}" class="hover:underline">
+              {{ site_settings.contact_email|default:"admpublik@untad.ac.id" }}
+            </a>
           </p>
           <p class="flex items-center gap-2.5">
             <i class="bi bi-telephone-fill text-amber-400 text-xs flex-shrink-0"></i>
-            <span>(0451) 422611 / +62 811-450-000</span>
+            <span>{{ site_settings.contact_phone|default:"(0451) 422611 / +62 811-450-000" }}</span>
           </p>
         </div>
       </div>
@@ -71,65 +83,91 @@
         </ul>
       </div>
 
-      <!-- Kolom 3: Tautan Akademik & Portal Kampus -->
+      <!-- Kolom 3: Layanan & Portal (Tautan Cepat Dinamis) -->
       <div>
         <h4 class="font-bold text-sm text-amber-400 uppercase tracking-wider mb-4 border-l-2 border-amber-400 pl-2">
           Layanan & Portal
         </h4>
         <ul class="space-y-2.5 text-[11px]">
-          <li>
-            <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition-colors flex items-center gap-2">
-              <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Portal SIGA-8 UNTAD
-            </a>
-          </li>
-          <li>
-            <a href="https://untad.ac.id" target="_blank" class="hover:text-amber-300 transition-colors flex items-center gap-2">
-              <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Website Resmi UNTAD
-            </a>
-          </li>
-          <li>
-            <a href="https://fisip.untad.ac.id" target="_blank" class="hover:text-amber-300 transition-colors flex items-center gap-2">
-              <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Website Resmi FISIP
-            </a>
-          </li>
-          <li>
-            <a href="{% url 'akademik_detail' 'kurikulum' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
-              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Kurikulum & RPS
-            </a>
-          </li>
-          <li>
-            <a href="{% url 'akademik_detail' 'jadwal' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
-              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Jadwal Perkuliahan
-            </a>
-          </li>
-          <li>
-            <a href="{% url 'akademik_detail' 'panduan' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
-              <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Panduan Skripsi & Magang
-            </a>
-          </li>
+          {% if quick_links %}
+            {% for ql in quick_links %}
+              <li>
+                <a href="{{ ql.get_url }}" 
+                   {% if ql.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %} 
+                   class="hover:text-amber-300 transition-colors flex items-center gap-2">
+                  {% if ql.is_file %}
+                    <i class="bi bi-file-earmark-pdf-fill text-[10px] text-amber-400"></i>
+                  {% elif ql.open_in_new_tab %}
+                    <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i>
+                  {% else %}
+                    <i class="bi bi-chevron-right text-[9px] text-teal-400"></i>
+                  {% endif %}
+                  <span>{{ ql.title }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          {% else %}
+            <!-- Fallback Default Tautan Cepat -->
+            <li>
+              <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+                <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Portal SIGA-8 UNTAD
+              </a>
+            </li>
+            <li>
+              <a href="https://untad.ac.id" target="_blank" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+                <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Website Resmi UNTAD
+              </a>
+            </li>
+            <li>
+              <a href="https://fisip.untad.ac.id" target="_blank" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+                <i class="bi bi-box-arrow-up-right text-[9px] text-teal-400"></i> Website Resmi FISIP
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'akademik_detail' 'kurikulum' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+                <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Kurikulum & RPS
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'akademik_detail' 'jadwal' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+                <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Jadwal Perkuliahan
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'akademik_detail' 'panduan' %}" class="hover:text-amber-300 transition-colors flex items-center gap-2">
+                <i class="bi bi-chevron-right text-[9px] text-teal-400"></i> Panduan Skripsi & Magang
+              </a>
+            </li>
+          {% endif %}
         </ul>
       </div>
 
-      <!-- Kolom 4: Media Sosial & Statistik Pengunjung -->
+      <!-- Kolom 4: Media Sosial Dinamis & Statistik Pengunjung -->
       <div class="space-y-4">
         <h4 class="font-bold text-sm text-amber-400 uppercase tracking-wider mb-4 border-l-2 border-amber-400 pl-2">
           Ikuti Kami
         </h4>
         <p class="text-[11px] text-slate-300">Dapatkan informasi terkini seputar kegiatan prodi dan akademik:</p>
         
-        <div class="flex items-center gap-3">
-          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
-            <i class="bi bi-instagram"></i>
-          </a>
-          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
-            <i class="bi bi-facebook"></i>
-          </a>
-          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
-            <i class="bi bi-youtube"></i>
-          </a>
-          <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
-            <i class="bi bi-linkedin"></i>
-          </a>
+        <!-- Ikon Sosial Media Dinamis -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          {% if social_medias %}
+            {% for sm in social_medias %}
+              <a href="{{ sm.url }}" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 title="{{ sm.get_platform_display }}" 
+                 class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow">
+                <i class="{{ sm.get_icon_class }}"></i>
+              </a>
+            {% endfor %}
+          {% else %}
+            <!-- Fallback Default Sosial Media jika belum diset -->
+            <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow"><i class="bi bi-youtube"></i></a>
+            <a href="#" class="w-8 h-8 rounded-lg bg-teal-800/80 hover:bg-amber-400 hover:text-slate-900 transition flex items-center justify-center text-sm shadow"><i class="bi bi-linkedin"></i></a>
+          {% endif %}
         </div>
 
         <!-- Box Statistik Pengunjung -->
@@ -157,7 +195,9 @@
 
     <!-- Baris Hak Cipta Bawah -->
     <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-slate-400 text-[11px]">
-      <p class="w-full md:w-auto text-center md:text-left">&copy; 2026 Program Studi Administrasi Publik FISIP Universitas Tadulako. All rights reserved.</p>
+      <p class="w-full md:w-auto text-center md:text-left">
+        &copy; 2026 Program Studi {{ site_settings.footer_title|default:"Administrasi Publik" }} {{ site_settings.footer_subtitle|default:"FISIP Universitas Tadulako" }}. All rights reserved.
+      </p>
       <p class="w-full md:w-auto text-center md:text-right flex items-center justify-center md:justify-end gap-1">
         Developed & Maintained with <i class="bi bi-heart-fill text-rose-500 text-[10px]"></i> by <a href="https://diginus.web.id" target="_blank" rel="noopener noreferrer" class="text-amber-400 font-semibold hover:underline transition-colors">Diginus</a>
       </p>

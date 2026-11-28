@@ -58,6 +58,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.statistik_pengunjung',
+                'core.context_processors.site_settings_processor',
                 'cms.context_processors.cms_navigation',
             ],
         },
