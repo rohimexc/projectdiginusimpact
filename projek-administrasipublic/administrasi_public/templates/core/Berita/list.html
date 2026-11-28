@@ -18,6 +18,9 @@
   <!-- AOS Animation CSS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
+  <!-- Swiper Carousel CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -69,6 +72,23 @@
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
     }
+
+    /* Swiper Styles Persis Galeri */
+    .berita-sorotan-swiper {
+      padding-bottom: 46px !important;
+    }
+    .berita-sorotan-swiper .swiper-pagination-bullet {
+      background: #cbd5e1;
+      opacity: 1;
+      width: 8px;
+      height: 8px;
+      transition: all 0.3s ease;
+    }
+    .berita-sorotan-swiper .swiper-pagination-bullet-active {
+      background: #0b7285 !important;
+      width: 26px !important;
+      border-radius: 9999px !important;
+    }
   </style>
 </head>
 <body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased min-h-screen flex flex-col justify-between">
@@ -103,6 +123,107 @@
         </p>
       </header>
       
+      <!-- ================= SOROTAN BERITA KEGIATAN (CAROUSEL 3-2-1 PERSIS GALERI) ================= -->
+      {% if sorotan_berita %}
+        <section class="mb-8" data-aos="fade-up" data-aos-duration="600">
+          <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-gold inline-block"></span>
+              <h2 class="text-sm sm:text-base font-bold text-slate-800">
+                Sorotan Berita <span class="text-xs font-normal text-slate-400">({{ total_sorotan }} Berita)</span>
+              </h2>
+            </div>
+            <!-- Tombol Navigasi Slider -->
+            <div class="flex items-center gap-2">
+              <button type="button" id="sorotan-berita-prev" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Berita Sebelumnya">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button type="button" id="sorotan-berita-next" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-[#0b7285] hover:text-white shadow-xs transition flex items-center justify-center cursor-pointer active:scale-95" aria-label="Berita Selanjutnya">
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="swiper berita-sorotan-swiper custom-carousel-swiper">
+            <div class="swiper-wrapper">
+              {% for sb in sorotan_berita %}
+                <div class="swiper-slide h-auto">
+                  <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+                    <div>
+                      <!-- FRAME GAMBAR RASIO 4:5 VERTIKAL PERSIS GALERI -->
+                      <a href="{% url 'berita_detail' sb.pk %}" class="block w-full overflow-hidden bg-slate-100 rounded-t-2xl relative cursor-pointer" style="aspect-ratio: 4 / 5;">
+                        {% if sb.gambar %}
+                          {% if sb.gambar.url %}
+                            <img src="{{ sb.gambar.url }}" alt="{{ sb.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                          {% else %}
+                            <img src="{{ sb.gambar }}" alt="{{ sb.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                          {% endif %}
+                        {% else %}
+                          <div class="w-full h-full flex flex-col items-center justify-center text-slate-300 bg-slate-100">
+                            <i class="fas fa-newspaper text-5xl mb-2 text-slate-300"></i>
+                            <span class="text-xs text-slate-400">Tidak ada gambar</span>
+                          </div>
+                        {% endif %}
+
+                        <div class="absolute inset-0 bg-slate-900/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity duration-200">
+                          <span class="w-10 h-10 rounded-full bg-white/25 backdrop-blur-xs flex items-center justify-center text-white text-sm">
+                            <i class="fas fa-arrow-right"></i>
+                          </span>
+                        </div>
+
+                        <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-white/20">
+                          Berita #{{ forloop.counter }}
+                        </span>
+                      </a>
+
+                      <div class="p-4 sm:p-5">
+                        <span class="text-[10px] font-semibold text-[#0b7285] flex items-center gap-1.5 mb-1.5">
+                          <i class="far fa-clock text-[9px]"></i>
+                          {{ sb.posted_at|date:"d M Y, H:i" }}
+                        </span>
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug line-clamp-2 hover:text-[#0b7285] transition">
+                          <a href="{% url 'berita_detail' sb.pk %}">{{ sb.judul }}</a>
+                        </h3>
+                        {% if sb.ringkasan %}
+                          <p class="text-xs text-slate-500 leading-relaxed line-clamp-2 mt-2">
+                            {{ sb.ringkasan }}
+                          </p>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <!-- Bar Interaksi Bawah Sesuai Desain: View, Like, Comment, Share & Baca -->
+                    <div class="px-4 sm:px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <div class="flex items-center gap-3">
+                        <!-- View -->
+                        <span class="flex items-center gap-1 text-slate-600 text-[11px]" title="{{ sb.views }} pembaca">
+                          <i class="far fa-eye text-xs text-[#0b7285]"></i>
+                          <span class="font-bold text-slate-700 font-mono">{{ sb.views }}</span>
+                        </span>
+                        <!-- Like -->
+                        <button type="button" class="btn-card-like group flex items-center gap-1 text-slate-600 focus:outline-none cursor-pointer text-[11px]" data-id="{{ sb.pk }}" title="Sukai berita">
+                          <i class="far fa-heart text-xs text-slate-400 group-hover:text-rose-500 transition-colors"></i>
+                          <span class="font-bold text-slate-700 font-mono like-count">{{ sb.likes }}</span>
+                        </button>
+                        <!-- Komentar -->
+                        <a href="{% url 'berita_detail' sb.pk %}#komentar-section" class="flex items-center gap-1 text-slate-600 hover:text-[#0b7285] text-[11px]" title="Komentar">
+                          <i class="far fa-comment-dots text-xs text-slate-400"></i>
+                          <span class="font-bold text-slate-700 font-mono">{{ sb.komentar_list.count }}</span>
+                        </a>
+                      </div>
+                      <a href="{% url 'berita_detail' sb.pk %}" class="text-[11px] font-bold text-[#0b7285] hover:text-[#084c5a] inline-flex items-center gap-1">
+                        Baca &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+      {% endif %}
+
       <!-- ================= KARTU PENCARIAN & FILTER KAPSUL MODERN (2 BARIS) ================= -->
       <div data-aos="fade-down" data-aos-duration="600" class="mb-5">
         <form method="GET" id="filter-form" action="{% url 'berita_list' %}" class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 lg:p-6 border border-slate-200/90 shadow-sm">
@@ -716,6 +837,38 @@
     document.getElementById('end_date')?.addEventListener('change', () => {
       const p = document.getElementById('preset-input');
       if (p) p.value = '';
+    });
+  </script>
+  <!-- Swiper Carousel JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.berita-sorotan-swiper')) {
+        new Swiper('.berita-sorotan-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 16,
+          grabCursor: true,
+          loop: false,
+          navigation: {
+            nextEl: '#sorotan-berita-next',
+            prevEl: '#sorotan-berita-prev',
+          },
+          pagination: {
+            el: '.berita-sorotan-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          },
+        });
+      }
     });
   </script>
 </body>

@@ -182,6 +182,42 @@ def berita_list(request):
                 27,
                 8,
             ),
+            (
+                "Seminar Nasional: Kebijakan Publik Berbasis AI dan Smart Governance",
+                "Seminar nasional mempertemukan akademisi dan praktisi kebijakan publik untuk mengkaji pemanfaatan kecerdasan buatan dalam tata kelola pemerintahan.",
+                "<p>Program Studi Administrasi Publik FISIP Universitas Tadulako sukses menyelenggarakan Seminar Nasional Kebijakan Publik dengan tema <strong>'Transformasi Pelayanan Publik dan Implementasi Artificial Intelligence dalam Tata Kelola Pemerintahan'</strong>.</p>",
+                "berita/IMG_0453.JPEG",
+                156,
+                42,
+                15,
+            ),
+            (
+                "Pelatihan Kepemimpinan Mahasiswa Administrasi Publik Tingkat Wilayah",
+                "Himpunan Mahasiswa Administrasi Publik mengadakan pelatihan kepemimpinan intensif untuk membentuk karakter pemimpin berintegritas dan adaptif.",
+                "<p>Dalam rangka membentuk calon pemimpin masa depan yang berintegritas dan memiliki wawasan birokrasi modern, Himpunan Mahasiswa Administrasi Publik (HIMAP) menggelar <strong>Pelatihan Kepemimpinan Mahasiswa Administrasi Publik</strong> tingkat regional Sulawesi.</p>",
+                "berita/3d80edb0db6f6ab2fa95cf3cf5006344.jpg",
+                110,
+                38,
+                9,
+            ),
+            (
+                "Kunjungan Studi Lapangan Tata Kelola Pemerintahan Daerah & Inovasi Pelayanan",
+                "Mahasiswa tingkat akhir melakukan observasi lapangan terkait inovasi pelayanan terpadu satu pintu di kantor pemerintahan daerah.",
+                "<p>Sebagai bagian dari mata kuliah Kebijakan dan Manajemen Publik, mahasiswa semester 6 Program Studi Administrasi Publik melaksanakan <strong>Kunjungan Studi Lapangan</strong> ke berbagai instansi pelayanan publik daerah.</p>",
+                "berita/gugugaga.webp",
+                88,
+                29,
+                7,
+            ),
+            (
+                "Rapat Kerja Kurikulum Berbasis OBE & Implementasi MBKM Unggul",
+                "Program studi menyelaraskan kurikulum berbasis Outcome-Based Education (OBE) untuk menjawab tuntutan pasar kerja dan akreditasi internasional.",
+                "<p>Guna mempertahankan standar mutu pendidikan tinggi bereputasi, Program Studi Administrasi Publik menyelenggarakan <strong>Rapat Kerja Evaluasi & Pemutakhiran Kurikulum Berbasis OBE (Outcome-Based Education)</strong>.</p>",
+                "berita/Untitled.png",
+                142,
+                50,
+                19,
+            ),
         ]
         for judul, ringkasan, konten, gambar, views, likes, shares in sample_berita:
             Berita.objects.create(
@@ -295,8 +331,14 @@ def berita_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # Sorotan berita untuk slider / carousel (mengikuti visual galeri)
+    sorotan_berita = Berita.objects.all().order_by('-posted_at')
+    total_sorotan = sorotan_berita.count()
+
     context = {
         'page_obj': page_obj,
+        'sorotan_berita': sorotan_berita,
+        'total_sorotan': total_sorotan,
         'query': query,
         'start_date': start_date_str,
         'end_date': end_date_str,

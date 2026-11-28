@@ -233,3 +233,12 @@ class BeritaUrlRoutingTest(TestCase):
         res_upper = self.client.get('/Berita/')
         self.assertEqual(res_upper.status_code, 200)
 
+    def test_berita_slider_carousel_rendered(self):
+        """Memastikan fitur slider/carousel sorotan berita dirender dengan benar seperti galeri"""
+        response = self.client.get('/berita/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('sorotan_berita', response.context)
+        self.assertIn('berita-sorotan-swiper', response.content.decode('utf-8'))
+        self.assertIn('sorotan-berita-prev', response.content.decode('utf-8'))
+        self.assertIn('sorotan-berita-next', response.content.decode('utf-8'))
+
