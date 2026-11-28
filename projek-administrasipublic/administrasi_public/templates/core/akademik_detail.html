@@ -1,9 +1,10 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
+
 <head>
   {% if site_settings.favicon %}
-    <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
+  <link rel="icon" type="image/x-icon" href="{{ site_settings.favicon.url }}">
   {% endif %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,8 @@
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- AOS Animation CSS -->
@@ -41,21 +43,27 @@
   <style>
     /* Animasi AOS Mobile Cepat, Ringan & Friendly */
     @media (max-width: 768px) {
-      body, html {
+
+      body,
+      html {
         overflow-x: hidden !important;
       }
+
       [data-aos] {
         transition-duration: 450ms !important;
         transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
       }
+
       [data-aos="fade-left"],
       [data-aos="fade-right"] {
         transform: translate3d(0, 20px, 0) !important;
       }
+
       [data-aos="fade-left"].aos-animate,
       [data-aos="fade-right"].aos-animate {
         transform: translate3d(0, 0, 0) !important;
       }
+
       [data-aos][data-aos-delay] {
         transition-delay: 50ms !important;
       }
@@ -65,50 +73,58 @@
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
+
     /* Hide scrollbar for IE, Edge and Firefox */
     .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
     }
   </style>
 </head>
+
 <body class="font-poppins bg-[#f8fafc] text-slate-800 antialiased flex flex-col min-h-screen">
 
   <!-- Floating WhatsApp -->
-  <a href="https://wa.me/{{ site_settings.clean_whatsapp|default:'6285330144401' }}" target="_blank" rel="noopener noreferrer" title="Hubungi via WhatsApp" class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
+  <a href="https://wa.me/{{ site_settings.clean_whatsapp|default:'6285330144401' }}" target="_blank"
+    rel="noopener noreferrer" title="Hubungi via WhatsApp"
+    class="fixed bottom-6 right-6 bg-[#25d366] text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg z-50 hover:scale-110 transition duration-200">
     <i class="fab fa-whatsapp"></i>
   </a>
 
   <!-- Unified Dynamic Navbar Component (CMS) -->
   {% include 'components/navbar.html' %}
 
-  
+
 
   <!-- Konten Utama -->
   <main class="flex-1 pt-24 sm:pt-28 pb-24 sm:pb-20 px-4 sm:px-6">
     <div class="max-w-6xl mx-auto">
-      
+
       <!-- ================= BLOK 1 AOS: HEADER & DERETAN TOMBOL TAB AKADEMIK ================= -->
       <header data-aos="fade-down" data-aos-duration="600" class="mb-6 sm:mb-8 text-center sm:text-left">
         <!-- Breadcrumb Navigasi Minimalis & Fungsional -->
-        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
+        <nav aria-label="Breadcrumb"
+          class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 text-xs text-slate-500 mb-2 sm:mb-2.5">
           <a href="{% url 'home' %}" class="hover:text-teal-800 hover:underline transition-colors">Beranda</a>
           <span class="text-slate-400">›</span>
-          <a href="{% url 'akademik_detail' 'siga8' %}" class="hover:text-teal-800 hover:underline transition-colors">Akademik</a>
+          <a href="{% url 'akademik_detail' 'siga8' %}"
+            class="hover:text-teal-800 hover:underline transition-colors">Akademik</a>
           <span class="text-slate-400">›</span>
           <span class="font-medium text-teal-800">
             {% if halaman.kategori == 'siga8' %}
-              SIGA-8
+            SIGA-8
             {% elif halaman.kategori == 'kurikulum' %}
-              Kurikulum
+            Kurikulum
             {% elif halaman.kategori == 'jadwal' %}
-              Jadwal Perkuliahan
+            Jadwal Perkuliahan
             {% elif halaman.kategori == 'rps' %}
-              Rencana Pembelajaran Semester (RPS)
+            Rencana Pembelajaran Semester (RPS)
             {% elif halaman.kategori == 'panduan' %}
-              Panduan Akademik
+            Panduan Akademik
             {% else %}
-              {{ halaman.judul|default:"Layanan Akademik" }}
+            {{ halaman.judul|default:"Layanan Akademik" }}
             {% endif %}
           </span>
         </nav>
@@ -121,40 +137,46 @@
 
         <!-- Navigasi Tab Sub-Menu Tombol Pill Akademik (Horizontal Scrollable di Mobile/Tablet) -->
         <div class="w-full overflow-x-auto no-scrollbar py-1.5 -mx-4 px-4 sm:mx-0 sm:px-0 mb-6 sm:mb-8">
-          <div class="flex flex-nowrap items-center gap-2 sm:gap-2.5 min-w-max md:min-w-0 md:justify-center lg:justify-start">
+          <div
+            class="flex flex-nowrap items-center gap-2 sm:gap-2.5 min-w-max md:min-w-0 md:justify-center lg:justify-start">
             <!-- SIGA-8 (Direct Link Eksternal) -->
             <a href="https://siga-8.untad.ac.id" target="_blank" rel="noopener noreferrer"
-               class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0 bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]" title="Buka Portal Resmi SIGA-8">
+              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0 bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]"
+              title="Buka Portal Resmi SIGA-8">
               <i class="fas fa-desktop text-slate-500"></i>
               <span>SIGA-8</span>
               <i class="fas fa-external-link-alt text-[9px] text-slate-400"></i>
             </a>
 
             <!-- Kurikulum -->
-            <a href="{% url 'akademik_detail' 'kurikulum' %}" 
-               class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'kurikulum' or halaman.kategori == 'kurikulum' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
-              <i class="fas fa-book-open {% if kategori == 'kurikulum' or halaman.kategori == 'kurikulum' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
+            <a href="{% url 'akademik_detail' 'kurikulum' %}"
+              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'kurikulum' or halaman.kategori == 'kurikulum' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
+              <i
+                class="fas fa-book-open {% if kategori == 'kurikulum' or halaman.kategori == 'kurikulum' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
               <span>Kurikulum</span>
             </a>
 
             <!-- Jadwal -->
-            <a href="{% url 'akademik_detail' 'jadwal' %}" 
-               class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'jadwal' or halaman.kategori == 'jadwal' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
-              <i class="fas fa-calendar-alt {% if kategori == 'jadwal' or halaman.kategori == 'jadwal' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
+            <a href="{% url 'akademik_detail' 'jadwal' %}"
+              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'jadwal' or halaman.kategori == 'jadwal' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
+              <i
+                class="fas fa-calendar-alt {% if kategori == 'jadwal' or halaman.kategori == 'jadwal' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
               <span>Jadwal Perkuliahan</span>
             </a>
 
             <!-- RPS -->
-            <a href="{% url 'akademik_detail' 'rps' %}" 
-               class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'rps' or halaman.kategori == 'rps' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
-              <i class="fas fa-file-signature {% if kategori == 'rps' or halaman.kategori == 'rps' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
+            <a href="{% url 'akademik_detail' 'rps' %}"
+              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'rps' or halaman.kategori == 'rps' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
+              <i
+                class="fas fa-file-signature {% if kategori == 'rps' or halaman.kategori == 'rps' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
               <span>RPS</span>
             </a>
 
             <!-- Panduan -->
-            <a href="{% url 'akademik_detail' 'panduan' %}" 
-               class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'panduan' or halaman.kategori == 'panduan' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
-              <i class="fas fa-book-bookmark {% if kategori == 'panduan' or halaman.kategori == 'panduan' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
+            <a href="{% url 'akademik_detail' 'panduan' %}"
+              class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 shadow-2xs whitespace-nowrap shrink-0 {% if kategori == 'panduan' or halaman.kategori == 'panduan' %}bg-[#0D636D] text-white shadow-sm{% else %}bg-white text-slate-700 border border-slate-200/90 hover:border-[#0D636D] hover:text-[#0D636D]{% endif %}">
+              <i
+                class="fas fa-book-bookmark {% if kategori == 'panduan' or halaman.kategori == 'panduan' %}text-[#ffd43b]{% else %}text-slate-500{% endif %}"></i>
               <span>Panduan Akademik</span>
             </a>
           </div>
@@ -164,9 +186,10 @@
       <!-- ================= BLOK 2 AOS: KARTU KONTEN UTAMA ================= -->
       <section data-aos="fade-up" data-aos-duration="700">
         <article class="bg-white rounded-2xl p-6 sm:p-10 shadow-sm border border-slate-200/80 min-h-[350px]">
-          
+
           <!-- Bar Judul Vertikal -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+          <div
+            class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
             <div class="flex items-center gap-3">
               <span class="w-2.5 h-7 bg-[#0b7285] rounded-full inline-block shrink-0"></span>
               <div>
@@ -174,75 +197,79 @@
                   {{ halaman.judul|default:"Informasi Layanan Akademik" }}
                 </h2>
                 {% if halaman.subjudul %}
-                  <p class="text-xs text-slate-500 mt-0.5">{{ halaman.subjudul }}</p>
+                <p class="text-xs text-slate-500 mt-0.5">{{ halaman.subjudul }}</p>
                 {% endif %}
               </div>
             </div>
 
             {% if halaman.link_eksternal %}
-              <a href="{{ halaman.link_eksternal }}" target="_blank" rel="noopener noreferrer" 
-                 class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-50 hover:bg-[#0b7285] text-[#0b7285] hover:text-white border border-teal-200 text-xs font-semibold transition self-start sm:self-auto shadow-2xs">
-                <span>Buka Tautan Resmi</span>
-                <i class="fas fa-external-link-alt text-[10px]"></i>
-              </a>
+            <a href="{{ halaman.link_eksternal }}" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-50 hover:bg-[#0b7285] text-[#0b7285] hover:text-white border border-teal-200 text-xs font-semibold transition self-start sm:self-auto shadow-2xs">
+              <span>Buka Tautan Resmi</span>
+              <i class="fas fa-external-link-alt text-[10px]"></i>
+            </a>
             {% endif %}
           </div>
 
           <!-- KONDISI B: HANYA FILE PDF YANG DIUNGGAH (PREVIEW PDF LANGSUNG) -->
           {% if kondisi == 'B' or not halaman.isi and halaman.file_utama %}
-            <div class="mb-4">
-              {% include 'components/document_viewer.html' with doc_title=halaman.nama_file_utama|default:halaman.judul doc_file=halaman.file_utama viewer_id="akademik_utama" %}
-            </div>
+          <div class="mb-4">
+            {% include 'components/document_viewer.html' with doc_title=halaman.nama_file_utama|default:halaman.judul
+            doc_file=halaman.file_utama viewer_id="akademik_utama" %}
+          </div>
 
           <!-- KONDISI C: ADA KONTEN TEKS DAN/ATAU LAMPIRAN FILE -->
           {% else %}
-            {% if halaman.isi %}
-              <div class="text-slate-700 leading-relaxed text-sm sm:text-[15px] space-y-4 content-detail text-justify mb-8">
-                {{ halaman.isi|safe }}
-              </div>
-            {% else %}
-              <div class="text-slate-500 text-xs italic py-4">
-                Konten akademik belum ditambahkan oleh administrator.
-              </div>
-            {% endif %}
+          {% if halaman.isi %}
+          <div class="text-slate-700 leading-relaxed text-sm sm:text-[15px] space-y-4 content-detail text-justify mb-8">
+            {{ halaman.isi|safe }}
+          </div>
+          {% else %}
+          <div class="text-slate-500 text-xs italic py-4">
+            Konten akademik belum ditambahkan oleh administrator.
+          </div>
+          {% endif %}
 
-            <!-- Lampiran Berkas Dokumen Utama Jika Ada -->
-            {% if halaman.file_utama %}
-              <div class="mt-8 pt-6 border-t border-slate-100">
-                <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                  <i class="fas fa-file-pdf text-[#0b7285]"></i>
-                  <span>{{ halaman.nama_file_utama|default:"Dokumen Lampiran:" }}</span>
-                </h3>
-                {% include 'components/document_viewer.html' with doc_title=halaman.nama_file_utama|default:halaman.judul doc_file=halaman.file_utama viewer_id="akademik_file" %}
-              </div>
-            {% endif %}
+          <!-- Lampiran Berkas Dokumen Utama Jika Ada -->
+          {% if halaman.file_utama %}
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <i class="fas fa-file-pdf text-[#0b7285]"></i>
+              <span>{{ halaman.nama_file_utama|default:"Dokumen Lampiran:" }}</span>
+            </h3>
+            {% include 'components/document_viewer.html' with doc_title=halaman.nama_file_utama|default:halaman.judul
+            doc_file=halaman.file_utama viewer_id="akademik_file" %}
+          </div>
+          {% endif %}
           {% endif %}
 
           <!-- Daftar Dokumen Tambahan Jika Ada -->
           {% if daftar_dokumen %}
-            <div class="mt-8 pt-6 border-t border-slate-100">
-              <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                <i class="fas fa-folder-open text-brand-gold"></i>
-                <span>Dokumen & Berkas Pendukung Lainnya:</span>
-              </h3>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {% for doc in daftar_dokumen %}
-                  <div class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 flex items-center justify-between gap-3 hover:bg-white hover:border-[#0b7285] transition">
-                    <div class="min-w-0">
-                      <p class="text-xs font-bold text-slate-800 truncate">{{ doc.judul }}</p>
-                      {% if doc.keterangan %}
-                        <p class="text-[11px] text-slate-400 truncate">{{ doc.keterangan }}</p>
-                      {% endif %}
-                    </div>
-                    {% if doc.file %}
-                      <a href="{{ doc.file.url }}" download class="px-3 py-1.5 rounded-lg bg-[#0b7285] text-white text-[11px] font-semibold hover:bg-[#084c5a] transition shrink-0 inline-flex items-center gap-1">
-                        <i class="fas fa-download text-[10px]"></i> Unduh
-                      </a>
-                    {% endif %}
-                  </div>
-                {% endfor %}
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <i class="fas fa-folder-open text-brand-gold"></i>
+              <span>Dokumen & Berkas Pendukung Lainnya:</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {% for doc in daftar_dokumen %}
+              <div
+                class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 flex items-center justify-between gap-3 hover:bg-white hover:border-[#0b7285] transition">
+                <div class="min-w-0">
+                  <p class="text-xs font-bold text-slate-800 truncate">{{ doc.judul }}</p>
+                  {% if doc.keterangan %}
+                  <p class="text-[11px] text-slate-400 truncate">{{ doc.keterangan }}</p>
+                  {% endif %}
+                </div>
+                {% if doc.file %}
+                <a href="{{ doc.file.url }}" download
+                  class="px-3 py-1.5 rounded-lg bg-[#0b7285] text-white text-[11px] font-semibold hover:bg-[#084c5a] transition shrink-0 inline-flex items-center gap-1">
+                  <i class="fas fa-download text-[10px]"></i> Unduh
+                </a>
+                {% endif %}
               </div>
+              {% endfor %}
             </div>
+          </div>
           {% endif %}
 
         </article>
@@ -260,6 +287,7 @@
       text-align: justify !important;
       text-justify: inter-word !important;
     }
+
     .content-detail img {
       max-width: 100%;
       height: auto;
@@ -326,4 +354,5 @@
     }
   </script>
 </body>
+
 </html>

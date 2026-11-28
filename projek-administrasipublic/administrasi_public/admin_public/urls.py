@@ -94,6 +94,21 @@ urlpatterns = [
     path('staf/tenaga-pengajar/<int:pk>/', tenaga_pendidik_detail, name='tenaga_pendidik_detail'),
     path('staf/tenaga-kependidikan/', tenaga_kependidikan_list, name='tenaga_kependidikan_list'),
     path('staf/tenaga-kependidikan/<int:pk>/', tenaga_kependidikan_detail, name='tenaga_kependidikan_detail'),
+
+    # Shortcut & Alias URL Publik untuk Staf (Dosen & Tenaga Kependidikan)
+    path('kependidikan/', tenaga_kependidikan_list, name='kependidikan_list'),
+    path('kependidikan/<int:pk>/', tenaga_kependidikan_detail, name='kependidikan_detail'),
+    path('Kependidikan/', tenaga_kependidikan_list),
+    path('Kependidikan/<int:pk>/', tenaga_kependidikan_detail),
+    path('tendik/', tenaga_kependidikan_list, name='tendik_list'),
+    path('tendik/<int:pk>/', tenaga_kependidikan_detail, name='tendik_detail'),
+    path('Tendik/', tenaga_kependidikan_list),
+    path('Tendik/<int:pk>/', tenaga_kependidikan_detail),
+    path('dosen/', tenaga_pendidik_list, name='dosen_list'),
+    path('dosen/<int:pk>/', tenaga_pendidik_detail, name='dosen_detail'),
+    path('Dosen/', tenaga_pendidik_list),
+    path('Dosen/<int:pk>/', tenaga_pendidik_detail),
+
     path('tentang/<str:kategori>/', tentang_detail, name='tentang_detail'),
     path('akademik/<str:kategori>/', akademik_detail, name='akademik_detail'),
 

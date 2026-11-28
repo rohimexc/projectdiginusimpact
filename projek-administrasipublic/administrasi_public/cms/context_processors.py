@@ -8,7 +8,8 @@ def cms_navigation(request):
     Menu nonaktif atau halaman berstatus Draft otomatis disembunyikan untuk pengunjung umum.
     Menghitung status `is_active_link` untuk menandai halaman yang sedang aktif di navbar.
     """
-    is_staff = request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)
+    user = getattr(request, 'user', None)
+    is_staff = bool(user and user.is_authenticated and (user.is_staff or user.is_superuser))
 
     try:
         root_menus = Menu.objects.filter(is_active=True, parent__isnull=True).prefetch_related(
