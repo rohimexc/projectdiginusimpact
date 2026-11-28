@@ -371,84 +371,8 @@
     </div>
   </section>
 
-  <!-- ================= GALERI KEGIATAN (CAROUSEL 3-2-1) ================= -->
-  <section class="py-16 px-4 sm:px-6 bg-slate-50 border-t border-slate-200/60" id="galeri">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
-        <div class="text-center sm:text-left">
-          <h2 class="text-2xl font-bold text-brand-teal mb-1">Galeri Kegiatan</h2>
-          <p class="text-xs text-slate-500">Dokumentasi visual berbagai kegiatan, agenda akademik, dan kemahasiswaan</p>
-        </div>
-        {% if daftar_galeri %}
-          <!-- Tombol Navigasi Swiper Galeri -->
-          <div class="flex items-center justify-center sm:justify-end gap-2 shrink-0">
-            <button type="button" id="galeri-prev" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Galeri Sebelumnya">
-              <i class="fas fa-chevron-left text-xs"></i>
-            </button>
-            <button type="button" id="galeri-next" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-brand-teal hover:text-white hover:border-brand-teal shadow-xs transition duration-200 flex items-center justify-center cursor-pointer active:scale-95" aria-label="Galeri Selanjutnya">
-              <i class="fas fa-chevron-right text-xs"></i>
-            </button>
-          </div>
-        {% endif %}
-      </div>
-
-      {% if daftar_galeri %}
-        <div class="swiper galeri-swiper custom-carousel-swiper" data-aos="fade-up" data-aos-delay="100">
-          <div class="swiper-wrapper">
-            {% for galeri in daftar_galeri %}
-              <div class="swiper-slide h-auto">
-                <div class="group h-full bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden hover:shadow-lg hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
-                  <div>
-                    <a href="{% url 'galeri_list' %}" class="w-full overflow-hidden bg-slate-100 rounded-t-2xl relative block" style="aspect-ratio: 4 / 5;">
-                      {% if galeri.gambar %}
-                        <img src="{{ galeri.gambar.url }}" alt="{{ galeri.judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
-                      {% else %}
-                        <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                          <i class="far fa-images text-5xl mb-2"></i>
-                        </div>
-                      {% endif %}
-                      <span class="absolute top-2.5 left-2.5 bg-slate-900/70 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full border border-white/20">
-                        Foto #{{ galeri.urutan|default:forloop.counter }}
-                      </span>
-                    </a>
-
-                    <div class="p-5">
-                      <span class="text-[11px] font-semibold text-brand-teal flex items-center gap-1.5 mb-2">
-                        <i class="far fa-clock text-[10px]"></i>
-                        {{ galeri.created_at|date:"d M Y" }}
-                      </span>
-                      <h3 class="text-sm font-bold text-slate-800 leading-snug line-clamp-2 group-hover:text-brand-teal transition">
-                        <a href="{% url 'galeri_list' %}">{{ galeri.judul|default:"Dokumentasi Kegiatan" }}</a>
-                      </h3>
-                    </div>
-                  </div>
-
-                  <div class="px-5 py-3.5 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <a href="{% url 'galeri_list' %}" class="text-[11px] font-bold text-brand-teal hover:text-brand-darkteal inline-flex items-center gap-1">
-                      Lihat Foto &rarr;
-                    </a>
-                    <span class="text-[10px] text-slate-400 font-medium">UNTAD</span>
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-          <div class="swiper-pagination"></div>
-        </div>
-
-        <div class="mt-4 text-center" data-aos="zoom-in">
-          <a href="{% url 'galeri_list' %}" class="inline-block bg-brand-teal hover:bg-brand-darkteal text-white text-xs font-semibold py-2.5 px-6 rounded-full shadow transition duration-200">
-            Lihat Semua Foto &rarr;
-          </a>
-        </div>
-      {% else %}
-        <div class="text-sm text-slate-500 py-10" data-aos="fade-in">Belum ada foto kegiatan.</div>
-      {% endif %}
-    </div>
-  </section>
-
   <!-- ================= TENAGA PENGAJAR (DOSEN) (CAROUSEL 3-2-1) ================= -->
-  <section class="py-16 px-4 sm:px-6 bg-white border-t border-slate-200/60" id="dosen">
+  <section class="py-16 px-4 sm:px-6 bg-slate-50 border-t border-slate-200/60" id="dosen">
     <div class="max-w-6xl mx-auto">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
         <div class="text-center sm:text-left">
@@ -525,7 +449,7 @@
   </section>
 
   <!-- ================= TENAGA KEPENDIDIKAN (CAROUSEL 3-2-1) ================= -->
-  <section class="py-16 px-4 sm:px-6 bg-slate-50 border-t border-slate-200/60" id="tendik">
+  <section class="py-16 px-4 sm:px-6 bg-white border-t border-slate-200/60" id="tendik">
     <div class="max-w-6xl mx-auto">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4" data-aos="fade-up">
         <div class="text-center sm:text-left">
@@ -602,7 +526,7 @@
   </section>
 
   <!-- Sistem Informasi -->
-  <section class="py-16 px-6 text-center bg-white" id="akreditasi" data-aos="fade-up">
+  <section class="py-16 px-6 text-center bg-slate-50 border-t border-slate-200/60" id="akreditasi" data-aos="fade-up">
     <h2 class="text-2xl font-bold text-brand-teal mb-2">Sistem Informasi</h2>
     <p class="text-xs text-slate-500 mb-8">Akses berbagai layanan akademik dan informasi di Universitas Tadulako</p>
     <div class="text-sm text-slate-500 py-10">Belum ada sistem informasi.</div>
@@ -762,9 +686,6 @@
       }
       if (document.querySelector('.event-swiper')) {
         new Swiper('.event-swiper', makeCarouselConfig('#event-prev', '#event-next', '.event-swiper .swiper-pagination'));
-      }
-      if (document.querySelector('.galeri-swiper')) {
-        new Swiper('.galeri-swiper', makeCarouselConfig('#galeri-prev', '#galeri-next', '.galeri-swiper .swiper-pagination'));
       }
       if (document.querySelector('.dosen-swiper')) {
         new Swiper('.dosen-swiper', makeCarouselConfig('#dosen-prev', '#dosen-next', '.dosen-swiper .swiper-pagination'));
